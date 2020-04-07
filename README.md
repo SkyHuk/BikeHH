@@ -43,5 +43,9 @@ npm install -g @angular/cli
 
 ### Angular mit Spring Boot
 Ein Ausführliches Tutorial findet ihr [hier](https://www.baeldung.com/spring-boot-angular-web). Es lohnt sich wirklich dieses durchzulesen.  
-Um eine ordentliche Projektstruktur zu halten, teilen wir das Repository in Unterordner auf. Einer für das Backend und einer für das Frontend.  
-Wir initialisieren unseren Angular-Sourcecode in dem Frontend Ordner.
+Um eine ordentliche Projektstruktur zu halten, teilen wir das Repository auf Rootebene in Unterordner auf. Einer für das Backend und einer für das Frontend.  
+Wir initialisieren unseren Angular-Sourcecode im Webapp Ordner, indem wir auf Rootebene folgenden Befehl ausführen:
+```
+ng new Webapp
+```
+Das generiert uns einen neuen Workspace-Ordner namens Webapp mit einem sehr großen Haufen an Dateien. Als zusätzliche Optionen beim Ausführen des Befehls haben wir uns dafür entschieden, Routing zu inkludieren und CSS zu benutzen.
