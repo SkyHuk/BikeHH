@@ -49,3 +49,14 @@ Wir initialisieren unseren Angular-Sourcecode im Webapp Ordner, indem wir auf Ro
 ng new Webapp
 ```
 Das generiert uns einen neuen Workspace-Ordner namens Webapp mit einem sehr großen Haufen an Dateien. Als zusätzliche Optionen beim Ausführen des Befehls haben wir uns dafür entschieden, Routing zu inkludieren und CSS zu benutzen.
+
+### OpenLayers und Angular
+Zum [Einbinden von OpenLayers](https://openlayers.org/en/latest/doc/tutorials/bundle.html) haben wir folgendes ausgeführt:
+```
+npm i ol
+```
+Das OpenLayers package heißt kurz ``ol``. Mit dem Befehl installieren wir es als "Laufzeit-Dependency". Javascript Bibliotheken, die nur zur Entwicklung und nicht zur Produktionslaufzeit gebraucht werden werden mit dem Schema ``npm i --save-dev <package name>`` installiert.  
+Dies kommt auch direkt zum Einsatz, da wir folgendes ausführen müssen, um die OpenLayers Typen in Typescript benutzen zu können:
+```
+npm i --save-dev @types/ol
+```

@@ -2,12 +2,14 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './modules/app-routing.module';
-import { AppComponent } from './app.component';
 import { MaterialModule } from './modules/material.module';
+import { MapComponent } from './components/map/map.component';
+import { LayoutComponent } from './components/layout/layout.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    MapComponent,
+    LayoutComponent
   ],
   imports: [
     BrowserModule,
@@ -15,6 +17,6 @@ import { MaterialModule } from './modules/material.module';
     MaterialModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [LayoutComponent]
 })
 export class AppModule { }

@@ -23,7 +23,8 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles/global.css",
+              "node_modules/ol/ol.css",
+              "src/styles/global.scss",
               "src/styles/theme.scss"
             ],
             "scripts": []
