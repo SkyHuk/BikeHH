@@ -9,6 +9,7 @@ Im Zuge des Praktikums "Fahrrad in Hamburg" der Universität Hamburg existiert d
 
 ### Frontend
 * [Angular](https://angular.io)
+    * [Angular Material Design](https://material.angular.io/)
 * [OpenLayers Kartenframework](https://openlayers.org/)
 
 # Erste Schritte
@@ -40,3 +41,7 @@ Es wird empfohlen das Angular [command-line interface](https://angular.io/cli) t
 npm install -g @angular/cli
 ```
 
+### Angular mit Spring Boot
+Ein Ausführliches Tutorial findet ihr [hier](https://www.baeldung.com/spring-boot-angular-web). Es lohnt sich wirklich dieses durchzulesen.  
+Um eine ordentliche Projektstruktur zu halten, teilen wir das Repository in Unterordner auf. Einer für das Backend und einer für das Frontend.  
+Wir initialisieren unseren Angular-Sourcecode in dem Frontend Ordner.
