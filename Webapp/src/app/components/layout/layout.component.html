@@ -1,4 +1,8 @@
+<!-- Left Sidenav -->
+<app-left-sidenav #sidenav></app-left-sidenav>
+
 <!-- Navbar -->
-<app-navbar></app-navbar>
+<app-navbar (OnToggleSidenav)="toggleSidenav()"></app-navbar>
+
 <!-- Map -->
 <app-map></app-map>

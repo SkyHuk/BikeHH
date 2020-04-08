@@ -1,0 +1,13 @@
+<mat-sidenav-container class="container">
+    <mat-sidenav #sidenav mode="over" class="sidenav" [fixedInViewport]="true">
+        <mat-action-list class="sidenav-list">
+            <button mat-list-item (click)="sidenav.toggle()" class="button-close">
+                <span>Schliessen</span>
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+        </mat-action-list>
+    </mat-sidenav>
+    <mat-sidenav-content class="content" *ngIf="sidenav.opened">
+        <button mat-button class="button-rest-of-screen" (click)="sidenav.toggle()"></button>
+    </mat-sidenav-content>
+</mat-sidenav-container>

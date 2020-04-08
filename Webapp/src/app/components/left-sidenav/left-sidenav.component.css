@@ -1,0 +1,29 @@
+.sidenav {
+    min-width: 250px;
+}
+
+.sidenav-list {
+    padding-top: 0;
+}
+
+.button-close /deep/ div {
+    justify-content: space-between;
+}
+
+.button-rest-of-screen {
+    width: 100%;
+    height: 100%;
+}
+
+.container {
+    z-index: 2;
+}
+
+.content {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 1;
+}

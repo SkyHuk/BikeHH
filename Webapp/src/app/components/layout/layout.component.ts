@@ -1,15 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { LeftSidenavComponent } from '../left-sidenav/left-sidenav.component';
 
 @Component({
   selector: 'app-layout',
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.css']
 })
-export class LayoutComponent implements OnInit {
+export class LayoutComponent {
 
-  constructor() { }
+  @ViewChild(LeftSidenavComponent) sidenav: LeftSidenavComponent;
 
-  ngOnInit(): void {
+  toggleSidenav(): void {
+    this.sidenav.toggle();
   }
 
 }
