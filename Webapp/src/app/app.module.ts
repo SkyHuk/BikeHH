@@ -5,11 +5,13 @@ import { AppRoutingModule } from './modules/app-routing.module';
 import { MaterialModule } from './modules/material.module';
 import { MapComponent } from './components/map/map.component';
 import { LayoutComponent } from './components/layout/layout.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
 
 @NgModule({
   declarations: [
     MapComponent,
-    LayoutComponent
+    LayoutComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,

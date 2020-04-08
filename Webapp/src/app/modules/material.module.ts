@@ -6,12 +6,19 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { PlatformModule } from '@angular/cdk/platform';
 import { ObserversModule } from '@angular/cdk/observers';
 import { PortalModule } from '@angular/cdk/portal';
+
 import { MatCardModule } from '@angular/material/card';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 @NgModule({
   exports: [
     // Material Modules
     MatCardModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatSidenavModule,
     CdkTableModule,
     A11yModule,
     BidiModule,
