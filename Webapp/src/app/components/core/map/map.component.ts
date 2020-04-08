@@ -1,8 +1,7 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { AfterViewInit, Component } from '@angular/core';
 import Map from 'ol/Map';
 import View from 'ol/View';
-import TileLayer from 'ol/layer/Tile';
-import OSM from 'ol/source/OSM';
+import { MapService } from 'src/app/services/core/map.service';
 
 @Component({
   selector: 'app-map',
@@ -13,17 +12,13 @@ export class MapComponent implements AfterViewInit {
 
   private map: Map;
 
-  constructor() {
+  constructor(private mapService: MapService) {
   }
 
   ngAfterViewInit(): void {
     this.map = new Map({
       target: 'map',
-      layers: [
-        new TileLayer({
-          source: new OSM()
-        })
-      ],
+      layers: Array.from(this.mapService.getLayers.values()),
       view: new View({
         center: [1115000.0, 7090000.0],
         zoom: 13
