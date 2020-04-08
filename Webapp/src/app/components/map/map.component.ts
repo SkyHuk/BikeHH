@@ -25,8 +25,8 @@ export class MapComponent implements AfterViewInit {
         })
       ],
       view: new View({
-        center: [1115000.0, 7095000.0],
-        zoom: 12
+        center: [1115000.0, 7090000.0],
+        zoom: 13
       })
     });
   }
