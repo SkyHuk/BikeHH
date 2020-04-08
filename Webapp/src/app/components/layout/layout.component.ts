@@ -1,5 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
-import { LeftSidenavComponent } from '../left-sidenav/left-sidenav.component';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-layout',
@@ -7,11 +6,5 @@ import { LeftSidenavComponent } from '../left-sidenav/left-sidenav.component';
   styleUrls: ['./layout.component.css']
 })
 export class LayoutComponent {
-
-  @ViewChild(LeftSidenavComponent) sidenav: LeftSidenavComponent;
-
-  toggleSidenav(): void {
-    this.sidenav.toggle();
-  }
 
 }
