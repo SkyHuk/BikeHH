@@ -8,5 +8,5 @@ import { MapService } from 'src/app/services/core/map.service';
 })
 export class LayoutComponent {
 
-  constructor(private mapService: MapService) { }
+  constructor(public mapService: MapService) { }
 }
