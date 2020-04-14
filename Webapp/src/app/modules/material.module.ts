@@ -13,10 +13,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 @NgModule({
   exports: [
     // Material Modules
+    MatButtonToggleModule,
+    MatBottomSheetModule,
     MatCardModule,
     MatToolbarModule,
     MatIconModule,

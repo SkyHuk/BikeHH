@@ -4,5 +4,8 @@
 <!-- Navbar -->
 <app-navbar (OnToggleSidenav)="sidenav.toggle()"></app-navbar>
 
+<!-- Map Overlay -->
+<app-overlay></app-overlay>
+
 <!-- Map -->
-<app-map></app-map>
+<app-map [layerSource]="mapService.getSelectedLayerSource"></app-map>
