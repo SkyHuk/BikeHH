@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import OSM from 'ol/source/OSM';
-import XYZ from 'ol/source/XYZ';
 import TileSource from 'ol/source/Tile';
+import XYZ from 'ol/source/XYZ';
+
 
 @Injectable({
   providedIn: 'root'
@@ -32,10 +33,14 @@ export class MapService {
       ['opnv', new XYZ({
         url: 'http://tile.memomaps.de/tilegen/{z}/{x}/{y}.png'
       })],
-      ['dark', new XYZ({
-        url: 'https://cartodb-basemaps-1.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png'
+      ['satellite', new XYZ({
+        attributions: ['Powered by Esri'],
+        attributionsCollapsible: false,
+        url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+        maxZoom: 23
       })]
     ]);
     this.selectedLayer = this.layers.get('default');
   }
+
 }

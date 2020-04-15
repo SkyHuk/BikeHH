@@ -4,8 +4,8 @@
         <button mat-button (click)="selectLayer('default')">
             <mat-icon>map</mat-icon> Standard
         </button>
-        <button mat-button (click)="selectLayer('dark')">
-            <mat-icon>map</mat-icon> Dark Theme
+        <button mat-button (click)="selectLayer('satellite')">
+            <mat-icon>map</mat-icon> Satellit
         </button>
         <button mat-button (click)="selectLayer('opnv')">
             <mat-icon>map</mat-icon> ÖPNV
@@ -16,8 +16,8 @@
     <mat-list-item *ngIf="selectedLayerName == 'default'">
         Derzeitig gibt es keine Kartendetails für diese Karte (default)
     </mat-list-item>
-    <mat-list-item *ngIf="selectedLayerName == 'dark'">
-        Derzeitig gibt es keine Kartendetails für diese Karte (dark)
+    <mat-list-item *ngIf="selectedLayerName == 'satellite'">
+        Derzeitig gibt es keine Kartendetails für diese Karte (satellite)
     </mat-list-item>
     <mat-list-item *ngIf="selectedLayerName == 'opnv'">
         Derzeitig gibt es keine Kartendetails für diese Karte (opnv)
