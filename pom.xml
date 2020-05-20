@@ -16,7 +16,29 @@
 
 	<properties>
 		<java.version>1.8</java.version>
+		<bikehh.build.skip-scss>false</bikehh.build.skip-scss>
 	</properties>
+	
+	<profiles>
+		<profile>
+			<id>eclipse</id>
+			<properties>
+				<!-- npm und scss sind sehr langsam. Daher sollte das beim inkrementellen 
+					Eclipse-Build nicht ausgeführt werden. In der Eclipse Project-Einstellung 
+					muss man unter "Maven" das Profile "eclipse" eintragen, damit das geht. Dann 
+					sind die eclipse-builds schön schnell. -->
+				<bikehh.build.skip-scss>true</bikehh.build.skip-scss>
+			</properties>
+			<dependencies>
+				<dependency>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-devtools</artifactId>
+					<optional>true</optional>
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
+	
 
 	<dependencies>
 		<dependency>
@@ -63,6 +85,121 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<executable>true</executable>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>com.github.eirslett</groupId>
+				<artifactId>frontend-maven-plugin</artifactId>
+
+				<configuration>
+					<workingDirectory>src/npm</workingDirectory>
+				</configuration>
+
+				<executions>
+					<execution>
+						<id>install node and npm</id>
+						<goals>
+							<goal>install-node-and-npm</goal>
+						</goals>
+						<phase>generate-resources</phase>
+						<configuration>
+							<nodeVersion>v10.16.0</nodeVersion>
+							<npmVersion>6.9.0</npmVersion>
+						</configuration>
+					</execution>
+					<execution>
+						<id>npm install</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>npm</goal>
+						</goals>
+						<configuration>
+							<arguments>install</arguments>
+						</configuration>
+					</execution>
+					<execution>
+						<id>npm run build</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>npm</goal>
+						</goals>
+						<configuration>
+							<arguments>run build</arguments>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>nl.geodienstencentrum.maven</groupId>
+				<artifactId>sass-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>update-stylesheets</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<skip>${bikehh.build.skip-scss}</skip>
+					<resources>
+						<resource>
+							<!-- Set source and destination dirs -->
+							<source>
+								<directory>${project.basedir}/src/main/resources/scss</directory>
+							</source>
+							<destination>${project.basedir}/src/main/resources/static/generated/css</destination>
+						</resource>
+					</resources>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-font-awesome-css</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.basedir}/src/main/resources/static/generated/css
+							</outputDirectory>
+							<resources>
+								<resource>
+									<directory>
+										${project.basedir}/src/npm/node_modules/@fortawesome/fontawesome-free/css
+									</directory>
+									<include>all.min.css</include>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copy-font-awesome-webfonts</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.basedir}/src/main/resources/static/generated/webfonts
+							</outputDirectory>
+							<resources>
+								<resource>
+									<directory>
+										${project.basedir}/src/npm/node_modules/@fortawesome/fontawesome-free/webfonts
+									</directory>
+									<include>*</include>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

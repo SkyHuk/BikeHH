@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<!-- Required meta tags -->
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<base th:href="@{/}">
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="generated/css/style.css">
+<link rel="stylesheet" href="generated/css/all.min.css">
+
+<!--  Each token will be replaced by their respective titles in the resulting page. -->
+<title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE">BikeHH</title>
+
+</head>
+<body class="d-flex flex-column" style="height: 100vh;">
+	<!-- Navbar -->
+	<div class="sticky-top">
+		<div class="bg-primary">
+			<div th:replace="layout/navbar :: navbar"></div>
+		</div>
+		<div th:replace="layout/notificationbar :: notificationbar"></div>
+	</div>
+
+	<!-- Content -->
+	<div class="container py-3 pt-lg-5">
+		<div layout:fragment="content"></div>
+	</div>
+
+	<!-- Footer -->
+	<div class="container d-flex justify-content-center op-50 py-3 mt-auto">
+		<svg class="mr-1" width="27" height="21" viewBox="0 0 27 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+			<path d="M9.64812 4.03697L2.89188 14.7776C1.63519 16.7755 3.07106 19.375 5.43127 19.375H24.375L14.7269 4.03697C13.5505 2.16677 10.8245 2.16678 9.64812 4.03697Z" fill="#003E67" stroke="white" stroke-width="2"/>
+			<path d="M18.9679 10.802L13.5608 19.375H24.375L18.9679 10.802Z" fill="#48AEBC" stroke="white" stroke-width="2"/>
+		</svg>
+		<small>BikeHH - Universität Hamburg Praktikum SoSe 2020</small>
+	</div>
+	
+	<script src="generated/js/bundle.js"></script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+@charset "UTF-8";
+
+$primary:       #003c67 !default;
+$secondary:     #FEFEFE !default;
+$dark:          #1c2025 !default;
+
+$body-bg: #f7f9fa;
+
+$theme-colors: (
+  "bikehh-inactive": #f0f3f3,
+  "bikehh-border": #d6dbe0,
+  "bikehh-danger": rgba(220, 53, 69, 0.3),
+  "bikehh-success": rgba(40, 167, 69, 0.3),
+  "bikehh-warning": rgba(255, 193, 7, 0.3)
+);
+
+$enable-responsive-font-sizes: true;
+
+@import "../../../npm/node_modules/bootstrap/scss/bootstrap";

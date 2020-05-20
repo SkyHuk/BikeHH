@@ -27,3 +27,20 @@ build/
 
 ### VS Code ###
 .vscode/
+
+## npm Quatsch ##
+**/npm/node_modules
+**/npm/node
+**/npm/dist
+
+src/main/resources/static/generated/js
+src/main/resources/static/generated/webfonts
+
+# Das CSS aus dem SCSS-Transpiler wird mit eingecheckt, da es für die Entwickler
+# lange dauern würde, dies jedes Mal selbst zu tun.
+# Daher gibt es diese Zeile nicht:
+#  src/main/resources/static/generated/css/
+# Diese aber schon, weil das recht fix von webpack generiert wird:
+src/main/resources/static/generated/css/all.min.css
+
+
