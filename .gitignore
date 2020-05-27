@@ -43,4 +43,6 @@ src/main/resources/static/generated/webfonts
 # Diese aber schon, weil das recht fix von webpack generiert wird:
 src/main/resources/static/generated/css/all.min.css
 
+# h2 database
+db/
 

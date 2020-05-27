@@ -12,8 +12,6 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	private String login;
-
 	private String encryptedPassword;
 
 	private String emailAddress;
@@ -28,14 +26,6 @@ public class User {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public String getLogin() {
-		return login;
-	}
-
-	public void setLogin(String login) {
-		this.login = login;
 	}
 
 	public String getEncryptedPassword() {

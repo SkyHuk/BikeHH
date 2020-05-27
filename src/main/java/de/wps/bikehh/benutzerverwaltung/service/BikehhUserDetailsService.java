@@ -26,17 +26,17 @@ public class BikehhUserDetailsService implements UserDetailsService {
 	}
 
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		if (!_userAuthenticationRepository.existsByLogin(username)) {
-			throw new UsernameNotFoundException("Unbekannter Nutzer: " + username);
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+		if (!_userAuthenticationRepository.existsByEmailAddress(email)) {
+			throw new UsernameNotFoundException("Unbekannter Nutzer: " + email);
 		}
 
-		User user = _userAuthenticationRepository.findByLogin(username);
+		User user = _userAuthenticationRepository.findByEmailAddress(email);
 
 		if (user.getIsLocked()) {
 			throw new LockedException("Nutzer ist gesperrt");
 		}
-		return new BikehhUserDetails(user, username, user.getEncryptedPassword(), createAuthorities(user));
+		return new BikehhUserDetails(user, email, user.getEncryptedPassword(), createAuthorities(user));
 	}
 
 	private String[] createAuthorities(User user) {
@@ -49,7 +49,7 @@ public class BikehhUserDetailsService implements UserDetailsService {
 			authorities.add(Roles.ROLE_USER);
 			break;
 		default:
-			throw new RuntimeException("Unbekannte Role (" + user.getRole() + ") von User " + user.getLogin());
+			throw new RuntimeException("Unbekannte Role (" + user.getRole() + ") von User " + user.getEmailAddress());
 		}
 
 		return authorities.toArray(new String[authorities.size()]);

@@ -17,7 +17,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				"/logout",
 				"/generated/css/*",
 				"/generated/js/*",
-				"/generated/webfonts/*"
+				"/generated/webfonts/*",
+				"/h2/**"
 		};
 
 		http.authorizeRequests()
@@ -29,5 +30,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
 				.invalidateHttpSession(true)
 				.deleteCookies("JSESSIONID").permitAll();
+
+		http.csrf().ignoringAntMatchers("/h2/**");
+		http.headers().frameOptions().sameOrigin();
 	}
 }
