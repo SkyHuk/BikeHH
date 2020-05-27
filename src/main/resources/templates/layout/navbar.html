@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="de">
 <body>
-	<nav th:fragment="navbar"
+	<!--<nav th:fragment="navbar"
 		class="container navbar navbar-expand-md navbar-dark py-md-0 h-md-55px">
 		<button class="navbar-toggler" type="button" data-toggle="collapse"
 			data-target="#navbarSupportedContent"
@@ -20,7 +20,7 @@
 				</a></li>
 			</ul>
 			<ul class="navbar-nav h-100" sec:authorize="isAuthenticated()">
-<!-- Desktop -->
+<!-- Desktop --><!--
 				<li class="nav-item dropdown d-none d-md-block py-md-2">
 					<a class="nav-link text-secondary dropdown-toggle py-md-2" href="#" id="navbarDropdownMenuLink" 
 					role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -32,7 +32,7 @@
 			          <a class="dropdown-item" th:href="@{/logout}"><i class="fas fa-sign-out-alt fa-fw"></i> Logout</a>
 			        </div>
 				</li>
-<!-- Mobile -->
+<!-- Mobile --><!--
 				<li class="nav-item d-md-none"
 				th:classappend="${#request.getServletPath().startsWith('/userprofile') ? 'active-nav-border font-weight-bold' : ''}">
 					<a class="nav-link text-secondary dropdown-item px-0" th:href="@{/userprofile/}"><i class="fas fa-id-card"></i> Benutzerprofil</a>
@@ -42,6 +42,77 @@
 				</li>
 			</ul>
 		</div>
-	</nav>
+	</nav>-->
+
+	<nav th:fragment="navbar" id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-primary sidebar collapse">
+      <div class="sidebar-sticky">
+        <div class="text-center mb-4">
+          <img src="/Logo.png" class="img-fluid">
+
+          <h3>Bicyclist Admin</h3>
+        </div>
+        <hr class="my-4">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link active" href="/">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+              Übersicht <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/surveys.html">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
+              Umfragen
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/reports.html">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bar-chart-2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+              Meldungen
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/map.html">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+              Karte
+            </a>
+          </li>
+        </ul>
+
+        <hr class="my-4">
+
+        <ul class="nav flex-column mb-2">
+          <li class="nav-item">
+            <a class="nav-link" href="/create-survey.html">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+              Umfrage erstellen
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/survey-example.html">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+              Umfrage Beispiel
+            </a>
+          </li>
+          </ul>
+
+       <hr class="my-4">
+
+       <ul class="nav flex-column mb-2">
+          <li class="nav-item">
+            <a class="nav-link" href="/create-survey.html">
+              <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="feather"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              User #1234
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/create-survey.html">
+              <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="feather"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+              Ausloggen
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
 </body>
 </html>

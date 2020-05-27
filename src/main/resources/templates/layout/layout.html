@@ -16,25 +16,25 @@
 <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE">BikeHH</title>
 
 </head>
-<body class="d-flex flex-column" style="height: 100vh;">
-	<!-- Navbar -->
-	<div class="sticky-top">
-		<div class="bg-primary">
+<body>
+	<div class="container-fluid">
+		<div class="row">
+			<!-- Navbar -->
 			<div th:replace="layout/navbar :: navbar"></div>
-		</div>
-		<div th:replace="layout/notificationbar :: notificationbar"></div>
-	</div>
+			<!--<div th:replace="layout/notificationbar :: notificationbar"></div>-->
 
-	<!-- Content -->
-	<div class="container py-3 pt-lg-5">
-		<div layout:fragment="content"></div>
+			<!-- Content -->
+			<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+				<div layout:fragment="content"></div>
+			</main>
+		</div>
 	</div>
 
 	<!-- Footer -->
 	<div class="container d-flex justify-content-center op-50 py-3 mt-auto">
 		<small>BikeHH - Universität Hamburg Praktikum SoSe 2020</small>
 	</div>
-	
+
 	<script src="generated/js/bundle.js"></script>
 </body>
 </html>

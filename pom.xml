@@ -24,9 +24,9 @@
 		<profile>
 			<id>eclipse</id>
 			<properties>
-				<!-- npm und scss sind sehr langsam. Daher sollte das beim inkrementellen 
-					Eclipse-Build nicht ausgeführt werden. In der Eclipse Project-Einstellung 
-					muss man unter "Maven" das Profile "eclipse" eintragen, damit das geht. Dann 
+				<!-- npm und scss sind sehr langsam. Daher sollte das beim inkrementellen
+					Eclipse-Build nicht ausgeführt werden. In der Eclipse Project-Einstellung
+					muss man unter "Maven" das Profile "eclipse" eintragen, damit das geht. Dann
 					sind die eclipse-builds schön schnell. -->
 				<bikehh.build.skip-scss>true</bikehh.build.skip-scss>
 			</properties>
@@ -56,7 +56,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
