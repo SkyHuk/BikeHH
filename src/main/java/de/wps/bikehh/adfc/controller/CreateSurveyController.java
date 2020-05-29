@@ -5,12 +5,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("meldungen")
-public class ReportListController {
+@RequestMapping("umfrage-erstellen")
+public class CreateSurveyController {
 
 	@GetMapping
-	public String showReportList() {
-
-		return "adfc/reportList";
+	public String showSurveyCreator() {
+		return "adfc/create_survey";
 	}
 }

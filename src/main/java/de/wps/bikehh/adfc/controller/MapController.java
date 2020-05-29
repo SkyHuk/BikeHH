@@ -5,12 +5,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("meldungen")
-public class ReportListController {
+@RequestMapping("karte")
+public class MapController {
 
 	@GetMapping
-	public String showReportList() {
-
-		return "adfc/reportList";
+	public String showMap() {
+		return "adfc/map";
 	}
+
 }

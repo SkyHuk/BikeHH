@@ -1,0 +1,58 @@
+<html layout:decorate="~{layout/layout}">
+<head>
+  <title>ADFC - Umfrage erstellen</title>
+</head>
+<body layout:fragment="content">
+
+  <h2 class="my-4">Umfrage Erstellen</h2>
+
+  <div class="row">
+    <div class="col-8 border-right">
+      <img src="/map_circle.png" width="600" class="img-responsive">
+    </div>
+    <div class="col-4">
+      <form>
+        <div class="form-group">
+          <label>Titel</label>
+          <input class="form-control" placeholder="Titel">
+        </div>
+        <div class="row-20 border"></div>
+        <div class="form-group">
+          <label>Frage #1</label>
+          <input class="form-control" placeholder="Frage"></input>
+        </div>
+
+        <div class="form-group">
+          <label>Antwort</label>
+          <input class="form-control" placeholder="Ja">
+          <input class="form-control" placeholder="Nein">
+          <button class="btn btn-primary mb-3">+</button>
+        </div>
+
+        <div class="form-group">
+          <button class="btn btn-primary mb-3">Bedingung hinzufügen</button>
+        </div>
+
+        <div class="row-20 border"></div>
+
+        <div class="form-group">
+          <button class="btn btn-primary mb-3">Frage hinzufügen</button>
+        </div>
+
+        <div class="form-group">
+          <label>Zeitfenster</label>
+          <input type="date" class="form-control" placeholder="From">
+          <input type="date" class="form-control" placeholder="To">
+        </div>
+
+        <div class="form-group">
+          <button class="btn btn-primary">Umfrage erstellen</button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+
+</body>
+</html>
