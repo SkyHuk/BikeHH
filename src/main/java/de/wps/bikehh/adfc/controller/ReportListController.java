@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 // import de.wps.bikehh.willkommen.material.Bier;
 
 @Controller
-@RequestMapping("report_list")
+@RequestMapping("reportList")
 public class ReportListController {
 	public String showReportList() {
-		return "adfc/report_list";
+		return "adfc/reportList";
 	}
 }
