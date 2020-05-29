@@ -1,0 +1,59 @@
+<html layout:decorate="~{layout/layout}">
+
+  <head>
+    <title>ADFC - Umfragen</title>
+  </head>
+
+  <body layout:fragment="content">
+
+    <div class="d-flex align-items-center justify-space-between">
+      <h2 class="my-4 mr-4">Umfragen</h2>
+      <input class="form-control" placeholder="Suche">
+    </div>
+    <div class="table-responsive mb-4">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Erstellungsdatum</th>
+            <th>erstellt von</th>
+            <th># Bestätigungen</th>
+            <th>Beschreibung</th>
+            <th>Aktion</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>3. Mai 2020</td>
+            <td><a href="#">User #123</a></td>
+            <td><h6 class="mb-2 text-muted"><span class="badge badge-secondary">2/5</span></h6></td>
+            <td>Schlagloch</td>
+            <td>
+              <div class="btn-group">
+                <a href="/survey.html" type="button" class="btn btn-sm btn-outline-secondary">Anzeigen</a>
+                <button type="button" class="btn btn-sm btn-outline-secondary">Bearbeiten</button>
+                <button type="button" class="btn btn-sm btn-outline-secondary">Löschen</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>10. April 2020</td>
+            <td><a href="#">User #328</a></td>
+            <td><h6 class="mb-2 text-muted"><span class="badge badge-success">5/5</span></h6></td>
+            <td>Schnee</td>
+            <td>
+              <div class="btn-group">
+                <a href="/survey.html" type="button" class="btn btn-sm btn-outline-secondary">Anzeigen</a>
+                <button type="button" class="btn btn-sm btn-outline-secondary">Bearbeiten</button>
+                <button type="button" class="btn btn-sm btn-outline-secondary">Löschen</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </body>
+</html>

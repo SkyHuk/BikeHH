@@ -1,0 +1,188 @@
+<html layout:decorate="~{layout/layout}">
+
+  <head>
+    <title>ADFC - Umfrage - UMFRAGE1</title>
+  </head>
+
+  <body layout:fragment="content">
+
+    <a href="/surveys.html" class="btn btn-link">&lt;- Umfragen</a>
+    <h2 class="my-2">Einzelne Umfrage</h2>
+    <div class="card mb-4">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-9">
+            <h5 class="card-title">Umfrage #123 <span class="badge badge-secondary">Nutzergeneriert</span></h5>
+            <h6 class="card-subtitle mb-2 text-muted">3. Mai 2020</h6>
+
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item">Verkehrführung</li>
+                <li class="breadcrumb-item">Kreuzung</li>
+                <li class="breadcrumb-item">Wegeführung</li>
+              </ol>
+            </nav>
+
+            <div>
+              <h6 class="mb-2 text-muted">Bestätigungspunkte: <span class="badge badge-secondary">2/5</span></h6>
+            </div>
+
+            <p class="card-text mb-4">Meldung bestätigen: Gefährliche Abbiegesituation. Rechts abbiegende KFZ überfahren den Radfahrstreifen.</p>
+          </div>
+          <div class="col-3">
+              <button class="btn btn-block btn-outline-primary">Umfrage bearbeiten</button>
+              <button class="btn btn-block btn-outline-secondary">Zeige auf Karte</button>
+              <button class="btn btn-block btn-outline-secondary">Kontaktiere Ersteller</button>
+              <button class="btn btn-block btn-outline-success">Bestätigen</button>
+          </div>
+        </div>
+
+        <hr class="my-4">
+
+          <div class="row">
+            <div class="col">
+              <img class="img-responsive mb-4" src="/map.png">
+            </div>
+            <div class="col">
+              <h6>Antwortmöglichkeiten</h6>
+              <ul>
+                <li>Bestätigen</li>
+                <li>Falsch</li>
+                <li>Weiß nicht</li>
+                <li>Freitext</li>
+              </ul>
+
+              <h6>Umfrage wurde automatisch aus folgender Meldung generiert</h6>
+              <div class="border p-4">
+                <div class="row">
+                  <div class="col-9">
+                    <a href="#"><strong>User #1234</strong></a>
+                    <p>Die Autos rasen über den Radfahrstreifen. Ein wahnsinnger Rader hat mich eben fast umgenietet!!! Bitte sofort anzeigen Kenzeichen KI-LL 666"Hintergrund: Veloroute 3, die Fahrradstraße "Uferstraße"</p>
+
+                    <h6>Meldungsergebnisse</h6>
+                    <img class="img-responsive" src="https://via.placeholder.com/300x200">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <hr class="my-4">
+
+          <h5 class="card-title">Meldungen</h5>
+          <form class="p-2 d-flex align-items-center">
+            <div class="px-2"><strong>Filter:</strong></div>
+            <select class="form-control mx-2">
+              <option selected disabled>Nach Status filtern</option>
+              <option>Erfasst</option>
+              <option>Bestätigt</option>
+              <!-- "In Bearbeitung" added here -->
+              <option>In Bearbeitung</option>
+              <option>Erledigt</option>
+            </select>
+            <input class="form-control mx-2" placeholder="Suche">
+            <button class="btn btn-outline-secondary">Exportieren</button>
+          </form>
+        </div>
+        <div style="overflow-y: scroll; overflow-x: hidden; max-height: 50vh;" class="border-top">
+          <div class="table-responsive">
+              <table class="table">
+                  <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Erstellungsdatum</th>
+                        <th>Art</th>
+                        <th>Standort</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>1</td>
+                        <td>3. Mai 2020</td>
+                        <td>Schlagloch</td>
+                        <td>Jungfernstieg</td>
+                        <td>Bestätigt</td>
+                      </tr>
+                      <tr>
+                          <td colspan="5">
+                              <h5 class="mb-2">Meldung #1</h5>
+                              <div class="row">
+                                <div class="col-9">
+                                  <p>Die Autos rasen über den Radfahrstreifen. Ein wahnsinnger Rader hat mich eben fast umgenietet!!! Bitte sofort anzeigen Kenzeichen KI-LL 666"Hintergrund: Veloroute 3, die Fahrradstraße "Uferstraße"</p>
+
+                                  <h6>Meldungsergebnisse</h6>
+                                  <img class="img-responsive" src="https://via.placeholder.com/700x300">
+                                </div>
+                                <div class="col-3">
+                                  <button class="btn btn-block btn-outline-secondary">Zeige auf Karte</button>
+                                  <button class="btn btn-block btn-outline-secondary">Kontaktiere Ersteller</button>
+                                  <button class="btn btn-block btn-outline-success">Als erledigt markieren</button>
+                                  <button class="btn btn-block btn-outline-danger">Löschen</button>
+                                </div>
+                              </div>
+                          </td>
+                      </tr>
+                      <tr>
+                        <td>2</td>
+                        <td>10. April 2020</td>
+                        <td>Schnee</td>
+                        <td>Stellingen</td>
+                        <td>Erfasst</td>
+                      </tr>
+                      <tr>
+                        <td>3</td>
+                        <td>15. April 2020</td>
+                        <td>Schnee</td>
+                        <td>adipiscing</td>
+                        <td>Bestätigt</td>
+                      </tr>
+                      <tr>
+                        <td>4</td>
+                        <td>15. April 2020</td>
+                        <td>Schnee</td>
+                        <td>adipiscing</td>
+                        <td>Bestätigt</td>
+                      </tr>
+                      <tr>
+                        <td>5</td>
+                        <td>15. April 2020</td>
+                        <td>Schnee</td>
+                        <td>adipiscing</td>
+                        <td>Bestätigt</td>
+                      </tr>
+                      <tr>
+                        <td>5</td>
+                        <td>15. April 2020</td>
+                        <td>Schnee</td>
+                        <td>adipiscing</td>
+                        <td>Bestätigt</td>
+                      </tr>
+                      <tr>
+                        <td>5</td>
+                        <td>15. April 2020</td>
+                        <td>Schnee</td>
+                        <td>adipiscing</td>
+                        <td>Bestätigt</td>
+                      </tr>
+                      <tr>
+                        <td>5</td>
+                        <td>15. April 2020</td>
+                        <td>Schnee</td>
+                        <td>adipiscing</td>
+                        <td>Bestätigt</td>
+                      </tr>
+                      <tr>
+                        <td>5</td>
+                        <td>15. April 2020</td>
+                        <td>Schnee</td>
+                        <td>adipiscing</td>
+                        <td>Bestätigt</td>
+                      </tr>
+                    </tbody>
+              </table>
+          </div>
+      </div>
+    </div>
+  </body>
+</html>
