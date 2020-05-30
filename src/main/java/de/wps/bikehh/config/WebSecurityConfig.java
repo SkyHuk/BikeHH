@@ -12,23 +12,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		String[] publicUrls = {
-				"/",
-				"/logout",
-				"/generated/css/*",
-				"/generated/js/*",
+		String[] publicUrls = { 
+				"/", 
+				"/logout", 
+				"/generated/css/*", 
+				"/generated/js/*", 
 				"/generated/webfonts/*",
-				"/h2/**"
-		};
+				"/h2/**" };
 
-		http.authorizeRequests()
-				.antMatchers(publicUrls).permitAll().anyRequest().authenticated()
-				.and()
-				.formLogin().loginPage("/login").permitAll()
-				.and()
-				.logout().logoutSuccessUrl("/login?logout").logoutUrl("/logout")
-				.logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
-				.invalidateHttpSession(true)
+		http.authorizeRequests().antMatchers(publicUrls).permitAll().anyRequest().authenticated().and()
+				// .formLogin().loginPage("/login").permitAll()
+				// .and()
+				.formLogin().loginPage("/login").defaultSuccessUrl("/übersicht").permitAll().and().logout()
+				.logoutSuccessUrl("/login?logout").logoutUrl("/logout")
+				.logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET")).invalidateHttpSession(true)
 				.deleteCookies("JSESSIONID").permitAll();
 
 		http.csrf().ignoringAntMatchers("/h2/**");

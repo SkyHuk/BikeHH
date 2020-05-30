@@ -11,6 +11,6 @@ public class ReportListController {
 	@GetMapping
 	public String showReportList() {
 
-		return "adfc/reportList";
+		return "adfc/report_list";
 	}
 }
