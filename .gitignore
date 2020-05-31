@@ -46,3 +46,8 @@ src/main/resources/static/generated/css/all.min.css
 # h2 database
 db/
 
+### macOS ###
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
