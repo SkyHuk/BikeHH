@@ -1,5 +1,7 @@
 package de.wps.bikehh.config;
 
+import de.wps.bikehh.benutzerverwaltung.exception.ApiException;
+import de.wps.bikehh.benutzerverwaltung.exception.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +15,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import javax.servlet.http.HttpServletResponse;
 
 @Configuration
 @EnableWebSecurity
@@ -36,7 +40,7 @@ class ApiWebSecurity extends WebSecurityConfigurerAdapter {
 
 
     @Autowired
-    CustomAuthenticationHandler customAuthenticationHandler;
+    CustomAuthenticationFailureHandler customAuthenticationHandler;
 
     @Value("x-api-key")
     private String principalRequestHeader;
@@ -48,6 +52,8 @@ class ApiWebSecurity extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         APIKeyAuthMiddleware filter = new APIKeyAuthMiddleware(principalRequestHeader);
 
+        //filter.setAuthenticationFailureHandler(new CustomAuthenticationFailureHandler());
+        //filter.setAuthenticationSuccessHandler(authenticationSuccessHandler());
 
         filter.setAuthenticationManager(new AuthenticationManager() {
 
@@ -55,9 +61,7 @@ class ApiWebSecurity extends WebSecurityConfigurerAdapter {
             public Authentication authenticate(Authentication authentication) throws AuthenticationException {
                 String principal = (String) authentication.getPrincipal();
                 if (!principalRequestValue.equals(principal)) {
-                    System.out.println("here");
-                    //throw new ApiRequestException("bad_request", HttpStatus.BAD_REQUEST);
-                    throw new BadCredentialsException("nooo");
+                    throw new BadCredentialsException(ErrorCode.unauthorized);
                 }
                 authentication.setAuthenticated(true);
                 return authentication;
@@ -65,8 +69,15 @@ class ApiWebSecurity extends WebSecurityConfigurerAdapter {
         });
 
         httpSecurity.antMatcher("/api/**").csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().addFilter(filter).
-                authorizeRequests().anyRequest().authenticated();
+                authorizeRequests().anyRequest().authenticated()
+                .and().exceptionHandling().authenticationEntryPoint(((request, response, e) -> {
+                    ApiException exception = new ApiException(ErrorCode.unauthorized);
+
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    response.getWriter().write(exception.toString());
+                }));
+
     }
-
-
 }

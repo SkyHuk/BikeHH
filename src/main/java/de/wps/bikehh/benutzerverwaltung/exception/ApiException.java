@@ -37,4 +37,9 @@ public class ApiException {
         return httpStatus;
     }*/
 
+    @Override
+    public String toString(){
+        return String.format("{\"errorCode\": \"%s\",\n\"errorMessage\": \"%s\"}", getErrorCode(), getErrorMessage());
+
+    }
 }
