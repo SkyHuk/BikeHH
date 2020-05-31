@@ -28,9 +28,9 @@ public class User {
 
     private String role;
 
- /*   private String updatedAt;
+    private String updatedAt;
 
-    private String createdAt;*/
+    private String createdAt;
 
 
     public User(String email, String encryptedPassword) {
@@ -108,7 +108,7 @@ public class User {
         this.role = role;
     }
 
-/*    public String getUpdatedAt() {
+   public String getUpdatedAt() {
         return updatedAt;
     }
 
@@ -122,7 +122,7 @@ public class User {
 
     public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
-    }*/
+    }
 
 }
 
