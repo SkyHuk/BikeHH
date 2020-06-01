@@ -42,7 +42,6 @@ public class BikehhUserDetailsService implements UserDetailsService {
         return new BikehhUserDetails(user, email, user.getEncryptedPassword(), createAuthorities(user));
     }
 
-
     public void createUser(User user) throws ApiRequestException {
         if (_userAuthenticationRepository.existsByEmailAddress(user.getEmailAddress())) {
             throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);

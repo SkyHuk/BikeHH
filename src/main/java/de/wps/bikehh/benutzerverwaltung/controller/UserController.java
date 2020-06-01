@@ -1,6 +1,7 @@
 package de.wps.bikehh.benutzerverwaltung.controller;
 
 import de.wps.bikehh.benutzerverwaltung.exception.ErrorCode;
+import de.wps.bikehh.benutzerverwaltung.material.BikehhUserDetails;
 import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.benutzerverwaltung.exception.ApiRequestException;
 import de.wps.bikehh.benutzerverwaltung.dto.request.UserDetailsRequestModel;
@@ -14,9 +15,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/user")
 public class UserController {
 
+    private BikehhUserDetailsService _bikehhUserDetailsService;
 
     @Autowired
-    private BikehhUserDetailsService bikehhUserDetailsService;
+    public UserController(BikehhUserDetailsService bikehhUserDetailsService) {
+        this._bikehhUserDetailsService = bikehhUserDetailsService;
+    }
 
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -37,7 +41,7 @@ public class UserController {
             throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
         }
         user.setRole("user");
-        bikehhUserDetailsService.createUser(user);
+        _bikehhUserDetailsService.createUser(user);
         return requestUserDetails;
     }
 

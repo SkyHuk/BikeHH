@@ -20,14 +20,14 @@ CREATE TABLE `Session`  (
   `id` LONG AUTO_INCREMENT  PRIMARY KEY,
   `user_Id` int NOT NULL,
   `token` VARCHAR(255) NOT NULL,
-  `createdAt` timestamp NOT NULL DEFAULT NOW()
+  `created_at` timestamp NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE `Reset`  (
   `id` LONG AUTO_INCREMENT  PRIMARY KEY,
   `user_Id` int NOT NULL,
-  `token` VARCHAR(255) NOT NULL,
-  `createdAt` timestamp NOT NULL DEFAULT NOW()
+  `token` VARCHAR(255) NOT NULL ,
+  `created_at` timestamp NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE `Verification`  (
@@ -44,5 +44,6 @@ ALTER TABLE `Verification` ADD CONSTRAINT `fk_verification_userId` FOREIGN KEY (
 INSERT INTO `User` (`email_address`, `encrypted_password`, `role`) VALUES
 ('admin@chef.lol', 'sha: uwXzywW1mNUAWQZIaRA3cvRyyQQ=', 'administrator');
 
+/*test_pw*/
 INSERT INTO `User` (`email_address`, `encrypted_password`, `role`) VALUES
-('emre', 'sha: uwXzywW1mNUAWQZIaRA3cvRyyQQ=', 'user');
+('test@mail.com', 'sha: 2YbXcpo8qT6PuNnA8ZYlZK7Z+Ck=', 'user');

@@ -1,11 +1,9 @@
 package de.wps.bikehh.benutzerverwaltung.material;
 
-import net.bytebuddy.implementation.bind.annotation.Default;
+import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 public class User {
@@ -28,9 +26,13 @@ public class User {
 
     private String role;
 
-    private String updatedAt;
+    @Column(nullable = false)
+    @CreationTimestamp
+    private Date updatedAt;
 
-    private String createdAt;
+    @Column(nullable = false, updatable = false)
+    @CreationTimestamp
+    private Date createdAt;
 
 
     public User(String email, String encryptedPassword) {
@@ -38,7 +40,7 @@ public class User {
         this.encryptedPassword = encryptedPassword;
     }
 
-    public User(){
+    public User() {
 
     }
 
@@ -108,19 +110,19 @@ public class User {
         this.role = role;
     }
 
-   public String getUpdatedAt() {
+    public Date getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(String updatedAt) {
+    public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
 
-    public String getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(String createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 

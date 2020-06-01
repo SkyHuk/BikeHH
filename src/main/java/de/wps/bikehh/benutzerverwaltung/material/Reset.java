@@ -1,19 +1,29 @@
 package de.wps.bikehh.benutzerverwaltung.material;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import org.hibernate.annotations.CreationTimestamp;
 
-public class Token {
+import javax.persistence.*;
+import java.util.Date;
+
+@Entity
+public class Reset {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String userId;
+    private Long userId;
 
     private String token;
 
-    private String createdAt;
+    @Column(nullable = false, updatable = false)
+    @CreationTimestamp
+    private Date createdAt;
+
+    public Reset(Long userId, String token) {
+        this.userId = userId;
+        this.token = token;
+    }
 
     public Long getId() {
         return id;
@@ -23,11 +33,11 @@ public class Token {
         this.id = id;
     }
 
-    public String getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
@@ -39,11 +49,11 @@ public class Token {
         this.token = token;
     }
 
-    public String getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(String createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 }
