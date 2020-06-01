@@ -1,5 +1,6 @@
 package de.wps.bikehh.benutzerverwaltung.controller;
 
+import de.wps.bikehh.benutzerverwaltung.dto.response.UserDetailsResponseModel;
 import de.wps.bikehh.benutzerverwaltung.exception.ErrorCode;
 import de.wps.bikehh.benutzerverwaltung.material.BikehhUserDetails;
 import de.wps.bikehh.benutzerverwaltung.material.User;
@@ -25,13 +26,15 @@ public class UserController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public User getCurrentUser(@RequestHeader("Authorization") String accessToken) {
+    public UserDetailsResponseModel getCurrentUser(@RequestHeader("Authorization") String accessToken) {
         //User user = bikehhUserDetailsService.getUserbyAccesstoken(accessToken);
         //return user;
         //throw new TestRequestException("unauthorized", HttpStatus.UNAUTHORIZED);
         //UserDetails user = bikehhUserDetailsService.loadUserByUsername("emre");
         //return user.getPassword();
-        return new User();
+        BikehhUserDetails user = (BikehhUserDetails) _bikehhUserDetailsService.loadUserByUsername(accessToken);
+        return new UserDetailsResponseModel(user.getBikehhUser());
+
     }
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})

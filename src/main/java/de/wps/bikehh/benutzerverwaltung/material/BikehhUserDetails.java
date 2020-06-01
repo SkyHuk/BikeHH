@@ -17,4 +17,5 @@ public class BikehhUserDetails extends org.springframework.security.core.userdet
 		return user;
 	}
 
+
 }
