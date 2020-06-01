@@ -31,13 +31,13 @@ public class BikehhUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         if (!_userAuthenticationRepository.existsByEmailAddress(email)) {
-            throw new UsernameNotFoundException("Unbekannter Nutzer: " + email);
+            throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
         }
 
         User user = _userAuthenticationRepository.findByEmailAddress(email);
 
         if (user.getIsLocked()) {
-            throw new LockedException("Nutzer ist gesperrt");
+            throw new ApiRequestException(ErrorCode.unauthorized, HttpStatus.UNAUTHORIZED);
         }
         return new BikehhUserDetails(user, email, user.getEncryptedPassword(), createAuthorities(user));
     }
@@ -45,7 +45,8 @@ public class BikehhUserDetailsService implements UserDetailsService {
     public void createUser(User user) throws ApiRequestException {
         if (_userAuthenticationRepository.existsByEmailAddress(user.getEmailAddress())) {
             throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
-        } _userAuthenticationRepository.save(user);
+        }
+        _userAuthenticationRepository.save(user);
     }
 
     private String[] createAuthorities(User user) {

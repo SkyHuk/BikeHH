@@ -47,3 +47,7 @@ INSERT INTO `User` (`email_address`, `encrypted_password`, `role`) VALUES
 /*test_pw*/
 INSERT INTO `User` (`email_address`, `encrypted_password`, `role`) VALUES
 ('test@mail.com', 'sha: 2YbXcpo8qT6PuNnA8ZYlZK7Z+Ck=', 'user');
+
+/*test_pw*/
+INSERT INTO `Reset` (`user_id`, `token`) VALUES
+(2, 'asdjhasjdkasd');

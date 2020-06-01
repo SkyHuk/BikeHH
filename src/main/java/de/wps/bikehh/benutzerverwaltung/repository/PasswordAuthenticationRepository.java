@@ -1,11 +1,10 @@
 package de.wps.bikehh.benutzerverwaltung.repository;
 
 import de.wps.bikehh.benutzerverwaltung.material.Reset;
+import de.wps.bikehh.benutzerverwaltung.material.User;
 import org.springframework.data.repository.CrudRepository;
 
 public interface PasswordAuthenticationRepository extends CrudRepository<Reset, Long> {
-
-    boolean existsByUserId(String userId);
-
-    Reset findByUserId(String userId);
+    Reset findByUserId(Long userId);
+    Reset findByToken(String token);
 }

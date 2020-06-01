@@ -26,6 +26,7 @@ public class User {
 
     private String role;
 
+
     @Column(nullable = false)
     @CreationTimestamp
     private Date updatedAt;

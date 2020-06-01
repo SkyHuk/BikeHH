@@ -3,6 +3,7 @@ package de.wps.bikehh.benutzerverwaltung.material;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
@@ -14,15 +15,25 @@ public class Reset {
 
     private Long userId;
 
+    @NotNull
     private String token;
 
     @Column(nullable = false, updatable = false)
     @CreationTimestamp
     private Date createdAt;
 
+    /*@OneToOne
+    @MapsId
+    @JoinColumn(name = "userId")
+    private User user;*/
+
     public Reset(Long userId, String token) {
         this.userId = userId;
         this.token = token;
+    }
+
+    public Reset(){
+
     }
 
     public Long getId() {
