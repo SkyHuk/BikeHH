@@ -28,6 +28,8 @@ public class ApiException {
                 return "is unauthorized";
             case ErrorCode.method_not_found:
                 return "Http method not found";
+            case ErrorCode._not_found:
+                return "not found";
         }
 
         return "unknown error code";
