@@ -1,12 +1,11 @@
 package de.wps.bikehh.benutzerverwaltung.service;
 
-import de.wps.bikehh.benutzerverwaltung.dto.request.ResetPasswordModel;
 import de.wps.bikehh.benutzerverwaltung.exception.ApiRequestException;
 import de.wps.bikehh.benutzerverwaltung.exception.ErrorCode;
-import de.wps.bikehh.benutzerverwaltung.material.Reset;
 import de.wps.bikehh.benutzerverwaltung.material.User;
-import de.wps.bikehh.benutzerverwaltung.repository.PasswordAuthenticationRepository;
+import de.wps.bikehh.benutzerverwaltung.material.Verification;
 import de.wps.bikehh.benutzerverwaltung.repository.UserAuthenticationRepository;
+import de.wps.bikehh.benutzerverwaltung.repository.VerificationAuthenticationRepository;
 import de.wps.bikehh.benutzerverwaltung.service.smtp.Mail;
 import de.wps.bikehh.benutzerverwaltung.service.smtp.SmtpService;
 import de.wps.bikehh.benutzerverwaltung.utils.Utils;
@@ -20,21 +19,63 @@ import java.util.Map;
 @Service
 public class VerifyDetailsService {
 
-    private PasswordAuthenticationRepository _passwordAuthenticationRepository;
+    private VerificationAuthenticationRepository _verificationRepository;
     private UserAuthenticationRepository _userAuthenticationRepository;
     private SmtpService _smtpService;
 
     @Autowired
-    public VerifyDetailsService(PasswordAuthenticationRepository passwordAuthenticationRepository, UserAuthenticationRepository userAuthenticationRepository, SmtpService smtpService, BikehhPasswordEncoderService bikehhPasswordEncoderService) {
-        this._passwordAuthenticationRepository = passwordAuthenticationRepository;
+    public VerifyDetailsService(VerificationAuthenticationRepository verificationRepository, UserAuthenticationRepository userAuthenticationRepository, SmtpService smtpService) {
+        this._verificationRepository = verificationRepository;
         this._userAuthenticationRepository = userAuthenticationRepository;
         this._smtpService = smtpService;
     }
 
     public void requestVerificationMail(User user) {
+        //Delete in case token for user already exists
+        Verification verification = _verificationRepository.findByUserId(user.getId());
+        if (verification != null) {
+            _verificationRepository.delete(verification);
+        }
+
+        String token = Utils.generateSecureToken(Utils.TOKEN_COUNT);
+        Verification verificationToken = new Verification(user.getId(), token);
+
+
+        _verificationRepository.save(verificationToken);
+
+        //Send mail
+        Mail mail = new Mail(user.getEmailAddress(), "Verify Account");
+
+        String redirectLink = String.format("http://localhost:8080/api/verify?token=%s", token);
+
+        Map<String, Object> model = new HashMap<>();
+        //model.put("username", user.getUsername());
+        model.put("link", redirectLink);
+        mail.setModel(model);
+
+        try {
+            _smtpService.sendMail(mail, SmtpService.Templates.RESET);
+        } catch (Exception e) {
+            String message = String.format("failed to send verification mail to %s. Error was: %s", mail.getTo(), e.getMessage());
+            Logger.logger.error(message);
+        }
     }
 
-    public void verifyUser(ResetPasswordModel requestModel, String token) throws ApiRequestException {
+    public void verifyUser(String token) throws ApiRequestException {
+        Verification verification = _verificationRepository.findByToken(token);
+        if (verification == null) {
+            throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
+        }
 
+        User user = _userAuthenticationRepository.findById(verification.getUserId()).orElse(null);
+        if (user == null) {
+            throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
+        }
+
+        user.setVerified(true);
+
+        //Delete reset token and set new password
+        _verificationRepository.delete(verification);
+        _userAuthenticationRepository.save(user);
     }
 }

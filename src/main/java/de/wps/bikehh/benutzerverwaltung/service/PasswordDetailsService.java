@@ -57,7 +57,7 @@ public class PasswordDetailsService {
         try {
             _smtpService.sendMail(mail, SmtpService.Templates.RESET);
         } catch (Exception e) {
-            String message = String.format("failed to send mail to %s. Error was: %s", mail.getTo(), e.getMessage());
+            String message = String.format("failed to send reset password mail to %s. Error was: %s", mail.getTo(), e.getMessage());
             Logger.logger.error(message);
         }
     }

@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
-public class Reset {
+public class Verification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,15 +22,9 @@ public class Reset {
     @CreationTimestamp
     private Date createdAt;
 
-    /*@OneToOne
-    @MapsId
-    @JoinColumn(name = "userId")
-    private User user;*/
+    public Verification(){ }
 
-
-    public Reset(){ }
-
-    public Reset(Long userId, String token) {
+    public Verification(Long userId, String token) {
         this.userId = userId;
         this.token = token;
     }
