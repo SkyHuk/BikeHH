@@ -25,7 +25,7 @@ public class PasswordDetailsService {
     private SmtpService _smtpService;
 
     @Autowired
-    public PasswordDetailsService(PasswordAuthenticationRepository passwordAuthenticationRepository, UserAuthenticationRepository userAuthenticationRepository, SmtpService smtpService, BikehhPasswordEncoderService bikehhPasswordEncoderService) {
+    public PasswordDetailsService(PasswordAuthenticationRepository passwordAuthenticationRepository, UserAuthenticationRepository userAuthenticationRepository, SmtpService smtpService) {
         this._passwordAuthenticationRepository = passwordAuthenticationRepository;
         this._userAuthenticationRepository = userAuthenticationRepository;
         this._smtpService = smtpService;
@@ -48,6 +48,7 @@ public class PasswordDetailsService {
         Mail mail = new Mail(user.getEmailAddress(), "Reset password");
 
         String redirectLink = String.format("http://localhost:8080/api/password?token=%s", token);
+
         Map<String, Object> model = new HashMap<>();
         //model.put("username", user.getEmailAddress());
         model.put("link", redirectLink);
@@ -56,8 +57,8 @@ public class PasswordDetailsService {
         try {
             _smtpService.sendMail(mail, SmtpService.Templates.RESET);
         } catch (Exception e) {
-            System.out.println(e);
-            //@TODO logging
+            String message = String.format("failed to send mail to %s. Error was: %s", mail.getTo(), e.getMessage());
+            Logger.logger.error(message);
         }
     }
 

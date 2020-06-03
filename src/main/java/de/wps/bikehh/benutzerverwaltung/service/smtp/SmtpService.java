@@ -18,7 +18,8 @@ import java.nio.charset.StandardCharsets;
 public class SmtpService {
 
     public enum Templates {
-        RESET("email/reset-template"), VERIFY("email/verify-template");
+        RESET("email/reset-template"),
+        VERIFY("email/verify-template");
 
         private String path;
 
