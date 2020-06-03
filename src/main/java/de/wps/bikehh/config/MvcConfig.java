@@ -15,7 +15,7 @@ public class MvcConfig implements WebMvcConfigurer {
 		registry.addViewController("/karte").setViewName("map");
 		registry.addViewController("/meldungen").setViewName("report_list");
 		registry.addViewController("/umfrage-erstellen").setViewName("create_survey");
-		registry.addViewController("/übersicht").setViewName("dashboard");
+		registry.addViewController("/uebersicht").setViewName("dashboard");
 
 	}
 }
