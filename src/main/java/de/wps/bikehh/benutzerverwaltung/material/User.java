@@ -1,9 +1,15 @@
 package de.wps.bikehh.benutzerverwaltung.material;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+
+import de.wps.bikehh.adfc.material.Survey;
 
 @Entity
 public class User {
@@ -19,6 +25,9 @@ public class User {
 	private String role;
 
 	private boolean isLocked;
+
+	@ManyToMany(mappedBy = "confirmedByUsers", cascade = CascadeType.ALL)
+	private List<Survey> confirmedSurveys;
 
 	public Long getId() {
 		return id;
@@ -58,6 +67,14 @@ public class User {
 
 	public void setIsLocked(boolean isLocked) {
 		this.isLocked = isLocked;
+	}
+
+	public List<Survey> getConfirmedSurveys() {
+		return confirmedSurveys;
+	}
+
+	public void setConfirmedSurveys(List<Survey> confirmedSurveys) {
+		this.confirmedSurveys = confirmedSurveys;
 	}
 
 }
