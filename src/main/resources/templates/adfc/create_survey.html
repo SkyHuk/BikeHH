@@ -16,11 +16,11 @@
 
   <div class="row">
     <div class="col-8 border-right">
-    	<div id="mapid" style="width: 600px; height: 400px;"></div>
+    	<div id="mapid" style="width: 600px; height: 600px;"></div>
       <!--<img src="/map_circle.png" width="600" class="img-responsive">-->
       <script>
 
-	var mymap = L.map('mapid').setView([53.551086, 9.993682], 11);
+	var mymap = L.map('mapid').setView([53.551086, 9.993682], 12);
 
 	L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
 		maxZoom: 18,
@@ -31,6 +31,24 @@
 		tileSize: 512,
 		zoomOffset: -1
 	}).addTo(mymap);
+	var popup = L.popup();
+
+	function onMapClick(e) {
+		
+		/*var circle = L.circle([e.lat, e.lng], {
+			color: 'red',
+		    fillColor: '#f03',
+		    fillOpacity: 0.5,
+		    radius: 500
+		}).addTo(mymap);*/
+		
+	    popup
+	        .setLatLng(e.latlng)
+	        .setContent("You clicked the map at " + e.latlng.toString())
+	        .openOn(mymap);
+	}
+
+	mymap.on('click', onMapClick);
 
 </script>
     </div>
