@@ -14,7 +14,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		String[] publicUrls = { 
 				"/",
-				"/img/*",
+				"/img/logo.png",
 				"/logout", 
 				"/generated/css/*", 
 				"/generated/js/*", 
