@@ -1,54 +1,65 @@
 package de.wps.bikehh.benutzerverwaltung.service.smtp;
 
+import nz.net.ultraq.thymeleaf.LayoutDialect;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
-import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
-import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
+import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
+import org.thymeleaf.templateresolver.ITemplateResolver;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 @Service
 public class SmtpService {
 
+    public enum Templates {
+        RESET("email/reset-template"), VERIFY("email/verify-template");
+
+        private String path;
+
+        Templates(String path) {
+            this.path = path;
+        }
+
+        public String getPath() {
+            return path;
+        }
+    }
+
     private JavaMailSender emailSender;
-    private SpringTemplateEngine templateEngine;
 
     /**
      * @param javaMailSender
      */
     @Autowired
-    public SmtpService(JavaMailSender javaMailSender, SpringTemplateEngine templateEngine) {
+    public SmtpService(JavaMailSender javaMailSender) {
         this.emailSender = javaMailSender;
-        this.templateEngine = templateEngine;
     }
 
     /**
      * Is used to send mail.
      *
      * @param mail
+     * @param template
      * @throws MessagingException
      */
 
-    public void sendMail(Mail mail, String template) throws MessagingException, IOException {
+    public void sendMail(Mail mail, Templates template) throws MessagingException {
         MimeMessage message = emailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, StandardCharsets.UTF_8.name());
+        MimeMessageHelper helper = new MimeMessageHelper(message, StandardCharsets.UTF_8.name());
 
         //helper.addAttachment("logo.png", new ClassPathResource("memorynotfound-logo.png"));
 
         Context context = new Context();
         context.setVariables(mail.getModel());
-        String html = templateEngine.process(template, context);
+
+        SpringTemplateEngine templateEngine = springTemplateEngine();
+        String html = templateEngine.process(template.getPath(), context);
 
         helper.setTo(mail.getTo());
         helper.setText(html, true);
@@ -57,4 +68,20 @@ public class SmtpService {
         emailSender.send(message);
     }
 
+    private SpringTemplateEngine springTemplateEngine() {
+        SpringTemplateEngine templateEngine = new SpringTemplateEngine();
+        templateEngine.addTemplateResolver(htmlTemplateResolver());
+        templateEngine.addDialect(new LayoutDialect());
+        return templateEngine;
+    }
+
+
+    private ITemplateResolver htmlTemplateResolver() {
+        ClassLoaderTemplateResolver emailTemplateResolver = new ClassLoaderTemplateResolver();
+        emailTemplateResolver.setPrefix("/templates/");
+        emailTemplateResolver.setSuffix(".html");
+        emailTemplateResolver.setTemplateMode("HTML");
+        emailTemplateResolver.setCharacterEncoding(StandardCharsets.UTF_8.name());
+        return emailTemplateResolver;
+    }
 }

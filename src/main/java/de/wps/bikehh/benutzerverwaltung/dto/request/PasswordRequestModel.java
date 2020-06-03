@@ -20,5 +20,4 @@ public class PasswordRequestModel {
         this.newPassword = newPassword;
     }
 
-
 }

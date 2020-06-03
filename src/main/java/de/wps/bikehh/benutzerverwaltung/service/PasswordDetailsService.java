@@ -54,8 +54,9 @@ public class PasswordDetailsService {
         mail.setModel(model);
 
         try {
-            _smtpService.sendMail(mail, "/email/reset-template");
+            _smtpService.sendMail(mail, SmtpService.Templates.RESET);
         } catch (Exception e) {
+            System.out.println(e);
             //@TODO logging
         }
     }
