@@ -2,6 +2,7 @@ package de.wps.bikehh.benutzerverwaltung.service;
 
 import de.wps.bikehh.benutzerverwaltung.exception.ApiRequestException;
 import de.wps.bikehh.benutzerverwaltung.exception.ErrorCode;
+import de.wps.bikehh.benutzerverwaltung.material.Reset;
 import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.benutzerverwaltung.material.Verification;
 import de.wps.bikehh.benutzerverwaltung.repository.UserAuthenticationRepository;
@@ -11,10 +12,10 @@ import de.wps.bikehh.benutzerverwaltung.service.smtp.SmtpService;
 import de.wps.bikehh.benutzerverwaltung.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class VerifyDetailsService {
@@ -77,5 +78,20 @@ public class VerifyDetailsService {
         //Delete reset token and set new password
         _verificationRepository.delete(verification);
         _userAuthenticationRepository.save(user);
+    }
+
+    @Scheduled(fixedRate = 10000)
+    public void deleteExpiredTokens() {
+        List<Verification> list = new ArrayList<>();
+        _verificationRepository.findAll().forEach(list::add);
+
+        Date now = new Date();
+        long oneHour = 1000 * 60 * 60;
+
+        for (Verification v : list) {
+            if ((now.getTime() - v.getCreatedAt().getTime()) > oneHour) {
+                _verificationRepository.delete(v);
+            }
+        }
     }
 }

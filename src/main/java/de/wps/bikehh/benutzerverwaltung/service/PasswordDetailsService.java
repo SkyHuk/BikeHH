@@ -12,10 +12,10 @@ import de.wps.bikehh.benutzerverwaltung.service.smtp.SmtpService;
 import de.wps.bikehh.benutzerverwaltung.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class PasswordDetailsService {
@@ -81,6 +81,21 @@ public class PasswordDetailsService {
         //Delete reset token and set new password
         _passwordAuthenticationRepository.delete(reset);
         _userAuthenticationRepository.save(user);
+    }
+
+    @Scheduled(fixedRate = 10000)
+    public void deleteExpiredTokens() {
+        List<Reset> list = new ArrayList<>();
+        _passwordAuthenticationRepository.findAll().forEach(list::add);
+
+        Date now = new Date();
+        long oneHour = 1000 * 60 * 60;
+
+        for (Reset r : list) {
+            if ((now.getTime() - r.getCreatedAt().getTime()) > oneHour) {
+                _passwordAuthenticationRepository.delete(r);
+            }
+        }
     }
 
 }
