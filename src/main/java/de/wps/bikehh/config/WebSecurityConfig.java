@@ -13,7 +13,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		String[] publicUrls = { 
-				"/", 
+				"/",
+				"/img/*",
 				"/logout", 
 				"/generated/css/*", 
 				"/generated/js/*", 
@@ -23,7 +24,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests().antMatchers(publicUrls).permitAll().anyRequest().authenticated().and()
 				// .formLogin().loginPage("/login").permitAll()
 				// .and()
-				.formLogin().loginPage("/login").defaultSuccessUrl("/übersicht").permitAll().and().logout()
+				.formLogin().loginPage("/login").defaultSuccessUrl("/uebersicht").permitAll().and().logout()
 				.logoutSuccessUrl("/login?logout").logoutUrl("/logout")
 				.logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET")).invalidateHttpSession(true)
 				.deleteCookies("JSESSIONID").permitAll();
