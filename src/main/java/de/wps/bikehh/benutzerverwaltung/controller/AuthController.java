@@ -3,7 +3,6 @@ package de.wps.bikehh.benutzerverwaltung.controller;
 import de.wps.bikehh.benutzerverwaltung.dto.request.LoginRequest;
 import de.wps.bikehh.benutzerverwaltung.material.Session;
 import de.wps.bikehh.benutzerverwaltung.service.AuthService;
-import de.wps.bikehh.benutzerverwaltung.service.BikehhUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +28,7 @@ public class AuthController {
     }
 
     @DeleteMapping
-    public ResponseEntity<Void> logout(@RequestHeader("Authentication") String token) {
+    public ResponseEntity<Void> logout(@RequestHeader("Authorization") String token) {
         _authService.logoutUser(token);
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
     }
