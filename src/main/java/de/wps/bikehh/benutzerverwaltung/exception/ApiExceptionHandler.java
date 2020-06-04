@@ -3,6 +3,8 @@ package de.wps.bikehh.benutzerverwaltung.exception;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -50,6 +52,13 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         ApiException headerException = new ApiException(ErrorCode.bad_request);
         return new ResponseEntity<>(headerException, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(value = {BadCredentialsException.class})
+    public ResponseEntity<Object> handleBadCredentialsException(BadCredentialsException e) {
+
+        ApiException apiException = new ApiException(e.getMessage());
+        return new ResponseEntity<>(apiException, HttpStatus.UNAUTHORIZED);
     }
 
     @Override //content-Type
