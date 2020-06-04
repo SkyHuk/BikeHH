@@ -69,17 +69,13 @@ public class UserController {
     }
 
     @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void updateUser(@RequestHeader("Authorization") String accessToken, @RequestBody UpdateUserDetailsRequestModel requestUserDetails){
-        _bikehhUserDetailsService.updateUser(getCurrentUser(accessToken), requestUserDetails);
-        }
-
+    public void updateUser(@RequestHeader("Authorization") String accessToken, @RequestBody UpdateUserDetailsRequestModel requestUserDetails) {
+        //_bikehhUserDetailsService.updateUser(getCurrentUser(accessToken), requestUserDetails);
+    }
 
     @DeleteMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@RequestHeader("Authorization") String accessToken, @RequestBody User user) {
-    _bikehhUserDetailsService.deleteUser(getCurrentUser(accessToken));
+        //_bikehhUserDetailsService.deleteUser(getCurrentUser(accessToken));
     }
-
-
-
 }
