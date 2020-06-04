@@ -2,23 +2,46 @@
 
   <head>
     <title>ADFC - Meldungen</title>
-<!-- Source: https://leafletjs.com/examples/quick-start/example.html -->
+	<!-- Source: https://leafletjs.com/examples/quick-start/example.html -->
     <meta charset="utf-8" />
-  
-<!-- CSS to get leaflet to fullscreen -->
-    <style type="text/css">
+    <!-- CSS to get leaflet to fullscreen -->
+	<!-- <link rel="stylesheet" type="text/css" href="map.css"> -->
+   <style>
     html, body {
-    height: 100%;
-	}
-
-	#mapid {
-    height: 100%;
-    background: #000;
-	}
-    </style>
-    
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	    height: 100%;
+		}
 	
+		#mapid {
+	    height: 100%;
+	    background: #000;
+		}
+	    
+	    .custom-round-btn{
+	    height: 60px;
+	  	line-height: 60px;  
+	  	width: 60px;  
+	  	font-size: 2em;
+	  	font-weight: bold;
+	  	border-radius: 50%;
+	  	background-color: #498adc;
+	  	color: white;
+	  	text-align: center;
+	  	cursor: pointer;
+	  	position: absolute;
+	    bottom: 20px;
+	    right: 30px;
+	    z-index: 9999;
+	    }
+	    
+	    .custom-round-btn:hover{
+	    	background-color: white;
+	    }  
+	    
+	    A:hover { COLOR: #498adc; TEXT-DECORATION: none; font-weight: none }
+	}
+   </style>
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin=""/>
     <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js" integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew==" crossorigin=""></script>
@@ -26,9 +49,13 @@
 
   <body layout:fragment="content">
 
-<div id="mapid" style="width:100%"></div>
-
-<script>
+	<div id="mapid" style="width:100%"></div>
+	<!-- round button to add a new survey -->
+	<a href="/umfrage-erstellen" class="custom-round-btn">+</a>
+	
+	<!-- js file for map.html -->
+	<!-- <script src="/map.js"></script> -->
+	<script>
 	// coordinates for hamburg lat: 53.551086, long: 9.993682
 	var mymap = L.map('mapid').setView([53.551086, 9.993682], 13);
 
@@ -63,14 +90,6 @@
 	}
 
 	mymap.on('click', onMapClick);
-
-</script>
-
-<!-- old Code: -->
-<!--     <h2 class="my-4">Karte</h2> -->
-<!--     <img class="img-responsive" src="map_overview_2.png"> -->
-
-<!--     <h2 class="my-4">HeatMap</h2> -->
-<!--     <img class="img-responsive" src="heatmap.png"> -->
+	</script>
   </body>
 </html>
