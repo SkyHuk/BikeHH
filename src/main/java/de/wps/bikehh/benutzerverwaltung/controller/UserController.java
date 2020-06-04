@@ -5,7 +5,9 @@ import de.wps.bikehh.benutzerverwaltung.dto.response.UserDetailsResponseModel;
 import de.wps.bikehh.benutzerverwaltung.exception.ErrorCode;
 import de.wps.bikehh.benutzerverwaltung.material.BikehhUserDetails;
 import de.wps.bikehh.benutzerverwaltung.material.User;
+import de.wps.bikehh.benutzerverwaltung.repository.UserAuthenticationRepository;
 import de.wps.bikehh.benutzerverwaltung.exception.ApiRequestException;
+import de.wps.bikehh.benutzerverwaltung.dto.request.UpdateUserDetailsRequestModel;
 import de.wps.bikehh.benutzerverwaltung.dto.request.UserDetailsRequestModel;
 import de.wps.bikehh.benutzerverwaltung.service.BikehhPasswordEncoderService;
 import de.wps.bikehh.benutzerverwaltung.service.BikehhUserDetailsService;
@@ -67,15 +69,17 @@ public class UserController {
     }
 
     @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public User updateUser(@RequestHeader("Authorization") String accessToken, @RequestBody User user) {
+    public void updateUser(@RequestHeader("Authorization") String accessToken, @RequestBody UpdateUserDetailsRequestModel requestUserDetails){
+        _bikehhUserDetailsService.updateUser(getCurrentUser(accessToken), requestUserDetails);
+        }
 
-        return new User();
-    }
 
-    @DeleteMapping
+    @DeleteMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteUser() {
-
+    public void deleteUser(@RequestHeader("Authorization") String accessToken, @RequestBody User user) {
+    _bikehhUserDetailsService.deleteUser(getCurrentUser(accessToken));
     }
+
+
 
 }
