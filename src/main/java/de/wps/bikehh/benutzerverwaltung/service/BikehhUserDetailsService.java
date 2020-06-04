@@ -67,7 +67,7 @@ public class BikehhUserDetailsService implements UserDetailsService {
         return authorities.toArray(new String[authorities.size()]);
     }
 
-	public void updateUser(User user, @RequestBody UserDetailsRequestModel userUpdate) {
+	public void updateUser(User user, UpdateUserDetailsRequestModel userUpdate) {
         
         if (user.getIsLocked()) {
             throw new LockedException("Nutzer ist gesperrt");
@@ -76,7 +76,7 @@ public class BikehhUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException(userUpdate.getEmail()+"bereits vergeben");
         }
         user.setEmailAddress(userUpdate.getEmail());
-        user.setPrivacySetting(userUpdate.getPrivacySettings());
+        user.setPrivacySetting(userUpdate.getPrivacySetting());
         _userAuthenticationRepository.save(user);
     }
 
