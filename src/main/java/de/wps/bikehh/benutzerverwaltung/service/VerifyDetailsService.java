@@ -2,6 +2,7 @@ package de.wps.bikehh.benutzerverwaltung.service;
 
 import de.wps.bikehh.benutzerverwaltung.exception.ApiRequestException;
 import de.wps.bikehh.benutzerverwaltung.exception.ErrorCode;
+import de.wps.bikehh.benutzerverwaltung.material.BikehhUserDetails;
 import de.wps.bikehh.benutzerverwaltung.material.Reset;
 import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.benutzerverwaltung.material.Verification;
@@ -31,7 +32,17 @@ public class VerifyDetailsService {
         this._smtpService = smtpService;
     }
 
-    public void requestVerificationMail(User user) {
+    public void requestVerificationMail(String email) throws ApiRequestException {
+        if (!_userAuthenticationRepository.existsByEmailAddress(email)) {
+            throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
+        }
+
+        User user = _userAuthenticationRepository.findByEmailAddress(email);
+        if (user.getIsVerified()) {
+            return;
+        }
+
+
         //Delete in case token for user already exists
         Verification verification = _verificationRepository.findByUserId(user.getId());
         if (verification != null) {
@@ -55,7 +66,7 @@ public class VerifyDetailsService {
         mail.setModel(model);
 
         try {
-            _smtpService.sendMail(mail, SmtpService.Templates.RESET);
+            _smtpService.sendMail(mail, SmtpService.Templates.VERIFY);
         } catch (Exception e) {
             String message = String.format("failed to send verification mail to %s. Error was: %s", mail.getTo(), e.getMessage());
             Logger.logger.error(message);
@@ -63,12 +74,13 @@ public class VerifyDetailsService {
     }
 
     public void verifyUser(String token) throws ApiRequestException {
-        Verification verification = _verificationRepository.findByToken(token);
+        Verification verification = _verificationRepository.findByToken(token).orElse(null);
         if (verification == null) {
-            throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
+            throw new ApiRequestException(ErrorCode.unauthorized, HttpStatus.UNAUTHORIZED);
         }
 
-        User user = _userAuthenticationRepository.findById(verification.getUserId()).orElse(null);
+        Long userId = verification.getUserId();
+        User user = _userAuthenticationRepository.findById(userId).orElse(null);
         if (user == null) {
             throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
         }

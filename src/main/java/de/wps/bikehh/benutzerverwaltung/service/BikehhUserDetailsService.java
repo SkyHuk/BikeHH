@@ -3,8 +3,10 @@ package de.wps.bikehh.benutzerverwaltung.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sun.tools.javac.util.DefinedBy;
 import de.wps.bikehh.benutzerverwaltung.dto.request.UpdateUserDetailsRequestModel;
 import de.wps.bikehh.benutzerverwaltung.dto.request.UserDetailsRequestModel;
+import de.wps.bikehh.benutzerverwaltung.dto.response.UserDetailsResponseModel;
 import de.wps.bikehh.benutzerverwaltung.exception.ApiRequestException;
 import de.wps.bikehh.benutzerverwaltung.exception.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +36,7 @@ public class BikehhUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         if (!_userAuthenticationRepository.existsByEmailAddress(email)) {
-           return null;
+            throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
         }
 
         User user = _userAuthenticationRepository.findByEmailAddress(email);
@@ -68,23 +70,24 @@ public class BikehhUserDetailsService implements UserDetailsService {
         return authorities.toArray(new String[authorities.size()]);
     }
 
-	public void updateUser(User user, UpdateUserDetailsRequestModel userUpdate) {
-        
+
+    public void updateUser(User user, UpdateUserDetailsRequestModel userUpdate) {
+
         if (user.getIsLocked()) {
             throw new LockedException("Nutzer ist gesperrt");
         }
-        if (_userAuthenticationRepository.existsByEmailAddress(userUpdate.getEmail())){
-            throw new UsernameNotFoundException(userUpdate.getEmail()+"bereits vergeben");
+        if (_userAuthenticationRepository.existsByEmailAddress(userUpdate.getEmail())) {
+            throw new UsernameNotFoundException(userUpdate.getEmail() + "bereits vergeben");
         }
         user.setEmailAddress(userUpdate.getEmail());
         user.setPrivacySetting(userUpdate.getPrivacySetting());
         _userAuthenticationRepository.save(user);
     }
 
-	public void deleteUser(User user) {
-        if(!(_userAuthenticationRepository.existsByEmailAddress(user.getEmailAddress()))){
+    public void deleteUser(User user) {
+        if (!(_userAuthenticationRepository.existsByEmailAddress(user.getEmailAddress()))) {
             throw new UsernameNotFoundException(user.getId() + "existiert nicht!");
         }
         _userAuthenticationRepository.delete(user);
-	}
+    }
 }

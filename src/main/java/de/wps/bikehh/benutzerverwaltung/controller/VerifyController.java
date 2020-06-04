@@ -16,34 +16,21 @@ public class VerifyController {
 
 
     private VerifyDetailsService _verifyDetailsService;
-    private BikehhUserDetailsService _bikehhUserDetailsService;
 
     @Autowired
-    public VerifyController(VerifyDetailsService verifyDetailsService, BikehhUserDetailsService bikehhUserDetailsService) {
+    public VerifyController(VerifyDetailsService verifyDetailsService) {
         this._verifyDetailsService = verifyDetailsService;
-        this._bikehhUserDetailsService = bikehhUserDetailsService;
-
     }
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
     public void requestVerificationMail(@RequestBody RequestMailModel requestModel) throws ApiRequestException {
-        BikehhUserDetails userDetails;
-        try {
-            userDetails = (BikehhUserDetails) _bikehhUserDetailsService.loadUserByUsername(requestModel.getEmail());
-        } catch (Exception e) {
-            return;
-        }
-
-        User u = userDetails.getBikehhUser();
-        if (u == null || u.getIsVerified()) {
-            return;
-        }
-
-        _verifyDetailsService.requestVerificationMail(u);
+        String email = requestModel.getEmail();
+        _verifyDetailsService.requestVerificationMail(email);
     }
 
     @PutMapping
     public void verifyUser(@RequestParam String token) {
+
         _verifyDetailsService.verifyUser(token);
     }
 

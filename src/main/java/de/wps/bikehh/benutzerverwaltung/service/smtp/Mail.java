@@ -7,8 +7,6 @@ public class Mail {
     private String to;
     private String subject;
     private Map<String,Object> model;
-    public Mail() {
-    }
 
     public Mail(String to, String subject) {
         this.to = to;

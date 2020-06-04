@@ -17,33 +17,24 @@ public class PasswordController {
 
 
     private PasswordDetailsService _passwordDetailsService;
-    private BikehhUserDetailsService _bikehhUserDetailsService;
 
     @Autowired
-    public PasswordController(PasswordDetailsService passwordDetailsService, BikehhUserDetailsService bikehhUserDetailsService) {
+    public PasswordController(PasswordDetailsService passwordDetailsService) {
         this._passwordDetailsService = passwordDetailsService;
-        this._bikehhUserDetailsService = bikehhUserDetailsService;
-
     }
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
     public void requestPasswordResetMail(@RequestBody RequestMailModel requestModel) throws ApiRequestException {
-        BikehhUserDetails userDetails;
+        String email = requestModel.getEmail();
 
-        userDetails = (BikehhUserDetails) _bikehhUserDetailsService.loadUserByUsername(requestModel.getEmail());
-
-
-        User u = userDetails.getBikehhUser();
-        if (u == null) {
-            return;
-        }
-
-        _passwordDetailsService.requestResetMail(u);
+        _passwordDetailsService.requestResetMail(email);
     }
 
     @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
     public void resetPassword(@RequestBody ResetPasswordModel requestModel, @RequestParam String token) {
-        _passwordDetailsService.resetPassword(requestModel, token);
+        String password = requestModel.getNewPassword();
+
+        _passwordDetailsService.resetPassword(password, token);
     }
 
 

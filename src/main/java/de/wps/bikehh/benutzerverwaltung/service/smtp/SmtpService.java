@@ -1,7 +1,9 @@
 package de.wps.bikehh.benutzerverwaltung.service.smtp;
 
+import de.wps.bikehh.benutzerverwaltung.service.Logger;
 import nz.net.ultraq.thymeleaf.LayoutDialect;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -50,23 +52,34 @@ public class SmtpService {
      * @throws MessagingException
      */
 
-    public void sendMail(Mail mail, Templates template) throws MessagingException {
+    public void sendMail(Mail mail, Templates template) {
         MimeMessage message = emailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, StandardCharsets.UTF_8.name());
-
-        //helper.addAttachment("logo.png", new ClassPathResource("memorynotfound-logo.png"));
 
         Context context = new Context();
         context.setVariables(mail.getModel());
+        context.setVariable("logo", "logo");
 
-        SpringTemplateEngine templateEngine = springTemplateEngine();
-        String html = templateEngine.process(template.getPath(), context);
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, StandardCharsets.UTF_8.name());
 
-        helper.setTo(mail.getTo());
-        helper.setText(html, true);
-        helper.setSubject(mail.getSubject());
 
-        emailSender.send(message);
+            SpringTemplateEngine templateEngine = springTemplateEngine();
+            String html = templateEngine.process(template.getPath(), context);
+
+            //@TODO set name of sender to "byclistics" or what ever the name of the app is gonna be
+            helper.setTo(mail.getTo());
+            helper.setText(html, true);
+            helper.setSubject(mail.getSubject());
+
+            helper.addInline("logo", new ClassPathResource("/images/logo.png"), "image/png");
+            emailSender.send(message);
+        } catch (MessagingException e) {
+
+            String error = String.format("failed to send mail to %s. Error was: %s", mail.getTo(), e.getMessage());
+            Logger.logger.error(error);
+        }
+
+
     }
 
     private SpringTemplateEngine springTemplateEngine() {

@@ -1,5 +1,6 @@
 package de.wps.bikehh.benutzerverwaltung.exception;
 
+import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MissingPathVariableException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -67,5 +69,4 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         ApiException headerException = new ApiException(ErrorCode.bad_request);
         return new ResponseEntity<>(headerException, HttpStatus.BAD_REQUEST);
     }
-
 }

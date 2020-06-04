@@ -4,6 +4,7 @@ import de.wps.bikehh.benutzerverwaltung.Validation.Validation;
 import de.wps.bikehh.benutzerverwaltung.dto.response.UserDetailsResponseModel;
 import de.wps.bikehh.benutzerverwaltung.exception.ErrorCode;
 import de.wps.bikehh.benutzerverwaltung.material.BikehhUserDetails;
+import de.wps.bikehh.benutzerverwaltung.material.Roles;
 import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.benutzerverwaltung.repository.UserAuthenticationRepository;
 import de.wps.bikehh.benutzerverwaltung.exception.ApiRequestException;
@@ -15,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+
+import javax.management.relation.Role;
 
 @RestController
 @RequestMapping("/api/user")
@@ -30,18 +33,12 @@ public class UserController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public UserDetailsResponseModel getCurrentUser(@RequestHeader("Authorization") String accessToken) throws ApiRequestException{
-        //User user = bikehhUserDetailsService.getUserbyAccesstoken(accessToken);
-        //return user;
-        //throw new TestRequestException("unauthorized", HttpStatus.UNAUTHORIZED);
-        //UserDetails user = bikehhUserDetailsService.loadUserByUsername("emre");
-        //return user.getPassword();
-
+    public UserDetailsResponseModel getCurrentUser(@RequestHeader("Authorization") String accessToken) throws ApiRequestException {
         BikehhUserDetails user = (BikehhUserDetails) _bikehhUserDetailsService.loadUserByUsername(accessToken);
 
         User u = user.getBikehhUser();
         if (u == null) {
-            throw new ApiRequestException(ErrorCode._not_found,HttpStatus.NOT_FOUND);
+            throw new ApiRequestException(ErrorCode._not_found, HttpStatus.NOT_FOUND);
         }
 
         return new UserDetailsResponseModel(u);
@@ -50,16 +47,15 @@ public class UserController {
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public UserDetailsRequestModel createUser(@RequestBody UserDetailsRequestModel requestUserDetails) throws ApiRequestException {
+        String email = requestUserDetails.getEmail();
+        String password = requestUserDetails.getPassword();
 
-        if (!Validation.isEmailValid(requestUserDetails.getEmail()) || !Validation.isPasswordValid(requestUserDetails.getPassword())){
-            throw new ApiRequestException(ErrorCode.bad_request,HttpStatus.BAD_REQUEST);
-        }
-
-        User user = new User(requestUserDetails.getEmail(), requestUserDetails.getPassword());
-        if (user.getEmailAddress() == null || user.getEncryptedPassword() == null) {
+        if (!Validation.isEmailValid(email) || !Validation.isPasswordValid(password)) {
             throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
         }
-        user.setRole("user");
+
+        User user = new User(email, password);
+        user.setRole(Roles.ROLE_USER);
 
         BikehhPasswordEncoderService encoder = new BikehhPasswordEncoderService();
         user.setEncryptedPassword(encoder.encodePassword(requestUserDetails.getPassword()));
