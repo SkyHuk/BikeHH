@@ -69,27 +69,67 @@
 		zoomOffset: -1
 	}).addTo(mymap);
 
-	// marker example Umfrage #201
-	L.marker([53.553847, 9.991648]).addTo(mymap)
-		.bindPopup("<b>Umfrage #201</b><br />").openPopup();
-
-	//circle example with Umfrage #201
-	L.circle([53.553847, 9.991648], 300, {
-		color: 'red',
-		fillColor: '#f03',
-		fillOpacity: 0.2
-	}).addTo(mymap).bindPopup("Umfrageradius zu Umfrage #201");
+	//example code	
+	// 	// marker example Umfrage #201
+	// 	L.marker([53.553847, 9.991648]).addTo(mymap)
+	// 		.bindPopup("<b>Umfrage #201</b><br />").openPopup();
+	
+	// 	//circle example with Umfrage #201
+	// 	L.circle([53.553847, 9.991648], 300, {
+	// 		color: 'red',
+	// 		fillColor: '#f03',
+	// 		fillOpacity: 0.2
+	// 	}).addTo(mymap).bindPopup("Umfrageradius zu Umfrage #201");
 
 	var popup = L.popup();
 
 	function onMapClick(e) {
+		//create link to open "/umfrage-erstellen"
+        var a = document.createElement('a');  
+          
+        //text node
+        var link = document.createTextNode("Hier klicken, um eine Umfrage an Position " + e.latlng.toString() + " zu erstellen"); 
+          
+        // Append text node to anchor element
+        a.appendChild(link);  
+          
+        // Set the href property. 
+        //TODO lat,long as parameters
+        a.href = "/umfrage-erstellen";  
+		
+        //popup
 		popup
 			.setLatLng(e.latlng)
-			.setContent("You clicked the map at " + e.latlng.toString())
+			.setContent(document.body.appendChild(a))
 			.openOn(mymap);
+	}
+	
+	//add a survey from db to map with marker (from files ONLY at the moment)
+	function addSurveysToMap(id, lat, lng, type, createdAtDate, confirmedByUsers, confirmed, text){
+		console.log('addSurveysToMap was called with ' + lat + 'and ' + lng);
+		L.marker([lat, lng]).addTo(mymap)
+		.bindPopup("<b>Umfrage" + " Id " + id + "</b><br/>" +
+				"Beschreibung: " + text + "<br/>" + 
+				"Lat: " + lat + "<br/>" +
+				"Lng: " + lng + "<br/>" +
+				"Typ: " + type + "<br/>" +
+				"Erstellt am: " + createdAtDate + "<br/>" +
+				"Bestätigt von: " + confirmedByUsers + "<br/>" +
+				"Bestätigt: " + confirmed);
 	}
 
 	mymap.on('click', onMapClick);
 	</script>
+	
+	<!-- add all surveys from db to map with marker -->
+	<th:block th:each="survey : ${surveys}">
+		<!-- call js function -->
+		<script th:inline="javascript">
+ 		/*<![CDATA[*/
+ 	    addSurveysToMap([[${survey.id}]], [[${survey.lat}]], [[${survey.lng}]], [[${survey.type}]], [[${survey.createdAtDate}]], [[${survey.confirmedByUsers}]], [[${survey.confirmed}]], [[${survey.text}]]);
+ 		/*]]>*/
+ 		</script>
+    </th:block>
+	
   </body>
 </html>
