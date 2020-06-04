@@ -31,7 +31,7 @@ public class BikehhUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         if (!_userAuthenticationRepository.existsByEmailAddress(email)) {
-            throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
+           return null;
         }
 
         User user = _userAuthenticationRepository.findByEmailAddress(email);

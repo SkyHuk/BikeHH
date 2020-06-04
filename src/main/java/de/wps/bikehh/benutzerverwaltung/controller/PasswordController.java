@@ -29,11 +29,9 @@ public class PasswordController {
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
     public void requestPasswordResetMail(@RequestBody RequestMailModel requestModel) throws ApiRequestException {
         BikehhUserDetails userDetails;
-        try {
-            userDetails = (BikehhUserDetails) _bikehhUserDetailsService.loadUserByUsername(requestModel.getEmail());
-        } catch (Exception e) {
-            return;
-        }
+
+        userDetails = (BikehhUserDetails) _bikehhUserDetailsService.loadUserByUsername(requestModel.getEmail());
+
 
         User u = userDetails.getBikehhUser();
         if (u == null) {
