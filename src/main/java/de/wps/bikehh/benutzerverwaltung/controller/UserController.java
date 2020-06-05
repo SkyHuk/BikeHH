@@ -1,10 +1,12 @@
 package de.wps.bikehh.benutzerverwaltung.controller;
 
+import de.wps.bikehh.benutzerverwaltung.dto.request.RequestMailModel;
 import de.wps.bikehh.benutzerverwaltung.dto.request.UpdateUserDetailsRequestModel;
 import de.wps.bikehh.benutzerverwaltung.dto.request.UserDetailsRequestModel;
 import de.wps.bikehh.benutzerverwaltung.dto.response.UserDetailsResponseModel;
 import de.wps.bikehh.benutzerverwaltung.exception.ApiRequestException;
 import de.wps.bikehh.benutzerverwaltung.service.BikehhUserDetailsService;
+import de.wps.bikehh.benutzerverwaltung.service.VerifyDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,10 +17,12 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private BikehhUserDetailsService _bikehhUserDetailsService;
+    private VerifyDetailsService _verifyDetailsService;
 
     @Autowired
-    public UserController(BikehhUserDetailsService bikehhUserDetailsService) {
+    public UserController(BikehhUserDetailsService bikehhUserDetailsService, VerifyDetailsService verifyDetailsService) {
         this._bikehhUserDetailsService = bikehhUserDetailsService;
+        this._verifyDetailsService = verifyDetailsService;
 
     }
 
@@ -47,5 +51,23 @@ public class UserController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@RequestHeader("Authorization") String accessToken) {
         _bikehhUserDetailsService.deleteUser(accessToken);
+    }
+
+    @RequestMapping(value = "/password",method = RequestMethod.PUT)
+    public void updatePassword() {
+        //@TODO
+    }
+
+    @RequestMapping("/verify")
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public void requestVerificationMail(@RequestBody RequestMailModel requestModel) throws ApiRequestException {
+        String email = requestModel.getEmail();
+        _verifyDetailsService.requestVerificationMail(email);
+    }
+
+
+    @RequestMapping(value = "/verify",method = RequestMethod.PUT)
+    public void verifyUser(@RequestParam String token) {
+        _verifyDetailsService.verifyUser(token);
     }
 }
