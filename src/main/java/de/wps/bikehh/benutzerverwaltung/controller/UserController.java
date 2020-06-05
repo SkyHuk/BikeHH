@@ -5,6 +5,7 @@ import de.wps.bikehh.benutzerverwaltung.dto.request.UpdateUserDetailsRequestMode
 import de.wps.bikehh.benutzerverwaltung.dto.request.UserDetailsRequestModel;
 import de.wps.bikehh.benutzerverwaltung.dto.response.UserDetailsResponseModel;
 import de.wps.bikehh.benutzerverwaltung.exception.ApiRequestException;
+import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.benutzerverwaltung.service.BikehhUserDetailsService;
 import de.wps.bikehh.benutzerverwaltung.service.VerifyDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +28,16 @@ public class UserController {
     }
 
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    /*@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public UserDetailsResponseModel getCurrentUser(@RequestHeader("Authorization") String accessToken) throws ApiRequestException {
         return _bikehhUserDetailsService.getCurrentUser(accessToken);
+    }*/
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public User getCurrentUser(@ModelAttribute("bikehh_user") User user) throws ApiRequestException {
+        return user;
     }
 
     //@TODO how do we create admin user ? through different endpoint ?
