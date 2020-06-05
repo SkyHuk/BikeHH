@@ -1,11 +1,14 @@
 package de.wps.bikehh.benutzerverwaltung.service;
 
+import de.wps.bikehh.benutzerverwaltung.exception.ApiRequestException;
+import de.wps.bikehh.benutzerverwaltung.exception.ErrorCode;
 import de.wps.bikehh.benutzerverwaltung.material.Session;
 import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.benutzerverwaltung.repository.SessionRepository;
 import de.wps.bikehh.benutzerverwaltung.repository.UserAuthenticationRepository;
 import de.wps.bikehh.benutzerverwaltung.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -39,8 +42,11 @@ public class AuthService {
         return session;
     }
 
-    public void logoutUser(String token) {
-        Session session = _sessionRepository.findByToken(token);
+    public void logoutUser(String token) throws  ApiRequestException {
+        Session session = _sessionRepository.findByToken(token).orElse(null);
+        if (session == null){
+            throw new ApiRequestException(ErrorCode.unauthorized, HttpStatus.UNAUTHORIZED);
+        }
         _sessionRepository.delete(session);
     }
 }

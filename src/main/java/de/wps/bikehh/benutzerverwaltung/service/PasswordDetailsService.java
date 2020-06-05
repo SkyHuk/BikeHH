@@ -1,9 +1,7 @@
 package de.wps.bikehh.benutzerverwaltung.service;
 
-import de.wps.bikehh.benutzerverwaltung.dto.request.ResetPasswordModel;
 import de.wps.bikehh.benutzerverwaltung.exception.ApiRequestException;
 import de.wps.bikehh.benutzerverwaltung.exception.ErrorCode;
-import de.wps.bikehh.benutzerverwaltung.material.BikehhUserDetails;
 import de.wps.bikehh.benutzerverwaltung.material.Reset;
 import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.benutzerverwaltung.repository.PasswordAuthenticationRepository;
@@ -11,13 +9,10 @@ import de.wps.bikehh.benutzerverwaltung.repository.UserAuthenticationRepository;
 import de.wps.bikehh.benutzerverwaltung.service.smtp.Mail;
 import de.wps.bikehh.benutzerverwaltung.service.smtp.SmtpService;
 import de.wps.bikehh.benutzerverwaltung.utils.Utils;
-import javassist.tools.web.BadHttpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.*;
 

@@ -28,8 +28,8 @@ public class AuthController {
     }
 
     @DeleteMapping
-    public ResponseEntity<Void> logout(@RequestHeader("Authorization") String token) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void logout(@RequestHeader("Authorization") String token) {
         _authService.logoutUser(token);
-        return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
     }
 }

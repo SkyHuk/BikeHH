@@ -59,6 +59,10 @@ class ApiWebSecurity extends WebSecurityConfigurerAdapter {
 
             @Override
             public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+                if (authentication == null) {
+                    return null;
+                }
+
                 String principal = (String) authentication.getPrincipal();
                 if (!principalRequestValue.equals(principal)) {
                     throw new BadCredentialsException(ErrorCode.unauthorized);

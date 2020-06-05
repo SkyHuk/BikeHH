@@ -4,8 +4,8 @@ import de.wps.bikehh.benutzerverwaltung.material.Session;
 import de.wps.bikehh.benutzerverwaltung.material.User;
 import org.springframework.data.repository.CrudRepository;
 
-public interface SessionRepository extends CrudRepository<Session, Long> {
+import java.util.Optional;
 
-    Session findByUser(User user);
-    Session findByToken(String token);
+public interface SessionRepository extends CrudRepository<Session, Long> {
+    Optional<Session> findByToken(String token);
 }
