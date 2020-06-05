@@ -1,4 +1,4 @@
-package de.wps.bikehh.benutzerverwaltung.Validation;
+package de.wps.bikehh.benutzerverwaltung.util;
 
 public class Validation {
     public static boolean isEmailValid(String email) {

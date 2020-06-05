@@ -8,7 +8,7 @@ import de.wps.bikehh.benutzerverwaltung.repository.PasswordAuthenticationReposit
 import de.wps.bikehh.benutzerverwaltung.repository.UserAuthenticationRepository;
 import de.wps.bikehh.benutzerverwaltung.service.smtp.Mail;
 import de.wps.bikehh.benutzerverwaltung.service.smtp.SmtpService;
-import de.wps.bikehh.benutzerverwaltung.utils.Utils;
+import de.wps.bikehh.benutzerverwaltung.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;

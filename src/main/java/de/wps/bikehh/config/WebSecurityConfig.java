@@ -2,18 +2,23 @@ package de.wps.bikehh.config;
 
 import de.wps.bikehh.benutzerverwaltung.exception.ApiException;
 import de.wps.bikehh.benutzerverwaltung.exception.ErrorCode;
+import de.wps.bikehh.benutzerverwaltung.security.AuthProvider;
+import de.wps.bikehh.benutzerverwaltung.security.AuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.servlet.http.HttpServletResponse;
@@ -42,6 +47,9 @@ class ApiWebSecurity extends WebSecurityConfigurerAdapter {
     @Autowired
     CustomAuthenticationFailureHandler customAuthenticationHandler;
 
+    @Autowired
+    AuthProvider authProvider;
+
     @Value("x-api-key")
     private String principalRequestHeader;
 
@@ -54,7 +62,7 @@ class ApiWebSecurity extends WebSecurityConfigurerAdapter {
 
         //filter.setAuthenticationFailureHandler(new CustomAuthenticationFailureHandler());
         //filter.setAuthenticationSuccessHandler(authenticationSuccessHandler());
-
+        /*
         filter.setAuthenticationManager(new AuthenticationManager() {
 
             @Override
@@ -81,9 +89,15 @@ class ApiWebSecurity extends WebSecurityConfigurerAdapter {
                     response.setContentType("application/json");
                     response.setCharacterEncoding("UTF-8");
                     response.getWriter().write(exception.toString());
-                }));
+                }));*/
 
+        httpSecurity.httpBasic().and().authorizeRequests().antMatchers(HttpMethod.POST, "/api/auth").permitAll().antMatchers(HttpMethod.POST, "/api/user").permitAll()
+        .and().authorizeRequests().antMatchers("/api/**").authenticated().and().addFilterBefore(new AuthenticationFilter(), BasicAuthenticationFilter.class);
     }
 
 
+    @Override
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(authProvider);
+    }
 }

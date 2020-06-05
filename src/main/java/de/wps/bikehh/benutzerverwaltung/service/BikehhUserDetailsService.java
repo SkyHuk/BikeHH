@@ -1,6 +1,6 @@
 package de.wps.bikehh.benutzerverwaltung.service;
 
-import de.wps.bikehh.benutzerverwaltung.Validation.Validation;
+import de.wps.bikehh.benutzerverwaltung.util.Validation;
 import de.wps.bikehh.benutzerverwaltung.dto.request.UpdateUserDetailsRequestModel;
 import de.wps.bikehh.benutzerverwaltung.dto.response.UserDetailsResponseModel;
 import de.wps.bikehh.benutzerverwaltung.exception.ApiRequestException;
@@ -82,7 +82,7 @@ public class BikehhUserDetailsService implements UserDetailsService {
     }
 
     public UserDetailsResponseModel getCurrentUser(String accessToken) throws ApiRequestException {
-        Session session = _sessionRepository.findByToken(accessToken).orElse(null);
+        Session session = _sessionRepository.findByToken(accessToken);
         if (session == null) {
             throw new ApiRequestException(ErrorCode.unauthorized, HttpStatus.UNAUTHORIZED);
         }
@@ -93,7 +93,7 @@ public class BikehhUserDetailsService implements UserDetailsService {
     }
 
     public void updateUser(String accessToken, UpdateUserDetailsRequestModel userUpdate) throws ApiRequestException {
-        Session session = _sessionRepository.findByToken(accessToken).orElse(null);
+        Session session = _sessionRepository.findByToken(accessToken);
         if (session == null) {
             throw new ApiRequestException(ErrorCode.unauthorized, HttpStatus.UNAUTHORIZED);
         }
@@ -110,7 +110,7 @@ public class BikehhUserDetailsService implements UserDetailsService {
     }
 
     public void deleteUser(String accessToken) {
-        Session session = _sessionRepository.findByToken(accessToken).orElse(null);
+        Session session = _sessionRepository.findByToken(accessToken);
         if (session == null) {
             throw new ApiRequestException(ErrorCode.unauthorized, HttpStatus.UNAUTHORIZED);
         }

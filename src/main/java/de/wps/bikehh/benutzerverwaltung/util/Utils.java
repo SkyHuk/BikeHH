@@ -1,4 +1,4 @@
-package de.wps.bikehh.benutzerverwaltung.utils;
+package de.wps.bikehh.benutzerverwaltung.util;
 
 import java.security.SecureRandom;
 import java.util.Base64;
