@@ -1,14 +1,12 @@
 package de.wps.bikehh.config;
 
-import de.wps.bikehh.benutzerverwaltung.exception.ApiException;
+import de.wps.bikehh.benutzerverwaltung.exception.ApiRequestException;
 import de.wps.bikehh.benutzerverwaltung.exception.ErrorCode;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -16,8 +14,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-
-import javax.servlet.http.HttpServletResponse;
 
 @EnableWebSecurity
 public class MultiHttpSecurityConfig {
@@ -56,7 +52,9 @@ public class MultiHttpSecurityConfig {
                 public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 
                     String principal = (String) authentication.getPrincipal();
-                    System.out.println(principal);
+                    if (principal.isEmpty()) {
+                        throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
+                    }
 
                     authentication.setAuthenticated(true);
                     return authentication;
@@ -64,11 +62,10 @@ public class MultiHttpSecurityConfig {
             });
 
             httpSecurity.antMatcher("/api/user").addFilter(filter);
+            httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER);
         }
-
-
     }
-    @Configuration
+    /*@Configuration
     @Order(1)
     class ApiWebSecurity extends WebSecurityConfigurerAdapter {
 
@@ -114,7 +111,5 @@ public class MultiHttpSecurityConfig {
             }));
 
         }
-
-
-    }
+    }*/
 }
