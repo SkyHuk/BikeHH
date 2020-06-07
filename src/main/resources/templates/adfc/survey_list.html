@@ -15,42 +15,27 @@
         <thead>
           <tr>
             <th>#</th>
+            <th>Breitengrad</th>
+            <th>Längengrad</th>
+            <th>Title</th>
+            <th>Typ</th>
             <th>Erstellungsdatum</th>
-            <th>erstellt von</th>
-            <th># Bestätigungen</th>
-            <th>Beschreibung</th>
-            <th>Aktion</th>
+            <th>Bestätigungen</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>3. Mai 2020</td>
-            <td><a href="#">User #123</a></td>
-            <td><h6 class="mb-2 text-muted"><span class="badge badge-secondary">2/5</span></h6></td>
-            <td>Schlagloch</td>
-            <td>
-              <div class="btn-group">
-                <a href="/survey.html" type="button" class="btn btn-sm btn-outline-secondary">Anzeigen</a>
-                <button type="button" class="btn btn-sm btn-outline-secondary">Bearbeiten</button>
-                <button type="button" class="btn btn-sm btn-outline-secondary">Löschen</button>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>10. April 2020</td>
-            <td><a href="#">User #328</a></td>
-            <td><h6 class="mb-2 text-muted"><span class="badge badge-success">5/5</span></h6></td>
-            <td>Schnee</td>
-            <td>
-              <div class="btn-group">
-                <a href="/survey.html" type="button" class="btn btn-sm btn-outline-secondary">Anzeigen</a>
-                <button type="button" class="btn btn-sm btn-outline-secondary">Bearbeiten</button>
-                <button type="button" class="btn btn-sm btn-outline-secondary">Löschen</button>
-              </div>
-            </td>
-          </tr>
+          <tr  th:each="survey: ${surveys}">
+         	<td> 
+         	<a th:text="${survey.id}" th:href="@{/umfrage(values=${survey.id})}" target="_blank"></a>
+         	</td>
+         	<td th:text="${survey.lat}"></td>
+         	<td th:text="${survey.lng}"></td>
+         	<td th:text="${survey.title}"></td>
+         	<td th:text="${survey.type}"></td>
+         	<td th:text="${survey.createdAtDate}"></td>
+         	<td th:text="${#lists.size(survey.confirmedByUsers)}"></td>
+         	
+          </tr>  
         </tbody>
       </table>
     </div>

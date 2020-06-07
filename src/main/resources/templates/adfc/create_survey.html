@@ -17,41 +17,7 @@
 
 	<div class="row">
 		<div class="col-8 border-right">
-			<div id="mapid" style="width: 600px; height: 600px;"></div>
-			<!--<img src="/map_circle.png" width="600" class="img-responsive">-->
-			<script type="text/javascript">
-
-	var mymap = L.map('mapid').setView([53.551086, 9.993682], 12);
-
-	L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-		maxZoom: 18,
-		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-			'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-		id: 'mapbox/streets-v11',
-		tileSize: 512,
-		zoomOffset: -1
-	}).addTo(mymap);
-	var popup = L.popup();
-
-	function onMapClick(e) {
-		
-		/*var circle = L.circle([e.lat, e.lng], {
-			color: 'red',
-		    fillColor: '#f03',
-		    fillOpacity: 0.5,
-		    radius: 500
-		}).addTo(mymap);*/
-		
-	    popup
-	        .setLatLng(e.latlng)
-	        .setContent("You clicked the map at " + e.latlng.toString())
-	        .openOn(mymap);
-	}
-
-	mymap.on('click', onMapClick);
-
-</script>
+			<div id="mapid" style="width: 600px; height: 600px;"></div>			
 		</div>
 		<div class="col-4">
 			<form action="">
@@ -98,55 +64,44 @@
 	</div>
 	<script type="text/javascript">
 
-var questionHTML = [
-    //'<div class="form-group">',
-            '<label>Frage #2</label>',
-            '<input class="form-control" placeholder="Frage"></input>',
-          //'</div>',
-
-          '<div class="form-group">',
-            '<label>Antwort</label>',
-            '<input class="form-control" value="Ja">',
-            '<input class="form-control" value="Nein">',
-            '<button class="btn btn-primary mb-3">+</button>',
-          '</div>',
-
-          '<div id="addCondition" class="form-group">',
-			'<button onclick="addCondition()" class="btn btn-primary mb-3">Bedingung hinzufügen</button>',
-		  '</div>',
-
-          '<div class="row-20 border"></div>',
-          '<div class="row-20 border"></div>',
-
-          '<div id="addQuestion" class="form-group">',
-          '<button onclick="addQuestion()" class="btn btn-primary mb-3">Frage hinzufügen</button>'
-].join("\n");
-
-var conditionHTML = [
-	'<div class="form-group">',
-    '<label for="fragen">Bedingung: Frage nur zeigen, wenn:</label>',
-    '<select id="fragen">',
-      '<option value="/">/</option>',
-      '<option value="frage1">Frage #1</option>',
-      '<option value="frage2">Frage #2</option>',
-      '<option value="frage2">Frage #4</option>',
-    '</select>',
-    '<label for="antworten">mit:</label>',
-    '<select id="antworten">',
-      '<option value="ja">Ja</option>',
-      '<option value="nein">Nein</option>',
-      '<option value="freitext">Freitext</option>',
-    '</select>',
-    '<label >beantwortet wurde.</label>',
-  '</div>'
+	var lat = [[${lat}]];
+	var lng = [[${lng}]];
+	var popup = L.popup();
+	var markers = L.layerGroup()
 	
-].join("\n");
-
-var answerHTML = [
+	if (lat == 0 && lng ==0) {
+		var mymap = L.map('mapid').setView([53.551086, 9.993682], 12);	
+	} else {
+		var mymap = L.map('mapid').setView([lat, lng], 16);
+		addMarkerToMap(lat, lng);
+	}
 	
-].join("\n");
+	L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+		maxZoom: 18,
+		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+			'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+		id: 'mapbox/streets-v11',
+		tileSize: 512,
+		zoomOffset: -1
+	}).addTo(mymap);
+	
 
+	function onMapClick(e) {		
+	    addMarkerToMap(e.latlng.lat, e.latlng.lng);
+	}
 
+	mymap.on('click', onMapClick);
+	
+	function addMarkerToMap(lat, lng) {
+		var marker = L.marker([lat, lng]).addTo(mymap)
+			.bindPopup("<b>Hier wird die erstellte Umfrage sein.<br/>");
+		markers.eachLayer(function(layer) {
+			layer.remove()
+		});
+		markers.addLayer(marker);
+	}
+	
 	function addQuestion() {
 		document.getElementById("addQuestion").innerHTML = questionHTML;
 	};
@@ -158,6 +113,54 @@ var answerHTML = [
 	function addAnswer() {
 		document.getElementById("addAnswer").innerHTML = answerHTML;
 	};
+
+	var questionHTML = [
+	            '<label>Frage #2</label>',
+	            '<input class="form-control" placeholder="Frage"></input>',
+	          
+
+	          '<div class="form-group">',
+	            '<label>Antwort</label>',
+	            '<input class="form-control" value="Ja">',
+	            '<input class="form-control" value="Nein">',
+	            '<button class="btn btn-primary mb-3">+</button>',
+	          '</div>',
+
+	          '<div id="addCondition" class="form-group">',
+				'<button onclick="addCondition()" class="btn btn-primary mb-3">Bedingung hinzufügen</button>',
+			  '</div>',
+
+	          '<div class="row-20 border"></div>',
+	          '<div class="row-20 border"></div>',
+
+	          '<div id="addQuestion" class="form-group">',
+	          '<button onclick="addQuestion()" class="btn btn-primary mb-3">Frage hinzufügen</button>'
+	].join("\n");
+
+	var conditionHTML = [
+		'<div class="form-group">',
+	    '<label for="fragen">Bedingung: Frage nur zeigen, wenn:</label>',
+	    '<select id="fragen">',
+	      '<option value="/">/</option>',
+	      '<option value="frage1">Frage #1</option>',
+	      '<option value="frage2">Frage #2</option>',
+	      '<option value="frage2">Frage #4</option>',
+	    '</select>',
+	    '<label for="antworten">mit:</label>',
+	    '<select id="antworten">',
+	      '<option value="ja">Ja</option>',
+	      '<option value="nein">Nein</option>',
+	      '<option value="freitext">Freitext</option>',
+	    '</select>',
+	    '<label >beantwortet wurde.</label>',
+	  '</div>'
+		
+		].join("\n");
+
+		var answerHTML = [
+		
+		].join("\n");
+
 </script>
 </body>
 </html>

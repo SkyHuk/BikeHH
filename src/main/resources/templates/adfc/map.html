@@ -86,16 +86,19 @@
 	function onMapClick(e) {
 		//create link to open "/umfrage-erstellen"
         var a = document.createElement('a');  
-          
+        var lat = e.latlng.lat;
+        var lng = e.latlng.lng;
+        
         //text node
-        var link = document.createTextNode("Hier klicken, um eine Umfrage an Position " + e.latlng.toString() + " zu erstellen"); 
+        var link = document.createTextNode("Hier klicken, um eine Umfrage an Position (" + lat + ", " + lng + ") zu erstellen"); 
           
         // Append text node to anchor element
         a.appendChild(link);  
           
         // Set the href property. 
-        //TODO lat,long as parameters
-        a.href = "/umfrage-erstellen";  
+        
+        
+        a.href = "/umfrage-erstellen?coordinates=" + [lat + "," + lng];  
 		
         //popup
 		popup
@@ -105,7 +108,7 @@
 	}
 	
 	//add a survey from db to map with marker (from files ONLY at the moment)
-	function addSurveysToMap(id, lat, lng, type, createdAtDate, confirmedByUsers, confirmed, text){
+	/*function addSurveysToMap(id, lat, lng, type, createdAtDate, confirmedByUsers, confirmed, text){
 		console.log('addSurveysToMap was called with ' + lat + 'and ' + lng);
 		L.marker([lat, lng]).addTo(mymap)
 		.bindPopup("<b>Umfrage" + " Id " + id + "</b><br/>" +
@@ -116,6 +119,19 @@
 				"Erstellt am: " + createdAtDate + "<br/>" +
 				"Bestätigt von: " + confirmedByUsers + "<br/>" +
 				"Bestätigt: " + confirmed);
+	}*/
+	
+	function addSurveysToMap(id, lat, lng, type, createdAtDate, confirmedByUsers, confirmedThreshhold, title, questions){
+		console.log('addSurveysToMap was called with ' + lat + 'and ' + lng);
+		L.marker([lat, lng]).addTo(mymap)
+		.bindPopup("<b>Umfrage" + " Id " + id + "</b><br/>" +
+				"Beschreibung: " + title + "<br/>" + 
+				"Lat: " + lat + "<br/>" +
+				"Lng: " + lng + "<br/>" +
+				"Typ: " + type + "<br/>" +
+				"Erstellt am: " + createdAtDate + "<br/>" +
+				"Bestätigt von: " + confirmedByUsers + "<br/>"
+				);
 	}
 
 	mymap.on('click', onMapClick);
@@ -126,7 +142,7 @@
 		<!-- call js function -->
 		<script th:inline="javascript">
  		/*<![CDATA[*/
- 	    addSurveysToMap([[${survey.id}]], [[${survey.lat}]], [[${survey.lng}]], [[${survey.type}]], [[${survey.createdAtDate}]], [[${survey.confirmedByUsers}]], [[${survey.confirmed}]], [[${survey.text}]]);
+ 	    addSurveysToMap([[${survey.id}]], [[${survey.lat}]], [[${survey.lng}]], [[${survey.type}]], [[${survey.createdAtDate}]], [[${survey.confirmedByUsers}]], [[${survey.confirmedThreshhold}]], [[${survey.title}]], [[${survey.questions}]]);
  		/*]]>*/
  		</script>
     </th:block>

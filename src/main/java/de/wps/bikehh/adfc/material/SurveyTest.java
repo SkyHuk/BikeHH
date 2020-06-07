@@ -13,9 +13,10 @@ public class SurveyTest {
 	private double lat;
 	private String type;
 	private String createdAtDate;
-	private String confirmedByUsers;
-	private boolean confirmed;
-	private String text;
+	private String[] confirmedByUsers;
+	private int confirmedThreshhold;
+	private String title;
+	private Question[] questions;
 
 	public int getId() {
 		return id;
@@ -57,28 +58,40 @@ public class SurveyTest {
 		this.createdAtDate = createdAtDate;
 	}
 
-	public String getConfirmedByUsers() {
+	public String[] getConfirmedByUsers() {
 		return confirmedByUsers;
 	}
 
-	public void setConfirmedByUsers(String confirmedByUsers) {
+	public void setConfirmedByUsers(String[] confirmedByUsers) {
 		this.confirmedByUsers = confirmedByUsers;
 	}
 
+	public int getConfirmedThreshhold() {
+		return confirmedThreshhold;
+	}
+
+	public void setConfirmedThreshhold(int confirmedThreshhold) {
+		this.confirmedThreshhold = confirmedThreshhold;
+	}
+
 	public boolean isConfirmed() {
-		return confirmed;
+		return confirmedByUsers.length >= confirmedThreshhold;
 	}
 
-	public void setConfirmed(boolean confirmed) {
-		this.confirmed = confirmed;
+	public String getTitle() {
+		return title;
 	}
 
-	public String getText() {
-		return text;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
-	public void setText(String text) {
-		this.text = text;
+	public Question[] getQuestions() {
+		return questions;
+	}
+
+	public void setQuestions(Question[] questions) {
+		this.questions = questions;
 	}
 
 }
