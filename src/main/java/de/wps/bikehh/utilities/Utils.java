@@ -17,27 +17,12 @@ import de.wps.bikehh.adfc.material.SurveyTest;
 public class Utils {
 
 	public static List<SurveyTest> getSurveyJsonsAsArray() {
-		return surveys();
-	}
-
-	public static List<SurveyTest> surveys() {
 		List<SurveyTest> surveys = new ArrayList<SurveyTest>();
 
-		// get path to ~/Dokumente/BikeHH/Umfragen/ for .json files
-		// Path startDir = Paths.get(System.getProperty("user.home"), "Dokumente",
-		// "BikeHH", "Umfragen");
-
-		/**
-		 * alternative path within project to minimized external errors like missing
-		 * read rights for directory under MacOS
-		 */
-		Path startDir = Paths.get(System.getProperty("user.dir"), "src", "main", "resources", "survey-jsons");
+		Path startDir = Paths.get(System.getProperty("user.dir"), "Umfragen");
 
 		// get files in directory as jsonArray
 		surveys = getJsonFilesAsSurveyList(startDir.toString());
-
-		// debug only
-		// System.out.print("surveys: " + surveys.toString());
 
 		return surveys;
 	}
@@ -65,17 +50,12 @@ public class Utils {
 			// prints numbers of files found in dir, for testing
 			System.out.println("Numbers of files found: " + files.length);
 
-			// initialize parser
-			@SuppressWarnings("deprecation")
-			JsonParser parser = new JsonParser();
-
 			Gson g = new Gson();
 
 			// add every json file in files to jsonArray
 			for (File jsonFile : files) {
-				// pare jsonFile
-				@SuppressWarnings("deprecation")
-				Object obj = parser.parse(new FileReader(jsonFile));
+				// parse file
+				Object obj = JsonParser.parseReader(new FileReader(jsonFile));
 				// convert to jsonObject
 				JsonObject jsonObject = (JsonObject) obj;
 				// add jsonObject to list of surveys
@@ -85,7 +65,7 @@ public class Utils {
 		} catch (Exception e) {
 			System.err.println("Error: " + e.getMessage());
 		}
-		System.out.println("Success building arrays from JSONs");
+		System.out.println("Success building Surveys from JSONs");
 		return listSurveys;
 	}
 

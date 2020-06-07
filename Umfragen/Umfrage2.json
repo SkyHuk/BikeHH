@@ -4,7 +4,12 @@
     "lng": 9.997581,
     "type": "Schneehaufen",
     "createdAtDate": "2020-06-05T10:54:51.723Z",
-    "confirmedByUsers": "BerndMeier",
-    "confirmed": false,
-    "text": "Dies ist eine Beispielumfrage am Ballindamm"
+    "confirmedByUsers": ["User1234", "ClaireGrube"],
+    "confirmedThreshhold": 4,
+    "title": "ACHTUNG",
+    "questions": [{
+    	"id": 1,
+    	"questionText": "Liegt hier Schnee?",
+    	"answers": ["Ja", "weiß nicht, alles so weiss."]
+    }]
 }

@@ -4,7 +4,12 @@
     "lng": 9.988244,
     "type": "Laubhaufen",
     "createdAtDate": "2020-06-04T13:50:56.782Z",
-    "confirmedByUsers": "User1234",
-    "confirmed": true,
-    "text": "Dies ist eine Beispielumfrage an der Uni"
+    "confirmedByUsers": ["User1234", "VolkerRacho"],
+    "confirmedThreshhold": 2,
+    "title": "TEST1234",
+    "questions": [{
+    	"id": 2,
+    	"questionText": "Wie gehts so?",
+    	"answers": ["gut", "schlecht"]
+    }]
 }

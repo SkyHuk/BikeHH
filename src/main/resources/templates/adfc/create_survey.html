@@ -22,18 +22,18 @@
 		<div class="col-4">
 			<form action="">
 				<div class="form-group">
-					<label>Titel</label> <input class="form-control"
-						placeholder="Titel">
+					<label>Titel</label> 
+					<input class="form-control" id="title" placeholder="Titel"></input>
 				</div>
 				<div class="row-20 border"></div>
 				<div class="form-group">
-					<label>Frage #1</label> <input class="form-control"
+					<label>Frage #1</label> <input class="form-control" id="question0"
 						placeholder="Frage"></input>
 				</div>
 
 				<div class="form-group">
-					<label>Antwort</label> <input class="form-control" placeholder="Ja">
-					<input class="form-control" placeholder="Nein">
+					<label>Antwort</label> <input class="form-control" id="answer00" value ="Ja">
+					<input class="form-control" id="answer01" value="Nein">
 					<button class="btn btn-primary mb-3">+</button>
 				</div>
 
@@ -55,7 +55,7 @@
 				</div>
 
 				<div class="form-group">
-					<button class="btn btn-primary">Umfrage erstellen</button>
+					<button onclick="postSurvey()" class="btn btn-primary" type="button">Umfrage erstellen</button>
 				</div>
 
 			</form>
@@ -86,10 +86,51 @@
 		zoomOffset: -1
 	}).addTo(mymap);
 	
-
+	
+	function postSurvey() {
+		var title = document.getElementById("title").value;
+		
+		var data = new Object();
+		data.id = Math.floor(Math.random() * (100000 - 0 + 1)) + 0;
+		data.title = title;
+		markers.eachLayer(function(layer) {
+			data.lat = layer.getLatLng().lat;
+			data.lng = layer.getLatLng().lng;
+		});
+		data.questions = [];
+		var questions = [];
+		var i = 0;
+		while (element = document.getElementById("question" + i) != undefined) {
+			questions.push(document.getElementById("question" + i).value);
+			i = i + 1;
+		}		 
+		
+		for (let i=0; i<questions.length; i++) {
+			var question = new Object();
+			question.id = i;
+			question.questionText = questions[i];
+			answers = [];
+			var k = 0;
+			while (element = document.getElementById("answer" + i + k) != undefined) {
+				answers.push(document.getElementById("answer" + i + k).value);
+				k = k + 1;
+			}
+			question.answers = answers;
+			data.questions.push(question);
+		};
+		
+		var jsonString = JSON.stringify(data);		
+		var request = new XMLHttpRequest();
+		request.open("POST", "/umfrage-erstellen");
+		request.setRequestHeader("Content-Type", "application/json");
+		request.send(jsonString);
+		
+		
+	};
+	
 	function onMapClick(e) {		
 	    addMarkerToMap(e.latlng.lat, e.latlng.lng);
-	}
+	};
 
 	mymap.on('click', onMapClick);
 	
@@ -98,9 +139,10 @@
 			.bindPopup("<b>Hier wird die erstellte Umfrage sein.<br/>");
 		markers.eachLayer(function(layer) {
 			layer.remove()
+			markers.removeLayer(layer);
 		});
 		markers.addLayer(marker);
-	}
+	};
 	
 	function addQuestion() {
 		document.getElementById("addQuestion").innerHTML = questionHTML;
@@ -116,13 +158,13 @@
 
 	var questionHTML = [
 	            '<label>Frage #2</label>',
-	            '<input class="form-control" placeholder="Frage"></input>',
+	            '<input class="form-control" id="question1" placeholder="Frage"></input>',
 	          
 
 	          '<div class="form-group">',
 	            '<label>Antwort</label>',
-	            '<input class="form-control" value="Ja">',
-	            '<input class="form-control" value="Nein">',
+	            '<input class="form-control" id="answer10" value="Ja">',
+	            '<input class="form-control" id="answer11" value="Nein">',
 	            '<button class="btn btn-primary mb-3">+</button>',
 	          '</div>',
 
