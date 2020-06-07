@@ -31,11 +31,11 @@ public class Question {
 	private List<String> answers = new ArrayList<String>();
 
 	/**
-	 * dictionary that maps links a question and a answer to be used as
+	 * dictionary that links a question and a answer, to be used as
 	 * HashMap<Question, Answer>
 	 * 
-	 * logic: this specific question will only be asked when a specific QUESTION is
-	 * answered with a specific ANSWER
+	 * logic: the question this class is the instance of will only be asked when a
+	 * specific QUESTION is answered with a specific ANSWER
 	 */
 	private HashMap<String, String> condition = new HashMap<String, String>();
 
