@@ -46,8 +46,6 @@ public class CreateSurveyController {
 	@RequestMapping(method = RequestMethod.POST)
 	public String processSurvey(@RequestBody String body) {
 
-		System.out.println(body.toString());
-
 		// TODO: create umfrage.json file
 		Utils.saveJSONSurveyInFiles(body);
 

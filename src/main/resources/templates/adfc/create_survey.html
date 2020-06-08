@@ -55,6 +55,11 @@
 				</div>
 
 				<div class="form-group">
+					<label>Anzahl an Bestätigungen benötigt:</label>
+					<input type="number" class="form-control" id="confirmedThreshhold" placeholder="10">
+				</div>
+				
+				<div class="form-group">
 					<button onclick="postSurvey()" class="btn btn-primary" type="button">Umfrage erstellen</button>
 				</div>
 
@@ -64,11 +69,18 @@
 	</div>
 	<script type="text/javascript">
 
+	// store coordinates coming from controller
+	
 	var lat = [[${lat}]];
 	var lng = [[${lng}]];
+	// init popup
 	var popup = L.popup();
+	// init layerGroup holding all the markers
+	// this is used to delete previous markers when clicking on map
 	var markers = L.layerGroup()
 	
+	// set map depending on whether real coordinates where given
+	// default is somewhat the center of hamburg
 	if (lat == 0 && lng ==0) {
 		var mymap = L.map('mapid').setView([53.551086, 9.993682], 12);	
 	} else {
@@ -76,6 +88,7 @@
 		addMarkerToMap(lat, lng);
 	}
 	
+	// init map
 	L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
 		maxZoom: 18,
 		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
@@ -86,25 +99,36 @@
 		zoomOffset: -1
 	}).addTo(mymap);
 	
-	
+	// make post to controller with json data of survey
 	function postSurvey() {
-		var title = document.getElementById("title").value;
 		
+		// data object holding information
 		var data = new Object();
+		// crreating unique id
 		data.id = Math.floor(Math.random() * (100000 - 0 + 1)) + 0;
-		data.title = title;
+		data.title = document.getElementById("title").value;
+		// get coordinates of current marker
+		// only one marker in layergroup, forEach only runs once
 		markers.eachLayer(function(layer) {
 			data.lat = layer.getLatLng().lat;
 			data.lng = layer.getLatLng().lng;
 		});
 		data.questions = [];
+		// TODO: fill this
+		data.type = "";
+		// array empty when creating survey
+		data.confirmedByUsers = [];
+		data.confirmedThreshhold = document.getElementById("confirmedThreshhold").value;
+		data.createdAtDate = new Date().toUTCString();
 		var questions = [];
 		var i = 0;
+		//parsing all the questions
 		while (element = document.getElementById("question" + i) != undefined) {
 			questions.push(document.getElementById("question" + i).value);
 			i = i + 1;
 		}		 
 		
+		//parsing all the answers
 		for (let i=0; i<questions.length; i++) {
 			var question = new Object();
 			question.id = i;
@@ -119,6 +143,7 @@
 			data.questions.push(question);
 		};
 		
+		// building and sending json
 		var jsonString = JSON.stringify(data);		
 		var request = new XMLHttpRequest();
 		request.open("POST", "/umfrage-erstellen");
@@ -128,12 +153,14 @@
 		
 	};
 	
+	// on click handler
 	function onMapClick(e) {		
 	    addMarkerToMap(e.latlng.lat, e.latlng.lng);
 	};
 
 	mymap.on('click', onMapClick);
 	
+	// add marker to map, delete old one
 	function addMarkerToMap(lat, lng) {
 		var marker = L.marker([lat, lng]).addTo(mymap)
 			.bindPopup("<b>Hier wird die erstellte Umfrage sein.<br/>");
@@ -144,14 +171,17 @@
 		markers.addLayer(marker);
 	};
 	
+	// add question to form, only works once for some reason
 	function addQuestion() {
 		document.getElementById("addQuestion").innerHTML = questionHTML;
 	};
 	
+	// add condition to form, only works once for some reason
 	function addCondition() {
 		document.getElementById("addCondition").innerHTML = conditionHTML;
 	};
 	
+	// add answer to form
 	function addAnswer() {
 		document.getElementById("addAnswer").innerHTML = answerHTML;
 	};

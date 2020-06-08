@@ -1,1 +1,21 @@
-{"id":69873,"title":"Testfrage","lat":53.55222824798737,"lng":10.008813142776491,"questions":[{"id":0,"questionText":"Test?","answers":["Ja","Nein"]},{"id":1,"questionText":"Test2?","answers":["Ja","Nein"]}]}
+{
+	"id":69873,
+	"title":"Testfrage",
+	"lat":53.55222824798737,
+	"lng":10.008813142776491,
+	"type": "",
+	"confirmedByUsers" : [],
+	"confirmedThreshhold": 1,
+	"questions":[
+		{
+			"id":0,
+			"questionText":"Test?",
+			"answers":["Ja","Nein"]
+		},
+		{
+			"id":1,
+			"questionText":"Test2?",
+			"answers":["Ja","Nein"]
+		}
+	]
+}
