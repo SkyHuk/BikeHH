@@ -2,7 +2,9 @@ package de.wps.bikehh.utilities;
 
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -16,15 +18,50 @@ import de.wps.bikehh.adfc.material.SurveyTest;
 
 public class Utils {
 
+	private static Path startDir = Paths.get(System.getProperty("user.dir"), "Umfragen");
+
 	public static List<SurveyTest> getSurveyJsonsAsArray() {
 		List<SurveyTest> surveys = new ArrayList<SurveyTest>();
-
-		Path startDir = Paths.get(System.getProperty("user.dir"), "Umfragen");
 
 		// get files in directory as jsonArray
 		surveys = getJsonFilesAsSurveyList(startDir.toString());
 
 		return surveys;
+	}
+
+	/**
+	 * Saves an JsonString in specified directory
+	 * 
+	 * @param JSONString
+	 */
+	public static void saveJSONSurveyInFiles(String JSONString) {
+		FileWriter file = null;
+		int filenameCounter = (int) (Math.random() * 999999 + 1);
+		String filename = "Umfrage" + String.valueOf(filenameCounter) + ".json";
+
+		try {
+			// create file
+			File fileToSaveIn = new File(startDir + "/" + filename);
+			if (fileToSaveIn.createNewFile()) {
+				System.out.println("File created: " + fileToSaveIn.getName());
+			} else {
+				System.out.println("File already exists.");
+			}
+
+			// write to file
+			file = new FileWriter(startDir + "/" + filename);
+			file.write(JSONString);
+			System.out.println("Successfully Copied JSON Object " + filename + " to " + startDir);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				file.flush();
+				file.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	private static List<SurveyTest> getJsonFilesAsSurveyList(String startDir) {
