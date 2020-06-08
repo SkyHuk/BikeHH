@@ -2,28 +2,28 @@
 
   <head>
     <title th:text="${'Umfrage #' + survey.id}"></title>
-    
+
     <link rel="stylesheet"
-	href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
-	integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
-	crossorigin="" />
-<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
-	integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
-	crossorigin="" type="text/javascript"></script>
-    
+      href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+      integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+      crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+      integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+      crossorigin="" type="text/javascript"></script>
+
   </head>
 
   <body layout:fragment="content">
 
-    <a href="/umfragen" class="btn btn-link">&lt;- Umfragen</a>
-    <h2 class="my-2">Einzelne Umfrage</h2>
+    <a href="/umfragen" class="btn btn-link"><i class="fas fa-arrow-left mr-1"></i>Umfragen</a>
+    <!--<h2 class="my-2">Einzelne Umfrage</h2>-->
     <div class="card mb-4">
       <div class="card-body">
         <div class="row">
           <div class="col-9">
-            <h5 class="card-title" th:text="${'Umfrage #' + survey.id}">
-            	<!-- <span class="badge badge-secondary">Nutzergeneriert</span> -->
-            </h5>
+            <h4 class="card-title" th:text="${'Umfrage #' + survey.id}">
+              <!-- <span class="badge badge-secondary">Nutzergeneriert</span> -->
+            </h4>
             <h6 class="card-subtitle mb-2 text-muted" th:text="${'Erstellt am: ' + survey.createdAtDate}"></h6>
 
             <nav aria-label="breadcrumb">
@@ -36,9 +36,12 @@
               <h6 class="mb-2 text-muted">Bestätigungspunkte: <span class="badge badge-secondary" th:text="${survey.confirmedByUsers.length + '/' + survey.confirmedThreshhold}"></span></h6>
             </div>
             <div>
-              <h6 class="mb-2 text-muted">Bestätigt von: <span class="badge badge-secondary" th:each="user : ${survey.confirmedByUsers}">
-              <span th:text="${user}"></span>
-              </span></h6>
+              <h6 class="mb-2 text-muted">
+                <span>Bestätigt von:</span>
+                <span class="badge badge-primary mr-2" th:each="user : ${survey.confirmedByUsers}">
+                  <span th:text="${user}"></span>
+                </span>
+              </h6>
             </div>
 
             <p class="card-text mb-4" th:text="${survey.title}"></p>
@@ -55,7 +58,7 @@
 
           <div class="row">
             <div class="col">
-              <div id="mapid" style="width: 400px; height: 400px;"></div>	
+              <div id="mapid" style="width: 400px; height: 400px;"></div>
             </div>
             <div class="col">
               <h6>Fragen</h6>
@@ -199,43 +202,43 @@
     
     // coordinates passed from controller
     var lat = [[${survey.lat}]];
-	var lng = [[${survey.lng}]];
+  var lng = [[${survey.lng}]];
     
-	// init map
-	
-    var mymap = L.map('mapid').setView([lat, lng], 13);	
+  // init map
+  
+    var mymap = L.map('mapid').setView([lat, lng], 13); 
     
     addMarkerToMap(lat, lng);
     
     L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-		maxZoom: 18,
-		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-			'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-		id: 'mapbox/streets-v11',
-		tileSize: 512,
-		zoomOffset: -1
-	}).addTo(mymap);
+    maxZoom: 18,
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+      '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+      'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+    id: 'mapbox/streets-v11',
+    tileSize: 512,
+    zoomOffset: -1
+  }).addTo(mymap);
     
     
     // adds a marker to given coordinates, 
     // used to mark location of survey 
     function addMarkerToMap(lat, lng) {
-		var marker = L.marker([lat, lng]).addTo(mymap)
-			.bindPopup("<b>Ort der Umfrage.<br/>");
-	};
-	 // centers the map on the location of the survey while zooming in
-	function showOnMap() {
-		mymap.setView([lat, lng], 17);
-	};
-	
-	// opens email client to write email to survey creator 
-	// TODO: NOT DONE
-	function contactCreator() {
-		var mail = "";
-		var subject = "BikeHH - Umfrage #" + [[${survey.id}]];
-		window.location.href = "mailto:user@example.com?subject="+ subject + "&body=";
-	};
+    var marker = L.marker([lat, lng]).addTo(mymap)
+      .bindPopup("<b>Ort der Umfrage.<br/>");
+  };
+   // centers the map on the location of the survey while zooming in
+  function showOnMap() {
+    mymap.setView([lat, lng], 17);
+  };
+  
+  // opens email client to write email to survey creator 
+  // TODO: NOT DONE
+  function contactCreator() {
+    var mail = "";
+    var subject = "BikeHH - Umfrage #" + [[${survey.id}]];
+    window.location.href = "mailto:user@example.com?subject="+ subject + "&body=";
+  };
     </script>
   </body>
 </html>

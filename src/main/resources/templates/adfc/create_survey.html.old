@@ -1,0 +1,240 @@
+<html layout:decorate="~{layout/layout}" xmlns:th="http://thymeleaf.org">
+<head>
+  <title>ADFC - Umfrage erstellen</title>
+
+  <link rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+    crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+    integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+    crossorigin="" type="text/javascript"></script>
+
+</head>
+<body layout:fragment="content">
+
+  <h2 class="my-4">Umfrage erstellen</h2>
+
+  <div class="row">
+    <div class="col-8 border-right">
+      <div id="mapid" style="width: 600px; height: 600px;"></div>
+    </div>
+    <div class="col-4">
+      <form action="">
+        <div class="form-group">
+          <label>Titel</label>
+          <input class="form-control" id="title" placeholder="Titel"></input>
+        </div>
+        <hr>
+        <div class="form-group">
+          <label>Frage #1</label> <input class="form-control" id="question0"
+            placeholder="Frage"></input>
+        </div>
+
+        <div class="form-group">
+          <label>Antwort</label> <input class="form-control" id="answer00" value ="Ja">
+          <input class="form-control" id="answer01" value="Nein">
+          <button class="btn btn-primary mb-3">+</button>
+        </div>
+
+        <div id="addCondition" class="form-group">
+          <button type="button" onclick="addCondition()" class="btn btn-primary mb-3">Bedingung hinzufügen</button>
+        </div>
+
+        <hr>
+
+        <div id="addQuestion" class="form-group">
+          <button type="button" onclick="addQuestion()" class="btn btn-primary mb-3">Frage hinzufügen</button>
+        </div>
+
+        <div class="form-group">
+          <label>Zeitfenster</label> <input type="date" class="form-control"
+            placeholder="From"> <input type="date"
+            class="form-control" placeholder="To">
+        </div>
+
+        <div class="form-group">
+          <label>Anzahl an Bestätigungen benötigt:</label>
+          <input type="number" class="form-control" id="confirmedThreshhold" placeholder="10">
+        </div>
+
+        <div class="form-group">
+          <button onclick="postSurvey()" class="btn btn-primary" type="button">Umfrage erstellen</button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+  <script type="text/javascript">
+
+  // store coordinates coming from controller
+
+  var lat = [[${lat}]];
+  var lng = [[${lng}]];
+  // init popup
+  var popup = L.popup();
+  // init layerGroup holding all the markers
+  // this is used to delete previous markers when clicking on map
+  var markers = L.layerGroup()
+
+  // set map depending on whether real coordinates where given
+  // default is somewhat the center of hamburg
+  if (lat == 0 && lng ==0) {
+    var mymap = L.map('mapid').setView([53.551086, 9.993682], 12);
+  } else {
+    var mymap = L.map('mapid').setView([lat, lng], 16);
+    addMarkerToMap(lat, lng);
+  }
+
+  // init map
+  L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+    maxZoom: 18,
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+      '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+      'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+    id: 'mapbox/streets-v11',
+    tileSize: 512,
+    zoomOffset: -1
+  }).addTo(mymap);
+
+  // make post to controller with json data of survey
+  function postSurvey() {
+
+    // data object holding information
+    var data = new Object();
+    // crreating unique id
+    data.id = Math.floor(Math.random() * (100000 - 0 + 1)) + 0;
+    data.title = document.getElementById("title").value;
+    // get coordinates of current marker
+    // only one marker in layergroup, forEach only runs once
+    markers.eachLayer(function(layer) {
+      data.lat = layer.getLatLng().lat;
+      data.lng = layer.getLatLng().lng;
+    });
+    data.questions = [];
+    // TODO: fill this
+    data.type = "";
+    // array empty when creating survey
+    data.confirmedByUsers = [];
+    data.confirmedThreshhold = document.getElementById("confirmedThreshhold").value;
+    data.createdAtDate = new Date().toUTCString();
+    var questions = [];
+    var i = 0;
+    // parsing all the questions
+    while (element = document.getElementById("question" + i) != undefined) {
+      questions.push(document.getElementById("question" + i).value);
+      i = i + 1;
+    }
+
+    // parsing all the answers
+    for (let i=0; i<questions.length; i++) {
+      var question = new Object();
+      question.id = i;
+      question.questionText = questions[i];
+      answers = [];
+      var k = 0;
+      while (element = document.getElementById("answer" + i + k) != undefined) {
+        answers.push(document.getElementById("answer" + i + k).value);
+        k = k + 1;
+      }
+      question.answers = answers;
+      data.questions.push(question);
+    };
+
+    // building and sending json
+    var jsonString = JSON.stringify(data);
+    var request = new XMLHttpRequest();
+    request.open("POST", "/umfrage-erstellen");
+    request.setRequestHeader("Content-Type", "application/json");
+    request.send(jsonString);
+
+
+  };
+
+  // on click handler
+  function onMapClick(e) {
+      addMarkerToMap(e.latlng.lat, e.latlng.lng);
+  };
+
+  mymap.on('click', onMapClick);
+
+  // add marker to map, delete old one
+  function addMarkerToMap(lat, lng) {
+    var marker = L.marker([lat, lng]).addTo(mymap)
+      .bindPopup("<b>Hier wird die erstellte Umfrage sein.<br/>");
+    markers.eachLayer(function(layer) {
+      layer.remove()
+      markers.removeLayer(layer);
+    });
+    markers.addLayer(marker);
+  };
+
+  // add question to form, only works once for some reason
+  function addQuestion() {
+    const newQuestionEl = document.createElement('div')
+    newQuestionEl.innerHTML = questionHTML
+    document.getElementById("addQuestion").appendChild(newQuestionEl);
+
+  };
+
+  // add condition to form, only works once for some reason
+  function addCondition() {
+    document.getElementById("addCondition").innerHTML = conditionHTML;
+  };
+
+  // add answer to form
+  function addAnswer() {
+    document.getElementById("addAnswer").innerHTML = answerHTML;
+  };
+
+  var questionHTML = [
+              '<label>Frage #2</label>',
+              '<input class="form-control" id="question1" placeholder="Frage"></input>',
+
+
+            '<div class="form-group">',
+              '<label>Antwort</label>',
+              '<input class="form-control" id="answer10" value="Ja">',
+              '<input class="form-control" id="answer11" value="Nein">',
+              '<button class="btn btn-primary mb-3">+</button>',
+            '</div>',
+
+            '<div id="addCondition" class="form-group">',
+        '<button onclick="addCondition()" class="btn btn-primary mb-3">Bedingung hinzufügen</button>',
+        '</div>',
+
+            '<div class="row-20 border"></div>',
+            '<div class="row-20 border"></div>',
+
+            '<div id="addQuestion" class="form-group">',
+            '<button onclick="addQuestion()" class="btn btn-primary mb-3">Frage hinzufügen</button>'
+  ].join("\n");
+
+  var conditionHTML = [
+    '<div class="form-group">',
+      '<label for="fragen">Bedingung: Frage nur zeigen, wenn:</label>',
+      '<select id="fragen">',
+        '<option value="/">/</option>',
+        '<option value="frage1">Frage #1</option>',
+        '<option value="frage2">Frage #2</option>',
+        '<option value="frage2">Frage #4</option>',
+      '</select>',
+      '<label for="antworten">mit:</label>',
+      '<select id="antworten">',
+        '<option value="ja">Ja</option>',
+        '<option value="nein">Nein</option>',
+        '<option value="freitext">Freitext</option>',
+      '</select>',
+      '<label >beantwortet wurde.</label>',
+    '</div>'
+
+    ].join("\n");
+
+    var answerHTML = [
+
+    ].join("\n");
+
+</script>
+</body>
+</html>

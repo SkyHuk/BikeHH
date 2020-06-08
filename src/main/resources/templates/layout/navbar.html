@@ -44,7 +44,7 @@
 		</div>
 	</nav>-->
 
-	<nav th:fragment="navbar" id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-primary sidebar collapse">
+	<nav th:fragment="navbar" id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-primary sidebar collapse px-0">
       <div class="sidebar-sticky">
         <div class="text-center mb-4">
           <img src="../static/img/logo.png" th:src="@{img/logo.png}" class="img-fluid"/>
@@ -54,32 +54,52 @@
         <hr class="my-4">
         <ul class="nav flex-column">
           <li class="nav-item">
-            <a class="nav-link active" href="/uebersicht">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            <a
+              class="nav-link"
+              href="/uebersicht"
+              th:classappend="${#request.getServletPath().startsWith('/uebersicht') ? 'active' : ''}"
+            >
+              <span><i class="fas fa-chart-line"></i></span>
               Übersicht <span class="sr-only">(current)</span>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/umfragen">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
+            <a
+              class="nav-link"
+              href="/umfragen"
+              th:classappend="${#request.getServletPath().startsWith('/umfragen') ? 'active' : ''}"
+            >
+              <span><i class="fas fa-file-alt"></i></span>
               Umfragen
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/meldungen">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bar-chart-2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+            <a
+              class="nav-link"
+              href="/meldungen"
+              th:classappend="${#request.getServletPath().startsWith('/meldungen') ? 'active' : ''}"
+            >
+              <span><i class="fas fa-map-marker-alt"></i></span>
               Meldungen
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/karte">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            <a
+              class="nav-link"
+              href="/karte"
+              th:classappend="${#request.getServletPath().startsWith('/karte') ? 'active' : ''}"
+            >
+              <span><i class="fas fa-map-marked-alt"></i></span>
               Karte
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/umfrage-erstellen">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            <a
+              class="nav-link"
+              href="/umfrage-erstellen"
+              th:classappend="${#request.getServletPath().startsWith('/umfrage-erstellen') ? 'active' : ''}"
+            >
+              <span><i class="fas fa-folder-plus"></i></span>
               Umfrage erstellen
             </a>
           </li>
@@ -101,23 +121,18 @@
        <ul class="nav flex-column mb-2">
           <li class="nav-item">
             <a class="nav-link" href="/">
-              <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="feather"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-              User #1234
+              <span><i class="fas fa-user-circle"></i></span>
+              <!--<span th:text="${currentUser ? currentUser.email : ''}"></span>-->
+              <span>Nutzer #1234</span>
             </a>
           </li>
           <li class="nav-item">
           <form>
-			<a class="nav-link">
-          		<svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="feather"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-          		<button type="submit" class="btn btn-link btn-logout">Logout</button>
+			       <a class="nav-link">
+          		<span><i class="fas fa-sign-out-alt"></i></span>
+          		<span>Ausloggen</span>
             </a>
           </form>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/">
-              <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="feather"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-              Ausloggen
-            </a>
           </li>
         </ul>
       </div>

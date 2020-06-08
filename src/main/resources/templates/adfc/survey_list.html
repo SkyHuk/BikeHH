@@ -11,31 +11,31 @@
       <input class="form-control" placeholder="Suche">
     </div>
     <div class="table-responsive mb-4">
-      <table class="table">
+      <table class="table table-hover">
         <thead>
           <tr>
-            <th>#</th>
             <th>Breitengrad</th>
             <th>Längengrad</th>
             <th>Title</th>
             <th>Typ</th>
             <th>Erstellungsdatum</th>
             <th>Bestätigungen</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
           <tr  th:each="survey: ${surveys}">
-         	<td> 
-         	<a th:text="${survey.id}" th:href="@{/umfrage(values=${survey.id})}" target="_self"></a>
-         	</td>
-         	<td th:text="${survey.lat}"></td>
-         	<td th:text="${survey.lng}"></td>
-         	<td th:text="${survey.title}"></td>
-         	<td th:text="${survey.type}"></td>
-         	<td th:text="${survey.createdAtDate}"></td>
-         	<td th:text="${#lists.size(survey.confirmedByUsers)}"></td>
-         	
-          </tr>  
+           	<td th:text="${survey.lat}"></td>
+           	<td th:text="${survey.lng}"></td>
+           	<td th:text="${survey.title}"></td>
+           	<td th:text="${survey.type}"></td>
+           	<td th:text="${survey.createdAtDate}"></td>
+           	<td th:text="${#lists.size(survey.confirmedByUsers)}"></td>
+            <td>
+              <!--<a class="btn btn-sm btn-primary" th:text="${survey.id} + ' anzeigen'" th:href="@{/umfrage(values=${survey.id})}" target="_self"></a>-->
+              <a class="btn btn-sm btn-primary" th:href="@{/umfragen/{id}(id=${survey.id})}" target="_self">Anzeigen</a>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
