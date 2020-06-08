@@ -15,12 +15,20 @@ import de.wps.bikehh.utilities.Utils;
 @RequestMapping("umfrage")
 public class SingleSurveyController {
 
+	/**
+	 * 
+	 * opens html page for specific survey
+	 * 
+	 * @param model        spring model
+	 * @param surveyNumber number of survey to open
+	 * @return html page
+	 */
 	@GetMapping
-	public String showSingleSurvey(Model model, @RequestParam(name = "values") String surveyNumber) {
+	public String showSingleSurvey(Model model, @RequestParam(name = "values") int surveyNumber) {
 
 		List<SurveyTest> surveysList = Utils.getSurveyJsonsAsArray();
 		for (SurveyTest survey : surveysList) {
-			if (String.valueOf(survey.getId()) == surveyNumber) {
+			if (survey.getId() == surveyNumber) {
 				model.addAttribute("survey", survey);
 			}
 		}

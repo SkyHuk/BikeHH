@@ -26,7 +26,7 @@
         <tbody>
           <tr  th:each="survey: ${surveys}">
          	<td> 
-         	<a th:text="${survey.id}" th:href="@{/umfrage(values=${survey.id})}" target="_blank"></a>
+         	<a th:text="${survey.id}" th:href="@{/umfrage(values=${survey.id})}" target="_self"></a>
          	</td>
          	<td th:text="${survey.lat}"></td>
          	<td th:text="${survey.lng}"></td>

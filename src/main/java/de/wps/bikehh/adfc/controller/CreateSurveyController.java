@@ -14,6 +14,14 @@ import de.wps.bikehh.utilities.Utils;
 @RequestMapping("umfrage-erstellen")
 public class CreateSurveyController {
 
+	/**
+	 * opens create_survey.html with optional coordinates. coordinates get set to 0
+	 * if not present, are then omitted in javascript.
+	 * 
+	 * @param coordinates coordinates if coming from map.html
+	 * @param model       spring model
+	 * @return html page
+	 */
 	@GetMapping
 	public String showSurveyCreator(@RequestParam(required = false, name = "coordinates") double[] coordinates,
 			Model model) {
@@ -28,8 +36,15 @@ public class CreateSurveyController {
 		return "adfc/create_survey";
 	}
 
+	/**
+	 * 
+	 * 
+	 * @param body post body
+	 * @return html page
+	 * @throws Exception
+	 */
 	@RequestMapping(method = RequestMethod.POST)
-	public String processSurvey(@RequestBody String body) throws Exception {
+	public String processSurvey(@RequestBody String body) {
 
 		System.out.println(body.toString());
 
