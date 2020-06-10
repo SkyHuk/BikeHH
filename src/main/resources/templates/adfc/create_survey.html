@@ -24,7 +24,7 @@
         <form @submit="postSurvey">
           <div class="row">
             <div class="col border-right">
-
+              <!-- common infos -->
               <div class="form-group">
                 <label>Titel</label>
                 <input class="form-control" v-model="title" placeholder="Titel"></input>
@@ -41,30 +41,23 @@
                 <input type="number" class="form-control" :placeholder="confirmedThreshhold" v-model="confirmedThreshhold">
               </div>
 
-              <hr>
-
-              <div class="form-group" v-for="(condition, index) in conditions">
-                <label :for="'condition-question' + index">Bedingung: Frage nur zeigen wenn:</label>
-                <select :id="'condition-question' + index" v-model="condition.question">
-                  <option default disabled>-</option>
-                  <option v-for="question in questions" :value="question">{{ question.title }}</option>
-                </select>
-                <label for="'condition-answer' + index">mit:</label>
-                <select id="'condition-answer' + index" v-if="condition.question" v-model="condition.expectedAnswer">
-                  <option v-for="answer in condition.question.answers" :value="answer">{{ answer.text }}</option>
-                </select>
-                <label>beantwortet wurde.</label>
-              </div>
-
               <div class="form-group">
-                <button type="button" class="btn btn-primary mb-3" @click="addCondition()">Bedingung hinzufügen</button>
+                <!-- category -->
+                <label>Kategorie</label>
+                <input class="form-control" v-model="category" placeholder="Kategorie"></input>
               </div>
 
             </div>
 
             <div class="col">
-
+              <!-- question -->
               <div v-for="(question, index) in questions">
+                
+                <!-- toogle <hr> after first question -->
+                <div v-if="questions.indexOf(question) > 0">
+                  <hr>
+                </div>
+
                 <div class="form-group">
                   <label>Frage #{{ index + 1 }}</label>
                   <input class="form-control" v-model="question.title" placeholder="Frage"></input>
@@ -75,12 +68,65 @@
                   <div v-for="answer in question.answers" class="mb-4">
                     <input class="form-control" v-model="answer.text">
                   </div>
+                <div class="button-group">
+                  <!-- add answer -->
                   <button type="button" class="btn btn-primary mb-3" @click="addAnswer(question)"><i class="fas fa-plus"></i></button>
+                  <!-- delete answer -->
+                  <button type="button" class="btn btn-danger mb-3" @click="removeAnswer(question)"><i class="fas fa-minus"></i></button>
+                </div>
+                  
                 </div>
 
-                <hr>
+                <div class="form-group" v-for="(condition, index) in question.conditions">
+                  <label :for="'condition-question' + index">Bedingung: Frage nur zeigen wenn:</label>
+                  <select :id="'condition-question' + index" v-model="condition.question">
+                    <option default disabled>-</option>
+                    <option v-for="question in questions" :value="question">{{ question.title }}</option>
+                  </select>
+                  <label for="'condition-answer' + index">mit:</label>
+                  <select id="'condition-answer' + index" v-if="condition.question" v-model="condition.expectedAnswer">
+                    <option v-for="answer in condition.question.answers" :value="answer">{{ answer.text }}</option>
+                  </select>
+                  <label>beantwortet wurde.</label>
+                </div>
+
+                <div class="button-group">
+                  <!-- add condition -->
+                  <button type="button" class="btn btn-primary mb-3" @click="addCondition(question)">Bedingung hinzufügen</button>
+                  <!-- delete condition -->
+                  <button type="button" class="btn btn-danger mb-3" @click="deleteCondition(question)">Bedingung löschen</button>
+                </div>
+
+                <!-- <div class="form-group" v-for="(condition, index) in question.conditions">
+                  <label :for="'condition-question' + index">Bedingung: Frage nur zeigen wenn:</label>
+                  <select :id="'condition-question' + index" v-model="condition.question">
+                    <option default disabled>-</option>
+                    <option v-for="question in questions" :value="question">{{ question.title }}</option>
+                  </select>
+                  <label for="'condition-answer' + index">mit:</label>
+                  <select id="'condition-answer' + index" v-if="condition.question" v-model="condition.expectedAnswer">
+                    <option v-for="answer in condition.question.answers" :value="answer">{{ answer.text }}</option>
+                  </select>
+                  <label>beantwortet wurde.</label>
+                </div>
+
+                <div class="button-group">
+                  <!-- add condition -->
+                  <button type="button" class="btn btn-primary mb-3" @click="addCondition(question)">Bedingung hinzufügen</button>
+                  <!-- delete condition -->
+                  <button type="button" class="btn btn-danger mb-3" @click="deleteCondition(question)">Bedingung löschen</button>
+                </div> -->
+
+        
+                
+                <div class="form-group">
+                  <!-- delete question -->
+                  <button type="button" class="btn btn-danger mb-3" @click="deleteQuestion(question)">Frage löschen</button>
+                </div>
 
               </div>
+
+              <hr>
 
               <div class="form-group">
                 <button type="button" class="btn btn-primary mb-3" @click="addQuestion">Frage hinzufügen</button>
@@ -89,6 +135,7 @@
             </div>
           </div>
 
+          <!-- create survey -->
           <div class="form-group">
             <button type="submit" class="btn btn-primary">Umfrage erstellen</button>
           </div>
@@ -105,11 +152,11 @@
       el: '#createSurveyApp',
       data: {
         title: '',
+        category: '',
         dateFrom: null,
         dateTo: null,
         confirmedThreshhold: 10,
         questions: [],
-        conditions: [],
 
         // store coordinates coming from controller
         lat: [[${lat}]],
@@ -178,19 +225,33 @@
               { text: 'Ja', },
               { text: 'Nein', },
             ],
+            conditions: []
           })
-
         },
+        //deletes a question
+        deleteQuestion(question){
+          var index = this.questions.indexOf(question)
+          console.log(index)
+          this.questions.splice(index, 1)
+        },
+        //add answer
         addAnswer(question) {
           question.answers.push({ text: '' })
-
         },
-        addCondition() {
-          this.conditions.push({
+         //delete latest answer in question.answers
+         removeAnswer(question){
+          question.answers.pop()
+        },
+        //add condition
+        addCondition(question) {
+          question.conditions.push({
             question: null,
             expectedAnswer: null,
           })
-
+        },
+        //delete condition
+        deleteCondition(question){
+          question.conditions.pop()
         },
         postSurvey(e) {
           e.preventDefault()
@@ -198,12 +259,16 @@
 
           // data object holding information
           const data = {};
-          // crreating unique id
+          // creating unique id
           data.id = Math.floor(Math.random() * (100000 - 0 + 1)) + 0;
+
+          //get data
           data.title = this.title;
           data.dateFrom = this.dateFrom;
           data.dateTo = this.dateTo;
           data.confirmedThreshhold = this.confirmedThreshhold
+          data.questions = this.questions;
+          data.category = this.category;
 
           // get coordinates of current marker
           // only one marker in layergroup, forEach only runs once
@@ -212,10 +277,9 @@
             data.lng = layer.getLatLng().lng;
           });
 
-          // TODO: fill this
+          // TODO: fill this?
           // data.type = this.type
 
-          data.questions = this.questions;
           // building and sending json
           const jsonString = JSON.stringify(data);
           const request = new XMLHttpRequest();
