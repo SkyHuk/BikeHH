@@ -33,5 +33,7 @@
 	"category":"Sonstige",
 	"createdAtDate":"2020-06-10T16:14:59.811Z",
 	"lat":53.5544010932816,
-	"lng":9.990863800048828
+	"lng":9.990863800048828,
+	"creator": "admin@chef.lol",
+	"createdManually": false
 }

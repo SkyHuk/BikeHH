@@ -71,7 +71,7 @@ public class Utils {
 		// try-catch block to handle exceptions
 		try {
 			File f = new File(startDir);
-			System.out.println(f);
+			// System.out.println(f);
 
 			FilenameFilter filter = new FilenameFilter() {
 				@Override

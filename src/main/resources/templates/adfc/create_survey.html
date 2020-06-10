@@ -19,7 +19,7 @@
   <div id="createSurveyApp">
 
     <h2 class="my-4">Umfrage erstellen</h2>
-    <div class="mb-4" id="mapid" style="width: calc(100vw - 3rem); height: 30vh;"></div>
+    <div class="mb-4" id="mapid" style="width: calc(90vw - 8rem); height: 30vh;"></div>
     <div class="card">
       <div class="card-body">
         <form @submit="postSurvey">
@@ -143,6 +143,8 @@
         dateTo: null,
         confirmedThreshhold: 10,
         questions: [],
+        creator: '',
+        createdManually: true,
 
         // store coordinates coming from controller
         lat: [[${ lat }]],
@@ -248,7 +250,7 @@
           // creating unique id
           data.id = Math.floor(Math.random() * (100000 - 0 + 1)) + 0;
 
-          //get data
+          // get data
           data.title = this.title;
           data.dateFrom = this.dateFrom;
           data.dateTo = this.dateTo;
@@ -256,8 +258,10 @@
           data.questions = this.questions;
           data.category = this.category;
           data.confirmedByUsers = [];
+          data.createdManually = this.createdManually;
+          data.creator = this.creator;
 
-          //get date
+          // get date
           // generate a timestamp
 		  var timestamp = Number(new Date())
 		  var date = new Date(timestamp)
@@ -277,10 +281,14 @@
           request.setRequestHeader("Content-Type", "application/json");
           request.send(jsonString);
         },
+        addCreator(creator) {
+        	this.creator = creator;
+        },
       },
     })
-
+    
   </script>
+  
 </body>
 
 </html>

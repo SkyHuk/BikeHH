@@ -118,7 +118,8 @@
 		function addSurveysToMap(id, lat, lng, category, createdAtDate, confirmedByUsers, confirmedThreshhold, title, questions, dateFrom, dateTo) {
 			console.log('addSurveysToMap was called with ' + lat + 'and ' + lng);
 			L.marker([lat, lng]).addTo(mymap)
-				.bindPopup("<b>Umfrage" + " Id " + id + "</b><br/>" +
+				.bindPopup(
+					'<a href="umfragen/' + id +'"><b>Umfrage Id ' + id +'</b></a><br/' +
 					"Beschreibung: " + title + "<br/>" +
 					"Lat: " + lat + "<br/>" +
 					"Lng: " + lng + "<br/>" +

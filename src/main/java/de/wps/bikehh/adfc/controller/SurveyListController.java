@@ -19,7 +19,6 @@ public class SurveyListController {
 
 		List<SurveyTest> surveys = Utils.getSurveyJsonsAsArray();
 
-		System.out.println(surveys.get(0).getConfirmedByUsers());
 		model.addAttribute("surveys", surveys);
 		return "adfc/survey_list";
 	}

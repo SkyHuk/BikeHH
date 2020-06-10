@@ -19,6 +19,8 @@ public class SurveyTest {
 	private int confirmedThreshhold;
 	private String title;
 	private Question[] questions;
+	private String creator;
+	private boolean createdManually;
 
 	public int getId() {
 		return id;
@@ -106,6 +108,22 @@ public class SurveyTest {
 
 	public void setQuestions(Question[] questions) {
 		this.questions = questions;
+	}
+
+	public String getCreator() {
+		return creator;
+	}
+
+	public void setCreator(String creator) {
+		this.creator = creator;
+	}
+
+	public boolean isCreatedManually() {
+		return createdManually;
+	}
+
+	public void setCreatedManually(boolean createdManually) {
+		this.createdManually = createdManually;
 	}
 
 }
