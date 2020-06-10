@@ -118,7 +118,7 @@
         mymap: null,
 
       },
-      created() {
+      mounted() {
         // initially add first question
         this.addQuestion()
 
@@ -130,11 +130,13 @@
 
         // set map depending on whether real coordinates where given
         // default is somewhat the center of hamburg
-        if (this.lat == 0 && this.lng ==0) {
+        if (this.lat == 0 && this.lng == 0) {
           this.mymap = L.map('mapid').setView([53.551086, 9.993682], 12);
+
         } else {
           this.mymap = L.map('mapid').setView([this.lat, this.lng], 16);
           this.addMarkerToMap(this.lat, this.lng);
+
         }
 
         // init map
@@ -148,9 +150,25 @@
           zoomOffset: -1
         }).addTo(this.mymap);
 
-        this.mymap.on('click', this.onMapClick);
+        const self = this
+
+        this.mymap.on('click', function(e) {
+          const lat = e.latlng.lat
+          const lng = e.latlng.lng
+
+          // add marker to map, delete old one
+          var marker = L.marker([lat, lng]).addTo(self.mymap)
+            .bindPopup("<b>Hier wird die erstellte Umfrage sein.</b><br/>");
+          self.markers.eachLayer((layer) => {
+            layer.remove()
+            self.markers.removeLayer(layer);
+          });
+          self.markers.addLayer(marker);
+        })
 
 
+      },
+      created() {
       },
       methods: {
         addQuestion() {
@@ -207,20 +225,6 @@
 
 
         },
-      },
-      addMarkerToMap(lat, lng) {
-        // add marker to map, delete old one
-        var marker = L.marker([lat, lng]).addTo(this.mymap)
-          .bindPopup("<b>Hier wird die erstellte Umfrage sein.<br/>");
-        this.markers.eachLayer(function(layer) {
-          layer.remove()
-          this.markers.removeLayer(layer);
-        });
-        this.markers.addLayer(marker);
-      },
-      onMapClick(e) {
-        // on click handler
-        this.addMarkerToMap(e.latlng.lat, e.latlng.lng);
       },
 
     })

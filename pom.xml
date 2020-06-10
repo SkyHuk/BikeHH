@@ -94,11 +94,17 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		
+
 		<dependency>
-  			<groupId>com.google.code.gson</groupId>
-  			<artifactId>gson</artifactId>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
 		</dependency>
+
+		<!--<dependency>
+			<groupId>com.fasterxml.jackson.jr</groupId>
+			<artifactId>jackson-jr-objects</artifactId>
+			<version>2.11.0</version>
+		</dependency>-->
 	</dependencies>
 
 	<build>

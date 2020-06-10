@@ -2,7 +2,7 @@ package de.wps.bikehh.adfc.material;
 
 /**
  * test class for Survey (test with JSON files)
- * 
+ *
  * @author amnesica
  *
  */

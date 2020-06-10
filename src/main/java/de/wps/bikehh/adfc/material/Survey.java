@@ -24,6 +24,10 @@ import de.wps.bikehh.benutzerverwaltung.material.User;
 @Entity
 public class Survey {
 
+	/* static Survey createFromJson(String jsonString) {
+		JSON j = JSON.builder().register(JacksonAnnotationExtension.std).build();
+	} */
+
 	@Id
 	@GeneratedValue
 	private int id;

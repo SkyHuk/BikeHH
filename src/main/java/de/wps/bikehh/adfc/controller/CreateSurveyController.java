@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import de.wps.bikehh.utilities.Utils;
+import de.wps.bikehh.adfc.material.Survey;
+
 
 @Controller
 @RequestMapping("umfrage-erstellen")
@@ -48,6 +50,8 @@ public class CreateSurveyController {
 
 		// TODO: create umfrage.json file
 		Utils.saveJSONSurveyInFiles(body);
+
+		// Survey survey = j.beanFrom(body);
 
 		return "adfc/survey_list";
 
