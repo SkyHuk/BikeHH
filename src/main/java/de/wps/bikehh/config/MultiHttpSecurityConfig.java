@@ -1,18 +1,19 @@
 package de.wps.bikehh.config;
 
-import de.wps.bikehh.benutzerverwaltung.exception.ApiRequestException;
-import de.wps.bikehh.benutzerverwaltung.exception.ErrorCode;
-import org.springframework.beans.factory.annotation.Value;
+import de.wps.bikehh.benutzerverwaltung.security.OAuthFilter;
+import de.wps.bikehh.benutzerverwaltung.security.OAuthProvider;
+import de.wps.bikehh.benutzerverwaltung.service.AuthService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @EnableWebSecurity
@@ -34,82 +35,23 @@ public class MultiHttpSecurityConfig {
     }
 
     @Configuration
-    @Order(2)
+    @Order(1)
     class AuthWebSecurity extends WebSecurityConfigurerAdapter {
 
-
-        @Value("Authorization")
-        private String principalRequestHeader;
-
+        @Autowired
+        OAuthProvider authProvider;
 
         @Override
         protected void configure(HttpSecurity httpSecurity) throws Exception {
-            APIKeyAuthMiddleware filter = new APIKeyAuthMiddleware(principalRequestHeader);
-
-            filter.setAuthenticationManager(new AuthenticationManager() {
-
-                @Override
-                public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-
-                    String principal = (String) authentication.getPrincipal();
-                    if (principal.isEmpty()) {
-                        throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
-                    }
-
-                    authentication.setAuthenticated(true);
-                    return authentication;
-                }
-            });
-
-            httpSecurity.antMatcher("/api/user").addFilter(filter);
+            httpSecurity.httpBasic().and().authorizeRequests().antMatchers(HttpMethod.POST, "/api/auth").permitAll()
+                    .antMatchers(HttpMethod.POST, "/api/user").permitAll()
+                    .and().authorizeRequests().antMatchers("/api/**").authenticated().and().addFilterBefore(new OAuthFilter(), BasicAuthenticationFilter.class);
             httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER);
         }
-    }
-    /*@Configuration
-    @Order(1)
-    class ApiWebSecurity extends WebSecurityConfigurerAdapter {
-
-        @Value("x-api-key")
-        private String principalRequestHeader;
-
-        @Value("${bikehh.api.key}")
-        private String principalRequestValue;
 
         @Override
-        protected void configure(HttpSecurity httpSecurity) throws Exception {
-            APIKeyAuthMiddleware filter = new APIKeyAuthMiddleware(principalRequestHeader);
-
-            //filter.setAuthenticationFailureHandler(new CustomAuthenticationFailureHandler());
-            //filter.setAuthenticationSuccessHandler(authenticationSuccessHandler());
-
-            filter.setAuthenticationManager(new AuthenticationManager() {
-
-                @Override
-                public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-                    System.out.println("api-key");
-                    if (authentication == null) {
-                        return null;
-                    }
-
-                    String principal = (String) authentication.getPrincipal();
-                    if (!principalRequestValue.equals(principal)) {
-                        throw new BadCredentialsException(ErrorCode.unauthorized);
-                    }
-                    authentication.setAuthenticated(true);
-                    return authentication;
-                }
-            });
-
-            httpSecurity.antMatcher("/api/**").csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().addFilter(filter).
-                    authorizeRequests().anyRequest().authenticated().and().exceptionHandling().authenticationEntryPoint(((request, response, e) -> {
-                ApiException exception = new ApiException(ErrorCode.unauthorized);
-
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.setContentType("application/json");
-                response.setCharacterEncoding("UTF-8");
-                response.getWriter().write(exception.toString());
-            }));
-
+        public void configure(AuthenticationManagerBuilder auth) throws Exception {
+            auth.authenticationProvider(authProvider);
         }
-    }*/
+    }
 }

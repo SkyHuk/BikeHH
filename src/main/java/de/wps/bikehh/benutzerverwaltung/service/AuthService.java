@@ -42,11 +42,15 @@ public class AuthService {
     }
 
     public void logoutUser(String token) {
-        Session session = _sessionRepository.findByToken(token);
+        Session session = _sessionRepository.findByToken(token).orElse(null);
         _sessionRepository.delete(session);
     }
 
     public User getUserByToken(String token) {
-        return _sessionRepository.findByToken(token).getUser();
+        Session session = _sessionRepository.findByToken(token).orElse(null);
+        if (session == null) {
+            return null;
+        }
+        return session.getUser();
     }
 }

@@ -82,7 +82,7 @@ public class BikehhUserDetailsService implements UserDetailsService {
     }
 
     public UserDetailsResponseModel getCurrentUser(String accessToken) throws ApiRequestException {
-        Session session = _sessionRepository.findByToken(accessToken);
+        Session session = _sessionRepository.findByToken(accessToken).orElse(null);
         if (session == null) {
             throw new ApiRequestException(ErrorCode.unauthorized, HttpStatus.UNAUTHORIZED);
         }
@@ -93,7 +93,7 @@ public class BikehhUserDetailsService implements UserDetailsService {
     }
 
     public void updateUser(String accessToken, UpdateUserDetailsRequestModel userUpdate) throws ApiRequestException {
-        Session session = _sessionRepository.findByToken(accessToken);
+        Session session = _sessionRepository.findByToken(accessToken).orElse(null);
         if (session == null) {
             throw new ApiRequestException(ErrorCode.unauthorized, HttpStatus.UNAUTHORIZED);
         }
@@ -110,7 +110,7 @@ public class BikehhUserDetailsService implements UserDetailsService {
     }
 
     public void deleteUser(String accessToken) {
-        Session session = _sessionRepository.findByToken(accessToken);
+        Session session = _sessionRepository.findByToken(accessToken).orElse(null);
         if (session == null) {
             throw new ApiRequestException(ErrorCode.unauthorized, HttpStatus.UNAUTHORIZED);
         }

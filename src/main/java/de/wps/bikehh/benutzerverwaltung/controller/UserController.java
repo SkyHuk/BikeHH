@@ -11,6 +11,7 @@ import de.wps.bikehh.benutzerverwaltung.service.VerifyDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,7 +25,6 @@ public class UserController {
     public UserController(BikehhUserDetailsService bikehhUserDetailsService, VerifyDetailsService verifyDetailsService) {
         this._bikehhUserDetailsService = bikehhUserDetailsService;
         this._verifyDetailsService = verifyDetailsService;
-
     }
 
 
@@ -34,10 +34,18 @@ public class UserController {
         return _bikehhUserDetailsService.getCurrentUser(accessToken);
     }*/
 
+    /*
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public User getCurrentUser(@ModelAttribute("bikehh_user") User user) throws ApiRequestException {
         return user;
+    }*/
+
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public User getCurrentUser(Authentication auth) throws ApiRequestException {
+        return (User) auth.getPrincipal();
     }
 
     //@TODO how do we create admin user ? through different endpoint ?

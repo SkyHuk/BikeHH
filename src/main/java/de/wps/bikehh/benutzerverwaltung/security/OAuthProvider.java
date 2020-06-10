@@ -1,5 +1,6 @@
 package de.wps.bikehh.benutzerverwaltung.security;
 
+import de.wps.bikehh.benutzerverwaltung.exception.ErrorCode;
 import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.benutzerverwaltung.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,30 +11,30 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AuthProvider implements AuthenticationProvider {
+public class OAuthProvider implements AuthenticationProvider {
 
     private AuthService authService;
 
     @Autowired
-    public AuthProvider(AuthService authService) {
+    public OAuthProvider(AuthService authService) {
         this.authService = authService;
     }
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        AuthenticationToken auth = (AuthenticationToken) authentication;
+        OAuthToken auth = (OAuthToken) authentication;
         String token = (String) auth.getCredentials();
         User user = authService.getUserByToken(token);
         if (user == null) {
-            throw new BadCredentialsException("Unauthorized");
+            throw new BadCredentialsException(ErrorCode.unauthorized);
         }
 
-        AuthenticationToken nAuth = new AuthenticationToken(user, token);
+        OAuthToken nAuth = new OAuthToken(user, token);
         return nAuth;
     }
 
     @Override
     public boolean supports(Class<?> authentication) {
-        return AuthenticationToken.class.isAssignableFrom(authentication);
+        return OAuthToken.class.isAssignableFrom(authentication);
     }
 }

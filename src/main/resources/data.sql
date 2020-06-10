@@ -19,7 +19,7 @@ CREATE TABLE `User` (
 CREATE TABLE `Session`  (
   `id` LONG AUTO_INCREMENT  PRIMARY KEY,
   `user_Id` int NOT NULL,
-  `token` VARCHAR(255) NOT NULL,
+  `token` VARCHAR(255) NOT NULL UNIQUE,
   `created_at` timestamp NOT NULL DEFAULT NOW()
 );
 
@@ -48,5 +48,5 @@ INSERT INTO `User` (`email_address`, `encrypted_password`, `role`) VALUES
 INSERT INTO `User` (`email_address`, `encrypted_password`, `role`) VALUES
 ('test@mail.com', 'sha: 2YbXcpo8qT6PuNnA8ZYlZK7Z+Ck=', 'user');
 
-INSERT INTO `Session` (`user_id`, `token`) VALUES
+INSERT INTO `Session` (`user_Id`, `token`) VALUES
 (2, '1234');
