@@ -12,7 +12,7 @@ import javax.persistence.OneToMany;
 
 /**
  * Entity Strecke
- * 
+ *
  * @author amnesica
  *
  */

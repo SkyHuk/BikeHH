@@ -11,7 +11,7 @@ import javax.persistence.Id;
 
 /**
  * Entitiy Question
- * 
+ *
  * Is used inside Survey entitiy
  *
  * @author felixwolf
@@ -33,7 +33,7 @@ public class Question {
 	/**
 	 * dictionary that links a question and a answer, to be used as
 	 * HashMap<Question, Answer>
-	 * 
+	 *
 	 * logic: the question this class is the instance of will only be asked when a
 	 * specific QUESTION is answered with a specific ANSWER
 	 */

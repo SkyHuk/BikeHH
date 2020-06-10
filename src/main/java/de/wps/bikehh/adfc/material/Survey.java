@@ -17,7 +17,7 @@ import de.wps.bikehh.benutzerverwaltung.material.User;
 
 /**
  * Entity Umfrage
- * 
+ *
  * @author amnesica
  *
  */

@@ -17,7 +17,7 @@ public class CreateSurveyController {
 	/**
 	 * opens create_survey.html with optional coordinates. coordinates get set to 0
 	 * if not present, are then omitted in javascript.
-	 * 
+	 *
 	 * @param coordinates coordinates if coming from map.html
 	 * @param model       spring model
 	 * @return html page
@@ -37,8 +37,8 @@ public class CreateSurveyController {
 	}
 
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 * @param body post body
 	 * @return html page
 	 * @throws Exception

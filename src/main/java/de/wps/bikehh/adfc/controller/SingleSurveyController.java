@@ -17,9 +17,9 @@ import de.wps.bikehh.utilities.Utils;
 public class SingleSurveyController {
 
 	/**
-	 * 
+	 *
 	 * opens html page for specific survey
-	 * 
+	 *
 	 * @param model        spring model
 	 * @param surveyId survey id to open
 	 * @return html page

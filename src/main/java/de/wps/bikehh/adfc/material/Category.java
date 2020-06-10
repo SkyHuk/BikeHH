@@ -11,7 +11,7 @@ import javax.persistence.OneToMany;
 
 /**
  * Entity Kategorien von Meldungen / Umfragen
- * 
+ *
  * @author amnesica
  *
  */
