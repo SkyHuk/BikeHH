@@ -25,10 +25,10 @@ public class Question {
 	@GeneratedValue
 	private int id;
 
-	private String questionText;
+	private String title;
 
 	@ElementCollection
-	private List<String> answers = new ArrayList<String>();
+	private List<Answer> answers = new ArrayList<Answer>();
 
 	/**
 	 * dictionary that links a question and a answer, to be used as
@@ -47,19 +47,19 @@ public class Question {
 		this.id = id;
 	}
 
-	public String getQuestionText() {
-		return questionText;
+	public String getTitle() {
+		return title;
 	}
 
-	public void setQuestionText(String questionText) {
-		this.questionText = questionText;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
-	public List<String> getAnswers() {
+	public List<Answer> getAnswers() {
 		return answers;
 	}
 
-	public void setAnswers(List<String> answers) {
+	public void setAnswers(List<Answer> answers) {
 		this.answers = answers;
 	}
 

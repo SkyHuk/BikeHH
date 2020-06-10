@@ -1,9 +1,9 @@
 <html layout:decorate="~{layout/layout}" xmlns:th="http://thymeleaf.org">
+
 <head>
   <title>ADFC - Umfrage erstellen</title>
 
-  <link rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
     integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
     crossorigin="" />
   <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
@@ -13,6 +13,7 @@
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 
 </head>
+
 <body layout:fragment="content">
 
   <div id="createSurveyApp">
@@ -38,7 +39,8 @@
 
               <div class="form-group">
                 <label>Anzahl an Bestätigungen benötigt:</label>
-                <input type="number" class="form-control" :placeholder="confirmedThreshhold" v-model="confirmedThreshhold">
+                <input type="number" class="form-control" :placeholder="confirmedThreshhold"
+                  v-model="confirmedThreshhold">
               </div>
 
               <div class="form-group">
@@ -52,7 +54,7 @@
             <div class="col">
               <!-- question -->
               <div v-for="(question, index) in questions">
-                
+
                 <!-- toogle <hr> after first question -->
                 <div v-if="questions.indexOf(question) > 0">
                   <hr>
@@ -68,13 +70,15 @@
                   <div v-for="answer in question.answers" class="mb-4">
                     <input class="form-control" v-model="answer.text">
                   </div>
-                <div class="button-group">
-                  <!-- add answer -->
-                  <button type="button" class="btn btn-primary mb-3" @click="addAnswer(question)"><i class="fas fa-plus"></i></button>
-                  <!-- delete answer -->
-                  <button type="button" class="btn btn-danger mb-3" @click="removeAnswer(question)"><i class="fas fa-minus"></i></button>
-                </div>
-                  
+                  <div class="button-group">
+                    <!-- add answer -->
+                    <button type="button" class="btn btn-primary mb-3" @click="addAnswer(question)"><i
+                        class="fas fa-plus"></i></button>
+                    <!-- delete answer -->
+                    <button type="button" class="btn btn-danger mb-3" @click="removeAnswer(question)"><i
+                        class="fas fa-minus"></i></button>
+                  </div>
+
                 </div>
 
                 <div class="form-group" v-for="(condition, index) in question.conditions">
@@ -92,14 +96,17 @@
 
                 <div class="button-group">
                   <!-- add condition -->
-                  <button type="button" class="btn btn-primary mb-3" @click="addCondition(question)">Bedingung hinzufügen</button>
+                  <button type="button" class="btn btn-primary mb-3" @click="addCondition(question)">Bedingung
+                    hinzufügen</button>
                   <!-- delete condition -->
-                  <button type="button" class="btn btn-danger mb-3" @click="deleteCondition(question)">Bedingung löschen</button>
+                  <button type="button" class="btn btn-danger mb-3" @click="deleteCondition(question)">Bedingung
+                    löschen</button>
                 </div>
-                
+
                 <div class="form-group">
                   <!-- delete question -->
-                  <button type="button" class="btn btn-danger mb-3" @click="deleteQuestion(question)">Frage löschen</button>
+                  <button type="button" class="btn btn-danger mb-3" @click="deleteQuestion(question)">Frage
+                    löschen</button>
                 </div>
 
               </div>
@@ -138,8 +145,8 @@
         questions: [],
 
         // store coordinates coming from controller
-        lat: [[${lat}]],
-        lng: [[${lng}]],
+        lat: [[${ lat }]],
+        lng: [[${ lng }]],
         markers: null,
         mymap: null,
 
@@ -178,7 +185,7 @@
 
         const self = this
 
-        this.mymap.on('click', function(e) {
+        this.mymap.on('click', function (e) {
           const lat = e.latlng.lat
           const lng = e.latlng.lng
 
@@ -208,7 +215,7 @@
           })
         },
         //deletes a question
-        deleteQuestion(question){
+        deleteQuestion(question) {
           var index = this.questions.indexOf(question)
           console.log(index)
           this.questions.splice(index, 1)
@@ -217,8 +224,8 @@
         addAnswer(question) {
           question.answers.push({ text: '' })
         },
-         //delete latest answer in question.answers
-         removeAnswer(question){
+        //delete latest answer in question.answers
+        removeAnswer(question) {
           question.answers.pop()
         },
         //add condition
@@ -229,7 +236,7 @@
           })
         },
         //delete condition
-        deleteCondition(question){
+        deleteCondition(question) {
           question.conditions.pop()
         },
         postSurvey(e) {
@@ -249,9 +256,15 @@
           data.questions = this.questions;
           data.category = this.category;
 
+          //get date
+          // generate a timestamp
+		  var timestamp = Number(new Date())
+		  var date = new Date(timestamp)
+		  data.createdAtDate = date;
+
           // get coordinates of current marker
           // only one marker in layergroup, forEach only runs once
-          this.markers.eachLayer(function(layer) {
+          this.markers.eachLayer(function (layer) {
             data.lat = layer.getLatLng().lat;
             data.lng = layer.getLatLng().lng;
           });
@@ -267,9 +280,9 @@
           request.send(jsonString);
         },
       },
-
     })
 
   </script>
 </body>
+
 </html>

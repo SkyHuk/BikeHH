@@ -11,7 +11,9 @@ public class SurveyTest {
 	private int id;
 	private double lng;
 	private double lat;
-	private String type;
+	private String category;
+	private String dateFrom;
+	private String dateTo;
 	private String createdAtDate;
 	private String[] confirmedByUsers;
 	private int confirmedThreshhold;
@@ -42,12 +44,28 @@ public class SurveyTest {
 		this.lat = lat;
 	}
 
-	public String getType() {
-		return type;
+	public String getCategory() {
+		return category;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	public String getDateFrom() {
+		return dateFrom;
+	}
+
+	public void setDateFrom(String dateFrom) {
+		this.dateFrom = dateFrom;
+	}
+
+	public String getDateTo() {
+		return dateTo;
+	}
+
+	public void setDateTo(String dateTo) {
+		this.dateTo = dateTo;
 	}
 
 	public String getCreatedAtDate() {
@@ -72,10 +90,6 @@ public class SurveyTest {
 
 	public void setConfirmedThreshhold(int confirmedThreshhold) {
 		this.confirmedThreshhold = confirmedThreshhold;
-	}
-
-	public boolean isConfirmed() {
-		return confirmedByUsers.length >= confirmedThreshhold;
 	}
 
 	public String getTitle() {

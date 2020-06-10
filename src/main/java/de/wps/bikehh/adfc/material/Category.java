@@ -26,4 +26,29 @@ public class Category {
 
 	@OneToMany(mappedBy = "type", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
 	private List<Survey> listOfSurveys;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public List<Survey> getListOfSurveys() {
+		return listOfSurveys;
+	}
+
+	public void setListOfSurveys(List<Survey> listOfSurveys) {
+		this.listOfSurveys = listOfSurveys;
+	}
+
 }
