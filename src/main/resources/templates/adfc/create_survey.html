@@ -255,6 +255,7 @@
           data.confirmedThreshhold = this.confirmedThreshhold
           data.questions = this.questions;
           data.category = this.category;
+          data.confirmedByUsers = [];
 
           //get date
           // generate a timestamp
@@ -268,9 +269,6 @@
             data.lat = layer.getLatLng().lat;
             data.lng = layer.getLatLng().lng;
           });
-
-          // TODO: fill this?
-          // data.type = this.type
 
           // building and sending json
           const jsonString = JSON.stringify(data);
