@@ -96,28 +96,6 @@
                   <!-- delete condition -->
                   <button type="button" class="btn btn-danger mb-3" @click="deleteCondition(question)">Bedingung löschen</button>
                 </div>
-
-                <!-- <div class="form-group" v-for="(condition, index) in question.conditions">
-                  <label :for="'condition-question' + index">Bedingung: Frage nur zeigen wenn:</label>
-                  <select :id="'condition-question' + index" v-model="condition.question">
-                    <option default disabled>-</option>
-                    <option v-for="question in questions" :value="question">{{ question.title }}</option>
-                  </select>
-                  <label for="'condition-answer' + index">mit:</label>
-                  <select id="'condition-answer' + index" v-if="condition.question" v-model="condition.expectedAnswer">
-                    <option v-for="answer in condition.question.answers" :value="answer">{{ answer.text }}</option>
-                  </select>
-                  <label>beantwortet wurde.</label>
-                </div>
-
-                <div class="button-group">
-                  <!-- add condition -->
-                  <button type="button" class="btn btn-primary mb-3" @click="addCondition(question)">Bedingung hinzufügen</button>
-                  <!-- delete condition -->
-                  <button type="button" class="btn btn-danger mb-3" @click="deleteCondition(question)">Bedingung löschen</button>
-                </div> -->
-
-        
                 
                 <div class="form-group">
                   <!-- delete question -->
@@ -129,6 +107,7 @@
               <hr>
 
               <div class="form-group">
+                <!-- add question -->
                 <button type="button" class="btn btn-primary mb-3" @click="addQuestion">Frage hinzufügen</button>
               </div>
 
@@ -286,8 +265,6 @@
           request.open("POST", "/umfrage-erstellen");
           request.setRequestHeader("Content-Type", "application/json");
           request.send(jsonString);
-
-
         },
       },
 
