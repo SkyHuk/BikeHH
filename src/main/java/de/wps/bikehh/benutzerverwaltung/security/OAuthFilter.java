@@ -19,6 +19,7 @@ public class OAuthFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        System.out.println("oAuthFilter");
         String accessToken = request.getHeader(authorizationHeader);
         if (accessToken == null || accessToken.isEmpty()) {
             ApiException exception = new ApiException(ErrorCode.unauthorized);

@@ -13,6 +13,7 @@ import de.wps.bikehh.benutzerverwaltung.repository.SessionRepository;
 import de.wps.bikehh.benutzerverwaltung.repository.UserAuthenticationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,12 +26,12 @@ import java.util.List;
 public class BikehhUserDetailsService implements UserDetailsService {
 
     private UserAuthenticationRepository _userAuthenticationRepository;
-    private SessionRepository _sessionRepository;
+    private VerifyDetailsService _verifyDetailsService;
 
     @Autowired
-    public BikehhUserDetailsService(UserAuthenticationRepository userAuthenticationRepository, SessionRepository sessionRepository) {
+    public BikehhUserDetailsService(UserAuthenticationRepository userAuthenticationRepository, VerifyDetailsService verifyDetailsService) {
         this._userAuthenticationRepository = userAuthenticationRepository;
-        this._sessionRepository = sessionRepository;
+        this._verifyDetailsService = verifyDetailsService;
     }
 
     @Override
@@ -47,7 +48,6 @@ public class BikehhUserDetailsService implements UserDetailsService {
         return new BikehhUserDetails(user, email, user.getEncryptedPassword(), createAuthorities(user));
     }
 
-    //@TODO send verification mail
     public void createUser(String email, String password) throws ApiRequestException {
         if (!Validation.isEmailValid(email) || !Validation.isPasswordValid(password)) {
             throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
@@ -63,6 +63,7 @@ public class BikehhUserDetailsService implements UserDetailsService {
         user.setEncryptedPassword(encoder.encodePassword(password));
 
         _userAuthenticationRepository.save(user);
+        _verifyDetailsService.requestVerificationMail(user.getEmailAddress());
     }
 
     private String[] createAuthorities(User user) {
@@ -81,25 +82,13 @@ public class BikehhUserDetailsService implements UserDetailsService {
         return authorities.toArray(new String[authorities.size()]);
     }
 
-    public UserDetailsResponseModel getCurrentUser(String accessToken) throws ApiRequestException {
-        Session session = _sessionRepository.findByToken(accessToken).orElse(null);
-        if (session == null) {
-            throw new ApiRequestException(ErrorCode.unauthorized, HttpStatus.UNAUTHORIZED);
-        }
-
-        User user = session.getUser();
-
+    public UserDetailsResponseModel getCurrentUser(Authentication auth) throws ApiRequestException {
+        User user = (User) auth.getPrincipal();
         return new UserDetailsResponseModel(user);
     }
 
-    public void updateUser(String accessToken, UpdateUserDetailsRequestModel userUpdate) throws ApiRequestException {
-        Session session = _sessionRepository.findByToken(accessToken).orElse(null);
-        if (session == null) {
-            throw new ApiRequestException(ErrorCode.unauthorized, HttpStatus.UNAUTHORIZED);
-        }
-
-        User user = session.getUser();
-
+    public void updateUser(Authentication auth, UpdateUserDetailsRequestModel userUpdate) throws ApiRequestException {
+        User user = (User) auth.getPrincipal();
         if (user.getIsLocked()) {
             throw new ApiRequestException(ErrorCode.unauthorized, HttpStatus.UNAUTHORIZED);
         }
@@ -109,14 +98,8 @@ public class BikehhUserDetailsService implements UserDetailsService {
         _userAuthenticationRepository.save(user);
     }
 
-    public void deleteUser(String accessToken) {
-        Session session = _sessionRepository.findByToken(accessToken).orElse(null);
-        if (session == null) {
-            throw new ApiRequestException(ErrorCode.unauthorized, HttpStatus.UNAUTHORIZED);
-        }
-
-        User user = session.getUser();
-
+    public void deleteUser(Authentication auth) {
+        User user = (User) auth.getPrincipal();
         _userAuthenticationRepository.delete(user);
 
     }

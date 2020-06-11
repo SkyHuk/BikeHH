@@ -1,15 +1,15 @@
 package de.wps.bikehh.config;
 
+import de.wps.bikehh.benutzerverwaltung.security.OAuthEntryPoint;
 import de.wps.bikehh.benutzerverwaltung.security.OAuthFilter;
 import de.wps.bikehh.benutzerverwaltung.security.OAuthProvider;
-import de.wps.bikehh.benutzerverwaltung.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -43,10 +43,18 @@ public class MultiHttpSecurityConfig {
 
         @Override
         protected void configure(HttpSecurity httpSecurity) throws Exception {
-            httpSecurity.httpBasic().and().authorizeRequests().antMatchers(HttpMethod.POST, "/api/auth").permitAll()
-                    .antMatchers(HttpMethod.POST, "/api/user").permitAll()
-                    .and().authorizeRequests().antMatchers("/api/**").authenticated().and().addFilterBefore(new OAuthFilter(), BasicAuthenticationFilter.class);
+       /*     httpSecurity.antMatcher()
+                    antMatchers(HttpMethod.POST, "/api/auth").permitAll()
+                    .antMatchers(HttpMethod.POST, "/api/user").permitAll();*/
+
+
+            httpSecurity.httpBasic().authenticationEntryPoint(new OAuthEntryPoint()).and().authorizeRequests().antMatchers("/api/**").authenticated().and().addFilterBefore(new OAuthFilter(), BasicAuthenticationFilter.class);
             httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER);
+        }
+
+        @Override
+        public void configure(WebSecurity webSecurity) throws Exception {
+            webSecurity.ignoring().antMatchers(HttpMethod.POST, "/api/user").and().ignoring().antMatchers(HttpMethod.POST, "/api/auth");
         }
 
         @Override

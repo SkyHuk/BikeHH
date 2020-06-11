@@ -28,24 +28,11 @@ public class UserController {
     }
 
 
-    /*@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public UserDetailsResponseModel getCurrentUser(@RequestHeader("Authorization") String accessToken) throws ApiRequestException {
-        return _bikehhUserDetailsService.getCurrentUser(accessToken);
-    }*/
-
-    /*
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public User getCurrentUser(@ModelAttribute("bikehh_user") User user) throws ApiRequestException {
-        return user;
-    }*/
-
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public User getCurrentUser(Authentication auth) throws ApiRequestException {
-        return (User) auth.getPrincipal();
+    public UserDetailsResponseModel getCurrentUser(Authentication auth) throws ApiRequestException {
+        return _bikehhUserDetailsService.getCurrentUser(auth);
     }
 
     //@TODO how do we create admin user ? through different endpoint ?
@@ -58,14 +45,14 @@ public class UserController {
     }
 
     @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void updateUser(@RequestHeader("Authorization") String accessToken, @RequestBody UpdateUserDetailsRequestModel requestUserDetails) {
-        _bikehhUserDetailsService.updateUser(accessToken, requestUserDetails);
+    public void updateUser(Authentication auth, @RequestBody UpdateUserDetailsRequestModel requestUserDetails) {
+        _bikehhUserDetailsService.updateUser(auth, requestUserDetails);
     }
 
     @DeleteMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteUser(@RequestHeader("Authorization") String accessToken) {
-        _bikehhUserDetailsService.deleteUser(accessToken);
+    public void deleteUser(Authentication auth) {
+        _bikehhUserDetailsService.deleteUser(auth);
     }
 
     @RequestMapping(value = "/password",method = RequestMethod.PUT)

@@ -1,14 +1,23 @@
 package de.wps.bikehh.benutzerverwaltung.security;
 
+import de.wps.bikehh.benutzerverwaltung.exception.ApiException;
 import de.wps.bikehh.benutzerverwaltung.exception.ErrorCode;
 import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.benutzerverwaltung.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 @Component
 public class OAuthProvider implements AuthenticationProvider {
@@ -37,4 +46,5 @@ public class OAuthProvider implements AuthenticationProvider {
     public boolean supports(Class<?> authentication) {
         return OAuthToken.class.isAssignableFrom(authentication);
     }
+
 }
