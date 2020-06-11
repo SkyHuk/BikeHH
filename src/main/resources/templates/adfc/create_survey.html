@@ -24,6 +24,15 @@
 
     <h2 class="my-4">Umfrage erstellen</h2>
     <div class="mb-4" id="mapid" style="width: calc(90vw - 8rem); height: 30vh;"></div>
+
+    <div v-if="showSuccessAlert" class="alert alert-success" role="alert">
+      Umfrage erfolgreich erstellt!
+    </div>
+
+    <div v-if="formError" class="alert alert-danger" role="alert">
+      {{ formError }}
+    </div>
+
     <div class="card">
       <div class="card-body">
         <form @submit="postSurvey">
@@ -200,6 +209,9 @@
         markers: null,
         mymap: null,
 
+        showSuccessAlert: false,
+        formError: null,
+
       },
       mounted() {
         // initially add first question
@@ -346,14 +358,15 @@
             request.setRequestHeader("Content-Type", "application/json");
             request.send(jsonString);
 
-            //TODO
-            //show modal
-            $('#positiveModal').modal('show');
+            // TODO
+            // show modal
+            // $('#positiveModal').modal('show');
+            this.showSuccessAlert = true
 
           } else {
             // TODO
-            //show modal 'Alle Felder müssen ausgefüllt werden und ein Punkt auf der Karte angegeben werden'
-            $('#negativeModal').modal('show');
+            // $('#negativeModal').modal('show');
+            this.formError = 'Alle Felder müssen ausgefüllt werden und ein Punkt auf der Karte angegeben werden'
           }
         },
         addCreator(creator) {
