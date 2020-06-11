@@ -58,7 +58,7 @@
 
       <div class="row">
         <div class="col">
-          <div id="mapid" style="width: 400px; height: 400px;"></div>
+          <div id="mapid" style="width: calc(40vw - 2rem); height: 350px;"></div>
         </div>
         <div class="col">
           <h6>Fragen</h6>
@@ -77,134 +77,131 @@
             <div class="col-9">
               <a href="#"><strong>User #1234</strong></a>
               <p>Die Autos rasen über den Radfahrstreifen. Ein wahnsinnger Rader hat mich eben fast umgenietet!!! Bitte sofort anzeigen Kenzeichen KI-LL 666"Hintergrund: Veloroute 3, die Fahrradstraße "Uferstraße"</p>
+            </div>
+            </div>
             </span>
             <h6>Meldungsergebnisse</h6>
             <img class="img-responsive" src="https://via.placeholder.com/300x200">
           </div>
         </div>
       </div>
+      <hr class="my-4">
+      <h5 class="card-title">Meldungen</h5>
+      <form class="p-2 d-flex align-items-center">
+        <div class="px-2"><strong>Filter:</strong></div>
+        <select class="form-control mx-2">
+          <option selected disabled>Nach Status filtern</option>
+          <option>Erfasst</option>
+          <option>Bestätigt</option>
+          <!-- "In Bearbeitung" added here -->
+          <option>In Bearbeitung</option>
+          <option>Erledigt</option>
+        </select>
+        <input class="form-control mx-2" placeholder="Suche">
+        <button class="btn btn-outline-secondary">Exportieren</button>
+      </form>
+      <div style="overflow-y: scroll; overflow-x: hidden; max-height: 50vh;" class="border-top">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Erstellungsdatum</th>
+                <th>Art</th>
+                <th>Standort</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>3. Mai 2020</td>
+                <td>Schlagloch</td>
+                <td>Jungfernstieg</td>
+                <td>Bestätigt</td>
+              </tr>
+              <tr>
+                <td colspan="5">
+                  <h5 class="mb-2">Meldung #1</h5>
+                  <div class="row">
+                    <div class="col-9">
+                      <p>Die Autos rasen über den Radfahrstreifen. Ein wahnsinnger Rader hat mich eben fast umgenietet!!! Bitte sofort anzeigen Kenzeichen KI-LL 666 "Hintergrund: Veloroute 3, die Fahrradstraße "Uferstraße"</p>
+
+                      <h6>Meldungsergebnisse</h6>
+                      <img class="img-responsive" src="https://via.placeholder.com/700x300">
+                    </div>
+                    <div class="col-3">
+                      <button class="btn btn-block btn-outline-secondary">Zeige auf Karte</button>
+                      <button class="btn btn-block btn-outline-secondary" th:href="${'mailto:' + survey.id}">Kontaktiere Ersteller</button>
+                      <button class="btn btn-block btn-outline-success">Als erledigt markieren</button>
+                      <button class="btn btn-block btn-outline-danger">Löschen</button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>10. April 2020</td>
+                <td>Schnee</td>
+                <td>Stellingen</td>
+                <td>Erfasst</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>15. April 2020</td>
+                <td>Schnee</td>
+                <td>adipiscing</td>
+                <td>Bestätigt</td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td>15. April 2020</td>
+                <td>Schnee</td>
+                <td>adipiscing</td>
+                <td>Bestätigt</td>
+              </tr>
+              <tr>
+                <td>5</td>
+                <td>15. April 2020</td>
+                <td>Schnee</td>
+                <td>adipiscing</td>
+                <td>Bestätigt</td>
+              </tr>
+              <tr>
+                <td>5</td>
+                <td>15. April 2020</td>
+                <td>Schnee</td>
+                <td>adipiscing</td>
+                <td>Bestätigt</td>
+              </tr>
+              <tr>
+                <td>5</td>
+                <td>15. April 2020</td>
+                <td>Schnee</td>
+                <td>adipiscing</td>
+                <td>Bestätigt</td>
+              </tr>
+              <tr>
+                <td>5</td>
+                <td>15. April 2020</td>
+                <td>Schnee</td>
+                <td>adipiscing</td>
+                <td>Bestätigt</td>
+              </tr>
+              <tr>
+                <td>5</td>
+                <td>15. April 2020</td>
+                <td>Schnee</td>
+                <td>adipiscing</td>
+                <td>Bestätigt</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
-  </div>
+    <script>
 
-  <hr class="my-4">
-
-  <h5 class="card-title">Meldungen</h5>
-  <form class="p-2 d-flex align-items-center">
-    <div class="px-2"><strong>Filter:</strong></div>
-    <select class="form-control mx-2">
-      <option selected disabled>Nach Status filtern</option>
-      <option>Erfasst</option>
-      <option>Bestätigt</option>
-      <!-- "In Bearbeitung" added here -->
-      <option>In Bearbeitung</option>
-      <option>Erledigt</option>
-    </select>
-    <input class="form-control mx-2" placeholder="Suche">
-    <button class="btn btn-outline-secondary">Exportieren</button>
-  </form>
-</div>
-<div style="overflow-y: scroll; overflow-x: hidden; max-height: 50vh;" class="border-top">
-  <div class="table-responsive">
-    <table class="table">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Erstellungsdatum</th>
-          <th>Art</th>
-          <th>Standort</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>1</td>
-          <td>3. Mai 2020</td>
-          <td>Schlagloch</td>
-          <td>Jungfernstieg</td>
-          <td>Bestätigt</td>
-        </tr>
-        <tr>
-          <td colspan="5">
-            <h5 class="mb-2">Meldung #1</h5>
-            <div class="row">
-              <div class="col-9">
-                <p>Die Autos rasen über den Radfahrstreifen. Ein wahnsinnger Rader hat mich eben fast umgenietet!!! Bitte sofort anzeigen Kenzeichen KI-LL 666"Hintergrund: Veloroute 3, die Fahrradstraße "Uferstraße"</p>
-
-                <h6>Meldungsergebnisse</h6>
-                <img class="img-responsive" src="https://via.placeholder.com/700x300">
-              </div>
-              <div class="col-3">
-                <button class="btn btn-block btn-outline-secondary">Zeige auf Karte</button>
-                <button class="btn btn-block btn-outline-secondary" th:href="${'mailto:' + survey.id}">Kontaktiere Ersteller</button>
-                <button class="btn btn-block btn-outline-success">Als erledigt markieren</button>
-                <button class="btn btn-block btn-outline-danger">Löschen</button>
-              </div>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td>2</td>
-          <td>10. April 2020</td>
-          <td>Schnee</td>
-          <td>Stellingen</td>
-          <td>Erfasst</td>
-        </tr>
-        <tr>
-          <td>3</td>
-          <td>15. April 2020</td>
-          <td>Schnee</td>
-          <td>adipiscing</td>
-          <td>Bestätigt</td>
-        </tr>
-        <tr>
-          <td>4</td>
-          <td>15. April 2020</td>
-          <td>Schnee</td>
-          <td>adipiscing</td>
-          <td>Bestätigt</td>
-        </tr>
-        <tr>
-          <td>5</td>
-          <td>15. April 2020</td>
-          <td>Schnee</td>
-          <td>adipiscing</td>
-          <td>Bestätigt</td>
-        </tr>
-        <tr>
-          <td>5</td>
-          <td>15. April 2020</td>
-          <td>Schnee</td>
-          <td>adipiscing</td>
-          <td>Bestätigt</td>
-        </tr>
-        <tr>
-          <td>5</td>
-          <td>15. April 2020</td>
-          <td>Schnee</td>
-          <td>adipiscing</td>
-          <td>Bestätigt</td>
-        </tr>
-        <tr>
-          <td>5</td>
-          <td>15. April 2020</td>
-          <td>Schnee</td>
-          <td>adipiscing</td>
-          <td>Bestätigt</td>
-        </tr>
-        <tr>
-          <td>5</td>
-          <td>15. April 2020</td>
-          <td>Schnee</td>
-          <td>adipiscing</td>
-          <td>Bestätigt</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
-</div>
-<script>
-  
     // coordinates passed from controller
     var lat = [[${survey.lat}]];
     var lng = [[${survey.lng}]];
