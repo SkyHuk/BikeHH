@@ -48,7 +48,7 @@ public class MultiHttpSecurityConfig {
                     .antMatchers(HttpMethod.POST, "/api/user").permitAll();*/
 
 
-            httpSecurity.httpBasic().authenticationEntryPoint(new OAuthEntryPoint()).and().authorizeRequests().antMatchers("/api/**").authenticated().and().addFilterBefore(new OAuthFilter(), BasicAuthenticationFilter.class);
+            httpSecurity.httpBasic().authenticationEntryPoint(new OAuthEntryPoint()).and().authorizeRequests().antMatchers("/api/**").authenticated().and().addFilterBefore(new OAuthFilter(), BasicAuthenticationFilter.class).csrf().disable();
             httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER);
         }
 

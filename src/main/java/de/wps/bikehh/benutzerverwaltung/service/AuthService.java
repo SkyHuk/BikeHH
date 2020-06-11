@@ -29,8 +29,11 @@ public class AuthService {
             throw new BadCredentialsException("Bad credentials");
         }
 
+        BikehhPasswordEncoderService hashService = new BikehhPasswordEncoderService();
+        String hashedPassword = hashService.encodePassword(password);
+
         User user = _userAuthenticationRepository.findByEmailAddress(email);
-        if (user.getEncryptedPassword() != password) {
+        if (!user.getEncryptedPassword().equals(hashedPassword)) {
             throw new BadCredentialsException("Bad credentials");
         }
 
@@ -41,16 +44,16 @@ public class AuthService {
         return session;
     }
 
-    public void logoutUser(String token) {
-        Session session = _sessionRepository.findByToken(token).orElse(null);
+    public void logoutUser(Session session) {
+        Session s = _sessionRepository.findById(session.getId()).orElse(null);
         _sessionRepository.delete(session);
     }
 
-    public User getUserByToken(String token) {
+    public Session getSessionByToken(String token) {
         Session session = _sessionRepository.findByToken(token).orElse(null);
         if (session == null) {
             return null;
         }
-        return session.getUser();
+        return session;
     }
 }

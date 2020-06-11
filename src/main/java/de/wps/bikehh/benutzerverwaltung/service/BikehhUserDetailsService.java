@@ -101,6 +101,43 @@ public class BikehhUserDetailsService implements UserDetailsService {
     public void deleteUser(Authentication auth) {
         User user = (User) auth.getPrincipal();
         _userAuthenticationRepository.delete(user);
+    }
 
+    public List<User> retrieveUsers() {
+        List<User> users = new ArrayList<>();
+        for (User user : _userAuthenticationRepository.findAll()) {
+            users.add(user);
+        }
+
+        return users;
+    }
+
+    public User getUserById(Long id) {
+        if (!_userAuthenticationRepository.existsById(id)) {
+            throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
+        }
+
+        User user = _userAuthenticationRepository.findById(id).orElse(null);
+
+        return user;
+    }
+
+    public void deleteUserById(Long id) {
+        if (!_userAuthenticationRepository.existsById(id)) {
+            throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
+        }
+
+        _userAuthenticationRepository.deleteById(id);
+    }
+
+    public User updateUserById(Long id, User updatedUser) {
+        if (!_userAuthenticationRepository.existsById(id)) {
+            throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
+        }
+
+        User user = _userAuthenticationRepository.findById(id).orElse(null);
+        updatedUser.setId(user.getId());
+
+        return _userAuthenticationRepository.save(updatedUser);
     }
 }

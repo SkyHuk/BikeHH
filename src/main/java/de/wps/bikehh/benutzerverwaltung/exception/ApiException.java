@@ -30,6 +30,8 @@ public class ApiException {
                 return "Http method not found";
             case ErrorCode.not_found:
                 return "not found";
+            case ErrorCode.forbidden:
+                return "forbidden";
         }
 
         return "unknown error code";

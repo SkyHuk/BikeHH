@@ -1,17 +1,17 @@
 package de.wps.bikehh.benutzerverwaltung.dto.response;
 
 public class SessionResponseModel {
-    private String authentication;
+    private String accessToken;
 
-    public SessionResponseModel(String auth){
-        this.authentication = auth;
+    public SessionResponseModel(String accessToken){
+        this.accessToken = accessToken;
     }
 
-    public String getAuthentication() {
-        return authentication;
+    public String getAccessToken() {
+        return accessToken;
     }
 
-    public void setAuthentication(String authentication) {
-        this.authentication = authentication;
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
     }
 }

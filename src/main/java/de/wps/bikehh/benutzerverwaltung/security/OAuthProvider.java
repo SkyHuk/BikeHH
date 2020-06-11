@@ -2,6 +2,7 @@ package de.wps.bikehh.benutzerverwaltung.security;
 
 import de.wps.bikehh.benutzerverwaltung.exception.ApiException;
 import de.wps.bikehh.benutzerverwaltung.exception.ErrorCode;
+import de.wps.bikehh.benutzerverwaltung.material.Session;
 import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.benutzerverwaltung.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +34,13 @@ public class OAuthProvider implements AuthenticationProvider {
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         OAuthToken auth = (OAuthToken) authentication;
         String token = (String) auth.getCredentials();
-        User user = authService.getUserByToken(token);
-        if (user == null) {
+        Session session = authService.getSessionByToken(token);
+        if (session == null) {
             throw new BadCredentialsException(ErrorCode.unauthorized);
         }
 
-        OAuthToken nAuth = new OAuthToken(user, token);
+        OAuthToken nAuth = new OAuthToken(session.getUser(), token);
+        nAuth.setSession(session);
         return nAuth;
     }
 

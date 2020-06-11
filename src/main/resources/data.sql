@@ -49,4 +49,7 @@ INSERT INTO `User` (`email_address`, `encrypted_password`, `role`) VALUES
 ('test@mail.com', 'sha: 2YbXcpo8qT6PuNnA8ZYlZK7Z+Ck=', 'user');
 
 INSERT INTO `Session` (`user_Id`, `token`) VALUES
+(1, '12345');
+
+INSERT INTO `Session` (`user_Id`, `token`) VALUES
 (2, '1234');
