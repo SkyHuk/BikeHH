@@ -241,7 +241,7 @@
   function contactCreator(creator) {
     console.log('contactCreator', creator)
     //var mailAddress = [[${survey.creator}]];
-    var mailAddress = "user@example.com"
+    var mailAddress = creator
     var subject = "BikeHH - Umfrage #" + [[${survey.id}]];
     window.location.href = "mailto:" + mailAddress + "?subject="+ subject + "&body=";
   };
