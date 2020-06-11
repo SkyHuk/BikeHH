@@ -31,9 +31,8 @@
               <li class="breadcrumb-item" th:text="${'Kategorie: ' + survey.category}"></li>
             </ol>
           </nav>
-
           <div>
-            <h6 class="mb-2 text-muted">Bestätigungspunkte: <span class="badge badge-secondary" th:text="${survey.confirmedByUsers.length + '/' + survey.confirmedThreshhold}"></span></h6>
+            <h6 class="mb-2 text-muted">Ersteller: <span class="badge badge-secondary" th:text="${survey.creator}"></span></h6>
           </div>
           <div>
             <h6 class="mb-2 text-muted">
@@ -42,6 +41,9 @@
                 <span th:text="${user}"></span>
               </span>
             </h6>
+          </div>
+          <div>
+            <h6 class="mb-2 text-muted">Bestätigungspunkte: <span class="badge badge-secondary" th:text="${survey.confirmedByUsers.length + '/' + survey.confirmedThreshhold}"></span></h6>
           </div>
 
           <p class="card-text mb-4" th:text="${survey.title}"></p>
