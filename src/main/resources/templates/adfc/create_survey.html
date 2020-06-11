@@ -4,13 +4,15 @@
   <title>ADFC - Umfrage erstellen</title>
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
-  integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
-  crossorigin="" />
+    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+    crossorigin="" />
   <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
-  integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
-  crossorigin="" type="text/javascript"></script>
+    integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+    crossorigin="" type="text/javascript"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 </head>
 
@@ -40,7 +42,7 @@
               <div class="form-group">
                 <label>Anzahl an Bestätigungen benötigt:</label>
                 <input type="number" class="form-control" :placeholder="confirmedThreshhold"
-                v-model="confirmedThreshhold">
+                  v-model="confirmedThreshhold">
               </div>
 
               <div class="form-group">
@@ -73,78 +75,122 @@
                   <div class="button-group">
                     <!-- add answer -->
                     <button type="button" class="btn btn-primary mb-3" @click="addAnswer(question)"><i
-                      class="fas fa-plus"></i></button>
-                      <!-- delete answer -->
-                      <button type="button" class="btn btn-danger mb-3" @click="removeAnswer(question)"><i
+                        class="fas fa-plus"></i></button>
+                    <!-- delete answer -->
+                    <button type="button" class="btn btn-danger mb-3" @click="removeAnswer(question)"><i
                         class="fas fa-minus"></i></button>
-                      </div>
-
-                    </div>
-
-                    <div class="form-group" v-for="(condition, index) in question.conditions">
-                      <label :for="'condition-question' + index">Bedingung: Frage nur zeigen wenn:</label>
-                      <select :id="'condition-question' + index" v-model="condition.question">
-                        <option default disabled>-</option>
-                        <option v-for="question in questions" :value="question">{{ question.title }}</option>
-                      </select>
-                      <label for="'condition-answer' + index">mit:</label>
-                      <select id="'condition-answer' + index" v-if="condition.question" v-model="condition.expectedAnswer">
-                        <option v-for="answer in condition.question.answers" :value="answer">{{ answer.text }}</option>
-                      </select>
-                      <label>beantwortet wurde.</label>
-                    </div>
-
-                    <div class="button-group">
-                      <!-- add condition -->
-                      <button type="button" class="btn btn-primary mb-3" @click="addCondition(question)">Bedingung
-                      hinzufügen</button>
-                      <!-- delete condition -->
-                      <button type="button" class="btn btn-danger mb-3" @click="deleteCondition(question)">Bedingung
-                      löschen</button>
-                    </div>
-
-                    <div class="form-group">
-                      <!-- delete question -->
-                      <button type="button" class="btn btn-danger mb-3" @click="deleteQuestion(question)">Frage
-                      löschen</button>
-                    </div>
-
-                  </div>
-
-                  <hr>
-
-                  <div class="form-group">
-                    <!-- add question -->
-                    <button type="button" class="btn btn-primary mb-3" @click="addQuestion">Frage hinzufügen</button>
                   </div>
 
                 </div>
+
+                <div class="form-group" v-for="(condition, index) in question.conditions">
+                  <label :for="'condition-question' + index">Bedingung: Frage nur zeigen wenn:</label>
+                  <select :id="'condition-question' + index" v-model="condition.question">
+                    <option default disabled>-</option>
+                    <option v-for="question in questions" :value="question">{{ question.title }}</option>
+                  </select>
+                  <label for="'condition-answer' + index">mit:</label>
+                  <select id="'condition-answer' + index" v-if="condition.question" v-model="condition.expectedAnswer">
+                    <option v-for="answer in condition.question.answers" :value="answer">{{ answer.text }}</option>
+                  </select>
+                  <label>beantwortet wurde.</label>
+                </div>
+
+                <div class="button-group">
+                  <!-- add condition -->
+                  <button type="button" class="btn btn-primary mb-3" @click="addCondition(question)">Bedingung
+                    hinzufügen</button>
+                  <!-- delete condition -->
+                  <button type="button" class="btn btn-danger mb-3" @click="deleteCondition(question)">Bedingung
+                    löschen</button>
+                </div>
+
+                <div class="form-group">
+                  <!-- delete question -->
+                  <button type="button" class="btn btn-danger mb-3" @click="deleteQuestion(question)">Frage
+                    löschen</button>
+                </div>
+
               </div>
 
-              <!-- create survey -->
+              <hr>
+
               <div class="form-group">
-                <button type="submit" class="btn btn-primary">Umfrage erstellen</button>
+                <!-- add question -->
+                <button type="button" class="btn btn-primary mb-3" @click="addQuestion">Frage hinzufügen</button>
               </div>
 
-            </form>
+            </div>
+          </div>
 
+          <!-- create survey -->
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary">Umfrage erstellen</button>
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+
+    <!-- positive modal when data is good -->
+    <div class="modal" tabindex="-1" id="positiveModal" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Senden der Umfrage erfolgreich</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Die Umfrage konnte erfolgreich gesendet werden.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary">OK</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Schließen</button>
           </div>
         </div>
       </div>
+    </div>
 
-      <script type="text/javascript">
+    <!-- negative modal when something is missing in data -->
+    <div class="modal" tabindex="-1" id="negativeModal" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Senden der Umfrage fehlgeschlagen</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Zum Senden der Umfrage müssen alle Felder ausgefüllt werden und ein Punkte auf der Karte angegeben
+              werden.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary">OK</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Schließen</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
-        const createSurveyApp = new Vue({
-          el: '#createSurveyApp',
-          data: {
-            title: '',
-            category: '',
-            dateFrom: null,
-            dateTo: null,
-            confirmedThreshhold: 10,
-            questions: [],
-            creator: '',
-            createdManually: true,
+  </div>
+
+  <script type="text/javascript">
+
+    const createSurveyApp = new Vue({
+      el: '#createSurveyApp',
+      data: {
+        title: '',
+        category: '',
+        dateFrom: null,
+        dateTo: null,
+        confirmedThreshhold: 10,
+        questions: [],
+        creator: '',
+        createdManually: true,
 
         // store coordinates coming from controller
         lat: [[${ lat }]],
@@ -172,7 +218,7 @@
           this.mymap = L.map('mapid').setView([this.lat, this.lng], 16);
           // add initial marker to map. this is duplicate code but vue does not let me use a function
           var marker = L.marker([this.lat, this.lng]).addTo(this.mymap)
-          .bindPopup("<b>Hier wird die erstellte Umfrage sein.</b><br/>");
+            .bindPopup("<b>Hier wird die erstellte Umfrage sein.</b><br/>");
           this.markers.eachLayer((layer) => {
             layer.remove()
             self.markers.removeLayer(layer);
@@ -185,8 +231,8 @@
         L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
           maxZoom: 18,
           attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-          '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-          'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+            'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
           id: 'mapbox/streets-v11',
           tileSize: 512,
           zoomOffset: -1
@@ -200,7 +246,7 @@
 
           // add marker to map, delete old one
           var marker = L.marker([lat, lng]).addTo(self.mymap)
-          .bindPopup("<b>Hier wird die erstellte Umfrage sein.</b><br/>");
+            .bindPopup("<b>Hier wird die erstellte Umfrage sein.</b><br/>");
           self.markers.eachLayer((layer) => {
             layer.remove()
             self.markers.removeLayer(layer);
@@ -215,8 +261,8 @@
           this.questions.push({
             title: '',
             answers: [
-            { text: 'Ja', },
-            { text: 'Nein', },
+              { text: 'Ja', },
+              { text: 'Nein', },
             ],
             conditions: []
           })
@@ -279,21 +325,42 @@
             data.lng = layer.getLatLng().lng;
           });
 
-          // building and sending json
-          const jsonString = JSON.stringify(data);
-          const request = new XMLHttpRequest();
-          request.open("POST", "/umfrage-erstellen");
-          request.setRequestHeader("Content-Type", "application/json");
-          request.send(jsonString);
+          //validate data
+          if (data.title.trim().length !== 0 &&
+            data.dateFrom !== null &&
+            data.dateTo !== null &&
+            data.confirmedThreshhold !== 0 &&
+            typeof data.questions != "undefined" && data.questions != null && data.questions.length != null && data.questions.length > 0 &&
+            data.category.trim().length !== 0 &&
+            data.createdAtDate != "undefined" &&
+            data.lat !== 0 && data.lat != "undefined" &&
+            data.lng !== 0 && data.lng != "undefined") {
+
+            // building and sending json
+            const jsonString = JSON.stringify(data);
+            const request = new XMLHttpRequest();
+            request.open("POST", "/umfrage-erstellen");
+            request.setRequestHeader("Content-Type", "application/json");
+            request.send(jsonString);
+
+            //TODO
+            //show modal
+            $('#positiveModal').modal('show');
+
+          } else {
+            // TODO
+            //show modal 'Alle Felder müssen ausgefüllt werden und ein Punkt auf der Karte angegeben werden'
+            $('#negativeModal').modal('show');
+          }
         },
         addCreator(creator) {
-        	this.creator = creator;
+          this.creator = creator;
         },
       },
     })
 
   </script>
-  
+
 </body>
 
 </html>
