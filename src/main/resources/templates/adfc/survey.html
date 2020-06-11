@@ -51,7 +51,7 @@
         <div class="col-3">
           <button class="btn btn-block btn-outline-primary">Umfrage bearbeiten</button>
           <button class="btn btn-block btn-outline-primary" onClick="showOnMap()">Zeige auf Karte</button>
-          <button class="btn btn-block btn-outline-primary" onClick="contactCreator()">Kontaktiere Ersteller</button>
+          <button class="btn btn-block btn-outline-primary" th:data-creator="${survey.creator}" onclick="contactCreator(this.dataset.creator)">Kontaktiere Ersteller</button>
           <button class="btn btn-block btn-outline-success">Bestätigen</button>
         </div>
       </div>
@@ -134,7 +134,7 @@
                     </div>
                     <div class="col-3">
                       <button class="btn btn-block btn-outline-secondary">Zeige auf Karte</button>
-                      <button class="btn btn-block btn-outline-secondary" th:href="${'mailto:' + survey.id}">Kontaktiere Ersteller</button>
+                      <button class="btn btn-block btn-outline-secondary">Kontaktiere Ersteller</button>
                       <button class="btn btn-block btn-outline-success">Als erledigt markieren</button>
                       <button class="btn btn-block btn-outline-danger">Löschen</button>
                     </div>
@@ -207,13 +207,13 @@
     // coordinates passed from controller
     var lat = [[${survey.lat}]];
     var lng = [[${survey.lng}]];
-    
+
   // init map
-  
-  var mymap = L.map('mapid').setView([lat, lng], 13); 
-  
+
+  var mymap = L.map('mapid').setView([lat, lng], 13);
+
   addMarkerToMap(lat, lng);
-  
+
   L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
     maxZoom: 18,
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
@@ -223,10 +223,10 @@
     tileSize: 512,
     zoomOffset: -1
   }).addTo(mymap);
-  
-  
-    // adds a marker to given coordinates, 
-    // used to mark location of survey 
+
+
+    // adds a marker to given coordinates,
+    // used to mark location of survey
     function addMarkerToMap(lat, lng) {
       var marker = L.marker([lat, lng]).addTo(mymap)
       .bindPopup("<b>Ort der Umfrage.<br/>");
@@ -235,10 +235,11 @@
    function showOnMap() {
     mymap.setView([lat, lng], 17);
   };
-  
-  // opens email client to write email to survey creator 
+
+  // opens email client to write email to survey creator
   // TODO: NOT DONE
-  function contactCreator() {
+  function contactCreator(creator) {
+    console.log('contactCreator', creator)
     //var mailAddress = [[${survey.creator}]];
     var mailAddress = "user@example.com"
     var subject = "BikeHH - Umfrage #" + [[${survey.id}]];
