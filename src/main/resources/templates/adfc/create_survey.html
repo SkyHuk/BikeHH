@@ -371,6 +371,7 @@
           if (data.title.trim().length !== 0 &&
             data.dateFrom !== null &&
             data.dateTo !== null &&
+            (this.dateFrom >= new Date().toJSON().slice(0, 10)) &&
             (this.dateTo >= this.dateFrom) &&
             data.confirmedThreshhold !== 0 &&
             data.questions !== null && data.questions.length !== 0 &&
