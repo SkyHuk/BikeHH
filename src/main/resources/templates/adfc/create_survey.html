@@ -23,10 +23,14 @@
   <div id="createSurveyApp">
 
     <h2 class="my-4">Umfrage erstellen</h2>
-    <div class="mb-4" id="mapid" style="width: calc(90vw - 8rem); height: 30vh;"></div>
+    <div class="mb-4" id="mapid" style="width: calc(90vw - 10rem); height: 30vh;"></div>
 
     <div v-if="showSuccessAlert" class="alert alert-success" role="alert">
-      Umfrage erfolgreich erstellt!
+      <div class="d-flex align-items-center">
+        <div>Umfrage erfolgreich erstellt!</div>
+        <a class="btn btn-link ml-2">Anzeigen</a>
+        <button class="btn ml-auto" @click="showSuccessAlert=false"><i class="fas fa-times"></i></button>
+      </div>
     </div>
 
     <div v-if="formError" class="alert alert-danger" role="alert">
@@ -79,44 +83,62 @@
                 </div>
 
                 <div class="form-group">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" v-model="question.allowCustomAnswer" id ="allowCustomAnswerCheckbox">
+                    <label class="form-check-label" for="allowCustomAnswerCheckbox">
+                      Erlaube Freitext-Antwort
+                    </label>
+                  </div>
+                </div>
+
+                <div class="form-group">
                   <label>Antwortmöglichkeiten</label>
-                  <div v-for="answer in question.answers" class="mb-4">
+                  <div v-for="answer in question.answers" class="d-flex justify-space-between mb-4">
                     <input class="form-control" v-model="answer.text">
+                    <button type="button" class="btn text-danger ml-3" @click="removeAnswer(question, answer)">
+                      <span><i class="far fa-trash-alt"></i></span>
+                    </button>
                   </div>
                   <div class="button-group">
                     <!-- add answer -->
                     <button type="button" class="btn btn-primary mb-3" @click="addAnswer(question)"><i
                         class="fas fa-plus"></i></button>
                     <!-- delete answer -->
-                    <button type="button" class="btn btn-danger mb-3" @click="removeAnswer(question)"><i
-                        class="fas fa-minus"></i></button>
+                    <!--<button type="button" class="btn btn-danger mb-3" @click="removeAnswer(question)"><i
+                        class="fas fa-minus"></i></button>-->
                   </div>
 
                 </div>
 
-                <div class="form-group" v-for="(condition, index) in question.conditions">
-                  <label :for="'condition-question' + index">Bedingung: Frage nur zeigen wenn:</label>
-                  <select :id="'condition-question' + index" v-model="condition.question">
-                    <option default disabled>-</option>
-                    <option v-for="question in questions" :value="question">{{ question.title }}</option>
-                  </select>
-                  <label for="'condition-answer' + index">mit:</label>
-                  <select id="'condition-answer' + index" v-if="condition.question" v-model="condition.expectedAnswer">
-                    <option v-for="answer in condition.question.answers" :value="answer">{{ answer.text }}</option>
-                  </select>
-                  <label>beantwortet wurde.</label>
+                <div class="list-group mb-3">
+                  <div class="list-group-item" v-for="(condition, index) in question.conditions">
+                      <div class="d-flex justify-space-between">
+                        <div class="form-group mb-0">
+                          <label :for="'condition-question' + index">Bedingung: Frage nur zeigen wenn:</label>
+                          <select :id="'condition-question' + index" v-model="condition.question">
+                            <option default disabled>-</option>
+                            <option v-for="question in questions" :value="question">{{ question.title }}</option>
+                          </select>
+                          <label for="'condition-answer' + index">mit:</label>
+                          <select id="'condition-answer' + index" v-if="condition.question" v-model="condition.expectedAnswer">
+                            <option v-for="answer in condition.question.answers" :value="answer">{{ answer.text }}</option>
+                          </select>
+                          <label>beantwortet wurde.</label>
+                        </div>
+                        <div>
+                          <!-- delete condition -->
+                          <button type="button" class="btn text-danger ml-3" @click="deleteCondition(question, condition)">
+                            <span><i class="far fa-trash-alt"></i></span>
+                          </button>
+                        </div>
+                      </div>
+                  </div>
                 </div>
 
                 <div class="button-group">
                   <!-- add condition -->
                   <button type="button" class="btn btn-primary mb-3" @click="addCondition(question)">Bedingung
                     hinzufügen</button>
-                  <!-- delete condition -->
-                  <button type="button" class="btn btn-danger mb-3" @click="deleteCondition(question)">Bedingung
-                    löschen</button>
-                </div>
-
-                <div class="form-group">
                   <!-- delete question -->
                   <button type="button" class="btn btn-danger mb-3" @click="deleteQuestion(question)">Frage
                     löschen</button>
@@ -214,8 +236,7 @@
 
       },
       mounted() {
-        // initially add first question
-        this.addQuestion()
+        this.resetData()
 
         // init popup
         var popup = L.popup();
@@ -231,15 +252,17 @@
         } else {
           this.mymap = L.map('mapid').setView([this.lat, this.lng], 16);
           // add initial marker to map. this is duplicate code but vue does not let me use a function
-          var marker = L.marker([this.lat, this.lng]).addTo(this.mymap)
+          /* var marker = L.marker([this.lat, this.lng]).addTo(this.mymap)
             .bindPopup("<b>Hier wird die erstellte Umfrage sein.</b><br/>");
           this.markers.eachLayer((layer) => {
             layer.remove()
             self.markers.removeLayer(layer);
           });
-          this.markers.addLayer(marker);
+          this.markers.addLayer(marker); */
 
         }
+
+        this.resetMap()
 
         // init map
         L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
@@ -269,7 +292,6 @@
         })
       },
       created() {
-        console.log('$', $)
       },
       methods: {
         addQuestion() {
@@ -282,32 +304,34 @@
             conditions: []
           })
         },
-        //deletes a question
+        // deletes a question
         deleteQuestion(question) {
           var index = this.questions.indexOf(question)
           console.log(index)
           this.questions.splice(index, 1)
         },
-        //add answer
+        // add answer
         addAnswer(question) {
           question.answers.push({ text: '' })
         },
-        //delete latest answer in question.answers
-        removeAnswer(question) {
-          question.answers.pop()
+        // delete latest answer in question.answers
+        removeAnswer(question, answer) {
+          question.answers.splice(question.answers.indexOf(answer), 1)
+
         },
-        //add condition
+        // add condition
         addCondition(question) {
           question.conditions.push({
             question: null,
             expectedAnswer: null,
           })
         },
-        //delete condition
-        deleteCondition(question) {
-          question.conditions.pop()
+        // delete condition
+        deleteCondition(question, condition) {
+          question.conditions.splice(question.conditions.indexOf(condition), 1)
+
         },
-        //check if all questions have at least one answer
+        // check if all questions have at least one answer
         questionsHaveAnswer(questions) {
           var bQuestionsHaveAnswer = false;
           for (var i = 0; i < questions.length; i++) {
@@ -320,7 +344,7 @@
           console.log(bQuestionsHaveAnswer)
           return bQuestionsHaveAnswer;
         },
-        //check if all questions have a title
+        // check if all questions have a title
         questionsHaveTitle(questions) {
           var bQuestionsHaveTitle = false;
           for (var i = 0; i < questions.length; i++) {
@@ -332,6 +356,32 @@
           }
           console.log(bQuestionsHaveTitle)
           return bQuestionsHaveTitle;
+        },
+        resetMap() {
+          // add initial marker to map. this is duplicate code but vue does not let me use a function
+          this.markers.eachLayer((layer) => {
+            layer.remove()
+            self.markers.removeLayer(layer);
+          });
+
+          if (this.lat && this.lng) {
+            var marker = L.marker([this.lat, this.lng]).addTo(this.mymap)
+              .bindPopup("<b>Hier wird die erstellte Umfrage sein.</b><br/>");
+            this.markers.addLayer(marker);
+          }
+        },
+        resetData() {
+          this.title = ''
+          this.category = ''
+          this.dateFrom = null
+          this.dateTo = null
+          this.confirmedThreshhold = 10
+          this.questions = []
+          this.creator = ''
+          this.createdManually = true
+
+          // initially add first question
+          this.addQuestion()
         },
         postSurvey(e) {
           e.preventDefault()
@@ -347,7 +397,20 @@
           data.dateFrom = this.dateFrom;
           data.dateTo = this.dateTo;
           data.confirmedThreshhold = this.confirmedThreshhold
-          data.questions = this.questions;
+
+          // map questions and expected answer to their indices to avoid circular json
+          data.questions = this.questions.map((question) => {
+            return {
+              ...question,
+              conditions: question.conditions.map((condition) => {
+                return {
+                  question: this.questions.indexOf(question),
+                  expectedAnswer: question.answers.indexOf(condition.expectedAnswer)
+                }
+              })
+            }
+          });
+          console.log(data.questions)
           data.category = this.category;
           data.confirmedByUsers = [];
           data.createdManually = this.createdManually;
@@ -387,6 +450,7 @@
             request.open("POST", "/umfrage-erstellen");
             request.setRequestHeader("Content-Type", "application/json");
             request.send(jsonString);
+            console.log(request)
 
             // TODO
             // show modal
@@ -397,20 +461,21 @@
             this.formError = null;
 
             //reset all fields
-            this.title = '';
+            this.resetData()
+            /* this.title = '';
             this.dateFrom = null;
             this.dateTo = null;
             this.confirmedThreshhold = 10;
             this.category = ''
             this.questions = [];
-            this.creator = '';
+            this.creator = ''; */
 
             //reset map
             this.lat = null;
             this.lng = null;
             this.markers = null;
             this.mymap = null;
-            //TODO 
+            //TODO
             //call mounted();
 
           } else {
