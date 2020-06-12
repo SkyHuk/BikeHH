@@ -41,6 +41,7 @@ public class MultiHttpSecurityConfig {
         @Autowired
         OAuthProvider authProvider;
 
+       //@TODO frontend still not working. Except /h2/**
         @Override
         protected void configure(HttpSecurity httpSecurity) throws Exception {
        /*     httpSecurity.antMatcher()
@@ -54,7 +55,7 @@ public class MultiHttpSecurityConfig {
 
         @Override
         public void configure(WebSecurity webSecurity) throws Exception {
-            webSecurity.ignoring().antMatchers(HttpMethod.POST, "/api/user").and().ignoring().antMatchers(HttpMethod.POST, "/api/auth");
+            webSecurity.ignoring().antMatchers(HttpMethod.POST, "/api/user", "/api/auth").and().ignoring().antMatchers("/h2/**", "/api/password", "/api/verify");
         }
 
         @Override

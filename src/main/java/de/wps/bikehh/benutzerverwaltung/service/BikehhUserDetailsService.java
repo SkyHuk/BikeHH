@@ -27,11 +27,13 @@ public class BikehhUserDetailsService implements UserDetailsService {
 
     private UserAuthenticationRepository _userAuthenticationRepository;
     private VerifyDetailsService _verifyDetailsService;
+    private AuthService _authService;
 
     @Autowired
-    public BikehhUserDetailsService(UserAuthenticationRepository userAuthenticationRepository, VerifyDetailsService verifyDetailsService) {
+    public BikehhUserDetailsService(UserAuthenticationRepository userAuthenticationRepository, VerifyDetailsService verifyDetailsService,AuthService authService) {
         this._userAuthenticationRepository = userAuthenticationRepository;
         this._verifyDetailsService = verifyDetailsService;
+        this._authService = authService;
     }
 
     @Override
@@ -82,13 +84,11 @@ public class BikehhUserDetailsService implements UserDetailsService {
         return authorities.toArray(new String[authorities.size()]);
     }
 
-    public UserDetailsResponseModel getCurrentUser(Authentication auth) throws ApiRequestException {
-        User user = (User) auth.getPrincipal();
+    public UserDetailsResponseModel getCurrentUser(User user) throws ApiRequestException {
         return new UserDetailsResponseModel(user);
     }
 
-    public void updateUser(Authentication auth, UpdateUserDetailsRequestModel userUpdate) throws ApiRequestException {
-        User user = (User) auth.getPrincipal();
+    public void updateUser(User user, UpdateUserDetailsRequestModel userUpdate) throws ApiRequestException {
         if (user.getIsLocked()) {
             throw new ApiRequestException(ErrorCode.unauthorized, HttpStatus.UNAUTHORIZED);
         }
@@ -98,9 +98,23 @@ public class BikehhUserDetailsService implements UserDetailsService {
         _userAuthenticationRepository.save(user);
     }
 
-    public void deleteUser(Authentication auth) {
-        User user = (User) auth.getPrincipal();
+    public void deleteUser(User user) {
+        _authService.logoutAllSession(user);
         _userAuthenticationRepository.delete(user);
+    }
+
+    public void updatePassword(User user, String passwordOld, String passwordNew) throws ApiRequestException {
+        if(!Validation.isPasswordValid(passwordNew)){
+            throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
+        }
+
+        BikehhPasswordEncoderService encoder = new BikehhPasswordEncoderService();
+        String hashedPasswordOld = encoder.encodePassword(passwordOld);
+        if(!encoder.matches(hashedPasswordOld, user.getEncryptedPassword()))  {
+            throw new ApiRequestException(ErrorCode.unauthorized, HttpStatus.UNAUTHORIZED);
+        }
+        user.setEncryptedPassword(encoder.encodePassword(passwordNew));
+        _userAuthenticationRepository.save(user);
     }
 
     public List<User> retrieveUsers() {

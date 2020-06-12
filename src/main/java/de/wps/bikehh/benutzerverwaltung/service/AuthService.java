@@ -1,16 +1,15 @@
 package de.wps.bikehh.benutzerverwaltung.service;
 
-import de.wps.bikehh.benutzerverwaltung.exception.ApiRequestException;
-import de.wps.bikehh.benutzerverwaltung.exception.ErrorCode;
 import de.wps.bikehh.benutzerverwaltung.material.Session;
 import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.benutzerverwaltung.repository.SessionRepository;
 import de.wps.bikehh.benutzerverwaltung.repository.UserAuthenticationRepository;
 import de.wps.bikehh.benutzerverwaltung.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class AuthService {
@@ -24,6 +23,7 @@ public class AuthService {
         this._userAuthenticationRepository = _userAuthenticationRepository;
     }
 
+    //@Todo hash access token
     public Session loginUser(String email, String password) throws BadCredentialsException {
         if (!_userAuthenticationRepository.existsByEmailAddress(email)) {
             throw new BadCredentialsException("Bad credentials");
@@ -45,15 +45,18 @@ public class AuthService {
     }
 
     public void logoutUser(Session session) {
-        Session s = _sessionRepository.findById(session.getId()).orElse(null);
         _sessionRepository.delete(session);
     }
 
-    public Session getSessionByToken(String token) {
-        Session session = _sessionRepository.findByToken(token).orElse(null);
-        if (session == null) {
-            return null;
+    public void logoutAllSession(User user) {
+        List<Session> sessions = _sessionRepository.findAllByUserId(user.getId());
+        System.out.println(sessions.size());
+        for (Session s : sessions) {
+            _sessionRepository.delete(s);
         }
-        return session;
+    }
+
+    public Session getSessionByToken(String token) {
+        return _sessionRepository.findByToken(token).orElse(null);
     }
 }

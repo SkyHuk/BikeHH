@@ -3,12 +3,10 @@ package de.wps.bikehh.benutzerverwaltung.controller;
 import de.wps.bikehh.benutzerverwaltung.dto.request.LoginRequest;
 import de.wps.bikehh.benutzerverwaltung.dto.response.SessionResponseModel;
 import de.wps.bikehh.benutzerverwaltung.material.Session;
-import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.benutzerverwaltung.security.OAuthToken;
 import de.wps.bikehh.benutzerverwaltung.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +21,7 @@ public class AuthController {
         this._authService = authService;
     }
 
+    //@TODO restriction for how many devices to log in ?
     @PostMapping
     public SessionResponseModel login(@RequestBody LoginRequest loginrequest) {
         String email = loginrequest.getEmail();

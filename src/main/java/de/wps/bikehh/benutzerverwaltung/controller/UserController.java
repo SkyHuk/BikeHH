@@ -1,13 +1,14 @@
 package de.wps.bikehh.benutzerverwaltung.controller;
 
-import de.wps.bikehh.benutzerverwaltung.dto.request.RequestMailModel;
+import de.wps.bikehh.benutzerverwaltung.dto.request.PasswordRequestModel;
 import de.wps.bikehh.benutzerverwaltung.dto.request.UpdateUserDetailsRequestModel;
 import de.wps.bikehh.benutzerverwaltung.dto.request.UserDetailsRequestModel;
 import de.wps.bikehh.benutzerverwaltung.dto.response.UserDetailsResponseModel;
 import de.wps.bikehh.benutzerverwaltung.exception.ApiRequestException;
+import de.wps.bikehh.benutzerverwaltung.material.Session;
 import de.wps.bikehh.benutzerverwaltung.material.User;
+import de.wps.bikehh.benutzerverwaltung.security.OAuthToken;
 import de.wps.bikehh.benutzerverwaltung.service.BikehhUserDetailsService;
-import de.wps.bikehh.benutzerverwaltung.service.VerifyDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,20 +20,19 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private BikehhUserDetailsService _bikehhUserDetailsService;
-    private VerifyDetailsService _verifyDetailsService;
 
     @Autowired
-    public UserController(BikehhUserDetailsService bikehhUserDetailsService, VerifyDetailsService verifyDetailsService) {
+    public UserController(BikehhUserDetailsService bikehhUserDetailsService) {
         this._bikehhUserDetailsService = bikehhUserDetailsService;
-        this._verifyDetailsService = verifyDetailsService;
-    }
 
+    }
 
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public UserDetailsResponseModel getCurrentUser(Authentication auth) throws ApiRequestException {
-        return _bikehhUserDetailsService.getCurrentUser(auth);
+        User user = (User) auth.getPrincipal();
+        return _bikehhUserDetailsService.getCurrentUser(user);
     }
 
     //@TODO how do we create admin user ? through different endpoint ?
@@ -46,30 +46,26 @@ public class UserController {
 
     @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public void updateUser(Authentication auth, @RequestBody UpdateUserDetailsRequestModel requestUserDetails) {
-        _bikehhUserDetailsService.updateUser(auth, requestUserDetails);
+        User user = (User) auth.getPrincipal();
+
+        _bikehhUserDetailsService.updateUser(user, requestUserDetails);
     }
 
     @DeleteMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(Authentication auth) {
-        _bikehhUserDetailsService.deleteUser(auth);
+        User user = (User) auth.getPrincipal();
+
+        _bikehhUserDetailsService.deleteUser(user);
     }
 
-    @RequestMapping(value = "/password",method = RequestMethod.PUT)
-    public void updatePassword() {
-        //@TODO
-    }
+    //@TODO delelte /user/password since we have PUT /user ?
+    @RequestMapping(value = "/password", method = RequestMethod.PUT)
+    public void updatePassword(Authentication auth,@RequestBody PasswordRequestModel passwordRequestModel) {
+        User user = (User) auth.getPrincipal();
+        String passwordOld = passwordRequestModel.getOldPassword();
+        String passwordNew = passwordRequestModel.getNewPassword();
 
-    @RequestMapping("/verify")
-    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public void requestVerificationMail(@RequestBody RequestMailModel requestModel) throws ApiRequestException {
-        String email = requestModel.getEmail();
-        _verifyDetailsService.requestVerificationMail(email);
-    }
-
-
-    @RequestMapping(value = "/verify",method = RequestMethod.PUT)
-    public void verifyUser(@RequestParam String token) {
-        _verifyDetailsService.verifyUser(token);
+        _bikehhUserDetailsService.updatePassword(user, passwordOld, passwordNew);
     }
 }
