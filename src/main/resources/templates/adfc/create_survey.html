@@ -64,20 +64,32 @@
                 <!-- category -->
                 <label>Kategorie</label>
                 <!--<input class="form-control" v-model="category" placeholder="Kategorie"></input>-->
-                <select class="custom-select mb-2" v-model="category1">
-                  <option selected>Kategorie 1</option>
-                  <option v-for="option in categoryOptions" :value="option">{{ option.text }}</option>
-                </select>
+                <div v-if="!customCategory">
+                  <select class="custom-select mb-2" v-model="category1">
+                    <option selected>Kategorie 1</option>
+                    <option v-for="option in categoryOptions" :value="option">{{ option.text }}</option>
+                  </select>
 
-                <select class="custom-select mb-2" v-if="category1" v-model="category2">
-                  <option selected>Kategorie 2</option>
-                  <option v-for="option in category1.suboptions" :value="option">{{ option.text }}</option>
-                </select>
+                  <select class="custom-select mb-2" v-if="category1" v-model="category2">
+                    <option selected>Kategorie 2</option>
+                    <option v-for="option in category1.suboptions" :value="option">{{ option.text }}</option>
+                  </select>
 
-                <select class="custom-select mb-2" v-if="category2" v-model="category3">
-                  <option selected>Kategorie 3</option>
-                  <option v-for="option in category2.suboptions" :value="option">{{ option.text }}</option>
-                </select>
+                  <select class="custom-select mb-2" v-if="category2" v-model="category3">
+                    <option selected>Kategorie 3</option>
+                    <option v-for="option in category2.suboptions" :value="option">{{ option.text }}</option>
+                  </select>
+                </div>
+
+                <div class="form-check mb-2">
+                  <input class="form-check-input" type="checkbox" v-model="customCategory" id ="customCategoryCheckbox">
+                  <label class="form-check-label" for="customCategoryCheckbox">
+                    Benutzerdefinierte Kategorie
+                  </label>
+                </div>
+
+                <input class="form-control" v-if="customCategory" v-model="customCategoryText" placeholder="Kategorie">
+
               </div>
 
             </div>
@@ -251,6 +263,8 @@
         category1: null,
         category2: null,
         category3: null,
+        customCategory: false,
+        customCategoryText: '',
 
         categoryOptions: [
           {
@@ -419,6 +433,11 @@
           this.questions = []
           this.creator = ''
           this.createdManually = true
+          this.category1 = null
+          this.category2 = null
+          this.category3 = null
+          this.customCategory = false
+          this.customCategoryText = null
 
           // initially add first question
           this.addQuestion()
@@ -451,7 +470,7 @@
             }
           });
           console.log(data.questions)
-          data.category = this.category;
+          data.category = this.customCategory ? this.customCategoryText : this.category1.text;
           data.confirmedByUsers = [];
           data.createdManually = this.createdManually;
           data.creator = this.creator;
@@ -469,16 +488,18 @@
             data.lng = layer.getLatLng().lng;
           });
 
+          console.log(data)
+
           //validate data
           //(date.dateTo >= date.dateFrom) &&
           if (data.title.trim().length !== 0 &&
             data.dateFrom !== null &&
             data.dateTo !== null &&
-            (this.dateFrom >= new Date().toJSON().slice(0, 10)) &&
-            (this.dateTo >= this.dateFrom) &&
+            //(this.dateFrom >= new Date().toJSON().slice(0, 10)) &&
+            //(this.dateTo >= this.dateFrom) &&
             data.confirmedThreshhold !== 0 &&
             data.questions !== null && data.questions.length !== 0 &&
-            this.questionsHaveTitle(this.questions) && this.questionsHaveAnswer(this.questions) &&
+            // this.questionsHaveTitle(data.questions) && this.questionsHaveAnswer(data.questions) &&
             data.category.trim().length !== 0 &&
             data.createdAtDate !== null &&
             data.lat !== null && data.lat !== 0 &&
