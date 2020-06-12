@@ -2,10 +2,17 @@ package de.wps.bikehh.benutzerverwaltung.util;
 
 public class Validation {
     public static boolean isEmailValid(String email) {
-        String regex = "^[\\w-_.+]*[\\w-_.]@([\\w]+\\.)+[\\w]+[\\w]$";
+        //String regex = "^[\\w-_.+]*[\\w-_.]@([\\w]+\\.)+[\\w]+[\\w]$";
+        String regex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$";
         return email.matches(regex);
     }
 
+    public static boolean isPasswordValid(String password) {
+        String regex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,}$";
+        return password.matches(regex);
+    }
+
+    /*
     //Ein Passwort muss mindestens 8 Zeichen lang sein und darf nur aus Buchstaben und zahlen bestehen,
     //wobei es dabei mindestens eine Zahl enthalten muss.
     public static boolean isPasswordValid(String password) {
@@ -37,6 +44,6 @@ public class Validation {
     public static boolean is_Numeric(char ch) {
 
         return (ch >= '0' && ch <= '9');
-    }
+    }*/
 
 }
