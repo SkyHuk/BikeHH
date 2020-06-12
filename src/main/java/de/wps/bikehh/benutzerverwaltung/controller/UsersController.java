@@ -32,22 +32,21 @@ public class UsersController {
         return _bikehhUserDetailsService.retrieveUsers();
     }
 
-    @GetMapping(value = "/{id}")
-    public User getUser(Authentication auth, @PathVariable @NotNull Long id) {
+    @GetMapping()
+    public User getUser(Authentication auth, @RequestParam @NotNull Long id) {
         this.authorizeAsAdmin(auth);
-
         return _bikehhUserDetailsService.getUserById(id);
     }
 
-    @PutMapping(value = "/{id}")
-    public void updateUser(Authentication auth, @PathVariable @NotNull Long id, @RequestBody User updatedUser) {
+    @PutMapping()
+    public void updateUser(Authentication auth, @RequestParam @NotNull Long id, @RequestBody User updatedUser) {
         this.authorizeAsAdmin(auth);
 
         _bikehhUserDetailsService.updateUserById(id, updatedUser);
     }
 
-    @DeleteMapping(value = "/{id}")
-    public void deleteUser(Authentication auth, @PathVariable @NotNull Long id) {
+    @DeleteMapping()
+    public void deleteUser(Authentication auth, @RequestParam @NotNull Long id) {
         this.authorizeAsAdmin(auth);
 
         _bikehhUserDetailsService.deleteUserById(id);

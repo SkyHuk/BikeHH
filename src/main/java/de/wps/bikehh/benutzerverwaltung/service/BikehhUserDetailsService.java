@@ -132,7 +132,7 @@ public class BikehhUserDetailsService implements UserDetailsService {
         }
 
         User user = _userAuthenticationRepository.findById(id).orElse(null);
-
+        System.out.println(user);
         return user;
     }
 
