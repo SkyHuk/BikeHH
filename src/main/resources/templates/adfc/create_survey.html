@@ -307,6 +307,32 @@
         deleteCondition(question) {
           question.conditions.pop()
         },
+        //check if all questions have at least one answer
+        questionsHaveAnswer(questions) {
+          var bQuestionsHaveAnswer = false;
+          for (var i = 0; i < questions.length; i++) {
+            if (this.questions[i].answers !== null && this.questions[i].answers.length > 0) {
+              bQuestionsHaveAnswer = true;
+            } else {
+              return false;
+            }
+          }
+          console.log(bQuestionsHaveAnswer)
+          return bQuestionsHaveAnswer;
+        },
+        //check if all questions have a title
+        questionsHaveTitle(questions) {
+          var bQuestionsHaveTitle = false;
+          for (var i = 0; i < questions.length; i++) {
+            if (this.questions[i].title !== null && this.questions[i].title.trim().length !== 0) {
+              bQuestionsHaveTitle = true;
+            } else {
+              return false;
+            }
+          }
+          console.log(bQuestionsHaveTitle)
+          return bQuestionsHaveTitle;
+        },
         postSurvey(e) {
           e.preventDefault()
           // make post to controller with json data of survey
@@ -341,15 +367,18 @@
           });
 
           //validate data
+          //(date.dateTo >= date.dateFrom) &&
           if (data.title.trim().length !== 0 &&
             data.dateFrom !== null &&
             data.dateTo !== null &&
+            (this.dateTo >= this.dateFrom) &&
             data.confirmedThreshhold !== 0 &&
-            typeof data.questions != "undefined" && data.questions != null && data.questions.length != null && data.questions.length > 0 &&
+            data.questions !== null && data.questions.length !== 0 &&
+            this.questionsHaveTitle(this.questions) && this.questionsHaveAnswer(this.questions) &&
             data.category.trim().length !== 0 &&
-            data.createdAtDate != "undefined" &&
-            data.lat !== 0 && data.lat != "undefined" &&
-            data.lng !== 0 && data.lng != "undefined") {
+            data.createdAtDate !== null &&
+            data.lat !== null && data.lat !== 0 &&
+            data.lng !== null && data.lng !== 0) {
 
             // building and sending json
             const jsonString = JSON.stringify(data);
@@ -363,10 +392,31 @@
             // $('#positiveModal').modal('show');
             this.showSuccessAlert = true
 
+            //delete all error modals
+            this.formError = null;
+
+            //reset all fields
+            this.title = '';
+            this.dateFrom = null;
+            this.dateTo = null;
+            this.confirmedThreshhold = 10;
+            this.category = ''
+            this.questions = [];
+            this.creator = '';
+
+            //reset map
+            this.lat = null;
+            this.lng = null;
+            this.markers = null;
+            this.mymap = null;
+            //TODO 
+            //call mounted();
+
           } else {
             // TODO
             // $('#negativeModal').modal('show');
             this.formError = 'Alle Felder müssen ausgefüllt werden und ein Punkt auf der Karte angegeben werden'
+            this.showSuccessAlert = false
           }
         },
         addCreator(creator) {
