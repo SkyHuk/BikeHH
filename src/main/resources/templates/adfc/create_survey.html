@@ -63,7 +63,21 @@
               <div class="form-group">
                 <!-- category -->
                 <label>Kategorie</label>
-                <input class="form-control" v-model="category" placeholder="Kategorie"></input>
+                <!--<input class="form-control" v-model="category" placeholder="Kategorie"></input>-->
+                <select class="custom-select mb-2" v-model="category1">
+                  <option selected>Kategorie 1</option>
+                  <option v-for="option in categoryOptions" :value="option">{{ option.text }}</option>
+                </select>
+
+                <select class="custom-select mb-2" v-if="category1" v-model="category2">
+                  <option selected>Kategorie 2</option>
+                  <option v-for="option in category1.suboptions" :value="option">{{ option.text }}</option>
+                </select>
+
+                <select class="custom-select mb-2" v-if="category2" v-model="category3">
+                  <option selected>Kategorie 3</option>
+                  <option v-for="option in category2.suboptions" :value="option">{{ option.text }}</option>
+                </select>
               </div>
 
             </div>
@@ -233,6 +247,32 @@
 
         showSuccessAlert: false,
         formError: null,
+
+        category1: null,
+        category2: null,
+        category3: null,
+
+        categoryOptions: [
+          {
+            text: 'Hindernis',
+            suboptions: [
+              { text: '' },
+            ],
+          },
+          {
+            text: 'Fahrbahnoberfläche',
+            suboptions: [
+              {
+                text: 'Verschmutzung',
+                suboptions: [
+                  { text: 'Schnee / Glatteis' },
+                ],
+              },
+            ]
+          },
+          { text: 'Verkehrsführung' },
+          { text: 'Abstellanlage' },
+        ],
 
       },
       mounted() {
