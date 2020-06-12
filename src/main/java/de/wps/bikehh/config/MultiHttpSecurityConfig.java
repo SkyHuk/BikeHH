@@ -41,7 +41,7 @@ public class MultiHttpSecurityConfig {
         @Autowired
         OAuthProvider authProvider;
 
-       //@TODO frontend still not working. Except /h2/**
+        //@TODO frontend still not working. Except /h2/**
         @Override
         protected void configure(HttpSecurity httpSecurity) throws Exception {
        /*     httpSecurity.antMatcher()
@@ -51,6 +51,11 @@ public class MultiHttpSecurityConfig {
 
             httpSecurity.httpBasic().authenticationEntryPoint(new OAuthEntryPoint()).and().authorizeRequests().antMatchers("/api/**").authenticated().and().addFilterBefore(new OAuthFilter(), BasicAuthenticationFilter.class).csrf().disable();
             httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER);
+            //.csrf().ignoringAntMatchers(
+            //            "/api-key-only",
+            //            "/dual-auth"
+            //    )
+            //        ;
         }
 
         @Override
@@ -63,4 +68,53 @@ public class MultiHttpSecurityConfig {
             auth.authenticationProvider(authProvider);
         }
     }
+
+  /*  @Configuration
+    @Order(2)
+    class ApiWebSecurity extends WebSecurityConfigurerAdapter {
+
+        @Value("x-api-key")
+        private String principalRequestHeader;
+
+        @Value("${bikehh.api.key}")
+        private String principalRequestValue;
+
+        @Override
+        protected void configure(HttpSecurity httpSecurity) throws Exception {
+            ApiKeyAuth filter = new ApiKeyAuth(principalRequestHeader);
+
+            //filter.setAuthenticationFailureHandler(new CustomAuthenticationFailureHandler());
+
+            filter.setAuthenticationManager(new AuthenticationManager() {
+
+                @Override
+                public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+                    System.out.println("api-key");
+                    if (authentication == null) {
+                        return null;
+                    }
+
+                    String principal = (String) authentication.getPrincipal();
+                    if (!principalRequestValue.equals(principal)) {
+                        throw new BadCredentialsException(ErrorCode.unauthorized);
+                    }
+                    authentication.setAuthenticated(true);
+                    return authentication;
+                }
+            });
+
+            httpSecurity.antMatcher("/api/**").csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().addFilter(filter).
+                    authorizeRequests().anyRequest().authenticated().and().exceptionHandling().authenticationEntryPoint(((request, response, e) -> {
+                ApiException exception = new ApiException(ErrorCode.unauthorized);
+
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write(exception.toString());
+            }));
+
+        }
+
+
+    }*/
 }
