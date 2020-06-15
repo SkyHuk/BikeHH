@@ -14,8 +14,8 @@
       <table class="table table-hover">
         <thead>
           <tr>
-            <th>Breitengrad</th>
-            <th>Längengrad</th>
+            <th>Stadt</th>
+            <th>Straße</th>
             <th>Title</th>
             <th>Typ</th>
             <th>Erstellungsdatum</th>
@@ -25,8 +25,8 @@
         </thead>
         <tbody>
           <tr  th:each="survey: ${surveys}">
-           	<td th:text="${survey.lat}"></td>
-           	<td th:text="${survey.lng}"></td>
+           	<td th:text="${survey.address.city + ', ' +survey.address.postcode}"></td>
+           	<td th:text="${survey.address.houseNumber!=null}?${survey.address.street + ' ' + survey.address.houseNumber}:${survey.address.street}"></td>
            	<td th:text="${survey.title}"></td>
            	<td th:text="${survey.category}"></td>
            	<td th:text="${survey.createdAtDate}"></td>

@@ -103,7 +103,7 @@ crossorigin=""></script>
 		}
 
 		//add a survey from db to map with marker (from files ONLY at the moment)
-		function addSurveysToMap(id, lat, lng, category, createdAtDate, confirmedByUsers, confirmedThreshhold, title, questions, dateFrom, dateTo) {
+		function addSurveysToMap(id, lat, lng, category, createdAtDate, confirmedByUsers, confirmedThreshhold, title, questions, dateFrom, dateTo, address) {
 			
 			var confirmations = "";
 			if (confirmedByUsers.length > 0) {
@@ -125,12 +125,18 @@ crossorigin=""></script>
 				answersHTML = "";
 			}
 			
+			var addressHTML = "";
+			if (address.houseNumber != undefined) {
+				addressHTML = "Addresse: " + address.street + " " + address.houseNumber + ", " + address.postcode + ", " + address.city + "<br/>";
+			} else {
+				addressHTML = "Addresse: " + address.street + ", "  + address.postcode + ", " + address.city + "<br/>";
+			}
+			
 			L.marker([lat, lng]).addTo(mymap)
 			.bindPopup(
 				'<a href="umfragen/' + id +'"><b>Umfrage Id ' + id +'</b></a>' + 
 				": " + title + "<br/>" +
-				"Lat: " + lat.toFixed(4) + "<br/>" +
-				"Lng: " + lng.toFixed(4) + "<br/>" +
+				addressHTML +
 				"Kategorie: " + category + "<br/>" +
 				"Erstellt am: " + createdAtDate + "<br/>" +
 				"Dauer: " + dateFrom + " bis " + dateTo + "<br/>" +
@@ -153,7 +159,7 @@ crossorigin=""></script>
 		/*<![CDATA[*/
 		addSurveysToMap([[${ survey.id }]], [[${ survey.lat }]], [[${ survey.lng }]], [[${ survey.category }]],
 			[[${ survey.createdAtDate }]], [[${ survey.confirmedByUsers }]], [[${ survey.confirmedThreshhold }]],
-			[[${ survey.title }]], [[${ survey.questions }]], [[${ survey.dateFrom }]], [[${ survey.dateTo }]]  );
+			[[${ survey.title }]], [[${ survey.questions }]], [[${ survey.dateFrom }]], [[${ survey.dateTo }]], [[${ survey.address }]]  );
 		/*]]>*/
 	</script>
 </th:block>

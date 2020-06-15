@@ -32,6 +32,9 @@
             </ol>
           </nav>
           <div>
+            <h6 class="mb-2 text-muted">Ort: <span class="badge badge-secondary" th:text="${survey.address.houseNumber!=null}?${survey.address.street + ' ' + survey.address.houseNumber + ', ' + survey.address.postcode + ', ' + survey.address.city}:${survey.address.street + ', ' + survey.address.postcode + ', ' + survey.address.city}"></span></h6>
+          </div>
+          <div>
             <h6 class="mb-2 text-muted">Ersteller: <span class="badge badge-secondary" th:text="${survey.creator}"></span></h6>
           </div>
           <div>

@@ -21,6 +21,7 @@ public class SurveyTest {
 	private Question[] questions;
 	private String creator;
 	private boolean createdManually;
+	private Address address;
 
 	public int getId() {
 		return id;
@@ -124,6 +125,14 @@ public class SurveyTest {
 
 	public void setCreatedManually(boolean createdManually) {
 		this.createdManually = createdManually;
+	}
+
+	public Address getAddress() {
+		return address;
+	}
+
+	public void setAddress(Address address) {
+		this.address = address;
 	}
 
 }
