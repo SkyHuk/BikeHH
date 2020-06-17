@@ -214,9 +214,8 @@
   // init map
 
   var mymap = L.map('mapid').setView([lat, lng], 13);
-
   addMarkerToMap(lat, lng);
-
+ 
   L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
     maxZoom: 18,
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
@@ -227,6 +226,22 @@
     zoomOffset: -1
   }).addTo(mymap);
 
+    function addQuestionMarkerToMap(question, index) {
+        console.log(index);
+    	if (question.lat && question.lng) {
+          var greenIcon = new L.Icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+          });
+           var marker = L.marker([question.lat, question.lng], {
+             icon:greenIcon
+           }).addTo(this.mymap).bindPopup('<b>Ort für Frage ' + index + ': ' + question.title +'</b>');
+        }
+    }
 
     // adds a marker to given coordinates,
     // used to mark location of survey
@@ -242,12 +257,18 @@
   // opens email client to write email to survey creator
   // TODO: NOT DONE
   function contactCreator(creator) {
-    console.log('contactCreator', creator)
-    //var mailAddress = [[${survey.creator}]];
     var mailAddress = creator
     var subject = "BikeHH - Umfrage #" + [[${survey.id}]];
     window.location.href = "mailto:" + mailAddress + "?subject="+ subject + "&body=";
   };
 </script>
+<th:block th:each="question,status : ${survey.questions}">
+  <!-- call js function -->
+  <script th:inline="javascript">
+    /*<![CDATA[*/
+    addQuestionMarkerToMap([[${ question }]], [[${status.index} + 1]]);
+    /*]]>*/
+  </script>
+</th:block>
 </body>
 </html>

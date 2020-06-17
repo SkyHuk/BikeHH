@@ -133,19 +133,17 @@
 			}
 
 			L.marker([lat, lng]).addTo(mymap)
-				.bindPopup(
-					'<a href="umfragen/' + id + '"><b>Umfrage Id ' + id + '</b></a>' +
-					": " + title + "<br/>" +
-					addressHTML +
-					"Kategorie: " + category + "<br/>" +
-					"Erstellt am: " + createdAtDate + "<br/>" +
-					"Dauer: " + dateFrom + " bis " + dateTo + "<br/>" +
-					confirmations +
-					"Fragen: " +
-					"<ul>" + questionsHTML + "</ul>" +
-					//"Fragen: " + questionsHTML + "<br/>" +
-					/*"Fragen: " + JSON.stringify(questions) + "<br/>"*/
-					'<a href="umfragen/' + id + '">Details</b></a>'
+			.bindPopup(
+				'<a href="umfragen/' + id +'"><b>Umfrage Id ' + id +'</b></a>' + 
+				": " + title + "<br/>" +
+				addressHTML +
+				"Kategorie: " + category + "<br/>" +
+				"Erstellt am: " + createdAtDate + "<br/>" +
+				"Dauer: " + dateFrom + " bis " + dateTo + "<br/>" +
+				confirmations +
+				"Fragen: " + 
+				"<ul>" + questionsHTML + "</ul>" +
+				'<a href="umfragen/' + id +'">Details</b></a>'
 				);
 		}
 

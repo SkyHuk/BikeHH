@@ -5,6 +5,7 @@ public class Address {
 	private String city;
 	private String postcode;
 	private String street;
+	// not guaranteed to be present, has to be checked
 	private String houseNumber;
 
 	public String getCity() {
@@ -37,6 +38,10 @@ public class Address {
 
 	public void setHouseNumber(String houseNumber) {
 		this.houseNumber = houseNumber;
+	}
+
+	public boolean hasHouseNumber(Address address) {
+		return address.getHouseNumber() != null;
 	}
 
 }

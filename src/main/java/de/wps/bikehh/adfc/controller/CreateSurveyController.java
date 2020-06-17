@@ -35,7 +35,6 @@ public class CreateSurveyController {
 			model.addAttribute("lng", 0);
 		}
 		model.addAttribute("user", user);
-		System.out.println(user.getEmailAddress());
 		return "adfc/create_survey";
 	}
 

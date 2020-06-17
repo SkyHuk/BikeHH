@@ -169,9 +169,16 @@
                   <!-- add condition -->
                   <button type="button" class="btn btn-primary mb-3" @click="addCondition(question)">Bedingung
                     hinzufügen</button>
-                  <!-- delete question -->
-                  <button type="button" class="btn btn-danger mb-3" @click="deleteQuestion(question)">Frage
+                    <!-- add location -->
+                    <button type="button" class="btn btn-primary mb-3" @click="addLocation(question)">Ort hinzufügen</button>
+                    <!-- delete question -->
+                    <button type="button" class="btn btn-danger mb-3" @click="deleteQuestion(question)">Frage
                     löschen</button>
+                    <!-- delete location -->
+                    <button type="button" class="btn btn-danger mb-3" @click="deleteLocation(question)">Ort
+                    löschen</button>
+                  </div>
+
                 </div>
 
               </div>
@@ -239,39 +246,37 @@
       </div>
     </div>
 
-  </div>
+    <script type="text/javascript">
 
-  <script type="text/javascript">
+      const createSurveyApp = new Vue({
+        el: '#createSurveyApp',
+        data: {
 
-    const createSurveyApp = new Vue({
-      el: '#createSurveyApp',
-      data: {
-        id: Math.floor(Math.random() * (100000 - 0 + 1)) + 0,
-        title: '',
-        category: '',
-        dateFrom: null,
-        dateTo: null,
-        confirmedThreshhold: 10,
-        questions: [],
-        creator: '',
-        createdManually: true,
+          id: Math.floor(Math.random() * (100000 - 0 + 1)) + 0,
+          title: '',
+          category: '',
+          dateFrom: null,
+          dateTo: null,
+          confirmedThreshhold: 10,
+          questions: [],
+          createdManually: true,
 
-        // store coordinates coming from controller
-        lat: [[${ lat }]],
-        lng: [[${ lng }]],
-        markers: null,
-        mymap: null,
+          lat: [[${ lat }]],
+          lng: [[${ lng }]],
+          markers: null,
+          questionMarkers: null,
+          mymap: null,
 
-        showSuccessAlert: false,
-        formError: null,
+          showSuccessAlert: false,
+          formError: null,
 
-        category1: null,
-        category2: null,
-        category3: null,
-        customCategory: false,
-        customCategoryText: '',
+          category1: null,
+          category2: null,
+          category3: null,
+          customCategory: false,
+          customCategoryText: '',
 
-        categoryOptions: [
+          categoryOptions: [
           {
             text: 'Hindernis',
             suboptions: [
@@ -293,15 +298,17 @@
           { text: 'Abstellanlage' },
         ],
 
-      },
-      mounted() {
-        this.resetData()
+        },
+        mounted() {
+          this.resetData()
 
         // init popup
         var popup = L.popup();
         // init layerGroup holding all the markers
         // this is used to delete previous markers when clicking on map
         this.markers = L.layerGroup()
+
+        this.questionMarkers = L.layerGroup();
 
         // set map depending on whether real coordinates where given
         // default is somewhat the center of hamburg
@@ -333,8 +340,11 @@
           const lng = e.latlng.lng
 
           // add marker to map, delete old one
-          var marker = L.marker([lat, lng]).addTo(self.mymap)
-            .bindPopup("<b>Hier wird die erstellte Umfrage sein.</b><br/>");
+          var marker = L.marker([lat, lng], {
+           draggable:true,
+           autoPan:true
+         }).addTo(self.mymap)
+          .bindPopup("<b>Hier wird die erstellte Umfrage sein.</b><br/>");
           self.markers.eachLayer((layer) => {
             layer.remove()
             self.markers.removeLayer(layer);
@@ -358,18 +368,68 @@
         },
         // deletes a question
         deleteQuestion(question) {
-          var index = this.questions.indexOf(question)
+          var index = this.questions.indexOf(question);
           //console.log(index)
-          this.questions.splice(index, 1)
+          this.questions.splice(index, 1);
         },
         // add answer
         addAnswer(question) {
-          question.answers.push({ text: '' })
+          question.answers.push({ text: '' });
         },
         // delete latest answer in question.answers
         removeAnswer(question, answer) {
           question.answers.splice(question.answers.indexOf(answer), 1)
+        },
+        // add location (green marker) to question on map, 
+        // only if question does not have location already
+        addLocation(question) {
 
+          var existingMarker = this.getMarkerForQuestion(question);
+          if (!existingMarker) {
+           var greenIcon = new L.Icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+          });
+
+           
+           const index = this.questions.indexOf(question) + 1;
+           const bounds = this.mymap.getBounds();
+           const coordinates = bounds.getCenter();
+           var marker = L.marker(coordinates, {
+             draggable:true,
+             autoPan:true,
+             icon:greenIcon
+           }).addTo(this.mymap).bindPopup('<b>Ort für Frage ' + index + ' </b>');
+           this.questionMarkers.addLayer(marker);
+         } else {
+        	 existingMarker.openPopup();
+         }
+       },
+        // delete marker for question
+        deleteLocation(question) {
+          var marker = this.getMarkerForQuestion(question);
+          if (marker) {
+            marker.remove();
+            this.questionMarkers.removeLayer(marker);
+          }
+        },
+        getMarkerForQuestion(question) {
+          const index = this.questions.indexOf(question)
+          // hyper complexe algorithm to pull out the correct marker to the question
+          // from all the markers in the array
+          var chosenMarker = null;
+          this.questionMarkers.eachLayer((layer) => {
+           const popupText = layer.getPopup().getContent();
+           const indexOfMarkerInLayerGroup = parseInt(popupText.split(' ')[3]) - 1;
+           if  (indexOfMarkerInLayerGroup == index) {
+            chosenMarker = layer;
+          }
+        });
+          return chosenMarker;
         },
         // add condition
         addCondition(question) {
@@ -429,7 +489,6 @@
           this.dateTo = null
           this.confirmedThreshhold = 10
           this.questions = []
-          this.creator = ''
           this.createdManually = true
           this.category1 = null
           this.category2 = null
@@ -459,6 +518,8 @@
           data.questions = this.questions.map((question) => {
             return {
               ...question,
+              lat: this.getMarkerForQuestion(question).getLatLng().lat,
+              lng: this.getMarkerForQuestion(question).getLatLng().lng,
               conditions: question.conditions.map((condition) => {
                 return {
                   question: this.questions.indexOf(question),
@@ -470,7 +531,7 @@
           data.category = this.customCategory ? this.customCategoryText : this.category1.text;
           data.confirmedByUsers = [];
           data.createdManually = this.createdManually;
-          data.creator = this.creator;
+          data.creator = '[[${ user.emailAddress }]]';
 
           // get date
           // generate a timestamp
@@ -530,7 +591,7 @@
               console.log(request);
             }
             getRequest.send();
-            console.log(getRequest)
+            //console.log(getRequest)
 
             this.showSuccessAlert = true
 
@@ -551,9 +612,6 @@
             this.formError = 'Alle Felder müssen ausgefüllt werden und ein Punkt auf der Karte angegeben werden. Das Startdatum darf nicht in der Vergangenheit liegen.'
             this.showSuccessAlert = false
           }
-        },
-        addCreator(creator) {
-          this.creator = creator;
         },
       },
     })
