@@ -6,6 +6,6 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.Optional;
 
 public interface PasswordAuthenticationRepository extends CrudRepository<Reset, Long> {
-    Reset findByUserId(Long userId);
+    Optional<Reset> findByUserId(Long userId);
     Optional<Reset> findByToken(String token);
 }

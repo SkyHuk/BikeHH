@@ -1,24 +1,23 @@
 package de.wps.bikehh.benutzerverwaltung.service;
 
-import de.wps.bikehh.benutzerverwaltung.util.Validation;
 import de.wps.bikehh.benutzerverwaltung.dto.request.UpdateUserDetailsRequestModel;
+import de.wps.bikehh.benutzerverwaltung.dto.request.UpdateUsersDetailsRequestModel;
 import de.wps.bikehh.benutzerverwaltung.dto.response.UserDetailsResponseModel;
 import de.wps.bikehh.benutzerverwaltung.exception.ApiRequestException;
 import de.wps.bikehh.benutzerverwaltung.exception.ErrorCode;
 import de.wps.bikehh.benutzerverwaltung.material.BikehhUserDetails;
 import de.wps.bikehh.benutzerverwaltung.material.Roles;
-import de.wps.bikehh.benutzerverwaltung.material.Session;
 import de.wps.bikehh.benutzerverwaltung.material.User;
-import de.wps.bikehh.benutzerverwaltung.repository.SessionRepository;
 import de.wps.bikehh.benutzerverwaltung.repository.UserAuthenticationRepository;
+import de.wps.bikehh.benutzerverwaltung.util.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.management.relation.Role;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,13 +26,15 @@ public class BikehhUserDetailsService implements UserDetailsService {
 
     private UserAuthenticationRepository _userAuthenticationRepository;
     private VerifyDetailsService _verifyDetailsService;
+    private PasswordDetailsService _passwordDetailsService;
     private AuthService _authService;
 
     @Autowired
-    public BikehhUserDetailsService(UserAuthenticationRepository userAuthenticationRepository, VerifyDetailsService verifyDetailsService,AuthService authService) {
+    public BikehhUserDetailsService(UserAuthenticationRepository userAuthenticationRepository, VerifyDetailsService verifyDetailsService, PasswordDetailsService passwordDetailsService, AuthService authService) {
         this._userAuthenticationRepository = userAuthenticationRepository;
         this._verifyDetailsService = verifyDetailsService;
         this._authService = authService;
+        this._passwordDetailsService = passwordDetailsService;
     }
 
     @Override
@@ -50,23 +51,6 @@ public class BikehhUserDetailsService implements UserDetailsService {
         return new BikehhUserDetails(user, email, user.getEncryptedPassword(), createAuthorities(user));
     }
 
-    public void createUser(String email, String password) throws ApiRequestException {
-        if (!Validation.isEmailValid(email) || !Validation.isPasswordValid(password)) {
-            throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
-        }
-        if (_userAuthenticationRepository.existsByEmailAddress(email)) {
-            throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
-        }
-
-        User user = new User(email, password);
-        user.setRole(Roles.ROLE_USER);
-
-        BikehhPasswordEncoderService encoder = new BikehhPasswordEncoderService();
-        user.setEncryptedPassword(encoder.encodePassword(password));
-
-        _userAuthenticationRepository.save(user);
-        _verifyDetailsService.requestVerificationMail(user.getEmailAddress());
-    }
 
     private String[] createAuthorities(User user) {
         List<String> authorities = new ArrayList<>(3);
@@ -84,6 +68,33 @@ public class BikehhUserDetailsService implements UserDetailsService {
         return authorities.toArray(new String[authorities.size()]);
     }
 
+
+    public void createUser(String email, String password) throws ApiRequestException {
+        createUserEntity(email, password, Roles.ROLE_USER);
+    }
+
+    public void createAdmin(String email, String password) {
+        createUserEntity(email, password, Roles.ROLE_ADMIN);
+    }
+
+    private void createUserEntity(String email, String password, String role) throws ApiRequestException {
+        if (!Validation.isEmailValid(email) || !Validation.isPasswordValid(password)) {
+            throw new ApiRequestException(ErrorCode.bad_credentials, HttpStatus.BAD_REQUEST);
+        }
+        if (_userAuthenticationRepository.existsByEmailAddress(email)) {
+            throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
+        }
+
+        User user = new User(email, password);
+        user.setRole(role);
+
+        BikehhPasswordEncoderService encoder = new BikehhPasswordEncoderService();
+        user.setEncryptedPassword(encoder.encodePassword(password));
+
+        _userAuthenticationRepository.save(user);
+        //_verifyDetailsService.requestVerificationMail(user.getEmailAddress());
+    }
+
     public UserDetailsResponseModel getCurrentUser(User user) throws ApiRequestException {
         return new UserDetailsResponseModel(user);
     }
@@ -99,18 +110,22 @@ public class BikehhUserDetailsService implements UserDetailsService {
     }
 
     public void deleteUser(User user) {
-        _authService.logoutAllSession(user);
+        Long userId = user.getId();
+
+        _authService.logoutAllSession(userId);
+        _verifyDetailsService.deleteVerification(userId);
+        _passwordDetailsService.deleteResetToken(userId);
+
         _userAuthenticationRepository.delete(user);
     }
 
     public void updatePassword(User user, String passwordOld, String passwordNew) throws ApiRequestException {
-        if(!Validation.isPasswordValid(passwordNew)){
+        if (!Validation.isPasswordValid(passwordNew)) {
             throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
         }
 
         BikehhPasswordEncoderService encoder = new BikehhPasswordEncoderService();
-        String hashedPasswordOld = encoder.encodePassword(passwordOld);
-        if(!encoder.matches(hashedPasswordOld, user.getEncryptedPassword()))  {
+        if (!encoder.matches(passwordOld, user.getEncryptedPassword())) {
             throw new ApiRequestException(ErrorCode.unauthorized, HttpStatus.UNAUTHORIZED);
         }
         user.setEncryptedPassword(encoder.encodePassword(passwordNew));
@@ -132,7 +147,6 @@ public class BikehhUserDetailsService implements UserDetailsService {
         }
 
         User user = _userAuthenticationRepository.findById(id).orElse(null);
-        System.out.println(user);
         return user;
     }
 
@@ -144,14 +158,18 @@ public class BikehhUserDetailsService implements UserDetailsService {
         _userAuthenticationRepository.deleteById(id);
     }
 
-    public User updateUserById(Long id, User updatedUser) {
+    public User updateUserById(Long id, UpdateUsersDetailsRequestModel userModel) {
         if (!_userAuthenticationRepository.existsById(id)) {
             throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
         }
 
         User user = _userAuthenticationRepository.findById(id).orElse(null);
-        updatedUser.setId(user.getId());
+        if (user == null) {
+            throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
+        }
 
-        return _userAuthenticationRepository.save(updatedUser);
+        user.setIsLocked(userModel.getIsLocked());
+
+        return _userAuthenticationRepository.save(user);
     }
 }

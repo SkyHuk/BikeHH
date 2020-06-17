@@ -32,6 +32,8 @@ public class ApiException {
                 return "not found";
             case ErrorCode.forbidden:
                 return "forbidden";
+            case ErrorCode.bad_credentials:
+                return "bad credentials";
         }
 
         return "unknown error code";
@@ -42,7 +44,7 @@ public class ApiException {
     }*/
 
     @Override
-    public String toString(){
+    public String toString() {
         return String.format("{\"errorCode\": \"%s\",\n\"errorMessage\": \"%s\"}", getErrorCode(), getErrorMessage());
 
     }

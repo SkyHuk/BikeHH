@@ -6,6 +6,6 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.Optional;
 
 public interface VerificationAuthenticationRepository extends CrudRepository<Verification, Long> {
-    Verification findByUserId(Long userId);
+    Optional<Verification> findByUserId(Long userId);
     Optional<Verification> findByToken(String token);
 }

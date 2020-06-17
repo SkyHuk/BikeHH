@@ -1,7 +1,11 @@
 package de.wps.bikehh.benutzerverwaltung.dto.request;
 
+import javax.validation.constraints.NotNull;
+
 public class LoginRequest {
+    @NotNull
     private String email;
+    @NotNull
     private String password;
 
     public void setEmail(String email) {

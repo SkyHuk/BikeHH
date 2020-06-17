@@ -7,8 +7,11 @@ import de.wps.bikehh.benutzerverwaltung.security.OAuthToken;
 import de.wps.bikehh.benutzerverwaltung.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -22,8 +25,8 @@ public class AuthController {
     }
 
     //@TODO restriction for how many devices to log in ?
-    @PostMapping
-    public SessionResponseModel login(@RequestBody LoginRequest loginrequest) {
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public SessionResponseModel login(@Valid @RequestBody LoginRequest loginrequest) {
         String email = loginrequest.getEmail();
         String password = loginrequest.getPassword();
 

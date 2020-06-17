@@ -11,10 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/api/password")
 public class PasswordController {
-
 
     private PasswordDetailsService _passwordDetailsService;
 
@@ -23,15 +24,15 @@ public class PasswordController {
         this._passwordDetailsService = passwordDetailsService;
     }
 
-    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public void requestPasswordResetMail(@RequestBody RequestMailModel requestModel) throws ApiRequestException {
+    @GetMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public void requestPasswordResetMail(@Valid @RequestBody RequestMailModel requestModel) throws ApiRequestException {
         String email = requestModel.getEmail();
 
         _passwordDetailsService.requestResetMail(email);
     }
 
     @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public void resetPassword(@RequestBody ResetPasswordModel requestModel, @RequestParam String token) {
+    public void resetPassword(@Valid @RequestBody ResetPasswordModel requestModel, @RequestParam String token) {
         String password = requestModel.getNewPassword();
 
         _passwordDetailsService.resetPassword(password, token);

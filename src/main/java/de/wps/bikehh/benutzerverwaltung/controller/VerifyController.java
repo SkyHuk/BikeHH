@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/api/verify")
 public class VerifyController {
@@ -19,13 +21,13 @@ public class VerifyController {
     private VerifyDetailsService _verifyDetailsService;
 
     @Autowired
-    public VerifyController(PasswordDetailsService passwordDetailsService,VerifyDetailsService verifyDetailsService) {
+    public VerifyController(VerifyDetailsService verifyDetailsService) {
         this._verifyDetailsService = verifyDetailsService;
     }
 
 
-    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public void requestVerificationMail(@RequestBody RequestMailModel requestModel) throws ApiRequestException {
+    @GetMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public void requestVerificationMail(@Valid @RequestBody RequestMailModel requestModel) throws ApiRequestException {
         String email = requestModel.getEmail();
         _verifyDetailsService.requestVerificationMail(email);
     }

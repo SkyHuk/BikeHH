@@ -1,11 +1,14 @@
 package de.wps.bikehh.benutzerverwaltung.service;
 
+import de.wps.bikehh.benutzerverwaltung.exception.ApiRequestException;
+import de.wps.bikehh.benutzerverwaltung.exception.ErrorCode;
 import de.wps.bikehh.benutzerverwaltung.material.Session;
 import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.benutzerverwaltung.repository.SessionRepository;
 import de.wps.bikehh.benutzerverwaltung.repository.UserAuthenticationRepository;
 import de.wps.bikehh.benutzerverwaltung.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
@@ -23,10 +26,10 @@ public class AuthService {
         this._userAuthenticationRepository = _userAuthenticationRepository;
     }
 
-    //@Todo hash access token
+    //@Todo hash access token ?
     public Session loginUser(String email, String password) throws BadCredentialsException {
         if (!_userAuthenticationRepository.existsByEmailAddress(email)) {
-            throw new BadCredentialsException("Bad credentials");
+            throw new ApiRequestException(ErrorCode.bad_credentials, HttpStatus.BAD_REQUEST);
         }
 
         BikehhPasswordEncoderService hashService = new BikehhPasswordEncoderService();
@@ -34,7 +37,7 @@ public class AuthService {
 
         User user = _userAuthenticationRepository.findByEmailAddress(email);
         if (!user.getEncryptedPassword().equals(hashedPassword)) {
-            throw new BadCredentialsException("Bad credentials");
+            throw new ApiRequestException(ErrorCode.bad_credentials, HttpStatus.BAD_REQUEST);
         }
 
         String token = Utils.generateSecureToken(Utils.TOKEN_COUNT);
@@ -48,9 +51,8 @@ public class AuthService {
         _sessionRepository.delete(session);
     }
 
-    public void logoutAllSession(User user) {
-        List<Session> sessions = _sessionRepository.findAllByUserId(user.getId());
-        System.out.println(sessions.size());
+    public void logoutAllSession(Long userId) {
+        List<Session> sessions = _sessionRepository.findAllByUserId(userId);
         for (Session s : sessions) {
             _sessionRepository.delete(s);
         }

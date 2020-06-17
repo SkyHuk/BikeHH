@@ -1,7 +1,11 @@
 package de.wps.bikehh.benutzerverwaltung.dto.request;
 
+import javax.validation.constraints.NotNull;
+
 public class UserDetailsRequestModel {
+    @NotNull
     private String email;
+    @NotNull
     private String password;
 
     public String getEmail() {

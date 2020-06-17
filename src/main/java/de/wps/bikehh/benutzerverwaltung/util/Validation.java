@@ -8,7 +8,7 @@ public class Validation {
     }
 
     public static boolean isPasswordValid(String password) {
-        String regex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,}$";
+        String regex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,64}$";
         return password.matches(regex);
     }
 

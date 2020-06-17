@@ -5,15 +5,15 @@ import de.wps.bikehh.benutzerverwaltung.dto.request.UpdateUserDetailsRequestMode
 import de.wps.bikehh.benutzerverwaltung.dto.request.UserDetailsRequestModel;
 import de.wps.bikehh.benutzerverwaltung.dto.response.UserDetailsResponseModel;
 import de.wps.bikehh.benutzerverwaltung.exception.ApiRequestException;
-import de.wps.bikehh.benutzerverwaltung.material.Session;
 import de.wps.bikehh.benutzerverwaltung.material.User;
-import de.wps.bikehh.benutzerverwaltung.security.OAuthToken;
 import de.wps.bikehh.benutzerverwaltung.service.BikehhUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/user")
@@ -24,7 +24,6 @@ public class UserController {
     @Autowired
     public UserController(BikehhUserDetailsService bikehhUserDetailsService) {
         this._bikehhUserDetailsService = bikehhUserDetailsService;
-
     }
 
 
@@ -35,9 +34,8 @@ public class UserController {
         return _bikehhUserDetailsService.getCurrentUser(user);
     }
 
-    //@TODO how do we create admin user ? through different endpoint ?
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void createUser(@RequestBody UserDetailsRequestModel requestUserDetails) throws ApiRequestException {
+    public void createUser(@Valid @RequestBody UserDetailsRequestModel requestUserDetails) throws ApiRequestException {
         String email = requestUserDetails.getEmail();
         String password = requestUserDetails.getPassword();
 
@@ -45,7 +43,7 @@ public class UserController {
     }
 
     @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void updateUser(Authentication auth, @RequestBody UpdateUserDetailsRequestModel requestUserDetails) {
+    public void updateUser(Authentication auth, @Valid @RequestBody UpdateUserDetailsRequestModel requestUserDetails) {
         User user = (User) auth.getPrincipal();
 
         _bikehhUserDetailsService.updateUser(user, requestUserDetails);
@@ -59,10 +57,10 @@ public class UserController {
         _bikehhUserDetailsService.deleteUser(user);
     }
 
-    //@TODO delelte /user/password since we have PUT /user ?
     @RequestMapping(value = "/password", method = RequestMethod.PUT)
-    public void updatePassword(Authentication auth,@RequestBody PasswordRequestModel passwordRequestModel) {
+    public void updatePassword(Authentication auth, @Valid @RequestBody PasswordRequestModel passwordRequestModel) {
         User user = (User) auth.getPrincipal();
+
         String passwordOld = passwordRequestModel.getOldPassword();
         String passwordNew = passwordRequestModel.getNewPassword();
 

@@ -4,6 +4,7 @@ import de.wps.bikehh.benutzerverwaltung.exception.ApiRequestException;
 import de.wps.bikehh.benutzerverwaltung.exception.ErrorCode;
 import de.wps.bikehh.benutzerverwaltung.material.Reset;
 import de.wps.bikehh.benutzerverwaltung.material.User;
+import de.wps.bikehh.benutzerverwaltung.material.Verification;
 import de.wps.bikehh.benutzerverwaltung.repository.PasswordAuthenticationRepository;
 import de.wps.bikehh.benutzerverwaltung.repository.UserAuthenticationRepository;
 import de.wps.bikehh.benutzerverwaltung.service.smtp.Mail;
@@ -38,7 +39,7 @@ public class PasswordDetailsService {
         User user = _userAuthenticationRepository.findByEmailAddress(email);
 
         //Delete in case token for user already exists
-        Reset reset = _passwordAuthenticationRepository.findByUserId(user.getId());
+        Reset reset = _passwordAuthenticationRepository.findByUserId(user.getId()).orElse(null);
         if (reset != null) {
             _passwordAuthenticationRepository.delete(reset);
         }
@@ -82,6 +83,11 @@ public class PasswordDetailsService {
         //Delete reset token and set new password
         _passwordAuthenticationRepository.delete(reset);
         _userAuthenticationRepository.save(user);
+    }
+
+    public void deleteResetToken(Long userId) {
+        Reset reset = _passwordAuthenticationRepository.findByUserId(userId).orElse(null);
+        _passwordAuthenticationRepository.delete(reset);
     }
 
     @Scheduled(fixedRate = 10000)

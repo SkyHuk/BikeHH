@@ -9,6 +9,7 @@ import de.wps.bikehh.benutzerverwaltung.repository.VerificationAuthenticationRep
 import de.wps.bikehh.benutzerverwaltung.service.smtp.Mail;
 import de.wps.bikehh.benutzerverwaltung.service.smtp.SmtpService;
 import de.wps.bikehh.benutzerverwaltung.util.Utils;
+import de.wps.bikehh.benutzerverwaltung.util.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -31,6 +32,10 @@ public class VerifyDetailsService {
     }
 
     public void requestVerificationMail(String email) throws ApiRequestException {
+        if (!Validation.isEmailValid(email)) {
+            throw new ApiRequestException(ErrorCode.bad_credentials, HttpStatus.BAD_REQUEST);
+        }
+
         if (!_userAuthenticationRepository.existsByEmailAddress(email)) {
             throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
         }
@@ -42,7 +47,7 @@ public class VerifyDetailsService {
 
 
         //Delete in case token for user already exists
-        Verification verification = _verificationRepository.findByUserId(user.getId());
+        Verification verification = _verificationRepository.findByUserId(user.getId()).orElse(null);
         if (verification != null) {
             _verificationRepository.delete(verification);
         }
@@ -88,6 +93,11 @@ public class VerifyDetailsService {
         //Delete reset token and set new password
         _verificationRepository.delete(verification);
         _userAuthenticationRepository.save(user);
+    }
+
+    public void deleteVerification(Long userId) {
+        Verification verification = _verificationRepository.findByUserId(userId).orElse(null);
+        _verificationRepository.delete(verification);
     }
 
     @Scheduled(fixedRate = 10000)

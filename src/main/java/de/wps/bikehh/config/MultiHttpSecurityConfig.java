@@ -60,7 +60,7 @@ public class MultiHttpSecurityConfig {
 
         @Override
         public void configure(WebSecurity webSecurity) throws Exception {
-            webSecurity.ignoring().antMatchers(HttpMethod.POST, "/api/user", "/api/auth").and().ignoring().antMatchers("/h2/**", "/api/password", "/api/verify");
+            webSecurity.ignoring().antMatchers(HttpMethod.POST, "/api/user", "/api/auth").and().ignoring().antMatchers("/h2/**", "/api/password", "/api/verify", "/generated/css/*", "/generated/js/*", "/generated/webfonts/*", "/login");
         }
 
         @Override

@@ -1,7 +1,11 @@
 package de.wps.bikehh.benutzerverwaltung.dto.request;
 
+import javax.validation.constraints.NotNull;
+
 public class PasswordRequestModel {
+    @NotNull
     private String oldPassword;
+    @NotNull
     private String newPassword;
 
     public String getOldPassword() {
