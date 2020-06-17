@@ -39,6 +39,8 @@ public class Question {
 	 */
 	private HashMap<String, String> condition = new HashMap<String, String>();
 
+	private boolean allowCustomAnswer;
+
 	public int getId() {
 		return id;
 	}
@@ -69,6 +71,14 @@ public class Question {
 
 	public void setCondition(HashMap<String, String> condition) {
 		this.condition = condition;
+	}
+
+	public boolean isAllowCustomAnswer() {
+		return allowCustomAnswer;
+	}
+
+	public void setAllowCustomAnswer(boolean allowCustomAnswer) {
+		this.allowCustomAnswer = allowCustomAnswer;
 	}
 
 }

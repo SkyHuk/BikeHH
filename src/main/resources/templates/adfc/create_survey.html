@@ -352,13 +352,14 @@
               { text: 'Ja', },
               { text: 'Nein', },
             ],
-            conditions: []
+            conditions: [],
+            allowCustomAnswer: this.allowCustomAnswer ? true : false
           })
         },
         // deletes a question
         deleteQuestion(question) {
           var index = this.questions.indexOf(question)
-          console.log(index)
+          //console.log(index)
           this.questions.splice(index, 1)
         },
         // add answer

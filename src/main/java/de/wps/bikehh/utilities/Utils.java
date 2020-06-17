@@ -39,6 +39,11 @@ public class Utils {
 		int filenameCounter = (int) (Math.random() * 999999 + 1);
 		String filename = "Umfrage" + String.valueOf(filenameCounter) + ".json";
 
+		// get SurveyTest from jsonString to validate jsonString
+		Gson g = new Gson();
+		SurveyTest surveyTest = g.fromJson(JSONString, SurveyTest.class);
+		System.out.println("SurveyTest: " + surveyTest + "is saved");
+
 		try {
 			// create file
 			File fileToSaveIn = new File(startDir + "/" + filename);
@@ -50,7 +55,10 @@ public class Utils {
 
 			// write to file
 			file = new FileWriter(startDir + "/" + filename);
-			file.write(JSONString);
+			// covnert SurveyTest to jsonString
+			String jsonString = g.toJson(surveyTest);
+			// old: file.write(JSONString);
+			file.write(jsonString);
 			System.out.println("Successfully Copied JSON Object " + filename + " to " + startDir);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -64,6 +72,12 @@ public class Utils {
 		}
 	}
 
+	/**
+	 * Returns jsonStrings in file directory as List<SurveyTest>
+	 * 
+	 * @param startDir
+	 * @return List<SurveyTest>
+	 */
 	private static List<SurveyTest> getJsonFilesAsSurveyList(String startDir) {
 		// JSONObjects in JSONArray to give to thymeleaf
 		List<SurveyTest> listSurveys = new ArrayList<>();

@@ -121,7 +121,7 @@
 					}
 					answersHTML += questions[i].answers[k].text;
 				}
-				questionsHTML += "<li>" + questions[i].title + " [" + answersHTML + "]</li>";
+				questionsHTML += "<li>" + questions[i].title + " [" + answersHTML + "]" + " (Freitext-Antwort: " + questions[i].allowCustomAnswer + ")" + "</li>";
 				answersHTML = "";
 			}
 
