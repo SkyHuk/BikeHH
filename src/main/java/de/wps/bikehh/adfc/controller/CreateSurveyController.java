@@ -40,7 +40,7 @@ public class CreateSurveyController {
 	}
 
 	/**
-	 *
+	 * Saves the json strings in a file directory
 	 *
 	 * @param body post body
 	 * @return html page
