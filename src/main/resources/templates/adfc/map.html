@@ -152,12 +152,12 @@
 
 	<!-- add all surveys from db to map with marker -->
 	<th:block th:each="survey : ${surveys}">
-		<!-- call js function -->
-		<script th:inline="javascript">
-			/*<![CDATA[*/
-			addSurveysToMap([[${ survey.id }]], [[${ survey.lat }]], [[${ survey.lng }]], [[${ survey.category }]],
-				[[${ survey.createdAtDate }]], [[${ survey.confirmedByUsers }]], [[${ survey.confirmedThreshhold }]],
-				[[${ survey.title }]], [[${ survey.questions }]], [[${ survey.dateFrom }]], [[${ survey.dateTo }]], [[${ survey.address }]]);
+	<!-- call js function -->
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+		addSurveysToMap([[${ survey.id }]], [[${ survey.lat }]], [[${ survey.lng }]], [[${ survey.category }]],
+			[[${ survey.createdAtDate }]], [[${ survey.confirmedByUsers }]], [[${ survey.confirmedThreshhold }]],
+			[[${ survey.title }]], [[${ survey.questions }]], [[${ survey.dateFrom }]], [[${ survey.dateTo }]], [[${ survey.address }]]);
 		/*]]>*/
 		</script>
 	</th:block>
