@@ -261,12 +261,12 @@
   };
 </script>
 <th:block th:each="question,status : ${survey.questions}">
-  <!-- call js function -->
-  <script th:inline="javascript">
-    /*<![CDATA[*/
-    addQuestionMarkerToMap([[${ question }]], [[${status.index} + 1]]);
-    /*]]>*/
-  </script>
+<!-- call js function -->
+<script th:inline="javascript">
+  /*<![CDATA[*/
+  addQuestionMarkerToMap([[${ question }]], [[${status.index} + 1]]);
+  /*]]>*/
+</script>
 </th:block>
 </body>
 </html>
