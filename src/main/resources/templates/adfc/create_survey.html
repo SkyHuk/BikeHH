@@ -297,7 +297,7 @@
           { text: 'Verkehrsführung' },
           { text: 'Abstellanlage' },
         ],
-
+        // TODO: we need to have one of these variables for each question 
         showAddLocationButton: true,
 
       },
@@ -403,12 +403,12 @@
               draggable: true,
               autoPan: true,
               icon: greenIcon
-            }).addTo(this.mymap).bindPopup('<b>Verschieb mich!</b>').openPopup();
+            }).addTo(this.mymap).bindPopup('<b>Verschieb mich für Frage ' + index + '!</b>').openPopup();
             //}).addTo(this.mymap).bindPopup('<b>Ort für Frage ' + index + ' </b>');
-            this.questionMarkers.addLayer(marker);
             marker.on('dragend', function (event) {
               marker.bindPopup('<b>Ort für Frage ' + index + ' </b>');
             });
+            this.questionMarkers.addLayer(marker);
           } else {
             existingMarker.openPopup();
           }
@@ -435,7 +435,7 @@
           var chosenMarker = null;
           this.questionMarkers.eachLayer((layer) => {
             const popupText = layer.getPopup().getContent();
-            const indexOfMarkerInLayerGroup = parseInt(popupText.split(' ')[3]) - 1;
+            const indexOfMarkerInLayerGroup = parseInt(popupText.split(' ')[4]) - 1;
             if (indexOfMarkerInLayerGroup == index) {
               chosenMarker = layer;
             }
