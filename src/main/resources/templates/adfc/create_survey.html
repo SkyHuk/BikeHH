@@ -171,14 +171,14 @@
                     hinzufügen</button>
                   <!-- add location -->
                   <button type="button" class="btn btn-primary mb-3" @click="addLocation(question)"
-                    v-if="showAddLocationButton">Ort
+                    v-if="!question.marker">Ort
                     hinzufügen</button>
+                    <!-- delete location -->
+                  <button type="button" class="btn btn-danger mb-3" @click="deleteLocation(question)"
+                    v-if="question.marker">Ort löschen</button>
                   <!-- delete question -->
                   <button type="button" class="btn btn-danger mb-3" @click="deleteQuestion(question)">Frage
                     löschen</button>
-                  <!-- delete location -->
-                  <button type="button" class="btn btn-danger mb-3" @click="deleteLocation(question)"
-                    v-if="!showAddLocationButton">Ort löschen</button>
                 </div>
 
               </div>
@@ -264,7 +264,7 @@
         lat: [[${ lat }]],
         lng: [[${ lng }]],
         markers: null,
-        questionMarkers: null,
+        //questionMarkers: null,
         mymap: null,
 
         showSuccessAlert: false,
@@ -297,9 +297,6 @@
           { text: 'Verkehrsführung' },
           { text: 'Abstellanlage' },
         ],
-        // TODO: we need to have one of these variables for each question 
-        showAddLocationButton: true,
-
       },
       mounted() {
         this.resetData()
@@ -309,8 +306,6 @@
         // init layerGroup holding all the markers
         // this is used to delete previous markers when clicking on map
         this.markers = L.layerGroup()
-
-        this.questionMarkers = L.layerGroup();
 
         // set map depending on whether real coordinates where given
         // default is somewhat the center of hamburg
@@ -365,6 +360,7 @@
               { text: 'Nein', },
             ],
             conditions: [],
+            marker: null,
             allowCustomAnswer: this.allowCustomAnswer ? true : false
           })
         },
@@ -386,7 +382,7 @@
         // only if question does not have location already
         addLocation(question) {
 
-          var existingMarker = this.getMarkerForQuestion(question);
+          var existingMarker = question.marker;
           if (!existingMarker) {
             var greenIcon = new L.Icon({
               iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
@@ -403,44 +399,24 @@
               draggable: true,
               autoPan: true,
               icon: greenIcon
-            }).addTo(this.mymap).bindPopup('<b>Verschieb mich für Frage ' + index + '!</b>').openPopup();
+            }).addTo(this.mymap).bindPopup('<b>Verschieb mich!</b>').openPopup();
             //}).addTo(this.mymap).bindPopup('<b>Ort für Frage ' + index + ' </b>');
             marker.on('dragend', function (event) {
               marker.bindPopup('<b>Ort für Frage ' + index + ' </b>');
             });
-            this.questionMarkers.addLayer(marker);
+            question.marker = marker;
           } else {
             existingMarker.openPopup();
           }
 
-          //show 'Ort löschen' button and hide add button
-          this.showAddLocationButton = false;
         },
         // delete marker for question
         deleteLocation(question) {
-          var marker = this.getMarkerForQuestion(question);
+          var marker = question.marker;
           if (marker) {
             marker.remove();
-            this.questionMarkers.removeLayer(marker);
+            question.marker = null;
           }
-
-          //hide 'Ort löschen' button and show add button
-          this.showAddLocationButton = true;
-
-        },
-        getMarkerForQuestion(question) {
-          const index = this.questions.indexOf(question)
-          // hyper complexe algorithm to pull out the correct marker to the question
-          // from all the markers in the array
-          var chosenMarker = null;
-          this.questionMarkers.eachLayer((layer) => {
-            const popupText = layer.getPopup().getContent();
-            const indexOfMarkerInLayerGroup = parseInt(popupText.split(' ')[4]) - 1;
-            if (indexOfMarkerInLayerGroup == index) {
-              chosenMarker = layer;
-            }
-          });
-          return chosenMarker;
         },
         // add condition
         addCondition(question) {
@@ -486,9 +462,10 @@
             layer.remove()
             this.markers.removeLayer(layer);
           });
-          this.questionMarkers.eachLayer((layer) => {
-            layer.remove()
-            this.markers.removeLayer(layer);
+          this.questions.forEach((question) => {
+            if (question.marker) {
+              question.marker.remove()
+            }
           });
 
           if (this.lat && this.lng) {
@@ -565,19 +542,19 @@
           data.title = this.title;
           data.dateFrom = this.dateFrom;
           data.dateTo = this.dateTo;
-          data.confirmedThreshhold = this.confirmedThreshhold
+          data.confirmedThreshhold = this.confirmedThreshhold;
 
           // map questions and expected answer to their indices to avoid circular json
           data.questions = this.questions.map((question) => {
             var lat = null;
             var lng = null;
             var coordinates = undefined;
-            if (coordinates = this.getMarkerForQuestion(question)) {
+            if (coordinates = question.marker) {
               lat = coordinates.getLatLng().lat;
               lng = coordinates.getLatLng().lng;
             }
 
-            return {
+            var rtn = {
               ...question,
               lat: lat,
               lng: lng,
@@ -588,6 +565,9 @@
                 }
               })
             }
+
+            delete rtn.marker;
+            return rtn;
           });
           data.category = this.customCategory ? this.customCategoryText : this.category1.text;
           data.confirmedByUsers = [];
