@@ -8,6 +8,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 /**
  * Entity Kategorien von Meldungen / Umfragen
@@ -24,8 +26,12 @@ public class Category {
 
 	private String name;
 
-	@OneToMany(mappedBy = "type", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+	@OneToMany(mappedBy = "category", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
 	private List<Survey> listOfSurveys;
+
+	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Category.class)
+	@JoinColumn(name = "parentCategory", referencedColumnName = "Id", nullable = false)
+	private Category parentCategory;
 
 	public int getId() {
 		return id;

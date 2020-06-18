@@ -38,7 +38,7 @@ public class Survey {
 
 	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Category.class)
 	@JoinColumn(name = "category", referencedColumnName = "Id", nullable = false)
-	private Category type;
+	private Category category;
 
 	private Date createdAtDate;
 
@@ -73,12 +73,12 @@ public class Survey {
 		this.latitude = latitude;
 	}
 
-	public Category getType() {
-		return type;
+	public Category getCategory() {
+		return category;
 	}
 
-	public void setType(Category type) {
-		this.type = type;
+	public void setCategory(Category category) {
+		this.category = category;
 	}
 
 	public Date getCreatedAtDate() {

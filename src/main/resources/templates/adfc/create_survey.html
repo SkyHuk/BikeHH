@@ -28,7 +28,7 @@
     <div v-if="showSuccessAlert" class="alert alert-success" role="alert">
       <div class="d-flex align-items-center">
         <div>Umfrage erfolgreich erstellt!</div>
-        <a class="btn btn-link ml-2">Anzeigen</a>
+        <a class="btn btn-link ml-2" :href="'/umfragen/' + id">Anzeigen</a>
         <button class="btn ml-auto" @click="showSuccessAlert=false"><i class="fas fa-times"></i></button>
       </div>
     </div>
@@ -63,19 +63,20 @@
               <div class="form-group">
                 <!-- category -->
                 <label>Kategorie</label>
-                <!--<input class="form-control" v-model="category" placeholder="Kategorie"></input>-->
+
+                <!-- TODO: write component that can be used recursively -->
                 <div v-if="!customCategory">
                   <select class="custom-select mb-2" v-model="category1">
                     <option selected>Kategorie 1</option>
                     <option v-for="option in categoryOptions" :value="option">{{ option.text }}</option>
                   </select>
 
-                  <select class="custom-select mb-2" v-if="category1" v-model="category2">
+                  <select class="custom-select mb-2" v-if="category1 && category1.suboptions" v-model="category2">
                     <option selected>Kategorie 2</option>
                     <option v-for="option in category1.suboptions" :value="option">{{ option.text }}</option>
                   </select>
 
-                  <select class="custom-select mb-2" v-if="category2" v-model="category3">
+                  <select class="custom-select mb-2" v-if="category2 && category2.suboptions" v-model="category3">
                     <option selected>Kategorie 3</option>
                     <option v-for="option in category2.suboptions" :value="option">{{ option.text }}</option>
                   </select>
@@ -409,8 +410,10 @@
             marker.on('dragend', function (event) {
               marker.bindPopup('<b>Ort für Frage ' + index + ' </b>');
             });
+
           } else {
             existingMarker.openPopup();
+
           }
 
           //show 'Ort löschen' button and hide add button
@@ -526,13 +529,13 @@
           this.lng = null;
           this.mymap = null;
         },
-        handleError(type) {
+        handleError(customText, type) {
           if (type == "server") {
             this.formError = 'Es ist ein Fehler beim kommunizieren mit dem Server aufgetreten,';
             this.showSuccessAlert = false;
           } else {
             // show negative modal and hide positive modal
-            this.formError = 'Alle Felder müssen ausgefüllt werden und ein Punkt auf der Karte angegeben werden. Das Startdatum darf nicht in der Vergangenheit liegen.'
+            this.formError = customText || 'Alle Felder müssen ausgefüllt werden und ein Punkt auf der Karte angegeben werden. Das Startdatum darf nicht in der Vergangenheit liegen.'
             this.showSuccessAlert = false
           }
         },
@@ -548,7 +551,7 @@
               self.handleSuccess();
 
             } else {
-              self.handleError("server");
+              self.handleError(null, "server");
             }
           }
         },
@@ -573,6 +576,7 @@
             var lng = null;
 
             var coordinates = this.getMarkerForQuestion(question);
+            console.log(coordinates)
             if(coordinates) {
               lat = coordinates.getLatLng().lat;
               lng = coordinates.getLatLng().lng;
@@ -590,7 +594,27 @@
               })
             }
           });
-          data.category = this.customCategory ? this.customCategoryText : this.category1.text;
+
+          if (this.customCategory) {
+            // creates new category serverside
+            data.category = { name: this.customCategoryText }
+
+          } else {
+            if (!this.category1) {
+              this.handleError('Kategorie nicht ausgewählt')
+              return
+            }
+
+            // TODO: find category recursively
+            data.category = { name: this.category3 ? this.category3.text : this.category2 ? this.category2.text : this.category1.text }
+
+          }
+
+          // TEMPORARY only string
+          data.category = data.category.name
+
+          console.log('category', data.category)
+
           data.confirmedByUsers = [];
           data.createdManually = this.createdManually;
           data.creator = '[[${ user.emailAddress }]]';
@@ -610,49 +634,73 @@
 
           //validate data
           //TODO category1 test
-          if (data.title.trim().length !== 0 &&
-            data.dateFrom !== null &&
-            data.dateTo !== null &&
-            (this.dateFrom >= new Date().toJSON().slice(0, 10)) &&
-            (this.dateTo >= this.dateFrom) &&
-            data.confirmedThreshhold !== 0 &&
-            data.questions !== null && data.questions.length !== 0 &&
-            this.questionsHaveTitle(data.questions) && this.questionsHaveAnswer(data.questions) &&
-            this.category !== null && data.category.trim().length !== 0 &&
-            data.createdAtDate !== null &&
-            data.lat !== undefined && data.lat !== 0 &&
-            data.lng !== undefined && data.lng !== 0) {
-
-            // get address from coordinates
-            const getRequest = new XMLHttpRequest();
-            getRequest.open("GET", 'https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=' + data.lat + '&lon=' + data.lng);
-            getRequest.responseType = "json";
-            var self = this;
-            // make post with complete json to controller once address is fetched
-            getRequest.onload = function (e) {
-              console.log(getRequest);
-              if (getRequest.status == 200) {
-                var address = new Object();
-                data.address = new Object();
-                // city is something different depending on the location [CITY, VILLAGE, TOWN]
-                if (getRequest.response.address.city != undefined) {
-                  address.city = getRequest.response.address.city;
-                } else if (getRequest.response.address.village != undefined) {
-                  address.city = getRequest.response.address.village;
-                } else if (getRequest.response.address.town != undefined) {
-                  address.city = getRequest.response.address.town;
-                }
-                address.postcode = getRequest.response.address.postcode;
-                address.street = getRequest.response.address.road;
-                address.houseNumber = getRequest.response.address.house_number; // not guaranteed to be present!
-                data.address = address;
-                self.postJson(data);
-              }
-            }
-            getRequest.send();
-          } else {
-            this.handleError();
+          if (data.title.trim().length === 0) {
+            this.handleError('Titel muss ausgefüllt sein')
+            return
           }
+
+          console.log(this.dateFrom, new Date().toJSON().slice(0, 10))
+
+          if (data.dateFrom === null ||
+              data.dateTo === null) {
+            this.handleError('Das Zeitfenster muss asugefüllt sein')
+            return
+          }
+
+          if (this.dateFrom < new Date().toJSON().slice(0, 10)) {
+            this.handleError('Das Sartdatum darf nicht in der Vergangenheit liegen')
+            return
+          }
+
+          if (this.dateFrom > this.dateTo) {
+            this.handleError('Das Enddatum darf nicht vor dem Startdatum liegen')
+            return
+          }
+
+          if (!data.confirmedThreshhold ||
+            !data.questions ||
+            !this.questionsHaveTitle(data.questions) ||
+            !this.questionsHaveAnswer(data.questions) ||
+            data.createdAtDate === null) {
+            this.handleError()
+            return
+          }
+
+          if (!data.lat || !data.lng) {
+            this.handleError('Ein Ort muss ausgewählt sein')
+            return
+          }
+
+          // no error: contiue sending request
+          console.log('data', data)
+          // get address from coordinates
+          const getRequest = new XMLHttpRequest();
+          getRequest.open("GET", 'https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=' + data.lat + '&lon=' + data.lng);
+          getRequest.responseType = "json";
+          var self = this;
+          // make post with complete json to controller once address is fetched
+          getRequest.onload = function (e) {
+            console.log(getRequest);
+            if (getRequest.status == 200) {
+              var address = new Object();
+              data.address = new Object();
+              // city is something different depending on the location [CITY, VILLAGE, TOWN]
+              if (getRequest.response.address.city != undefined) {
+                address.city = getRequest.response.address.city;
+              } else if (getRequest.response.address.village != undefined) {
+                address.city = getRequest.response.address.village;
+              } else if (getRequest.response.address.town != undefined) {
+                address.city = getRequest.response.address.town;
+              }
+              address.postcode = getRequest.response.address.postcode;
+              address.street = getRequest.response.address.road;
+              address.houseNumber = getRequest.response.address.house_number; // not guaranteed to be present!
+              data.address = address;
+              self.postJson(data);
+            }
+          }
+
+          getRequest.send();
         },
       },
     })
