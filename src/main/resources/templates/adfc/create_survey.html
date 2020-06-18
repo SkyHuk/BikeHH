@@ -394,8 +394,6 @@
             popupAnchor: [1, -34],
             shadowSize: [41, 41]
           });
-
-           
            const index = this.questions.indexOf(question) + 1;
            const bounds = this.mymap.getBounds();
            const coordinates = bounds.getCenter();
@@ -403,8 +401,12 @@
              draggable:true,
              autoPan:true,
              icon:greenIcon
-           }).addTo(this.mymap).bindPopup('<b>Ort für Frage ' + index + ' </b>');
+           }).addTo(this.mymap).bindPopup('<b>Verschieb mich!</b>').openPopup();
+           //}).addTo(this.mymap).bindPopup('<b>Ort für Frage ' + index + ' </b>');
            this.questionMarkers.addLayer(marker);
+           marker.on('dragend', function(event) {
+            marker.bindPopup('<b>Ort für Frage ' + index + ' </b>');
+          });
          } else {
           existingMarker.openPopup();
         }
@@ -503,8 +505,46 @@
           // initially add first question
           this.addQuestion()
         },
-        postSurvey(e) {
-          e.preventDefault()
+        handleSuccess() {
+          this.showSuccessAlert = true
+          //delete all error modals
+          this.formError = null;
+          //reset all fields
+          this.resetData();
+          //reset map
+          this.resetMap();
+          this.lat = null;
+          this.lng = null;
+          this.mymap = null;
+        },
+        handleError(type) {
+          if (type == "server") {
+            this.formError = 'Es ist ein Fehler beim kommunizieren mit dem Server aufgetreten,';
+            this.showSuccessAlert = false;
+          } else {
+            // show negative modal and hide positive modal
+            this.formError = 'Alle Felder müssen ausgefüllt werden und ein Punkt auf der Karte angegeben werden. Das Startdatum darf nicht in der Vergangenheit liegen.'
+            this.showSuccessAlert = false
+          }
+        },
+        postJson(data) {
+          var self = this;
+          const jsonString = JSON.stringify(data);
+          const request = new XMLHttpRequest();
+          request.open("POST", "/umfrage-erstellen");
+          request.setRequestHeader("Content-Type", "application/json");
+          request.send(jsonString);
+          request.onload = function(e) {
+           if (request.status == 200) {
+            self.handleSuccess();
+
+          } else {
+            self.handleError("server");
+          }
+        }
+      },
+      postSurvey(e) {
+        e.preventDefault()
           // make post to controller with json data of survey
 
           // data object holding information
@@ -522,11 +562,11 @@
           data.questions = this.questions.map((question) => {
             var lat = null;
             var lng = null;
-            if(this.getMarkerForQuestion(question)) {
-              lat = this.getMarkerForQuestion(question).getLatLng().lat;
-              lng =this.getMarkerForQuestion(question).getLatLng().lng;
+            var coordinates = undefined;
+            if(coordinates = this.getMarkerForQuestion(question)) {
+              lat = coordinates.getLatLng().lat;
+              lng = coordinates.getLatLng().lng;
             }
-
 
             return {
               ...question,
@@ -570,20 +610,20 @@
             this.questionsHaveTitle(data.questions) && this.questionsHaveAnswer(data.questions) &&
             this.category !== null && data.category.trim().length !== 0 &&
             data.createdAtDate !== null &&
-            data.lat !== null && data.lat !== 0 &&
-            data.lng !== null && data.lng !== 0) {
+            data.lat !== undefined && data.lat !== 0 &&
+            data.lng !== undefined && data.lng !== 0) {
 
             // get address from coordinates
           const getRequest = new XMLHttpRequest();
           getRequest.open("GET", 'https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=' + data.lat + '&lon=' + data.lng);
           getRequest.responseType = "json";
-
-            // make post with complete json to controller once address is fetched
-            getRequest.onload = function (e) {
-            	console.log(getRequest);
-            	if (getRequest.status == 200) {
-                var address = new Object();
-                data.address = new Object();
+          var self = this;
+          // make post with complete json to controller once address is fetched
+          getRequest.onload = function (e) {
+            console.log(getRequest);
+            if (getRequest.status == 200) {
+              var address = new Object();
+              data.address = new Object();
               // city is something different depending on the location [CITY, VILLAGE, TOWN]
               if (getRequest.response.address.city != undefined) {
                 address.city = getRequest.response.address.city;
@@ -596,41 +636,18 @@
               address.street = getRequest.response.address.road;
               address.houseNumber = getRequest.response.address.house_number; // not guaranteed to be present!
               data.address = address;
-
-              const jsonString = JSON.stringify(data);
-              const request = new XMLHttpRequest();
-              request.open("POST", "/umfrage-erstellen");
-              request.setRequestHeader("Content-Type", "application/json");
-              request.send(jsonString);
+              self.postJson(data);
             }
           }
           getRequest.send();
-            //console.log(getRequest)
-
-            this.showSuccessAlert = true
-
-            //delete all error modals
-            this.formError = null;
-
-            //reset all fields
-            this.resetData()
-
-            //reset map
-            this.resetMap()
-            this.lat = null;
-            this.lng = null;
-            this.mymap = null;
-
-          } else {
-            // show negative modal and hide positive modal
-            this.formError = 'Alle Felder müssen ausgefüllt werden und ein Punkt auf der Karte angegeben werden. Das Startdatum darf nicht in der Vergangenheit liegen.'
-            this.showSuccessAlert = false
-          }
-        },
+        } else {
+          this.handleError();
+        }
       },
-    })
+    },
+  })
 
-  </script>
+</script>
 
 </body>
 
