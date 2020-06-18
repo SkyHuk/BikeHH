@@ -382,7 +382,7 @@
         removeAnswer(question, answer) {
           question.answers.splice(question.answers.indexOf(answer), 1)
         },
-        // add location (green marker) to question on map, 
+        // add location (green marker) to question on map,
         // only if question does not have location already
         addLocation(question) {
 
@@ -571,8 +571,9 @@
           data.questions = this.questions.map((question) => {
             var lat = null;
             var lng = null;
-            var coordinates = undefined;
-            if (coordinates = this.getMarkerForQuestion(question)) {
+
+            var coordinates = this.getMarkerForQuestion(question);
+            if(coordinates) {
               lat = coordinates.getLatLng().lat;
               lng = coordinates.getLatLng().lng;
             }
