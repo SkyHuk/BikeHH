@@ -48,10 +48,18 @@ public class CreateSurveyController {
 	@RequestMapping(method = RequestMethod.POST)
 	public String processSurvey(@RequestBody String body) {
 
-		// create umfrage.json file
-		Utils.saveJSONSurveyInFiles(body);
+		// old method
+		Utils.saveJSONSurveyInFilesOld(body);
 
-		// Survey survey = j.beanFrom(body);
+		// new method
+		// create umfrage.json file and validate jsonString
+		// try {
+		// Utils.saveJSONSurveyInFiles(body);
+		// } catch (IllegalArgumentException | ParseException e) {
+		// // TODO test
+		// throw new ResponseStatusException(HttpStatus.NOT_FOUND, "JSONString is not
+		// valid", e);
+		// }
 
 		return "adfc/survey_list";
 	}
