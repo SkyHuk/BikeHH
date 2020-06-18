@@ -10,6 +10,8 @@
     integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
     crossorigin="" type="text/javascript"></script>
 
+  <script src="http://bbecquet.github.io/Leaflet.PolylineDecorator/dist/leaflet.polylineDecorator.js" type="text/javascript"></script>
+
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -348,6 +350,27 @@
             self.markers.removeLayer(layer);
           });
           self.markers.addLayer(marker);
+
+          const lineLength = 0.01
+          const halfLineLength = lineLength / 2
+
+          const polyline = L.polyline([
+            [lat - halfLineLength, lng - halfLineLength],
+            [lat + halfLineLength, lng + halfLineLength],
+          ], {
+            color: '#f00',
+            weight: 2,
+          }).addTo(self.mymap)
+
+          self.markers.addLayer(polyline)
+
+          const decorator = L.polylineDecorator(polyline, {
+            patterns: [
+              { offset: '100%', repeat: 0, symbol: L.Symbol.arrowHead({ pixelSize: 20, polygon: false, pathOptions: { stroke: true, color: 'f00' } }) },
+            ]
+          }).addTo(self.mymap)
+
+          self.markers.addLayer(decorator)
         })
       },
       created() {
