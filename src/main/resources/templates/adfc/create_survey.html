@@ -4,11 +4,11 @@
   <title>ADFC - Umfrage erstellen</title>
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
-  integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
-  crossorigin="" />
+    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+    crossorigin="" />
   <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
-  integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
-  crossorigin="" type="text/javascript"></script>
+    integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+    crossorigin="" type="text/javascript"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 
@@ -57,7 +57,7 @@
               <div class="form-group">
                 <label>Anzahl an Bestätigungen benötigt:</label>
                 <input type="number" class="form-control" :placeholder="confirmedThreshhold"
-                v-model="confirmedThreshhold">
+                  v-model="confirmedThreshhold">
               </div>
 
               <div class="form-group">
@@ -111,7 +111,7 @@
                 <div class="form-group">
                   <div class="form-check">
                     <input class="form-check-input" type="checkbox" v-model="question.allowCustomAnswer"
-                    id="allowCustomAnswerCheckbox">
+                      id="allowCustomAnswerCheckbox">
                     <label class="form-check-label" for="allowCustomAnswerCheckbox">
                       Erlaube Freitext-Antwort
                     </label>
@@ -129,25 +129,25 @@
                   <div class="button-group">
                     <!-- add answer -->
                     <button type="button" class="btn btn-primary mb-3" @click="addAnswer(question)"><i
-                      class="fas fa-plus"></i></button>
-                      <!-- delete answer -->
+                        class="fas fa-plus"></i></button>
+                    <!-- delete answer -->
                     <!--<button type="button" class="btn btn-danger mb-3" @click="removeAnswer(question)"><i
                       class="fas fa-minus"></i></button>-->
-                    </div>
-
                   </div>
 
-                  <div class="list-group mb-3">
-                    <div class="list-group-item" v-for="(condition, index) in question.conditions">
-                      <div class="d-flex justify-space-between">
-                        <div class="form-group mb-0">
-                          <label :for="'condition-question' + index">Bedingung: Frage nur zeigen wenn:</label>
-                          <select :id="'condition-question' + index" v-model="condition.question">
-                            <option default disabled>-</option>
-                            <option v-for="question in questions" :value="question">{{ question.title }}</option>
-                          </select>
-                          <label for="'condition-answer' + index">mit:</label>
-                          <select id="'condition-answer' + index" v-if="condition.question"
+                </div>
+
+                <div class="list-group mb-3">
+                  <div class="list-group-item" v-for="(condition, index) in question.conditions">
+                    <div class="d-flex justify-space-between">
+                      <div class="form-group mb-0">
+                        <label :for="'condition-question' + index">Bedingung: Frage nur zeigen wenn:</label>
+                        <select :id="'condition-question' + index" v-model="condition.question">
+                          <option default disabled>-</option>
+                          <option v-for="question in questions" :value="question">{{ question.title }}</option>
+                        </select>
+                        <label for="'condition-answer' + index">mit:</label>
+                        <select id="'condition-answer' + index" v-if="condition.question"
                           v-model="condition.expectedAnswer">
                           <option v-for="answer in condition.question.answers" :value="answer">{{ answer.text }}
                           </option>
@@ -157,150 +157,152 @@
                       <div>
                         <!-- delete condition -->
                         <button type="button" class="btn text-danger ml-3"
-                        @click="deleteCondition(question, condition)">
-                        <span><i class="far fa-trash-alt"></i></span>
-                      </button>
+                          @click="deleteCondition(question, condition)">
+                          <span><i class="far fa-trash-alt"></i></span>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
+
+                <div class="button-group">
+                  <!-- add condition -->
+                  <button type="button" class="btn btn-primary mb-3" @click="addCondition(question)">Bedingung
+                    hinzufügen</button>
+                  <!-- add location -->
+                  <button type="button" class="btn btn-primary mb-3" @click="addLocation(question)"
+                    v-if="showAddLocationButton">Ort
+                    hinzufügen</button>
+                  <!-- delete question -->
+                  <button type="button" class="btn btn-danger mb-3" @click="deleteQuestion(question)">Frage
+                    löschen</button>
+                  <!-- delete location -->
+                  <button type="button" class="btn btn-danger mb-3" @click="deleteLocation(question)"
+                    v-if="!showAddLocationButton">Ort löschen</button>
+                </div>
+
               </div>
 
-              <div class="button-group">
-                <!-- add condition -->
-                <button type="button" class="btn btn-primary mb-3" @click="addCondition(question)">Bedingung
-                hinzufügen</button>
-                <!-- add location -->
-                <button type="button" class="btn btn-primary mb-3" @click="addLocation(question)">Ort hinzufügen</button>
-                <!-- delete question -->
-                <button type="button" class="btn btn-danger mb-3" @click="deleteQuestion(question)">Frage
-                löschen</button>
-                <!-- delete location -->
-                <button type="button" class="btn btn-danger mb-3" @click="deleteLocation(question)">Ort
-                löschen</button>
+              <hr>
 
-
+              <div class="form-group">
+                <!-- add question -->
+                <button type="button" class="btn btn-primary mb-3" @click="addQuestion">Frage hinzufügen</button>
               </div>
 
             </div>
-
-            <hr>
-
-            <div class="form-group">
-              <!-- add question -->
-              <button type="button" class="btn btn-primary mb-3" @click="addQuestion">Frage hinzufügen</button>
-            </div>
-
           </div>
+
+          <!-- create survey -->
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary">Umfrage erstellen</button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- positive modal when data is good -->
+  <div class="modal" tabindex="-1" id="positiveModal" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Senden der Umfrage erfolgreich</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
-
-        <!-- create survey -->
-        <div class="form-group">
-          <button type="submit" class="btn btn-primary">Umfrage erstellen</button>
+        <div class="modal-body">
+          <p>Die Umfrage konnte erfolgreich gesendet werden.</p>
         </div>
-
-      </form>
-    </div>
-  </div>
-</div>
-
-<!-- positive modal when data is good -->
-<div class="modal" tabindex="-1" id="positiveModal" role="dialog">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Senden der Umfrage erfolgreich</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p>Die Umfrage konnte erfolgreich gesendet werden.</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary">OK</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Schließen</button>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary">OK</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Schließen</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- negative modal when something is missing in data -->
-<div class="modal" tabindex="-1" id="negativeModal" role="dialog">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Senden der Umfrage fehlgeschlagen</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p>Zum Senden der Umfrage müssen alle Felder ausgefüllt werden und ein Punkte auf der Karte angegeben
-        werden.</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary">OK</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Schließen</button>
+  <!-- negative modal when something is missing in data -->
+  <div class="modal" tabindex="-1" id="negativeModal" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Senden der Umfrage fehlgeschlagen</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Zum Senden der Umfrage müssen alle Felder ausgefüllt werden und ein Punkte auf der Karte angegeben
+            werden.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary">OK</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Schließen</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<script type="text/javascript">
+  <script type="text/javascript">
 
-  const createSurveyApp = new Vue({
-    el: '#createSurveyApp',
-    data: {
+    const createSurveyApp = new Vue({
+      el: '#createSurveyApp',
+      data: {
 
-      id: Math.floor(Math.random() * (100000 - 0 + 1)) + 0,
-      title: '',
-      category: '',
-      dateFrom: null,
-      dateTo: null,
-      confirmedThreshhold: 10,
-      questions: [],
-      createdManually: true,
+        id: Math.floor(Math.random() * (100000 - 0 + 1)) + 0,
+        title: '',
+        category: '',
+        dateFrom: null,
+        dateTo: null,
+        confirmedThreshhold: 10,
+        questions: [],
+        createdManually: true,
 
-      lat: [[${ lat }]],
-      lng: [[${ lng }]],
-      markers: null,
-      questionMarkers: null,
-      mymap: null,
+        lat: [[${ lat }]],
+        lng: [[${ lng }]],
+        markers: null,
+        questionMarkers: null,
+        mymap: null,
 
-      showSuccessAlert: false,
-      formError: null,
+        showSuccessAlert: false,
+        formError: null,
 
-      category1: null,
-      category2: null,
-      category3: null,
-      customCategory: false,
-      customCategoryText: '',
+        category1: null,
+        category2: null,
+        category3: null,
+        customCategory: false,
+        customCategoryText: '',
 
-      categoryOptions: [
-      {
-        text: 'Hindernis',
-        suboptions: [
-        { text: '' },
+        categoryOptions: [
+          {
+            text: 'Hindernis',
+            suboptions: [
+              { text: '' },
+            ],
+          },
+          {
+            text: 'Fahrbahnoberfläche',
+            suboptions: [
+              {
+                text: 'Verschmutzung',
+                suboptions: [
+                  { text: 'Schnee / Glatteis' },
+                ],
+              },
+            ]
+          },
+          { text: 'Verkehrsführung' },
+          { text: 'Abstellanlage' },
         ],
-      },
-      {
-        text: 'Fahrbahnoberfläche',
-        suboptions: [
-        {
-          text: 'Verschmutzung',
-          suboptions: [
-          { text: 'Schnee / Glatteis' },
-          ],
-        },
-        ]
-      },
-      { text: 'Verkehrsführung' },
-      { text: 'Abstellanlage' },
-      ],
 
-    },
-    mounted() {
-      this.resetData()
+        showAddLocationButton: true,
+
+      },
+      mounted() {
+        this.resetData()
 
         // init popup
         var popup = L.popup();
@@ -326,8 +328,8 @@
         L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
           maxZoom: 18,
           attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-          '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-          'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+            'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
           id: 'mapbox/streets-v11',
           tileSize: 512,
           zoomOffset: -1
@@ -341,10 +343,10 @@
 
           // add marker to map, delete old one
           var marker = L.marker([lat, lng], {
-           draggable:true,
-           autoPan:true
-         }).addTo(self.mymap)
-          .bindPopup("<b>Hier wird die erstellte Umfrage sein.</b><br/>");
+            draggable: true,
+            autoPan: true
+          }).addTo(self.mymap)
+            .bindPopup("<b>Hier wird die erstellte Umfrage sein.</b><br/>");
           self.markers.eachLayer((layer) => {
             layer.remove()
             self.markers.removeLayer(layer);
@@ -359,8 +361,8 @@
           this.questions.push({
             title: '',
             answers: [
-            { text: 'Ja', },
-            { text: 'Nein', },
+              { text: 'Ja', },
+              { text: 'Nein', },
             ],
             conditions: [],
             allowCustomAnswer: this.allowCustomAnswer ? true : false
@@ -385,32 +387,35 @@
         addLocation(question) {
 
           var existingMarker = this.getMarkerForQuestion(question);
-          if (!existingMarker) {
-           var greenIcon = new L.Icon({
-            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
-            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-            iconSize: [25, 41],
-            iconAnchor: [12, 41],
-            popupAnchor: [1, -34],
-            shadowSize: [41, 41]
-          });
-           const index = this.questions.indexOf(question) + 1;
-           const bounds = this.mymap.getBounds();
-           const coordinates = bounds.getCenter();
-           var marker = L.marker(coordinates, {
-             draggable:true,
-             autoPan:true,
-             icon:greenIcon
-           }).addTo(this.mymap).bindPopup('<b>Verschieb mich!</b>').openPopup();
-           //}).addTo(this.mymap).bindPopup('<b>Ort für Frage ' + index + ' </b>');
-           this.questionMarkers.addLayer(marker);
-           marker.on('dragend', function(event) {
-            marker.bindPopup('<b>Ort für Frage ' + index + ' </b>');
-          });
-         } else {
-          existingMarker.openPopup();
-        }
-      },
+          if (!existingMarker) {
+            var greenIcon = new L.Icon({
+              iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+              shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+              iconSize: [25, 41],
+              iconAnchor: [12, 41],
+              popupAnchor: [1, -34],
+              shadowSize: [41, 41]
+            });
+            const index = this.questions.indexOf(question) + 1;
+            const bounds = this.mymap.getBounds();
+            const coordinates = bounds.getCenter();
+            var marker = L.marker(coordinates, {
+              draggable: true,
+              autoPan: true,
+              icon: greenIcon
+            }).addTo(this.mymap).bindPopup('<b>Verschieb mich!</b>').openPopup();
+            //}).addTo(this.mymap).bindPopup('<b>Ort für Frage ' + index + ' </b>');
+            this.questionMarkers.addLayer(marker);
+            marker.on('dragend', function (event) {
+              marker.bindPopup('<b>Ort für Frage ' + index + ' </b>');
+            });
+          } else {
+            existingMarker.openPopup();
+          }
+
+          //show 'Ort löschen' button and hide add button
+          this.showAddLocationButton = false;
+        },
         // delete marker for question
         deleteLocation(question) {
           var marker = this.getMarkerForQuestion(question);
@@ -418,6 +423,10 @@
             marker.remove();
             this.questionMarkers.removeLayer(marker);
           }
+
+          //hide 'Ort löschen' button and show add button
+          this.showAddLocationButton = true;
+
         },
         getMarkerForQuestion(question) {
           const index = this.questions.indexOf(question)
@@ -425,12 +434,12 @@
           // from all the markers in the array
           var chosenMarker = null;
           this.questionMarkers.eachLayer((layer) => {
-           const popupText = layer.getPopup().getContent();
-           const indexOfMarkerInLayerGroup = parseInt(popupText.split(' ')[3]) - 1;
-           if  (indexOfMarkerInLayerGroup == index) {
-            chosenMarker = layer;
-          }
-        });
+            const popupText = layer.getPopup().getContent();
+            const indexOfMarkerInLayerGroup = parseInt(popupText.split(' ')[3]) - 1;
+            if (indexOfMarkerInLayerGroup == index) {
+              chosenMarker = layer;
+            }
+          });
           return chosenMarker;
         },
         // add condition
@@ -484,7 +493,7 @@
 
           if (this.lat && this.lng) {
             var marker = L.marker([this.lat, this.lng]).addTo(this.mymap)
-            .bindPopup("<b>Hier wird die erstellte Umfrage sein.</b><br/>");
+              .bindPopup("<b>Hier wird die erstellte Umfrage sein.</b><br/>");
             this.markers.addLayer(marker);
           }
         },
@@ -534,17 +543,17 @@
           request.open("POST", "/umfrage-erstellen");
           request.setRequestHeader("Content-Type", "application/json");
           request.send(jsonString);
-          request.onload = function(e) {
-           if (request.status == 200) {
-            self.handleSuccess();
+          request.onload = function (e) {
+            if (request.status == 200) {
+              self.handleSuccess();
 
-          } else {
-            self.handleError("server");
+            } else {
+              self.handleError("server");
+            }
           }
-        }
-      },
-      postSurvey(e) {
-        e.preventDefault()
+        },
+        postSurvey(e) {
+          e.preventDefault()
           // make post to controller with json data of survey
 
           // data object holding information
@@ -563,7 +572,7 @@
             var lat = null;
             var lng = null;
             var coordinates = undefined;
-            if(coordinates = this.getMarkerForQuestion(question)) {
+            if (coordinates = this.getMarkerForQuestion(question)) {
               lat = coordinates.getLatLng().lat;
               lng = coordinates.getLatLng().lng;
             }
@@ -614,40 +623,40 @@
             data.lng !== undefined && data.lng !== 0) {
 
             // get address from coordinates
-          const getRequest = new XMLHttpRequest();
-          getRequest.open("GET", 'https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=' + data.lat + '&lon=' + data.lng);
-          getRequest.responseType = "json";
-          var self = this;
-          // make post with complete json to controller once address is fetched
-          getRequest.onload = function (e) {
-            console.log(getRequest);
-            if (getRequest.status == 200) {
-              var address = new Object();
-              data.address = new Object();
-              // city is something different depending on the location [CITY, VILLAGE, TOWN]
-              if (getRequest.response.address.city != undefined) {
-                address.city = getRequest.response.address.city;
-              } else if (getRequest.response.address.village != undefined) {
-                address.city = getRequest.response.address.village;
-              } else if (getRequest.response.address.town != undefined) {
-                address.city = getRequest.response.address.town;
+            const getRequest = new XMLHttpRequest();
+            getRequest.open("GET", 'https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=' + data.lat + '&lon=' + data.lng);
+            getRequest.responseType = "json";
+            var self = this;
+            // make post with complete json to controller once address is fetched
+            getRequest.onload = function (e) {
+              console.log(getRequest);
+              if (getRequest.status == 200) {
+                var address = new Object();
+                data.address = new Object();
+                // city is something different depending on the location [CITY, VILLAGE, TOWN]
+                if (getRequest.response.address.city != undefined) {
+                  address.city = getRequest.response.address.city;
+                } else if (getRequest.response.address.village != undefined) {
+                  address.city = getRequest.response.address.village;
+                } else if (getRequest.response.address.town != undefined) {
+                  address.city = getRequest.response.address.town;
+                }
+                address.postcode = getRequest.response.address.postcode;
+                address.street = getRequest.response.address.road;
+                address.houseNumber = getRequest.response.address.house_number; // not guaranteed to be present!
+                data.address = address;
+                self.postJson(data);
               }
-              address.postcode = getRequest.response.address.postcode;
-              address.street = getRequest.response.address.road;
-              address.houseNumber = getRequest.response.address.house_number; // not guaranteed to be present!
-              data.address = address;
-              self.postJson(data);
             }
+            getRequest.send();
+          } else {
+            this.handleError();
           }
-          getRequest.send();
-        } else {
-          this.handleError();
-        }
+        },
       },
-    },
-  })
+    })
 
-</script>
+  </script>
 
 </body>
 
