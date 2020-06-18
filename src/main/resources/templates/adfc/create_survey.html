@@ -269,6 +269,7 @@
         markers: null,
         //questionMarkers: null,
         mymap: null,
+        mainMarker: null,
 
         showSuccessAlert: false,
         formError: null,
@@ -351,7 +352,9 @@
           });
           self.markers.addLayer(marker);
 
-          const lineLength = 0.01
+          self.mainMarker = marker
+
+          const lineLength = 0.002
           const halfLineLength = lineLength / 2
 
           const polyline = L.polyline([
@@ -459,29 +462,13 @@
         },
         // check if all questions have at least one answer
         questionsHaveAnswer(questions) {
-          var bQuestionsHaveAnswer = false;
-          for (var i = 0; i < questions.length; i++) {
-            if (this.questions[i].answers !== null && this.questions[i].answers.length > 0) {
-              bQuestionsHaveAnswer = true;
-            } else {
-              return false;
-            }
-          }
-          //console.log('bQuestionsHaveAnswer ' + bQuestionsHaveAnswer)
-          return bQuestionsHaveAnswer;
+          return questions.filter(q => q.answers.length > 0).length === questions.length
+
         },
         // check if all questions have a title
         questionsHaveTitle(questions) {
-          var bQuestionsHaveTitle = false;
-          for (var i = 0; i < questions.length; i++) {
-            if (this.questions[i].title !== null && this.questions[i].title.trim().length !== 0) {
-              bQuestionsHaveTitle = true;
-            } else {
-              return false;
-            }
-          }
-          //console.log('bQuestionsHaveTitle ' + bQuestionsHaveTitle)
-          return bQuestionsHaveTitle;
+          return questions.filter(q => !!q.title && q.title.trim().length > 0).length === questions.length
+
         },
         resetMap() {
           // add initial marker to map. this is duplicate code but vue does not let me use a function
@@ -499,6 +486,7 @@
             var marker = L.marker([this.lat, this.lng]).addTo(this.mymap)
               .bindPopup("<b>Hier wird die erstellte Umfrage sein.</b><br/>");
             this.markers.addLayer(marker);
+            this.mainMarker = marker
           }
         },
         resetData() {
@@ -573,24 +561,19 @@
 
           // map questions and expected answer to their indices to avoid circular json
           data.questions = this.questions.map((question) => {
-            var lat = null;
-            var lng = null;
-            var coordinates = this.getMarkerForQuestion(question);
-            if(coordinates) {
-              lat = coordinates.getLatLng().lat;
-              lng = coordinates.getLatLng().lng;
-            }
-
             var rtn = {
               ...question,
-              lat: lat,
-              lng: lng,
               conditions: question.conditions.map((condition) => {
                 return {
                   question: this.questions.indexOf(question),
                   expectedAnswer: question.answers.indexOf(condition.expectedAnswer)
                 }
               })
+            }
+
+            if (question.marker) {
+              rtn.lat = question.marker.getLatLng().lat;
+              rtn.lng = question.marker.getLatLng().lng;
             }
 
             delete rtn.marker;
@@ -612,7 +595,7 @@
 
           }
 
-          // TEMPORARY only string
+          // TEMPORARY: only string
           data.category = data.category.name
 
           console.log('category', data.category)
@@ -627,12 +610,14 @@
           var date = new Date(timestamp)
           data.createdAtDate = date;
 
-          // get coordinates of current marker
-          // only one marker in layergroup, forEach only runs once
-          this.markers.eachLayer(function (layer) {
-            data.lat = layer.getLatLng().lat;
-            data.lng = layer.getLatLng().lng;
-          });
+          if (!this.mainMarker) {
+            this.handleError('Ein Ort muss ausgewählt sein')
+            return
+          }
+
+          // get coordinates of main marker
+          data.lat = this.mainMarker.getLatLng().lat;
+          data.lng = this.mainMarker.getLatLng().lng;
 
           //validate data
           //TODO category1 test
@@ -641,11 +626,9 @@
             return
           }
 
-          console.log(this.dateFrom, new Date().toJSON().slice(0, 10))
-
           if (data.dateFrom === null ||
               data.dateTo === null) {
-            this.handleError('Das Zeitfenster muss asugefüllt sein')
+            this.handleError('Das Zeitfenster muss ausgefüllt sein')
             return
           }
 
@@ -665,11 +648,6 @@
             !this.questionsHaveAnswer(data.questions) ||
             data.createdAtDate === null) {
             this.handleError()
-            return
-          }
-
-          if (!data.lat || !data.lng) {
-            this.handleError('Ein Ort muss ausgewählt sein')
             return
           }
 
