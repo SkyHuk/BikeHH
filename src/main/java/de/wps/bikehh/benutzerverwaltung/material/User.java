@@ -9,7 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
-import de.wps.bikehh.adfc.material.Survey;
+import de.wps.bikehh.adminplattform.material.UmfrageDB;
 
 @Entity
 public class User {
@@ -27,7 +27,7 @@ public class User {
 	private boolean isLocked;
 
 	@ManyToMany(mappedBy = "confirmedByUsers", cascade = CascadeType.ALL)
-	private List<Survey> confirmedSurveys;
+	private List<UmfrageDB> confirmedSurveys;
 
 	public Long getId() {
 		return id;
@@ -69,11 +69,11 @@ public class User {
 		this.isLocked = isLocked;
 	}
 
-	public List<Survey> getConfirmedSurveys() {
+	public List<UmfrageDB> getConfirmedSurveys() {
 		return confirmedSurveys;
 	}
 
-	public void setConfirmedSurveys(List<Survey> confirmedSurveys) {
+	public void setConfirmedSurveys(List<UmfrageDB> confirmedSurveys) {
 		this.confirmedSurveys = confirmedSurveys;
 	}
 

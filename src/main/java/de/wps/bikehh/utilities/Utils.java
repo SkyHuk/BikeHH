@@ -17,20 +17,20 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import de.wps.bikehh.adfc.material.Question;
-import de.wps.bikehh.adfc.material.SurveyTest;
+import de.wps.bikehh.adminplattform.material.Question;
+import de.wps.bikehh.adminplattform.material.Umfrage;
 
 public class Utils {
 
-	private static Path startDir = Paths.get(System.getProperty("user.dir"), "Umfragen");
+	private static Path startDir = Paths.get(System.getProperty("user.dir"), "src", "main", "resources", "Umfragen");
 
 	/**
 	 * Gets surveys as List<SurveyTest> from JSON strings in storage
 	 * 
 	 * @return List<SurveyTest>
 	 */
-	public static List<SurveyTest> getSurveyJsonsAsArray() {
-		List<SurveyTest> surveys = new ArrayList<SurveyTest>();
+	public static List<Umfrage> getSurveyJsonsAsArray() {
+		List<Umfrage> surveys = new ArrayList<Umfrage>();
 
 		// get files in directory as jsonArray
 		surveys = getJsonFilesAsSurveyList(startDir.toString());
@@ -51,7 +51,7 @@ public class Utils {
 
 		// get SurveyTest from jsonString to validate jsonString
 		Gson g = new Gson();
-		SurveyTest surveyTest = g.fromJson(JSONString, SurveyTest.class);
+		Umfrage surveyTest = g.fromJson(JSONString, Umfrage.class);
 
 		if (surveyTest != null) {
 
@@ -161,9 +161,9 @@ public class Utils {
 	 * @param startDir
 	 * @return List<SurveyTest>
 	 */
-	private static List<SurveyTest> getJsonFilesAsSurveyList(String startDir) {
+	private static List<Umfrage> getJsonFilesAsSurveyList(String startDir) {
 		// JSONObjects in JSONArray to give to thymeleaf
-		List<SurveyTest> listSurveys = new ArrayList<>();
+		List<Umfrage> listSurveys = new ArrayList<>();
 
 		// try-catch block to handle exceptions
 		try {
@@ -192,7 +192,7 @@ public class Utils {
 				// convert to jsonObject
 				JsonObject jsonObject = (JsonObject) obj;
 				// add jsonObject to list of surveys
-				SurveyTest survey = g.fromJson(jsonObject, SurveyTest.class);
+				Umfrage survey = g.fromJson(jsonObject, Umfrage.class);
 				listSurveys.add(survey);
 			}
 		} catch (Exception e) {
