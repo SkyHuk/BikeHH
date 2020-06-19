@@ -10,6 +10,7 @@ import de.wps.bikehh.benutzerverwaltung.repository.UserAuthenticationRepository;
 import de.wps.bikehh.benutzerverwaltung.service.smtp.Mail;
 import de.wps.bikehh.benutzerverwaltung.service.smtp.SmtpService;
 import de.wps.bikehh.benutzerverwaltung.util.Utils;
+import de.wps.bikehh.benutzerverwaltung.util.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -32,6 +33,10 @@ public class PasswordDetailsService {
     }
 
     public void requestResetMail(String email) throws ApiRequestException {
+        if (!Validation.isEmailValid(email)) {
+            throw new ApiRequestException(ErrorCode.bad_credentials, HttpStatus.BAD_REQUEST);
+        }
+
         if (!_userAuthenticationRepository.existsByEmailAddress(email)) {
             return;
         }
@@ -68,7 +73,7 @@ public class PasswordDetailsService {
     public void resetPassword(String password, String token) throws ApiRequestException {
         Reset reset = _passwordAuthenticationRepository.findByToken(token).orElse(null);
         if (reset == null) {
-            throw new ApiRequestException(ErrorCode.unauthorized, HttpStatus.UNAUTHORIZED);
+            throw new ApiRequestException(ErrorCode.invalid_token, HttpStatus.NOT_FOUND);
         }
 
         User user = _userAuthenticationRepository.findById(reset.getUserId()).orElse(null);

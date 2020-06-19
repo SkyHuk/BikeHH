@@ -34,6 +34,10 @@ public class ApiException {
                 return "forbidden";
             case ErrorCode.bad_credentials:
                 return "bad credentials";
+            case ErrorCode.invalid_token:
+                return "invalid token or not found";
+            case ErrorCode.internal_server_error:
+                return "internal server error";
         }
 
         return "unknown error code";

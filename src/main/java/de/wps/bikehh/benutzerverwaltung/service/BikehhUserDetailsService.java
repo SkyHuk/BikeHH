@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -124,7 +125,7 @@ public class BikehhUserDetailsService implements UserDetailsService {
 
         BikehhPasswordEncoderService encoder = new BikehhPasswordEncoderService();
         if (!encoder.matches(passwordOld, user.getEncryptedPassword())) {
-            throw new ApiRequestException(ErrorCode.unauthorized, HttpStatus.UNAUTHORIZED);
+            throw new ApiRequestException(ErrorCode.bad_credentials, HttpStatus.BAD_REQUEST);
         }
         user.setEncryptedPassword(encoder.encodePassword(passwordNew));
         _userAuthenticationRepository.save(user);
@@ -133,7 +134,10 @@ public class BikehhUserDetailsService implements UserDetailsService {
     public List<User> retrieveUsers() {
         List<User> users = new ArrayList<>();
         for (User user : _userAuthenticationRepository.findAll()) {
-            users.add(user);
+            if (user.getRole().equals(Roles.ROLE_USER)) {
+                user.setEncryptedPassword(null);
+                users.add(user);
+            }
         }
 
         return users;

@@ -16,7 +16,7 @@ public class OAuthEntryPoint implements AuthenticationEntryPoint {
         System.out.println("OAuthEntryPoint");
         ApiException e = new ApiException(authException.getMessage());
 
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(e.toString());

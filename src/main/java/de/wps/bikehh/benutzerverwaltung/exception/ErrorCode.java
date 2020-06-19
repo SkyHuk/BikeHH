@@ -7,4 +7,6 @@ public class ErrorCode {
     public static final String method_not_found = "method_not_found";
     public static final String not_found = "not_found";
     public static final String forbidden = "forbidden";
+    public static final String invalid_token = "invalid_token";
+    public static final String internal_server_error = "internal_server_error";
 }

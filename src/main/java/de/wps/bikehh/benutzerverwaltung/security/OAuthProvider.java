@@ -36,7 +36,7 @@ public class OAuthProvider implements AuthenticationProvider {
         String token = (String) auth.getCredentials();
         Session session = authService.getSessionByToken(token);
         if (session == null) {
-            throw new BadCredentialsException(ErrorCode.unauthorized);
+            throw new BadCredentialsException(ErrorCode.invalid_token);
         }
 
         OAuthToken nAuth = new OAuthToken(session.getUser(), token);
