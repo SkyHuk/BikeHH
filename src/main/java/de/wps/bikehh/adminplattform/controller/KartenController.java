@@ -13,7 +13,7 @@ import de.wps.bikehh.utilities.Utils;
 
 @Controller
 @RequestMapping("karte")
-public class MapController {
+public class KartenController {
 
 	@GetMapping
 	public String showMap() {

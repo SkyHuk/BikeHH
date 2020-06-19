@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("uebersicht")
-public class DashboardController {
+public class UebersichtController {
 
 	@GetMapping
 	public String showDashboard() {

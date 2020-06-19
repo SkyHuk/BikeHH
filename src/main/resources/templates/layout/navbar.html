@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <body>
-	<!--<nav th:fragment="navbar"
+  <!--<nav th:fragment="navbar"
 		class="container navbar navbar-expand-md navbar-dark py-md-0 h-md-55px">
 		<button class="navbar-toggler" type="button" data-toggle="collapse"
 			data-target="#navbarSupportedContent"
@@ -20,7 +21,8 @@
 				</a></li>
 			</ul>
 			<ul class="navbar-nav h-100" sec:authorize="isAuthenticated()">
-<!-- Desktop --><!--
+<!-- Desktop -->
+  <!--
 				<li class="nav-item dropdown d-none d-md-block py-md-2">
 					<a class="nav-link text-secondary dropdown-toggle py-md-2" href="#" id="navbarDropdownMenuLink" 
 					role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -32,7 +34,8 @@
 			          <a class="dropdown-item" th:href="@{/logout}"><i class="fas fa-sign-out-alt fa-fw"></i> Logout</a>
 			        </div>
 				</li>
-<!-- Mobile --><!--
+<!-- Mobile -->
+  <!--
 				<li class="nav-item d-md-none"
 				th:classappend="${#request.getServletPath().startsWith('/userprofile') ? 'active-nav-border font-weight-bold' : ''}">
 					<a class="nav-link text-secondary dropdown-item px-0" th:href="@{/userprofile/}"><i class="fas fa-id-card"></i> Benutzerprofil</a>
@@ -44,20 +47,17 @@
 		</div>
 	</nav>-->
 
-	<nav th:fragment="navbar" id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-primary sidebar collapse px-0">
-      <div class="sidebar-sticky">
-        <div class="text-center mb-4">
-          <img src="../static/img/logo.png" th:src="@{img/logo.png}" class="img-fluid"/>
+  <nav th:fragment="navbar" id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-primary sidebar collapse px-0">
+    <div class="sidebar-sticky">
+      <div class="text-center mb-4">
+        <img src="../static/img/logo.png" th:src="@{img/logo.png}" class="img-fluid" />
 
-          <h3>Bicyclist Admin</h3>
-        </div>
-        <hr class="my-4">
-        <ul class="nav flex-column">
-          <li class="nav-item">
-            <a
-              class="nav-link"
-              href="/uebersicht"
-              th:classappend="${#request.getServletPath().startsWith('/uebersicht') ? 'active' : ''}"
+        <h3>Bicyclist Admin</h3>
+      </div>
+      <hr class="my-4">
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <a class="nav-link" href="/uebersicht" th:classappend="${#request.getServletPath().startsWith('/uebersicht') ? 'active' : ''}"
             >
               <span><i class="fas fa-chart-line"></i></span>
               Übersicht <span class="sr-only">(current)</span>
@@ -106,17 +106,6 @@
         </ul>
 
         <hr class="my-4">
-
-        <ul class="nav flex-column mb-2">
-          <li class="nav-item">
-            <a class="nav-link" href="/umfrage-beispiel">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-              Umfrage Beispiel
-            </a>
-          </li>
-          </ul>
-
-       <hr class="my-4">
 
        <ul class="nav flex-column mb-2">
           <li class="nav-item">
