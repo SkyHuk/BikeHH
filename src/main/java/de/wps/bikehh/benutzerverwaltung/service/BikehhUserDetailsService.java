@@ -171,6 +171,11 @@ public class BikehhUserDetailsService implements UserDetailsService {
         }
 
         user.setIsLocked(userModel.getIsLocked());
+        if (user.getIsLocked()) {
+            _authService.logoutAllSession(user.getId());
+            _verifyDetailsService.deleteVerification(user.getId());
+            _passwordDetailsService.deleteResetToken(user.getId());
+        }
 
         return _userAuthenticationRepository.save(user);
     }

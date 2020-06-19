@@ -36,6 +36,9 @@ public class AuthService {
         String hashedPassword = hashService.encodePassword(password);
 
         User user = _userAuthenticationRepository.findByEmailAddress(email);
+        if (user.getIsLocked()) {
+            throw new ApiRequestException(ErrorCode.unauthorized, HttpStatus.UNAUTHORIZED);
+        }
         if (!user.getEncryptedPassword().equals(hashedPassword)) {
             throw new ApiRequestException(ErrorCode.bad_credentials, HttpStatus.BAD_REQUEST);
         }
