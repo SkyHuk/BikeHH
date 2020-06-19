@@ -1,6 +1,7 @@
 package de.wps.bikehh.adminplattform.controller;
 
 import java.text.ParseException;
+import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
+import de.wps.bikehh.adminplattform.material.Umfrage;
 import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.utilities.Utils;
 
@@ -39,6 +41,28 @@ public class UmfrageErstellenController {
 			model.addAttribute("lng", 0);
 		}
 		model.addAttribute("user", user);
+		return "adfc/create_survey";
+	}
+
+	/**
+	 * 
+	 * @param umfrageId
+	 * @param model
+	 * @return
+	 */
+	@GetMapping("/bearbeiten")
+	public String showUmfragenBearbeiter(@RequestParam(required = true, name = "umfrageId") int umfrageId,
+			Model model) {
+
+		List<Umfrage> umfragenListe = Utils.getSurveyJsonsAsArray();
+		Umfrage zuBearbeitendeUmfrage = null;
+		for (Umfrage umfrage : umfragenListe) {
+			if (umfrage.getId() == umfrageId) {
+				zuBearbeitendeUmfrage = umfrage;
+			}
+		}
+
+		model.addAttribute("umfrage", zuBearbeitendeUmfrage);
 		return "adfc/create_survey";
 	}
 
