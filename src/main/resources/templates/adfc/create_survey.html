@@ -354,26 +354,7 @@
 
           self.mainMarker = marker
 
-          const lineLength = 0.002
-          const halfLineLength = lineLength / 2
-
-          const polyline = L.polyline([
-            [lat - halfLineLength, lng - halfLineLength],
-            [lat + halfLineLength, lng + halfLineLength],
-          ], {
-            color: '#f00',
-            weight: 2,
-          }).addTo(self.mymap)
-
-          self.markers.addLayer(polyline)
-
-          const decorator = L.polylineDecorator(polyline, {
-            patterns: [
-              { offset: '100%', repeat: 0, symbol: L.Symbol.arrowHead({ pixelSize: 20, polygon: false, pathOptions: { stroke: true, color: 'f00' } }) },
-            ]
-          }).addTo(self.mymap)
-
-          self.markers.addLayer(decorator)
+          self.addArrow(lat, lng)
         })
       },
       created() {
@@ -388,6 +369,7 @@
             ],
             conditions: [],
             marker: null,
+            arrow: null,
             allowCustomAnswer: this.allowCustomAnswer ? true : false
           })
         },
@@ -404,6 +386,46 @@
         // delete latest answer in question.answers
         removeAnswer(question, answer) {
           question.answers.splice(question.answers.indexOf(answer), 1)
+        },
+        addArrow(lat, lng) {
+
+          const lineLength = 0.002
+          const halfLineLength = lineLength / 2
+          const rotateMarkerOffset = 0.0005
+
+          const polyline = L.polyline([
+            [lat - halfLineLength, lng - halfLineLength],
+            [lat + halfLineLength, lng + halfLineLength],
+          ], {
+            weight: 2,
+          }).addTo(this.mymap)
+
+          this.markers.addLayer(polyline)
+
+          const decorator = L.polylineDecorator(polyline, {
+            patterns: [
+              { offset: '100%', repeat: 0, symbol: L.Symbol.arrowHead({ pixelSize: 20, polygon: false, pathOptions: { stroke: true } }) },
+            ]
+          }).addTo(this.mymap)
+
+          this.markers.addLayer(decorator)
+
+          const rotateMarker = L.marker([lat + halfLineLength + rotateMarkerOffset, lng + halfLineLength + rotateMarkerOffset], {
+            draggable: true,
+            autoPan: false,
+            // icon: L.Icon({ })
+          }).addTo(this.mymap).on('drag', (e) => {
+            console.log(e, e.latlng)
+            const x = e.latlng.lat - lat
+            const y = e.latlng.lng - lng
+            const angle = Math.atan2(x, y)
+            const degrees = 180*angle/Math.PI
+            console.log('ROTATE DRAG', angle, degrees)
+
+            // const newX = Math.cos(angle)
+          })
+
+          return polyline
         },
         // add location (green marker) to question on map,
         // only if question does not have location already
@@ -434,6 +456,9 @@
 
             question.marker = marker;
 
+            if (coordinates)
+              question.arrow = this.addArrow(coordinates.getLatLng().lat, coordinates.getLatLng().lng)
+
           } else {
             existingMarker.openPopup();
 
@@ -446,6 +471,8 @@
           if (marker) {
             marker.remove();
             question.marker = null;
+            question.arrow.remove()
+            question.arrow = null
           }
         },
         // add condition
