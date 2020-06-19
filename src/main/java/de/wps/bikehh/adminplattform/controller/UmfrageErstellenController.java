@@ -1,7 +1,6 @@
 package de.wps.bikehh.adminplattform.controller;
 
 import java.text.ParseException;
-import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -13,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
+
+import com.google.gson.Gson;
 
 import de.wps.bikehh.adminplattform.material.Umfrage;
 import de.wps.bikehh.benutzerverwaltung.material.User;
@@ -54,15 +55,12 @@ public class UmfrageErstellenController {
 	public String showUmfragenBearbeiter(@RequestParam(required = true, name = "umfrageId") int umfrageId,
 			Model model) {
 
-		List<Umfrage> umfragenListe = Utils.getSurveyJsonsAsArray();
-		Umfrage zuBearbeitendeUmfrage = null;
-		for (Umfrage umfrage : umfragenListe) {
-			if (umfrage.getId() == umfrageId) {
-				zuBearbeitendeUmfrage = umfrage;
-			}
-		}
-
-		model.addAttribute("umfrage", zuBearbeitendeUmfrage);
+		System.out.println("TESTTEST");
+		Umfrage umfrage = Utils.getUmfrageById(umfrageId);
+		Gson gson = new Gson();
+		String jsonUmfrage = gson.toJson(umfrage);
+		System.out.println(jsonUmfrage);
+		model.addAttribute("umfrage", jsonUmfrage);
 		return "adfc/create_survey";
 	}
 

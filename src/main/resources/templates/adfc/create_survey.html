@@ -24,7 +24,7 @@
 
   <div id="createSurveyApp">
 
-    <h2 class="my-4">Umfrage erstellen</h2>
+    <h2 id="headline" class="my-4">Umfrage erstellen</h2>
     <div class="mb-4" id="mapid" style="width: calc(90vw - 10rem); height: 30vh;"></div>
 
     <div v-if="showSuccessAlert" class="alert alert-success" role="alert">
@@ -198,7 +198,7 @@
 
           <!-- create survey -->
           <div class="form-group">
-            <button type="submit" class="btn btn-primary">Umfrage erstellen</button>
+            <button type="submit" id="submitButton" class="btn btn-primary">Umfrage erstellen</button>
           </div>
 
         </form>
@@ -254,7 +254,9 @@
     const createSurveyApp = new Vue({
       el: '#createSurveyApp',
       data: {
-
+    	  
+    	umfrage: undefined,
+    	editMode: false,
         id: Math.floor(Math.random() * (100000 - 0 + 1)) + 0,
         title: '',
         category: '',
@@ -264,8 +266,8 @@
         questions: [],
         createdManually: true,
 
-        lat: [[${ lat }]],
-        lng: [[${ lng }]],
+        lat: [[${ lat }?lat:0]],
+        lng: [[${ lng }?lng:0]],
         markers: null,
         //questionMarkers: null,
         mymap: null,
@@ -303,6 +305,15 @@
         ],
       },
       mounted() {
+    	  
+    	this.umfrage = [(${umfrage}?${umfrage}:'null')]
+    	if (this.umfrage) {
+    		this.editMode = true;
+    	}  
+    	  
+    	if (!this.editMode) {
+    		
+    	
         this.resetData()
 
         // init popup
@@ -323,16 +334,7 @@
 
         this.resetMap()
 
-        // init map
-        L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-          maxZoom: 18,
-          attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-            '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-            'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-          id: 'mapbox/streets-v11',
-          tileSize: 512,
-          zoomOffset: -1
-        }).addTo(this.mymap);
+        this.initMap()
 
         const self = this
 
@@ -375,6 +377,25 @@
 
           self.markers.addLayer(decorator)
         })
+		} else {
+			document.getElementById("headline").innerHTML = "Umfrage bearbeiten";
+			document.getElementById("submitButton").innerHTML = "Umfrage bearbeiten";
+			this.lat = this.umfrage.lat
+			this.lng = this.umfrage.lng
+			this.mymap = L.map('mapid').setView([this.lat, this.lng], 16)
+			
+			this.initMap()
+	        
+	        var marker = L.marker([this.lat, this.lng]).addTo(this.mymap)
+	            .bindPopup("<b>Ort der Umfrage</b><br/>")
+    		this.title = this.umfrage.title
+    		this.category = this.umfrage.category
+    		this.questions = this.umfrage.questions
+    		this.dateFrom = this.umfrage.dateFrom
+    		this.dateTo = this.umfrage.dateTo
+    		this.confirmedThreshhold = this.umfrage.confirmedThreshhold
+    		this.createdManually = this.umfrage.createdManually
+    	}
       },
       created() {
       },
@@ -602,7 +623,7 @@
 
           data.confirmedByUsers = [];
           data.createdManually = this.createdManually;
-          data.creator = '[[${ user.emailAddress }]]';
+          data.creator = '[[${ user }?user.emailAddress:null]]';
 
           // get date
           // generate a timestamp
@@ -682,6 +703,18 @@
 
           getRequest.send();
         },
+        initMap() {
+          // init map
+          L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+            maxZoom: 18,
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+              '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+              'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            id: 'mapbox/streets-v11',
+            tileSize: 512,
+            zoomOffset: -1
+          }).addTo(this.mymap);
+        }
       },
     })
 

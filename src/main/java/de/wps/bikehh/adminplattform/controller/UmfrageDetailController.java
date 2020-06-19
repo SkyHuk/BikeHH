@@ -7,7 +7,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import de.wps.bikehh.adminplattform.material.Umfrage;
 import de.wps.bikehh.utilities.Utils;
@@ -20,7 +19,7 @@ public class UmfrageDetailController {
 	 *
 	 * opens html page for specific survey
 	 *
-	 * @param model        spring model
+	 * @param model    spring model
 	 * @param surveyId survey id to open
 	 * @return html page
 	 */

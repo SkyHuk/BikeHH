@@ -52,7 +52,7 @@
           <p class="card-text mb-4" th:text="${survey.title}"></p>
         </div>
         <div class="col-3">
-          <a class="btn btn-block btn-outline-primary" href='/umfrage-erstellen'>Umfrage bearbeiten</a>
+          <a class="btn btn-block btn-outline-primary" th:href="@{/umfrage-erstellen/bearbeiten?umfrageId={id}(id=${survey.id})}">Umfrage bearbeiten</a>
           <button class="btn btn-block btn-outline-primary" onClick="showOnMap()">Zeige auf Karte</button>
           <button class="btn btn-block btn-outline-primary" th:data-creator="${survey.creator}" onclick="contactCreator(this.dataset.creator)">Kontaktiere Ersteller</button>
           <button class="btn btn-block btn-outline-success">Bestätigen</button>

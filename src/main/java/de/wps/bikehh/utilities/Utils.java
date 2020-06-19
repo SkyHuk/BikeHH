@@ -38,6 +38,16 @@ public class Utils {
 		return surveys;
 	}
 
+	public static Umfrage getUmfrageById(int Id) {
+		List<Umfrage> umfragen = getSurveyJsonsAsArray();
+		for (Umfrage umfrage : umfragen) {
+			if (umfrage.getId() == Id) {
+				return umfrage;
+			}
+		}
+		return null;
+	}
+
 	/**
 	 * Saves an JsonString in specified directory
 	 *
