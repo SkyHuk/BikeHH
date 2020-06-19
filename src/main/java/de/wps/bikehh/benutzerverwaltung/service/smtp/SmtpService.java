@@ -3,6 +3,7 @@ package de.wps.bikehh.benutzerverwaltung.service.smtp;
 import de.wps.bikehh.benutzerverwaltung.service.Logger;
 import nz.net.ultraq.thymeleaf.LayoutDialect;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -36,23 +37,20 @@ public class SmtpService {
 
     private JavaMailSender emailSender;
 
-    /**
-     * @param javaMailSender
-     */
+    @Value("${spring.profiles.active}")
+    private String enviroment;
+
+
     @Autowired
     public SmtpService(JavaMailSender javaMailSender) {
         this.emailSender = javaMailSender;
     }
 
-    /**
-     * Is used to send mail.
-     *
-     * @param mail
-     * @param template
-     * @throws MessagingException
-     */
-
     public void sendMail(Mail mail, Templates template) {
+        if (enviroment.equals("local")) {
+            return;
+        }
+
         MimeMessage message = emailSender.createMimeMessage();
 
         Context context = new Context();

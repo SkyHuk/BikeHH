@@ -53,6 +53,7 @@ public class PasswordDetailsService {
         //Send mail
         Mail mail = new Mail(user.getEmailAddress(), "Reset password");
 
+        //@TODO set frontend link. Add config file with host depending on environment
         String redirectLink = String.format("http://localhost:8080/api/password?token=%s", token);
 
         Map<String, String> model = new HashMap<>();
@@ -87,7 +88,9 @@ public class PasswordDetailsService {
 
     public void deleteResetToken(Long userId) {
         Reset reset = _passwordAuthenticationRepository.findByUserId(userId).orElse(null);
-        _passwordAuthenticationRepository.delete(reset);
+        if (reset != null) {
+            _passwordAuthenticationRepository.delete(reset);
+        }
     }
 
     @Scheduled(fixedRate = 10000)

@@ -61,6 +61,7 @@ public class VerifyDetailsService {
         //Send mail
         Mail mail = new Mail(user.getEmailAddress(), "Verify Account");
 
+        //@TODO set frontend link. Add config file with host depending on environment
         String redirectLink = String.format("http://localhost:8080/api/verify?token=%s", token);
 
         Map<String, Object> model = new HashMap<>();
@@ -97,7 +98,9 @@ public class VerifyDetailsService {
 
     public void deleteVerification(Long userId) {
         Verification verification = _verificationRepository.findByUserId(userId).orElse(null);
-        _verificationRepository.delete(verification);
+        if (verification != null) {
+            _verificationRepository.delete(verification);
+        }
     }
 
     @Scheduled(fixedRate = 10000)

@@ -16,8 +16,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import javax.management.relation.Role;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -92,7 +90,7 @@ public class BikehhUserDetailsService implements UserDetailsService {
         user.setEncryptedPassword(encoder.encodePassword(password));
 
         _userAuthenticationRepository.save(user);
-        //_verifyDetailsService.requestVerificationMail(user.getEmailAddress());
+        _verifyDetailsService.requestVerificationMail(user.getEmailAddress());
     }
 
     public UserDetailsResponseModel getCurrentUser(User user) throws ApiRequestException {
