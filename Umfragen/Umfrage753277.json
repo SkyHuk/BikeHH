@@ -1,0 +1,65 @@
+{
+    "id": 26277,
+    "lng": 9.824523925781252,
+    "lat": 53.535410138436106,
+    "category": "Fahrbahnoberfläche",
+    "dateFrom": "2020-06-19",
+    "dateTo": "2020-07-02",
+    "createdAtDate": "2020-06-19T08:56:29.646Z",
+    "confirmedByUsers": [],
+    "confirmedThreshhold": 10,
+    "title": "gggggggggggg",
+    "questions": [
+        {
+            "id": 0,
+            "title": "ggggggggggg",
+            "answers": [
+                {
+                    "id": 0,
+                    "text": "Ja"
+                },
+                {
+                    "id": 0,
+                    "text": "Nein"
+                },
+                {
+                    "id": 0,
+                    "text": "Vielleicht"
+                },
+                {
+                    "id": 0,
+                    "text": "Vielleicht auch nicht"
+                }
+            ],
+            "condition": {},
+            "allowCustomAnswer": true,
+            "lat": 53.52511065912279,
+            "lng": 9.869155883789062
+        },
+        {
+            "id": 0,
+            "title": "gggggggggggg",
+            "answers": [
+                {
+                    "id": 0,
+                    "text": "Ja"
+                },
+                {
+                    "id": 0,
+                    "text": "Hallo"
+                }
+            ],
+            "condition": {},
+            "allowCustomAnswer": false,
+            "lat": 53.52386107120718,
+            "lng": 9.987258911132814
+        }
+    ],
+    "creator": "admin@chef.lol",
+    "createdManually": true,
+    "address": {
+        "city": "Hamburg",
+        "postcode": "21129",
+        "street": "Franz-Josef-Strauß Straße"
+    }
+}

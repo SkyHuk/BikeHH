@@ -1,5 +1,8 @@
 package de.wps.bikehh.adfc.controller;
 
+import java.text.ParseException;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.server.ResponseStatusException;
 
 import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.utilities.Utils;
@@ -49,17 +53,17 @@ public class CreateSurveyController {
 	public String processSurvey(@RequestBody String body) {
 
 		// old method
-		Utils.saveJSONSurveyInFilesOld(body);
+		// Utils.saveJSONSurveyInFilesOld(body);
 
 		// new method
 		// create umfrage.json file and validate jsonString
-		// try {
-		// Utils.saveJSONSurveyInFiles(body);
-		// } catch (IllegalArgumentException | ParseException e) {
-		// // TODO test
-		// throw new ResponseStatusException(HttpStatus.NOT_FOUND, "JSONString is not
-		// valid", e);
-		// }
+		try {
+			Utils.saveJSONSurveyInFiles(body);
+		} catch (IllegalArgumentException | ParseException e) {
+			// TODO test
+			System.out.println("IllegalArgumentException or ParseException was thrown in CreateSurveyController");
+			throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "JSONString is not valid", e);
+		}
 
 		return "adfc/survey_list";
 	}

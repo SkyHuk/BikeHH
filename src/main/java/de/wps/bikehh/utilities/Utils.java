@@ -38,45 +38,6 @@ public class Utils {
 		return surveys;
 	}
 
-	// OLD METHOD, replaced by saveJSONSurveyInFiles()
-	public static void saveJSONSurveyInFilesOld(String JSONString) {
-		FileWriter file = null;
-		int filenameCounter = (int) (Math.random() * 999999 + 1);
-		String filename = "Umfrage" + String.valueOf(filenameCounter) + ".json";
-
-		// get SurveyTest from jsonString to validate jsonString
-		Gson g = new Gson();
-		SurveyTest surveyTest = g.fromJson(JSONString, SurveyTest.class);
-
-		// save file
-		try {
-			// create file
-			File fileToSaveIn = new File(startDir + "/" + filename);
-			if (fileToSaveIn.createNewFile()) {
-				System.out.println("File created: " + fileToSaveIn.getName());
-			} else {
-				System.out.println("File already exists.");
-			}
-
-			// write to file
-			file = new FileWriter(startDir + "/" + filename);
-			// covnert SurveyTest to jsonString
-			String jsonString = g.toJson(surveyTest);
-			// old: file.write(JSONString);
-			file.write(jsonString);
-			System.out.println("Successfully Copied JSON Object " + filename + " to " + startDir);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				file.flush();
-				file.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
 	/**
 	 * Saves an JsonString in specified directory
 	 *
@@ -92,69 +53,103 @@ public class Utils {
 		Gson g = new Gson();
 		SurveyTest surveyTest = g.fromJson(JSONString, SurveyTest.class);
 
-		Date dateFrom = null;
-		Date dateTo = null;
+		if (surveyTest != null) {
 
-		// format dates to validate Date simple
-		if (surveyTest.getDateFrom() != null) {
-			// possible ParseException
-			dateFrom = convertStringDateToDate(surveyTest.getDateFrom());
-		}
-		if (surveyTest.getDateTo() != null) {
-			// possible ParseException
-			dateFrom = convertStringDateToDate(surveyTest.getDateTo());
-		}
+			Date dateFrom = null;
+			Date dateTo = null;
 
-		// validate Survey and save to files
-		if (surveyTest.getTitle() != null && !surveyTest.getTitle().isEmpty() && // title is not empty
-				(dateFrom.after(getCurrentDate()) || dateFrom.equals(getCurrentDate())) && // dateFrom is greater or
-																							// equals currentDate()
-				(dateFrom.after(dateTo) || dateFrom.equals(dateTo)) && // dateFrom is greater or equals dateTo
-				surveyTest.getQuestions() != null && // questions are not null
-				questionsHaveTitle(surveyTest.getQuestions()) && questionsHaveAnswer(surveyTest.getQuestions()) && // questions
-																													// have
-																													// title
-																													// and
-																													// answer
-				surveyTest.getCreatedAtDate() != null && !surveyTest.getCreatedAtDate().isEmpty() && // createdDate is
-																										// not null and
-																										// not empty
-				surveyTest.getLat() != 0 && surveyTest.getLng() != 0 && // lat, long are not 0
-				surveyTest.getCategory() != null && !surveyTest.getCategory().isEmpty() && // category is not null and
-																							// not empty
-				surveyTest.getConfirmedByUsers() != null && // confirmedByUsers array is not null
-				surveyTest.getCreator() != null && // creator is not null
-				!surveyTest.getCreator().isEmpty() && surveyTest.getAddress() != null) { // address is not null
+			// format dates to validate Date simple
+			if (surveyTest.getDateFrom() != null) {
+				// possible ParseException
+				dateFrom = convertStringDateToDate(surveyTest.getDateFrom());
+				// System.out.println("dateFrom successfully parsed: " + dateFrom);
+			}
+			if (surveyTest.getDateTo() != null) {
+				// possible ParseException
+				dateTo = convertStringDateToDate(surveyTest.getDateTo());
+				// System.out.println("dateTo successfully parsed: " + dateTo);
+			}
 
-			// TODO
-			// save file
-			try {
-				// create file
-				File fileToSaveIn = new File(startDir + "/" + filename);
-				if (fileToSaveIn.createNewFile()) {
-					System.out.println("File created: " + fileToSaveIn.getName());
-				} else {
-					System.out.println("File already exists.");
-				}
+//			// important for debugging
+//			if ((dateFrom.after(getCurrentDate()) || dateFrom.equals(getCurrentDate()))) {
+//				System.out.println("dateFrom.after(getCurrentDate()) || dateFrom.equals(getCurrentDate()) returns: "
+//						+ (dateFrom.after(getCurrentDate()) || dateFrom.equals(getCurrentDate())));
+//			} else {
+//				System.out.println("dateFrom.after(getCurrentDate()) || dateFrom.equals(getCurrentDate()) returns: "
+//						+ (dateFrom.after(getCurrentDate()) || dateFrom.equals(getCurrentDate())));
+//			}
+//
+//			if ((dateTo.after(dateFrom) || dateTo.equals(dateFrom))) {
+//				System.out.println("(dateTo.after(dateFrom) || dateTo.equals(dateFrom)) returns: "
+//						+ (dateTo.after(dateFrom) || dateTo.equals(dateFrom)));
+//			} else {
+//				System.out.println("(dateTo.after(dateFrom) || dateTo.equals(dateFrom)) returns: "
+//						+ (dateTo.after(dateFrom) || dateTo.equals(dateFrom)));
+//			}
 
-				// write to file
-				file = new FileWriter(startDir + "/" + filename);
-				// covnert SurveyTest to jsonString
-				String jsonString = g.toJson(surveyTest);
-				// old: file.write(JSONString);
-				file.write(jsonString);
-				System.out.println("Successfully Copied JSON Object " + filename + " to " + startDir);
-			} catch (IOException e) {
-				e.printStackTrace();
-			} finally {
+			System.out.println("Starting validation if ...");
+
+			// TODO test condition array
+			// validate Survey and save to files
+			if (surveyTest.getTitle() != null && !surveyTest.getTitle().isEmpty() && dateFrom != null && dateTo != null
+					&& (dateFrom.after(getCurrentDate()) || dateFrom.equals(getCurrentDate()))
+					&& (dateTo.after(dateFrom) || dateTo.equals(dateFrom)) && surveyTest.getQuestions() != null
+					&& surveyTest.getQuestions().length > 0 && questionsHaveTitle(surveyTest.getQuestions())
+					&& questionsHaveAnswer(surveyTest.getQuestions()) && surveyTest.getCreatedAtDate() != null
+					&& !surveyTest.getCreatedAtDate().isEmpty() && surveyTest.getLat() != 0 && surveyTest.getLng() != 0
+					&& surveyTest.getCategory() != null && !surveyTest.getCategory().isEmpty()
+					&& surveyTest.getConfirmedByUsers() != null && surveyTest.getCreator() != null
+					&& !surveyTest.getCreator().isEmpty() && surveyTest.getAddress() != null) {
+
+				System.out.println("JSONString is valid. JSON is saved to storage ...");
+
+				// save file
 				try {
-					file.flush();
-					file.close();
+					// create file
+					File fileToSaveIn = new File(startDir + "/" + filename);
+					if (fileToSaveIn.createNewFile()) {
+						System.out.println("File created: " + fileToSaveIn.getName());
+					} else {
+						System.out.println("File already exists.");
+					}
+
+					// write to file
+					file = new FileWriter(startDir + "/" + filename);
+					// covnert SurveyTest to jsonString
+					String jsonString = g.toJson(surveyTest);
+					// old: file.write(JSONString);
+					file.write(jsonString);
+					System.out.println("Successfully Copied JSON Object " + filename + " to " + startDir);
 				} catch (IOException e) {
 					e.printStackTrace();
+				} finally {
+					try {
+						file.flush();
+						file.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		} else {
+			System.out.println("----- If-condition failed -----");
+//			// print survey
+//			System.out.println("----- survey info -----");
+//			System.out.println("id: " + surveyTest.getId());
+//			System.out.println("lng: " + surveyTest.getLng());
+//			System.out.println("lat: " + surveyTest.getLat());
+//			System.out.println("category: " + surveyTest.getCategory());
+//			System.out.println("dateFrom: " + surveyTest.getDateFrom());
+//			System.out.println("dateTo: " + surveyTest.getDateTo());
+//			System.out.println("createdAtDate: " + surveyTest.getCreatedAtDate());
+//			System.out.println("confirmedByUsers: " + surveyTest.getConfirmedByUsers());
+//			System.out.println("confirmedThreshhold: " + surveyTest.getConfirmedThreshhold());
+//			System.out.println("title: " + surveyTest.getTitle());
+//			System.out.println("questions: " + surveyTest.getQuestions());
+//			System.out.println("creator: " + surveyTest.getCreator());
+//			System.out.println("createdManually: " + surveyTest.isCreatedManually());
+//			System.out.println("address: " + surveyTest.getAddress().toString());
+
 			// throw Exception
 			throw new IllegalArgumentException("Survey" + surveyTest + " has not the right format. File is not saved!");
 		}
@@ -211,12 +206,14 @@ public class Utils {
 	 * Returns the current date as yyyy-MM-dd as a Date
 	 * 
 	 * @return Date
+	 * @throws ParseException
 	 */
-	private static Date getCurrentDate() {
+	private static Date getCurrentDate() throws ParseException {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		Date date = new Date();
-		System.out.println(formatter.format(date));
-		return date;
+		// System.out.println("getCurrentDate returns: " +
+		// convertStringDateToDate(formatter.format(date)));
+		return convertStringDateToDate(formatter.format(date));
 	}
 
 	/**
@@ -242,10 +239,11 @@ public class Utils {
 			if (question.getTitle() != null && !question.getTitle().isEmpty()) {
 				bQuestionsHaveTitle = true;
 			} else {
+				System.out.println("questionsHaveTitle return: " + false);
 				return false;
 			}
 		}
-
+		// System.out.println("questionsHaveTitle return: " + bQuestionsHaveTitle);
 		return bQuestionsHaveTitle;
 	}
 
@@ -261,11 +259,34 @@ public class Utils {
 			if (question.getAnswers() != null && question.getAnswers().size() > 0) {
 				bQuestionsHaveAnswer = true;
 			} else {
+				System.out.println("questionsHaveAnswer return: " + false);
 				return false;
 			}
 		}
-
+		// System.out.println("questionsHaveAnswer return: " + bQuestionsHaveAnswer);
 		return bQuestionsHaveAnswer;
 	}
-
 }
+
+/*
+ * // OLD METHOD, replaced by saveJSONSurveyInFiles() public static void
+ * saveJSONSurveyInFilesOld(String JSONString) { FileWriter file = null; int
+ * filenameCounter = (int) (Math.random() * 999999 + 1); String filename =
+ * "Umfrage" + String.valueOf(filenameCounter) + ".json";
+ * 
+ * // get SurveyTest from jsonString to validate jsonString Gson g = new Gson();
+ * SurveyTest surveyTest = g.fromJson(JSONString, SurveyTest.class);
+ * 
+ * // save file try { // create file File fileToSaveIn = new File(startDir + "/"
+ * + filename); if (fileToSaveIn.createNewFile()) {
+ * System.out.println("File created: " + fileToSaveIn.getName()); } else {
+ * System.out.println("File already exists."); }
+ * 
+ * // write to file file = new FileWriter(startDir + "/" + filename); // covnert
+ * SurveyTest to jsonString String jsonString = g.toJson(surveyTest); // old:
+ * file.write(JSONString); file.write(jsonString);
+ * System.out.println("Successfully Copied JSON Object " + filename + " to " +
+ * startDir); } catch (IOException e) { e.printStackTrace(); } finally { try {
+ * file.flush(); file.close(); } catch (IOException e) { e.printStackTrace(); }
+ * } }
+ */
