@@ -41,9 +41,13 @@ public class User {
         this.encryptedPassword = encryptedPassword;
     }
 
-    public User() {
-
+    public User(Long id, String email, String encryptedPassword) {
+        this.id = id;
+        this.emailAddress = email;
+        this.encryptedPassword = encryptedPassword;
     }
+
+    public User() {}
 
     public Long getId() {
         return id;

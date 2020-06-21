@@ -1,4 +1,4 @@
-package de.wps.bikehh.benutzerverwaltung.service.smtp;
+package de.wps.bikehh.benutzerverwaltung.material;
 
 import java.util.Map;
 

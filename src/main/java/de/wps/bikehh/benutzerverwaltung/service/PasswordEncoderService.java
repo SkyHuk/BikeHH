@@ -6,7 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class BikehhPasswordEncoderService implements PasswordEncoder {
+public class PasswordEncoderService implements PasswordEncoder {
 
 	public static final String SHA_PREFIX = "sha: ";
 

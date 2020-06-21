@@ -1,13 +1,8 @@
 package de.wps.bikehh.benutzerverwaltung.controller;
 
 import de.wps.bikehh.benutzerverwaltung.dto.request.RequestMailModel;
-import de.wps.bikehh.benutzerverwaltung.dto.request.ResetPasswordModel;
 import de.wps.bikehh.benutzerverwaltung.exception.ApiRequestException;
-import de.wps.bikehh.benutzerverwaltung.material.BikehhUserDetails;
-import de.wps.bikehh.benutzerverwaltung.material.User;
-import de.wps.bikehh.benutzerverwaltung.service.BikehhUserDetailsService;
-import de.wps.bikehh.benutzerverwaltung.service.PasswordDetailsService;
-import de.wps.bikehh.benutzerverwaltung.service.VerifyDetailsService;
+import de.wps.bikehh.benutzerverwaltung.service.VerifyDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -18,22 +13,23 @@ import javax.validation.Valid;
 @RequestMapping("/api/verify")
 public class VerifyController {
 
-    private VerifyDetailsService _verifyDetailsService;
+    private VerifyDetailService _verifyDetailService;
+
 
     @Autowired
-    public VerifyController(VerifyDetailsService verifyDetailsService) {
-        this._verifyDetailsService = verifyDetailsService;
+    public VerifyController(VerifyDetailService verifyDetailService) {
+        this._verifyDetailService = verifyDetailService;
     }
 
 
     @GetMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
     public void requestVerificationMail(@Valid @RequestBody RequestMailModel requestModel) throws ApiRequestException {
         String email = requestModel.getEmail();
-        _verifyDetailsService.requestVerificationMail(email);
+        _verifyDetailService.requestVerificationMail(email);
     }
 
     @PutMapping
     public void verifyUser(@RequestParam String token) {
-        _verifyDetailsService.verifyUser(token);
+        _verifyDetailService.verifyUser(token);
     }
 }

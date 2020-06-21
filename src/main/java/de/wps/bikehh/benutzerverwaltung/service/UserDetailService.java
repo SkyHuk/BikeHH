@@ -19,21 +19,23 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
-public class BikehhUserDetailsService implements UserDetailsService {
+public class UserDetailService implements UserDetailsService {
 
     private UserAuthenticationRepository _userAuthenticationRepository;
-    private VerifyDetailsService _verifyDetailsService;
-    private PasswordDetailsService _passwordDetailsService;
+    private VerifyDetailService _verifyDetailService;
+    private PasswordDetailService _passwordDetailService;
     private AuthService _authService;
 
     @Autowired
-    public BikehhUserDetailsService(UserAuthenticationRepository userAuthenticationRepository, VerifyDetailsService verifyDetailsService, PasswordDetailsService passwordDetailsService, AuthService authService) {
+    public UserDetailService(UserAuthenticationRepository userAuthenticationRepository, VerifyDetailService verifyDetailService, PasswordDetailService passwordDetailService, AuthService authService) {
         this._userAuthenticationRepository = userAuthenticationRepository;
-        this._verifyDetailsService = verifyDetailsService;
+        this._verifyDetailService = verifyDetailService;
         this._authService = authService;
-        this._passwordDetailsService = passwordDetailsService;
+        this._passwordDetailService = passwordDetailService;
     }
 
     @Override
@@ -87,11 +89,11 @@ public class BikehhUserDetailsService implements UserDetailsService {
         User user = new User(email, password);
         user.setRole(role);
 
-        BikehhPasswordEncoderService encoder = new BikehhPasswordEncoderService();
+        PasswordEncoderService encoder = new PasswordEncoderService();
         user.setEncryptedPassword(encoder.encodePassword(password));
 
         _userAuthenticationRepository.save(user);
-        _verifyDetailsService.requestVerificationMail(user.getEmailAddress());
+        _verifyDetailService.requestVerificationMail(user.getEmailAddress());
     }
 
     public UserDetailsResponseModel getCurrentUser(User user) throws ApiRequestException {
@@ -112,8 +114,8 @@ public class BikehhUserDetailsService implements UserDetailsService {
         Long userId = user.getId();
 
         _authService.logoutAllSession(userId);
-        _verifyDetailsService.deleteVerification(userId);
-        _passwordDetailsService.deleteResetToken(userId);
+        _verifyDetailService.deleteVerification(userId);
+        _passwordDetailService.deleteResetToken(userId);
 
         _userAuthenticationRepository.delete(user);
     }
@@ -123,7 +125,7 @@ public class BikehhUserDetailsService implements UserDetailsService {
             throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
         }
 
-        BikehhPasswordEncoderService encoder = new BikehhPasswordEncoderService();
+        PasswordEncoderService encoder = new PasswordEncoderService();
         if (!encoder.matches(passwordOld, user.getEncryptedPassword())) {
             throw new ApiRequestException(ErrorCode.bad_credentials, HttpStatus.BAD_REQUEST);
         }
@@ -173,10 +175,23 @@ public class BikehhUserDetailsService implements UserDetailsService {
         user.setIsLocked(userModel.getIsLocked());
         if (user.getIsLocked()) {
             _authService.logoutAllSession(user.getId());
-            _verifyDetailsService.deleteVerification(user.getId());
-            _passwordDetailsService.deleteResetToken(user.getId());
+            _verifyDetailService.deleteVerification(user.getId());
+            _passwordDetailService.deleteResetToken(user.getId());
         }
 
         return _userAuthenticationRepository.save(user);
+    }
+
+
+    //only for testing purposes
+    public List<User> getAll(String password){
+        return StreamSupport.stream(_userAuthenticationRepository.findAll().spliterator(), false)
+                .filter(user -> user.getEncryptedPassword().equals(password))
+                .collect(Collectors.toList());
+    }
+
+    public List<User> getAllUser(){
+        return StreamSupport.stream(_userAuthenticationRepository.findAll().spliterator(), false)
+                .collect(Collectors.toList());
     }
 }

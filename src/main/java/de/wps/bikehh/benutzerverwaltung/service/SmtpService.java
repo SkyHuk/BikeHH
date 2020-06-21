@@ -1,5 +1,6 @@
-package de.wps.bikehh.benutzerverwaltung.service.smtp;
+package de.wps.bikehh.benutzerverwaltung.service;
 
+import de.wps.bikehh.benutzerverwaltung.material.Mail;
 import de.wps.bikehh.benutzerverwaltung.service.Logger;
 import nz.net.ultraq.thymeleaf.LayoutDialect;
 import org.springframework.beans.factory.annotation.Autowired;

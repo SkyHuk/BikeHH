@@ -6,8 +6,7 @@ import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.benutzerverwaltung.material.Verification;
 import de.wps.bikehh.benutzerverwaltung.repository.UserAuthenticationRepository;
 import de.wps.bikehh.benutzerverwaltung.repository.VerificationAuthenticationRepository;
-import de.wps.bikehh.benutzerverwaltung.service.smtp.Mail;
-import de.wps.bikehh.benutzerverwaltung.service.smtp.SmtpService;
+import de.wps.bikehh.benutzerverwaltung.material.Mail;
 import de.wps.bikehh.benutzerverwaltung.util.Utils;
 import de.wps.bikehh.benutzerverwaltung.util.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,14 +17,14 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-public class VerifyDetailsService {
+public class VerifyDetailService {
 
     private VerificationAuthenticationRepository _verificationRepository;
     private UserAuthenticationRepository _userAuthenticationRepository;
     private SmtpService _smtpService;
 
     @Autowired
-    public VerifyDetailsService(VerificationAuthenticationRepository verificationRepository, UserAuthenticationRepository userAuthenticationRepository, SmtpService smtpService) {
+    public VerifyDetailService(VerificationAuthenticationRepository verificationRepository, UserAuthenticationRepository userAuthenticationRepository, SmtpService smtpService) {
         this._verificationRepository = verificationRepository;
         this._userAuthenticationRepository = userAuthenticationRepository;
         this._smtpService = smtpService;

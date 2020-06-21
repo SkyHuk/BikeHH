@@ -32,7 +32,7 @@ public class AuthService {
             throw new ApiRequestException(ErrorCode.bad_credentials, HttpStatus.BAD_REQUEST);
         }
 
-        BikehhPasswordEncoderService hashService = new BikehhPasswordEncoderService();
+        PasswordEncoderService hashService = new PasswordEncoderService();
         String hashedPassword = hashService.encodePassword(password);
 
         User user = _userAuthenticationRepository.findByEmailAddress(email);

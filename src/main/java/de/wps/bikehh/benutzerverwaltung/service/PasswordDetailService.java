@@ -4,11 +4,9 @@ import de.wps.bikehh.benutzerverwaltung.exception.ApiRequestException;
 import de.wps.bikehh.benutzerverwaltung.exception.ErrorCode;
 import de.wps.bikehh.benutzerverwaltung.material.Reset;
 import de.wps.bikehh.benutzerverwaltung.material.User;
-import de.wps.bikehh.benutzerverwaltung.material.Verification;
 import de.wps.bikehh.benutzerverwaltung.repository.PasswordAuthenticationRepository;
 import de.wps.bikehh.benutzerverwaltung.repository.UserAuthenticationRepository;
-import de.wps.bikehh.benutzerverwaltung.service.smtp.Mail;
-import de.wps.bikehh.benutzerverwaltung.service.smtp.SmtpService;
+import de.wps.bikehh.benutzerverwaltung.material.Mail;
 import de.wps.bikehh.benutzerverwaltung.util.Utils;
 import de.wps.bikehh.benutzerverwaltung.util.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +17,14 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-public class PasswordDetailsService {
+public class PasswordDetailService {
 
     private PasswordAuthenticationRepository _passwordAuthenticationRepository;
     private UserAuthenticationRepository _userAuthenticationRepository;
     private SmtpService _smtpService;
 
     @Autowired
-    public PasswordDetailsService(PasswordAuthenticationRepository passwordAuthenticationRepository, UserAuthenticationRepository userAuthenticationRepository, SmtpService smtpService) {
+    public PasswordDetailService(PasswordAuthenticationRepository passwordAuthenticationRepository, UserAuthenticationRepository userAuthenticationRepository, SmtpService smtpService) {
         this._passwordAuthenticationRepository = passwordAuthenticationRepository;
         this._userAuthenticationRepository = userAuthenticationRepository;
         this._smtpService = smtpService;
@@ -82,7 +80,7 @@ public class PasswordDetailsService {
         }
 
 
-        BikehhPasswordEncoderService _encoder = new BikehhPasswordEncoderService();
+        PasswordEncoderService _encoder = new PasswordEncoderService();
         String encodedPassword = _encoder.encode(password);
         user.setEncryptedPassword(encodedPassword);
 

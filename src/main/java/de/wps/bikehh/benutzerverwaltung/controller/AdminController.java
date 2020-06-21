@@ -6,7 +6,7 @@ import de.wps.bikehh.benutzerverwaltung.exception.ApiRequestException;
 import de.wps.bikehh.benutzerverwaltung.exception.ErrorCode;
 import de.wps.bikehh.benutzerverwaltung.material.Roles;
 import de.wps.bikehh.benutzerverwaltung.material.User;
-import de.wps.bikehh.benutzerverwaltung.service.BikehhUserDetailsService;
+import de.wps.bikehh.benutzerverwaltung.service.UserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,11 +21,11 @@ import java.util.List;
 @RequestMapping("/api/admin")
 public class AdminController {
 
-    private BikehhUserDetailsService _bikehhUserDetailsService;
+    private UserDetailService _UserDetailService;
 
     @Autowired
-    public AdminController(BikehhUserDetailsService bikehhUserDetailsService) {
-        this._bikehhUserDetailsService = bikehhUserDetailsService;
+    public AdminController(UserDetailService userDetailService) {
+        this._UserDetailService = userDetailService;
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -34,26 +34,26 @@ public class AdminController {
 
         String email = requestUserDetails.getEmail();
         String password = requestUserDetails.getPassword();
-        _bikehhUserDetailsService.createAdmin(email, password);
+        _UserDetailService.createAdmin(email, password);
     }
 
     @RequestMapping(value = "/users", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<User> getAllUsers(Authentication auth) {
         this.authorizeAsAdmin(auth);
 
-        return _bikehhUserDetailsService.retrieveUsers();
+        return _UserDetailService.retrieveUsers();
     }
 
     @RequestMapping(value = "/users/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public User getUser(Authentication auth, @PathVariable("id") @NotNull Long id) {
         this.authorizeAsAdmin(auth);
-        return _bikehhUserDetailsService.getUserById(id);
+        return _UserDetailService.getUserById(id);
     }
 
     @RequestMapping(value = "/users/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
     public void updateUser(Authentication auth, @PathVariable("id") @NotNull Long id, @RequestBody UpdateUsersDetailsRequestModel userModel) {
         this.authorizeAsAdmin(auth);
-        _bikehhUserDetailsService.updateUserById(id, userModel);
+        _UserDetailService.updateUserById(id, userModel);
     }
 
     @RequestMapping(value = "/users/{id}", method = RequestMethod.DELETE)
@@ -61,7 +61,7 @@ public class AdminController {
     public void deleteUser(Authentication auth, @PathVariable("id") @NotNull Long id) {
         this.authorizeAsAdmin(auth);
 
-        _bikehhUserDetailsService.deleteUserById(id);
+        _UserDetailService.deleteUserById(id);
     }
 
     private void authorizeAsAdmin(Authentication auth) {

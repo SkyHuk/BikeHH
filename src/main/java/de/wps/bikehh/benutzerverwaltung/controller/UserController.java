@@ -6,9 +6,8 @@ import de.wps.bikehh.benutzerverwaltung.dto.request.UserDetailsRequestModel;
 import de.wps.bikehh.benutzerverwaltung.dto.response.UserDetailsResponseModel;
 import de.wps.bikehh.benutzerverwaltung.exception.ApiRequestException;
 import de.wps.bikehh.benutzerverwaltung.material.User;
-import de.wps.bikehh.benutzerverwaltung.service.BikehhUserDetailsService;
+import de.wps.bikehh.benutzerverwaltung.service.UserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -20,11 +19,11 @@ import javax.validation.Valid;
 @RequestMapping("/api/user")
 public class UserController {
 
-    private BikehhUserDetailsService _bikehhUserDetailsService;
+    private UserDetailService _UserDetailService;
 
     @Autowired
-    public UserController(BikehhUserDetailsService bikehhUserDetailsService) {
-        this._bikehhUserDetailsService = bikehhUserDetailsService;
+    public UserController(UserDetailService userDetailService) {
+        this._UserDetailService = userDetailService;
     }
 
 
@@ -32,7 +31,7 @@ public class UserController {
     @ResponseBody
     public UserDetailsResponseModel getCurrentUser(Authentication auth) throws ApiRequestException {
         User user = (User) auth.getPrincipal();
-        return _bikehhUserDetailsService.getCurrentUser(user);
+        return _UserDetailService.getCurrentUser(user);
     }
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -40,14 +39,14 @@ public class UserController {
         String email = requestUserDetails.getEmail();
         String password = requestUserDetails.getPassword();
 
-        _bikehhUserDetailsService.createUser(email, password);
+        _UserDetailService.createUser(email, password);
     }
 
     @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public void updateUser(Authentication auth, @Valid @RequestBody UpdateUserDetailsRequestModel requestUserDetails) {
         User user = (User) auth.getPrincipal();
 
-        _bikehhUserDetailsService.updateUser(user, requestUserDetails);
+        _UserDetailService.updateUser(user, requestUserDetails);
     }
 
     @DeleteMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
@@ -55,7 +54,7 @@ public class UserController {
     public void deleteUser(Authentication auth) {
         User user = (User) auth.getPrincipal();
 
-        _bikehhUserDetailsService.deleteUser(user);
+        _UserDetailService.deleteUser(user);
     }
 
     @RequestMapping(value = "/password", method = RequestMethod.PUT)
@@ -65,6 +64,6 @@ public class UserController {
         String passwordOld = passwordRequestModel.getOldPassword();
         String passwordNew = passwordRequestModel.getNewPassword();
 
-        _bikehhUserDetailsService.updatePassword(user, passwordOld, passwordNew);
+        _UserDetailService.updatePassword(user, passwordOld, passwordNew);
     }
 }
