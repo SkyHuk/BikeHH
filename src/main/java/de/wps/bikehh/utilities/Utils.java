@@ -56,12 +56,13 @@ public class Utils {
 	 */
 	public static void saveJSONSurveyInFiles(String JSONString) throws IllegalArgumentException, ParseException {
 		FileWriter file = null;
-		int filenameCounter = (int) (Math.random() * 999999 + 1);
-		String filename = "Umfrage" + String.valueOf(filenameCounter) + ".json";
 
 		// get SurveyTest from jsonString to validate jsonString
 		Gson g = new Gson();
 		Umfrage surveyTest = g.fromJson(JSONString, Umfrage.class);
+
+		int filenameCounter = surveyTest.getId();
+		String filename = "Umfrage" + String.valueOf(filenameCounter) + ".json";
 
 		if (surveyTest != null) {
 
@@ -120,7 +121,7 @@ public class Utils {
 					if (fileToSaveIn.createNewFile()) {
 						System.out.println("File created: " + fileToSaveIn.getName());
 					} else {
-						System.out.println("File already exists.");
+						System.out.println("File already exists, will be overwritten.");
 					}
 
 					// write to file

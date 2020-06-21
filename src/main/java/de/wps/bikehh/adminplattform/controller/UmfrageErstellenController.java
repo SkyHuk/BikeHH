@@ -55,11 +55,9 @@ public class UmfrageErstellenController {
 	public String showUmfragenBearbeiter(@RequestParam(required = true, name = "umfrageId") int umfrageId,
 			Model model) {
 
-		System.out.println("TESTTEST");
 		Umfrage umfrage = Utils.getUmfrageById(umfrageId);
 		Gson gson = new Gson();
 		String jsonUmfrage = gson.toJson(umfrage);
-		System.out.println(jsonUmfrage);
 		model.addAttribute("umfrage", jsonUmfrage);
 		return "adfc/create_survey";
 	}

@@ -1,7 +1,6 @@
 package de.wps.bikehh.adminplattform.material;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.persistence.ElementCollection;
@@ -37,7 +36,10 @@ public class Question {
 	 * logic: the question this class is the instance of will only be asked when a
 	 * specific QUESTION is answered with a specific ANSWER
 	 */
-	private HashMap<String, String> condition = new HashMap<String, String>();
+	// private HashMap<String, String> conditions = new HashMap<String, String>();
+
+	@ElementCollection
+	private List<Condition> conditions = new ArrayList<Condition>();
 
 	private boolean allowCustomAnswer;
 
@@ -69,12 +71,18 @@ public class Question {
 		this.answers = answers;
 	}
 
-	public HashMap<String, String> getCondition() {
-		return condition;
+	/*
+	 * public HashMap<String, String> getConditions() { return conditions; }
+	 * 
+	 * public void setConditions(HashMap<String, String> condition) {
+	 * this.conditions = condition; }
+	 */
+	public List<Condition> getConditions() {
+		return conditions;
 	}
 
-	public void setCondition(HashMap<String, String> condition) {
-		this.condition = condition;
+	public void setConditions(List<Condition> condition) {
+		this.conditions = condition;
 	}
 
 	public boolean isAllowCustomAnswer() {
