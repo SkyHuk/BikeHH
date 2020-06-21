@@ -373,9 +373,6 @@
 
           self.addDirectionToMarker(lat,lng)
           })
-        self.mainMarker.on('drag', function(e) {
-          //drag directionarrow
-        })
       },
       created() {
       },
@@ -578,8 +575,8 @@
                 return {
                   //question: this.questions.indexOf(question),
                   //expectedAnswer: question.answers.indexOf(condition.expectedAnswer)
-                  question: condition.question,
-                  expectedAnswer: condition.expectedAnswer
+                  question: condition.question.title,
+                  expectedAnswer: condition.expectedAnswer.text
                 }
               })
             }
