@@ -5,13 +5,13 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import de.wps.bikehh.benutzerverwaltung.material.BikehhUserDetails;
-import de.wps.bikehh.benutzerverwaltung.material.User;
+import de.wps.bikehh.benutzerverwaltung.material.Benutzer;
 
 @ControllerAdvice
 public class UserControllerAdvice {
 
 	@ModelAttribute(name = "bikehh_user", binding = false)
-	public User getUser(Authentication authentication) {
+	public Benutzer getBenutzer(Authentication authentication) {
 		if (authentication == null) {
 			return null;
 		}

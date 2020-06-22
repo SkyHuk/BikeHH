@@ -8,26 +8,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import de.wps.bikehh.adminplattform.material.UmfrageDB;
 import de.wps.bikehh.adminplattform.repository.UmfrageRepository;
 
-public class SurveyService {
+public class UmfragenService {
 
 	@Autowired
 	UmfrageRepository surveyRepository;
 
-	public List<UmfrageDB> getAllSurveys() {
+	public List<UmfrageDB> getAlleUmfragen() {
 		List<UmfrageDB> surveys = new ArrayList<UmfrageDB>();
 		surveyRepository.findAll().forEach(survey -> surveys.add(survey));
 		return surveys;
 	}
 
-	public UmfrageDB getSurveyById(int id) {
+	public UmfrageDB getUmfrageNachId(int id) {
 		return surveyRepository.findById((long) id).get();
 	}
 
-	public void saveOrUpdate(UmfrageDB survey) {
+	public void speichereOderUpdateUmfrage(UmfrageDB survey) {
 		surveyRepository.save(survey);
 	}
 
-	public void delete(int id) {
+	public void loesche(int id) {
 		surveyRepository.deleteById((long) id);
 	}
 }

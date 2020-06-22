@@ -13,7 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
-import de.wps.bikehh.benutzerverwaltung.material.User;
+import de.wps.bikehh.benutzerverwaltung.material.Benutzer;
 
 /**
  * Entity Umfrage
@@ -24,77 +24,90 @@ import de.wps.bikehh.benutzerverwaltung.material.User;
 @Entity
 public class UmfrageDB {
 
-	/* static Survey createFromJson(String jsonString) {
-		JSON j = JSON.builder().register(JacksonAnnotationExtension.std).build();
-	} */
+	/*
+	 * static Survey createFromJson(String jsonString) { JSON j =
+	 * JSON.builder().register(JacksonAnnotationExtension.std).build(); }
+	 */
 
 	@Id
 	@GeneratedValue
 	private int id;
 
-	private double longitude;
+	private double laengengrad;
 
-	private double latitude;
+	private double breitengrad;
 
-	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Category.class)
-	@JoinColumn(name = "category", referencedColumnName = "Id", nullable = false)
-	private Category category;
+	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Kategorie.class)
+	@JoinColumn(name = "kategorie", referencedColumnName = "Id", nullable = false)
+	private Kategorie kategorie;
 
-	private Date createdAtDate;
+	private Date erstelltAmDatum;
 
 	@ManyToMany(cascade = CascadeType.ALL)
-	private List<User> confirmedByUsers = new ArrayList<User>();
+	private List<Benutzer> bestaetigtVonBenutzern = new ArrayList<Benutzer>();
 
-	private boolean confirmed;
+	private boolean bestaetigt;
 
 	private String text;
 
-	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Track.class)
-	@JoinColumn(name = "track", referencedColumnName = "Id", nullable = false)
-	private Track track;
+	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Strecke.class)
+	@JoinColumn(name = "strecke", referencedColumnName = "Id", nullable = false)
+	private Strecke strecke;
 
 	public int getId() {
 		return id;
 	}
 
-	public double getLongitude() {
-		return longitude;
+	public void setId(int id) {
+		this.id = id;
 	}
 
-	public void setLongitude(double longitude) {
-		this.longitude = longitude;
+	public double getLaengengrad() {
+		return laengengrad;
 	}
 
-	public double getLatitude() {
-		return latitude;
+	public void setLaengengrad(double laengengrad) {
+		this.laengengrad = laengengrad;
 	}
 
-	public void setLatitude(double latitude) {
-		this.latitude = latitude;
+	public double getBreitengrad() {
+		return breitengrad;
 	}
 
-	public Category getCategory() {
-		return category;
+	public void setBreitengrad(double breitengrad) {
+		this.breitengrad = breitengrad;
 	}
 
-	public void setCategory(Category category) {
-		this.category = category;
+	public Kategorie getKategorie() {
+		return kategorie;
 	}
 
-	public Date getCreatedAtDate() {
-		return createdAtDate;
+	public void setKategorie(Kategorie kategorie) {
+		this.kategorie = kategorie;
 	}
 
-	public void setCreatedAtDate(Date createdAtDate) {
-		this.createdAtDate = createdAtDate;
+	public Date getErstelltAmDatum() {
+		return erstelltAmDatum;
 	}
 
-	public List<User> getConfirmedByUsers() {
-		return confirmedByUsers;
+	public void setErstelltAmDatum(Date erstelltAmDatum) {
+		this.erstelltAmDatum = erstelltAmDatum;
 	}
 
-	public void setConfirmedByUsers(List<User> confirmedByUsers) {
-		this.confirmedByUsers = confirmedByUsers;
+	public List<Benutzer> getBestaetigtVonBenutzern() {
+		return bestaetigtVonBenutzern;
+	}
+
+	public void setBestaetigtVonBenutzern(List<Benutzer> bestaetigtVonBenutzern) {
+		this.bestaetigtVonBenutzern = bestaetigtVonBenutzern;
+	}
+
+	public boolean isBestaetigt() {
+		return bestaetigt;
+	}
+
+	public void setBestaetigt(boolean bestaetigt) {
+		this.bestaetigt = bestaetigt;
 	}
 
 	public String getText() {
@@ -105,19 +118,15 @@ public class UmfrageDB {
 		this.text = text;
 	}
 
-	public Track getTrack() {
-		return track;
+	public Strecke getStrecke() {
+		return strecke;
 	}
 
-	public void setTrack(Track track) {
-		this.track = track;
+	public void setStrecke(Strecke strecke) {
+		this.strecke = strecke;
 	}
 
-	public boolean isConfirmed() {
-		return confirmed;
-	}
-
-	public void setConfirmed(boolean confirmed) {
-		this.confirmed = confirmed;
+	public boolean istBestaetigt() {
+		return bestaetigt;
 	}
 }

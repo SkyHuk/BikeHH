@@ -16,7 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.google.gson.Gson;
 
 import de.wps.bikehh.adminplattform.material.Umfrage;
-import de.wps.bikehh.benutzerverwaltung.material.User;
+import de.wps.bikehh.benutzerverwaltung.material.Benutzer;
 import de.wps.bikehh.utilities.Utils;
 
 @Controller
@@ -24,25 +24,25 @@ import de.wps.bikehh.utilities.Utils;
 public class UmfrageErstellenController {
 
 	/**
-	 * opens create_survey.html with optional coordinates. coordinates get set to 0
-	 * if not present, are then omitted in javascript.
+	 * Öffnet umfrage_erstellen.html mit optional Koordinaten. Koordinaten werden
+	 * auf 0 gesetzt, wenn sie nicht vorhanden sind.
 	 *
-	 * @param coordinates coordinates if coming from map.html
+	 * @param koordinaten coordinates if coming from map.html
 	 * @param model       spring model
 	 * @return html page
 	 */
 	@GetMapping
-	public String showSurveyCreator(@ModelAttribute("bikehh_user") User user,
-			@RequestParam(required = false, name = "coordinates") double[] coordinates, Model model) {
-		if (coordinates != null) {
-			model.addAttribute("lat", coordinates[0]);
-			model.addAttribute("lng", coordinates[1]);
+	public String zeigeUmfragenErsteller(@ModelAttribute("bikehh_user") Benutzer benutzer,
+			@RequestParam(required = false, name = "koordinaten") double[] koordinaten, Model model) {
+		if (koordinaten != null) {
+			model.addAttribute("breitengrad", koordinaten[0]);
+			model.addAttribute("laengengrad", koordinaten[1]);
 		} else {
-			model.addAttribute("lat", 0);
-			model.addAttribute("lng", 0);
+			model.addAttribute("breitengrad", 0);
+			model.addAttribute("laengengrad", 0);
 		}
-		model.addAttribute("user", user);
-		return "adfc/create_survey";
+		model.addAttribute("benutzer", benutzer);
+		return "adfc/umfrage_erstellen";
 	}
 
 	/**
@@ -52,25 +52,25 @@ public class UmfrageErstellenController {
 	 * @return
 	 */
 	@GetMapping("/bearbeiten")
-	public String showUmfragenBearbeiter(@RequestParam(required = true, name = "umfrageId") int umfrageId,
+	public String zeigeUmfragenBearbeiter(@RequestParam(required = true, name = "umfrageId") int umfrageId,
 			Model model) {
 
-		Umfrage umfrage = Utils.getUmfrageById(umfrageId);
+		Umfrage umfrage = Utils.getUmfrageNachId(umfrageId);
 		Gson gson = new Gson();
 		String jsonUmfrage = gson.toJson(umfrage);
 		model.addAttribute("umfrage", jsonUmfrage);
-		return "adfc/create_survey";
+		return "adfc/umfrage_erstellen";
 	}
 
 	/**
-	 * Saves the json strings in a file directory
+	 * Speichert den JSON-String im Speicher
 	 *
-	 * @param body post body
+	 * @param jsonString post body
 	 * @return html page
 	 * @throws Exception
 	 */
 	@RequestMapping(method = RequestMethod.POST)
-	public String processSurvey(@RequestBody String body) {
+	public String speichereUmfrage(@RequestBody String jsonString) {
 
 		// old method
 		// Utils.saveJSONSurveyInFilesOld(body);
@@ -78,14 +78,14 @@ public class UmfrageErstellenController {
 		// new method
 		// create umfrage.json file and validate jsonString
 		try {
-			Utils.saveJSONSurveyInFiles(body);
+			Utils.speichereJSONStringImSpeicher(jsonString);
 		} catch (IllegalArgumentException | ParseException e) {
 			// TODO test
-			System.out.println("IllegalArgumentException or ParseException was thrown in CreateSurveyController");
-			throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "JSONString is not valid", e);
+			System.out.println("IllegalArgumentException oder ParseException wurde in CreateSurveyController geworfen");
+			throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "JSONString ist ungültig", e);
 		}
 
-		return "adfc/survey_list";
+		return "adfc/umfragen_liste";
 	}
 
 }

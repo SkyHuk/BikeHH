@@ -10,31 +10,31 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import de.wps.bikehh.adminplattform.material.UmfrageDB;
-import de.wps.bikehh.adminplattform.service.SurveyService;
+import de.wps.bikehh.adminplattform.service.UmfragenService;
 
 public class UmfrageController {
 
 	@Autowired
-	SurveyService surveyService;
+	UmfragenService umfragenService;
 
-	@GetMapping("/surveys")
-	private List<UmfrageDB> getAllSurveys() {
-		return surveyService.getAllSurveys();
+	@GetMapping("/umfragen")
+	private List<UmfrageDB> getAlleUmfragen() {
+		return umfragenService.getAlleUmfragen();
 	}
 
-	@GetMapping("/surveys/{id}")
-	private UmfrageDB getSurvey(@PathVariable("id") int id) {
-		return surveyService.getSurveyById(id);
+	@GetMapping("/umfragen/{id}")
+	private UmfrageDB getUmfrage(@PathVariable("id") int id) {
+		return umfragenService.getUmfrageNachId(id);
 	}
 
-	@DeleteMapping("/surveys/{id}")
-	private void deleteSurvey(@PathVariable("id") int id) {
-		surveyService.delete(id);
+	@DeleteMapping("/umfragen/{id}")
+	private void loescheUmfrage(@PathVariable("id") int id) {
+		umfragenService.loesche(id);
 	}
 
-	@PostMapping("/surveys")
-	private int saveSurvey(@RequestBody UmfrageDB survey) {
-		surveyService.saveOrUpdate(survey);
-		return survey.getId();
+	@PostMapping("/umfragen")
+	private int speichereUmfrage(@RequestBody UmfrageDB umfrage) {
+		umfragenService.speichereOderUpdateUmfrage(umfrage);
+		return umfrage.getId();
 	}
 }

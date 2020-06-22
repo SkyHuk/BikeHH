@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class MeldungenListeController {
 
 	@GetMapping
-	public String showReportList() {
+	public String zeigeMeldungenListe() {
 
-		return "adfc/report_list";
+		return "adfc/meldungen_liste";
 	}
 }

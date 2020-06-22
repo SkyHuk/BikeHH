@@ -17,22 +17,22 @@ public class UmfrageDetailController {
 
 	/**
 	 *
-	 * opens html page for specific survey
+	 * Öffnet eine html-Seite für eine bestimmte Umfrage
 	 *
-	 * @param model    spring model
-	 * @param surveyId survey id to open
-	 * @return html page
+	 * @param model     spring model
+	 * @param umfrageId id der Umfrage, welche geöffnet werden soll
+	 * @return html Seite
 	 */
 	@GetMapping
-	public String showSingleSurvey(Model model, @PathVariable Integer surveyId) {
+	public String zeigeEinzelUmfrage(Model model, @PathVariable Integer umfrageId) {
 
-		List<Umfrage> surveysList = Utils.getSurveyJsonsAsArray();
-		for (Umfrage survey : surveysList) {
-			if (survey.getId() == surveyId) {
-				model.addAttribute("survey", survey);
+		List<Umfrage> umfragenListe = Utils.getUmfragenAusSpeicher();
+		for (Umfrage umfrage : umfragenListe) {
+			if (umfrage.getId() == umfrageId) {
+				model.addAttribute("umfrage", umfrage);
 			}
 		}
 
-		return "adfc/survey";
+		return "adfc/umfrage";
 	}
 }

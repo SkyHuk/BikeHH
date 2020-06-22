@@ -7,9 +7,9 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 /**
  * Entity Kategorien von Meldungen / Umfragen
@@ -18,7 +18,7 @@ import javax.persistence.ManyToOne;
  *
  */
 @Entity
-public class Category {
+public class Kategorie {
 
 	@Id
 	@GeneratedValue
@@ -26,12 +26,12 @@ public class Category {
 
 	private String name;
 
-	@OneToMany(mappedBy = "category", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-	private List<UmfrageDB> listOfSurveys;
+	@OneToMany(mappedBy = "kategorie", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+	private List<UmfrageDB> umfragenListe;
 
-	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Category.class)
+	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Kategorie.class)
 	@JoinColumn(name = "parentCategory", referencedColumnName = "Id", nullable = false)
-	private Category parentCategory;
+	private Kategorie oberKategorie;
 
 	public int getId() {
 		return id;
@@ -49,12 +49,12 @@ public class Category {
 		this.name = name;
 	}
 
-	public List<UmfrageDB> getListOfSurveys() {
-		return listOfSurveys;
+	public List<UmfrageDB> getUmfragenListe() {
+		return umfragenListe;
 	}
 
-	public void setListOfSurveys(List<UmfrageDB> listOfSurveys) {
-		this.listOfSurveys = listOfSurveys;
+	public void setUmfragenListe(List<UmfrageDB> umfragenListe) {
+		this.umfragenListe = umfragenListe;
 	}
 
 }

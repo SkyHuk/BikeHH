@@ -15,11 +15,11 @@ import de.wps.bikehh.utilities.Utils;
 public class UmfragenListeController {
 
 	@GetMapping
-	public String showSurveyList(Model model) {
+	public String zeigeUmfragenListe(Model model) {
 
-		List<Umfrage> surveys = Utils.getSurveyJsonsAsArray();
+		List<Umfrage> umfragen = Utils.getUmfragenAusSpeicher();
 
-		model.addAttribute("surveys", surveys);
-		return "adfc/survey_list";
+		model.addAttribute("umfragen", umfragen);
+		return "adfc/umfragen_liste";
 	}
 }

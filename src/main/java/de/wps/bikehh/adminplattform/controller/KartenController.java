@@ -1,6 +1,5 @@
 package de.wps.bikehh.adminplattform.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
@@ -16,27 +15,17 @@ import de.wps.bikehh.utilities.Utils;
 public class KartenController {
 
 	@GetMapping
-	public String showMap() {
-		return "adfc/map";
+	public String zeigeKarte() {
+		return "adfc/karte";
 	}
 
-	// test only
-	@ModelAttribute("test")
-	public List<String> testMethod() {
-		ArrayList<String> list = new ArrayList<String>();
-		list.add("Hello World");
-		// test only
-		// System.out.print("test was called");
-		return list;
-	}
+	@ModelAttribute("umfragen")
+	public List<Umfrage> umfragen() {
+		System.out.print("umfragen wurde aufgerufen\n");
 
-	@ModelAttribute("surveys")
-	public List<Umfrage> surveys() {
-		System.out.print("surveys was called\n");
+		List<Umfrage> umfragen = Utils.getUmfragenAusSpeicher();
 
-		List<Umfrage> surveys = Utils.getSurveyJsonsAsArray();
-
-		return surveys;
+		return umfragen;
 	}
 
 }

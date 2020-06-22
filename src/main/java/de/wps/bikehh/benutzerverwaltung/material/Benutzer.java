@@ -12,7 +12,7 @@ import javax.persistence.ManyToMany;
 import de.wps.bikehh.adminplattform.material.UmfrageDB;
 
 @Entity
-public class User {
+public class Benutzer {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

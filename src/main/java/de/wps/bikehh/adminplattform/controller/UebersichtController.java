@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class UebersichtController {
 
 	@GetMapping
-	public String showDashboard() {
+	public String zeigeUebersicht() {
 		return "adfc/dashboard";
 	}
 }

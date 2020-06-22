@@ -1,6 +1,6 @@
 package de.wps.bikehh.benutzerverwaltung.material;
 
-public class Roles {
+public class Rollen {
 
 	public static final String ROLE_USER = "user";
 

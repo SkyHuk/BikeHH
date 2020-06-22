@@ -1,7 +1,7 @@
 package de.wps.bikehh.adminplattform.material;
 
 /**
- * test class for Survey (test with JSON files)
+ * Test-Klasse für eine Umfrage (mit JSON-Dateien, non-Db-Version)
  *
  * @author amnesica
  *
@@ -9,19 +9,19 @@ package de.wps.bikehh.adminplattform.material;
 public class Umfrage {
 
 	private int id;
-	private double lng;
-	private double lat;
-	private String category;
-	private String dateFrom;
-	private String dateTo;
-	private String createdAtDate;
-	private String[] confirmedByUsers;
-	private int confirmedThreshhold;
-	private String title;
-	private Question[] questions;
-	private String creator;
-	private boolean createdManually;
-	private Address address;
+	private double laengengrad;
+	private double breitengrad;
+	private String kategorie;
+	private String startDatum;
+	private String endDatum;
+	private String erstelltAmDatum;
+	private String[] bestaetigtVonBenutzern;
+	private int bestaetigtSchwellenwert;
+	private String titel;
+	private Frage[] fragen;
+	private String ersteller;
+	private boolean manuellErstellt;
+	private Adresse adresse;
 
 	public int getId() {
 		return id;
@@ -31,108 +31,112 @@ public class Umfrage {
 		this.id = id;
 	}
 
-	public double getLng() {
-		return lng;
+	public double getLaengengrad() {
+		return laengengrad;
 	}
 
-	public void setLng(double lng) {
-		this.lng = lng;
+	public void setLaengengrad(double laengengrad) {
+		this.laengengrad = laengengrad;
 	}
 
-	public double getLat() {
-		return lat;
+	public double getBreitengrad() {
+		return breitengrad;
 	}
 
-	public void setLat(double lat) {
-		this.lat = lat;
+	public void setBreitengrad(double breitengrad) {
+		this.breitengrad = breitengrad;
 	}
 
-	public String getCategory() {
-		return category;
+	public String getKategorie() {
+		return kategorie;
 	}
 
-	public void setCategory(String category) {
-		this.category = category;
+	public void setKategorie(String kategorie) {
+		this.kategorie = kategorie;
 	}
 
-	public String getDateFrom() {
-		return dateFrom;
+	public String getStartDatum() {
+		return startDatum;
 	}
 
-	public void setDateFrom(String dateFrom) {
-		this.dateFrom = dateFrom;
+	public void setStartDatum(String startDatum) {
+		this.startDatum = startDatum;
 	}
 
-	public String getDateTo() {
-		return dateTo;
+	public String getEndDatum() {
+		return endDatum;
 	}
 
-	public void setDateTo(String dateTo) {
-		this.dateTo = dateTo;
+	public void setEndDatum(String endDatum) {
+		this.endDatum = endDatum;
 	}
 
-	public String getCreatedAtDate() {
-		return createdAtDate;
+	public String getErstelltAmDatum() {
+		return erstelltAmDatum;
 	}
 
-	public void setCreatedAtDate(String createdAtDate) {
-		this.createdAtDate = createdAtDate;
+	public void setErstelltAmDatum(String erstelltAmDatum) {
+		this.erstelltAmDatum = erstelltAmDatum;
 	}
 
-	public String[] getConfirmedByUsers() {
-		return confirmedByUsers;
+	public String[] getBestaetigtVonBenutzern() {
+		return bestaetigtVonBenutzern;
 	}
 
-	public void setConfirmedByUsers(String[] confirmedByUsers) {
-		this.confirmedByUsers = confirmedByUsers;
+	public void setBestaetigtVonBenutzern(String[] bestaetigtVonBenutzern) {
+		this.bestaetigtVonBenutzern = bestaetigtVonBenutzern;
 	}
 
-	public int getConfirmedThreshhold() {
-		return confirmedThreshhold;
+	public int getBestaetigtSchwellenwert() {
+		return bestaetigtSchwellenwert;
 	}
 
-	public void setConfirmedThreshhold(int confirmedThreshhold) {
-		this.confirmedThreshhold = confirmedThreshhold;
+	public void setBestaetigtSchwellenwert(int bestaetigtSchwellenwert) {
+		this.bestaetigtSchwellenwert = bestaetigtSchwellenwert;
 	}
 
-	public String getTitle() {
-		return title;
+	public String getTitel() {
+		return titel;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public void setTitel(String titel) {
+		this.titel = titel;
 	}
 
-	public Question[] getQuestions() {
-		return questions;
+	public Frage[] getFragen() {
+		return fragen;
 	}
 
-	public void setQuestions(Question[] questions) {
-		this.questions = questions;
+	public void setFragen(Frage[] fragen) {
+		this.fragen = fragen;
 	}
 
-	public String getCreator() {
-		return creator;
+	public String getErsteller() {
+		return ersteller;
 	}
 
-	public void setCreator(String creator) {
-		this.creator = creator;
+	public void setErsteller(String ersteller) {
+		this.ersteller = ersteller;
 	}
 
-	public boolean isCreatedManually() {
-		return createdManually;
+	public boolean isManuellErstellt() {
+		return manuellErstellt;
 	}
 
-	public void setCreatedManually(boolean createdManually) {
-		this.createdManually = createdManually;
+	public void setManuellErstellt(boolean manuellErstellt) {
+		this.manuellErstellt = manuellErstellt;
 	}
 
-	public Address getAddress() {
-		return address;
+	public Adresse getAdresse() {
+		return adresse;
 	}
 
-	public void setAddress(Address address) {
-		this.address = address;
+	public void setAdresse(Adresse adresse) {
+		this.adresse = adresse;
+	}
+
+	public boolean wurdeManuellErstellt() {
+		return manuellErstellt;
 	}
 
 }

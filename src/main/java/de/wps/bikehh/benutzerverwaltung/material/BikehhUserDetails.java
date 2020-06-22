@@ -6,14 +6,14 @@ public class BikehhUserDetails extends org.springframework.security.core.userdet
 
 	private static final long serialVersionUID = -6532889422081326223L;
 
-	private User user;
+	private Benutzer user;
 
-	public BikehhUserDetails(User user, String username, String password, String[] authorities) {
+	public BikehhUserDetails(Benutzer user, String username, String password, String[] authorities) {
 		super(username, password, AuthorityUtils.createAuthorityList(authorities));
 		this.user = user;
 	}
 
-	public User getBikehhUser() {
+	public Benutzer getBikehhUser() {
 		return user;
 	}
 

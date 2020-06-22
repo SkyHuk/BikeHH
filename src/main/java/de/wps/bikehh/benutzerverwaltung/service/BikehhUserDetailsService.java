@@ -11,8 +11,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import de.wps.bikehh.benutzerverwaltung.material.BikehhUserDetails;
-import de.wps.bikehh.benutzerverwaltung.material.Roles;
-import de.wps.bikehh.benutzerverwaltung.material.User;
+import de.wps.bikehh.benutzerverwaltung.material.Rollen;
+import de.wps.bikehh.benutzerverwaltung.material.Benutzer;
 import de.wps.bikehh.benutzerverwaltung.repository.UserAuthenticationRepository;
 
 @Service
@@ -31,7 +31,7 @@ public class BikehhUserDetailsService implements UserDetailsService {
 			throw new UsernameNotFoundException("Unbekannter Nutzer: " + email);
 		}
 
-		User user = _userAuthenticationRepository.findByEmailAddress(email);
+		Benutzer user = _userAuthenticationRepository.findByEmailAddress(email);
 
 		if (user.getIsLocked()) {
 			throw new LockedException("Nutzer ist gesperrt");
@@ -39,14 +39,14 @@ public class BikehhUserDetailsService implements UserDetailsService {
 		return new BikehhUserDetails(user, email, user.getEncryptedPassword(), createAuthorities(user));
 	}
 
-	private String[] createAuthorities(User user) {
+	private String[] createAuthorities(Benutzer user) {
 		List<String> authorities = new ArrayList<>(3);
 
 		switch (user.getRole()) {
-		case Roles.ROLE_ADMIN:
-			authorities.add(Roles.ROLE_ADMIN);
-		case Roles.ROLE_USER:
-			authorities.add(Roles.ROLE_USER);
+		case Rollen.ROLE_ADMIN:
+			authorities.add(Rollen.ROLE_ADMIN);
+		case Rollen.ROLE_USER:
+			authorities.add(Rollen.ROLE_USER);
 			break;
 		default:
 			throw new RuntimeException("Unbekannte Role (" + user.getRole() + ") von User " + user.getEmailAddress());
