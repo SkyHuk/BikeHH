@@ -402,7 +402,7 @@
 
           this.markers.addLayer(polyline)
 
-          const decorator = L.polylineDecorator(polyline, {
+          let decorator = L.polylineDecorator(polyline, {
             patterns: [
               { offset: '100%', repeat: 0, symbol: L.Symbol.arrowHead({ pixelSize: 20, polygon: false, pathOptions: { stroke: true } }) },
             ]
@@ -410,20 +410,57 @@
 
           this.markers.addLayer(decorator)
 
-          const rotateMarker = L.marker([lat + halfLineLength + rotateMarkerOffset, lng + halfLineLength + rotateMarkerOffset], {
-            draggable: true,
-            autoPan: false,
-            // icon: L.Icon({ })
-          }).addTo(this.mymap).on('drag', (e) => {
-            console.log(e, e.latlng)
+          const onRotate = (e) => {
             const x = e.latlng.lat - lat
             const y = e.latlng.lng - lng
             const angle = Math.atan2(x, y)
             const degrees = 180*angle/Math.PI
             console.log('ROTATE DRAG', angle, degrees)
 
-            // const newX = Math.cos(angle)
-          })
+            // arrow pointing straight right
+            const initialX = halfLineLength
+            const initialY = 0.0
+
+            const rotatedX = (Math.cos(angle) * initialX) - (Math.sin(angle) * initialY)
+            const rotatedY = (Math.sin(angle) * initialX) + (Math.cos(angle) * initialY)
+            console.log('rotatedX', rotatedX, 'rotatedY', rotatedY)
+            const halfPoint = [rotatedX , rotatedY ]
+
+            const newStart = [
+              lat - halfPoint[1],
+              lng - halfPoint[0],
+            ]
+
+            const newEnd = [
+              lat + halfPoint[1],
+              lng + halfPoint[0],
+            ]
+
+            console.log('newStart', newStart, 'newEnd', newEnd)
+
+            polyline.setLatLngs([newStart, newEnd])
+
+            this.mymap.removeLayer(decorator)
+            decorator = L.polylineDecorator(polyline, {
+              patterns: [
+                { offset: '100%', repeat: 0, symbol: L.Symbol.arrowHead({ pixelSize: 20, polygon: false, pathOptions: { stroke: true } }) },
+              ]
+            }).addTo(this.mymap)
+          }
+
+          let rotateMarker
+
+          const addRotateMarker = () => {
+            rotateMarker = L.marker([lat + halfLineLength + rotateMarkerOffset, lng + halfLineLength + rotateMarkerOffset], {
+              draggable: true,
+              autoPan: false,
+              // icon: L.Icon({ })
+            }).addTo(this.mymap).on('drag', onRotate)
+
+            this.markers.addLayer(rotateMarker)
+          }
+
+          addRotateMarker()
 
           return polyline
         },
