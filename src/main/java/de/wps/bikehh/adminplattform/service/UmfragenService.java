@@ -4,30 +4,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import de.wps.bikehh.adminplattform.material.UmfrageDB;
+import de.wps.bikehh.adminplattform.material.Umfrage;
 import de.wps.bikehh.adminplattform.repository.UmfrageRepository;
 
+@Service
 public class UmfragenService {
 
 	@Autowired
 	UmfrageRepository umfrageRepository;
 
-	public List<UmfrageDB> getAlleUmfragen() {
-		List<UmfrageDB> surveys = new ArrayList<UmfrageDB>();
-		umfrageRepository.findAll().forEach(survey -> surveys.add(survey));
-		return surveys;
+	public List<Umfrage> getAlleUmfragen() {
+		List<Umfrage> umfragen = new ArrayList<Umfrage>();
+		umfrageRepository.findAll().forEach(umfrage -> umfragen.add(umfrage));
+		return umfragen;
 	}
 
-	public UmfrageDB getUmfrageNachId(int id) {
-		return umfrageRepository.findById((long) id).get();
+	public Umfrage getUmfrageNachId(int id) {
+		return umfrageRepository.findById((int) id).get();
 	}
 
-	public void speichereOderUpdateUmfrage(UmfrageDB survey) {
+	public void speichereOderUpdateUmfrage(Umfrage survey) {
 		umfrageRepository.save(survey);
 	}
 
 	public void loesche(int id) {
-		umfrageRepository.deleteById((long) id);
+		umfrageRepository.deleteById((int) id);
 	}
 }

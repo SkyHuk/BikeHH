@@ -4,12 +4,13 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
-import de.wps.bikehh.adminplattform.material.UmfrageDB;
+import de.wps.bikehh.adminplattform.material.Umfrage;
 
 @Entity
 public class Benutzer {
@@ -26,8 +27,8 @@ public class Benutzer {
 
 	private boolean istGesperrt;
 
-	@ManyToMany(mappedBy = "bestaetigtVonBenutzern", cascade = CascadeType.ALL)
-	private List<UmfrageDB> bestaetigteUmfragen;
+	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "bestaetigtVonBenutzern", cascade = CascadeType.ALL)
+	private List<Umfrage> bestaetigteUmfragen;
 
 	public Long getId() {
 		return id;
@@ -69,11 +70,11 @@ public class Benutzer {
 		this.istGesperrt = isLocked;
 	}
 
-	public List<UmfrageDB> getBestaetigteUmfragen() {
+	public List<Umfrage> getBestaetigteUmfragen() {
 		return bestaetigteUmfragen;
 	}
 
-	public void setBestaetigteUmfragen(List<UmfrageDB> confirmedSurveys) {
+	public void setBestaetigteUmfragen(List<Umfrage> confirmedSurveys) {
 		this.bestaetigteUmfragen = confirmedSurveys;
 	}
 

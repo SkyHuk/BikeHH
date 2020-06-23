@@ -3,10 +3,14 @@ package de.wps.bikehh.adminplattform.material;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 
 /**
  * Entitiy Frage
@@ -26,8 +30,11 @@ public class Frage {
 
 	private String titel;
 
-	@ElementCollection
-	private List<Antwort> antworten = new ArrayList<Antwort>();
+	// @ElementCollection
+	// private List<Antwort> antworten = new ArrayList<Antwort>();
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, targetEntity = AntwortMoeglichkeit.class)
+	@JoinColumn(name = "frage", referencedColumnName = "Id", nullable = false)
+	private List<AntwortMoeglichkeit> antwortMoeglichkeiten;
 
 	/**
 	 * dictionary that links a question and a answer, to be used as
@@ -39,6 +46,7 @@ public class Frage {
 	// private HashMap<String, String> conditions = new HashMap<String, String>();
 
 	@ElementCollection
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, targetEntity = Bedingung.class)
 	private List<Bedingung> bedingungen = new ArrayList<Bedingung>();
 
 	private boolean erlaubeBenutzerdefinierteAntwort;
@@ -63,12 +71,12 @@ public class Frage {
 		this.titel = titel;
 	}
 
-	public List<Antwort> getAntworten() {
-		return antworten;
+	public List<AntwortMoeglichkeit> getAntwortMoeglichkeiten() {
+		return antwortMoeglichkeiten;
 	}
 
-	public void setAntworten(List<Antwort> antworten) {
-		this.antworten = antworten;
+	public void setAntwortenMoeglichkeiten(List<AntwortMoeglichkeit> antwortMoeglichkeiten) {
+		this.antwortMoeglichkeiten = antwortMoeglichkeiten;
 	}
 
 	public List<Bedingung> getBedingungen() {
@@ -102,12 +110,5 @@ public class Frage {
 	public void setLaengengrad(double laengengrad) {
 		this.laengengrad = laengengrad;
 	}
-
-	/*
-	 * public HashMap<String, String> getConditions() { return conditions; }
-	 * 
-	 * public void setConditions(HashMap<String, String> condition) {
-	 * this.conditions = condition; }
-	 */
 
 }

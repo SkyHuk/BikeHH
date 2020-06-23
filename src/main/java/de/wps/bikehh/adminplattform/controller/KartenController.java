@@ -2,30 +2,38 @@ package de.wps.bikehh.adminplattform.controller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import de.wps.bikehh.adminplattform.material.Umfrage;
-import de.wps.bikehh.utilities.Utils;
+import de.wps.bikehh.adminplattform.service.UmfragenService;
 
 @Controller
 @RequestMapping("karte")
 public class KartenController {
 
+	@Autowired
+	UmfragenService umfragenService;
+
 	@GetMapping
-	public String zeigeKarte() {
+	public String zeigeKarte(Model model) {
+
+		List<Umfrage> umfragen = umfragenService.getAlleUmfragen();
+
+		System.out.println(umfragen.size());
+		model.addAttribute("umfragen", umfragen);
 		return "adfc/karte";
 	}
 
-	@ModelAttribute("umfragen")
-	public List<Umfrage> umfragen() {
-		System.out.print("umfragen wurde aufgerufen\n");
-
-		List<Umfrage> umfragen = Utils.getUmfragenAusSpeicher();
-
-		return umfragen;
-	}
+	/*
+	 * @ModelAttribute("umfragen") public List<Umfrage> umfragen() {
+	 * 
+	 * List<Umfrage> umfragen = umfragenService.getAlleUmfragen();
+	 * 
+	 * return umfragen; }
+	 */
 
 }
