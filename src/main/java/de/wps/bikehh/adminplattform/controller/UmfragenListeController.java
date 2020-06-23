@@ -19,6 +19,8 @@ public class UmfragenListeController {
 
 		List<Umfrage> umfragen = Utils.getUmfragenAusSpeicher();
 
+		System.out.println(umfragen.get(0).getAdresse().getStrasse().toString());
+
 		model.addAttribute("umfragen", umfragen);
 		return "adfc/umfragen_liste";
 	}

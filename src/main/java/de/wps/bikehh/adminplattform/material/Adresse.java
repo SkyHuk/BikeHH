@@ -4,7 +4,7 @@ public class Adresse {
 
 	private String stadt;
 	private String postleitZahl;
-	private String straße;
+	private String strasse;
 	// not guaranteed to be present, has to be checked
 	private String hausnummer;
 
@@ -24,12 +24,12 @@ public class Adresse {
 		this.postleitZahl = postleitZahl;
 	}
 
-	public String getStraße() {
-		return straße;
+	public String getStrasse() {
+		return strasse;
 	}
 
-	public void setStraße(String straße) {
-		this.straße = straße;
+	public void setStrasse(String straße) {
+		this.strasse = straße;
 	}
 
 	public String getHausnummer() {

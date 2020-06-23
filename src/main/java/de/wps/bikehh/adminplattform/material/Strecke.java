@@ -29,7 +29,7 @@ public class Strecke {
 
 	private Date erstelltAmDatum;
 
-	@OneToMany(mappedBy = "track", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+	@OneToMany(mappedBy = "strecke", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
 	private List<UmfrageDB> listeAnUmfragen;
 
 	public int getId() {

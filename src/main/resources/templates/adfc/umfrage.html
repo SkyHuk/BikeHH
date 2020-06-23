@@ -1,7 +1,7 @@
 <html layout:decorate="~{layout/layout}">
 
 <head>
-  <title th:text="${'Umfrage #' + survey.id}"></title>
+  <title th:text="${'Umfrage #' + umfrage.id}"></title>
 
   <link rel="stylesheet"
   href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
@@ -21,40 +21,40 @@
     <div class="card-body">
       <div class="row">
         <div class="col-9">
-          <h4 class="card-title" th:text="${'Umfrage #' + survey.id}">
+          <h4 class="card-title" th:text="${'Umfrage #' + umfrage.id}">
             <!-- <span class="badge badge-secondary">Nutzergeneriert</span> -->
           </h4>
-          <h6 class="card-subtitle mb-2 text-muted" th:text="${'Erstellt am: ' + survey.createdAtDate}"></h6>
+          <h6 class="card-subtitle mb-2 text-muted" th:text="${'Erstellt am: ' + umfrage.erstelltAmDatum}"></h6>
 
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-              <li class="breadcrumb-item" th:text="${'Kategorie: ' + survey.category}"></li>
+              <li class="breadcrumb-item" th:text="${'Kategorie: ' + umfrage.kategorie}"></li>
             </ol>
           </nav>
           <div>
-            <h6 class="mb-2 text-muted">Ort: <span class="badge badge-secondary" th:text="${survey.address.houseNumber!=null}?${survey.address.street + ' ' + survey.address.houseNumber + ', ' + survey.address.postcode + ', ' + survey.address.city}:${survey.address.street + ', ' + survey.address.postcode + ', ' + survey.address.city}"></span></h6>
+            <h6 class="mb-2 text-muted">Ort: <span class="badge badge-secondary" th:text="${umfrage.adresse.hausnummer!=null}?${umfrage.adresse.straße + ' ' + umfrage.adresse.hausnummer + ', ' + umfrage.adresse.postleitZahl + ', ' + umfrage.adresse.stadt}:${umfrage.adresse.straße + ', ' + umfrage.adresse.postleitZahl + ', ' + umfrage.adresse.stadt}"></span></h6>
           </div>
           <div>
-            <h6 class="mb-2 text-muted">Ersteller: <span class="badge badge-secondary" th:text="${survey.creator}"></span></h6>
+            <h6 class="mb-2 text-muted">Ersteller: <span class="badge badge-secondary" th:text="${umfrage.ersteller}"></span></h6>
           </div>
           <div>
             <h6 class="mb-2 text-muted">
               <span>Bestätigt von:</span>
-              <span class="badge badge-primary mr-2" th:each="user : ${survey.confirmedByUsers}">
-                <span th:text="${user}"></span>
+              <span class="badge badge-primary mr-2" th:each="benutzer : ${umfrage.bestaetigtVonBenutzern}">
+                <span th:text="${benutzer}"></span>
               </span>
             </h6>
           </div>
           <div>
-            <h6 class="mb-2 text-muted">Bestätigungspunkte: <span class="badge badge-secondary" th:text="${survey.confirmedByUsers.length + '/' + survey.confirmedThreshhold}"></span></h6>
+            <h6 class="mb-2 text-muted">Bestätigungspunkte: <span class="badge badge-secondary" th:text="${umfrage.bestaetigtVonBenutzern.length + '/' + umfrage.bestaetigtSchwellenwert}"></span></h6>
           </div>
 
-          <p class="card-text mb-4" th:text="${survey.title}"></p>
+          <p class="card-text mb-4" th:text="${umfrage.titel}"></p>
         </div>
         <div class="col-3">
-          <a class="btn btn-block btn-outline-primary" th:href="@{/umfrage-erstellen/bearbeiten?umfrageId={id}(id=${survey.id})}">Umfrage bearbeiten</a>
-          <button class="btn btn-block btn-outline-primary" onClick="showOnMap()">Zeige auf Karte</button>
-          <button class="btn btn-block btn-outline-primary" th:data-creator="${survey.creator}" onclick="contactCreator(this.dataset.creator)">Kontaktiere Ersteller</button>
+          <a class="btn btn-block btn-outline-primary" th:href="@{/umfrage-erstellen/bearbeiten?umfrageId={id}(id=${umfrage.id})}">Umfrage bearbeiten</a>
+          <button class="btn btn-block btn-outline-primary" onClick="zeigAufKarte()">Zeige auf Karte</button>
+          <button class="btn btn-block btn-outline-primary" th:data-creator="${umfrage.ersteller}" onclick="kontaktiereErsteller(this.dataset.creator)">Kontaktiere Ersteller</button>
           <button class="btn btn-block btn-outline-success">Bestätigen</button>
         </div>
       </div>
@@ -67,15 +67,15 @@
         </div>
         <div class="col">
           <h6>Fragen</h6>
-          <div th:each="question : ${survey.questions}">
-           <div th:text="${question.title}"></div>
+          <div th:each="frage : ${umfrage.fragen}">
+           <div th:text="${frage.titel}"></div>
            <ul>
-            <div th:each="answer : ${question.answers}">
-             <li th:text="${answer.text}"></li>
+            <div th:each="antwort : ${frage.antworten}">
+             <li th:text="${antwort.text}"></li>
            </div>
          </ul>
        </div>
-       <span th:if="${!survey.createdManually}">
+       <span th:if="${!umfrage.manuellErstellt}">
          <h6>Umfrage wurde automatisch aus folgender Meldung generiert</h6>
          <div class="border p-4">
           <div class="row">
@@ -208,13 +208,13 @@
 <script>
 
     // coordinates passed from controller
-    var lat = [[${survey.lat}]];
-    var lng = [[${survey.lng}]];
+    var breitengrad = [[${umfrage.laengengrad}]];
+    var laengengrad = [[${survey.breitengrad}]];
 
   // init map
 
-  var mymap = L.map('mapid').setView([lat, lng], 13);
-  addMarkerToMap(lat, lng);
+  var karte = L.map('mapid').setView([breitengrad, laengengrad], 13);
+  fügeMarkerZurKarteHinzu(breitengrad, laengengrad);
 
   L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
     maxZoom: 18,
@@ -224,10 +224,10 @@
     id: 'mapbox/streets-v11',
     tileSize: 512,
     zoomOffset: -1
-  }).addTo(mymap);
+  }).addTo(karte);
 
-  function addQuestionMarkerToMap(question, index) {
-    if (question.lat && question.lng) {
+  function fügeFragenmarkerZurKarteHinzu(frage, index) {
+    if (frage.breitengrad && frage.laengengrad) {
       var greenIcon = new L.Icon({
         iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
         shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
@@ -236,35 +236,35 @@
         popupAnchor: [1, -34],
         shadowSize: [41, 41]
       });
-      var marker = L.marker([question.lat, question.lng], {
+      var marker = L.marker([frage.breitengrad, frage.laengengrad], {
        icon:greenIcon
-     }).addTo(this.mymap).bindPopup('<b>Ort für Frage ' + index + ': ' + question.title +'</b>');
+     }).addTo(this.karte).bindPopup('<b>Ort für Frage ' + index + ': ' + frage.titel +'</b>');
     }
   }
 
     // adds a marker to given coordinates,
     // used to mark location of survey
-    function addMarkerToMap(lat, lng) {
-      var marker = L.marker([lat, lng]).addTo(mymap)
+    function fügeMarkerZurKarteHinzu(breitengrad, laengengrad) {
+      var marker = L.marker([breitengrad, laengengrad]).addTo(karte)
       .bindPopup("<b>Ort der Umfrage.<br/>");
     };
    // centers the map on the location of the survey while zooming in
-   function showOnMap() {
-    mymap.setView([lat, lng], 17);
+   function zeigAufKarte() {
+    karte.setView([breitengrad, laengengrad], 17);
   };
 
   // opens email client to write email to survey creator
-  function contactCreator(creator) {
-    var mailAddress = creator
-    var subject = "BikeHH - Umfrage #" + [[${survey.id}]];
-    window.location.href = "mailto:" + mailAddress + "?subject="+ subject + "&body=";
+  function kontaktiereErsteller(ersteller) {
+    var mailAdresse = ersteller
+    var betreff = "BikeHH - Umfrage #" + [[${umfrage.id}]];
+    window.location.href = "mailto:" + mailAdresse + "?subject="+ betreff + "&body=";
   };
 </script>
-<th:block th:each="question,status : ${survey.questions}">
+<th:block th:each="frage,status : ${umfrage.fragenfragen}">
 <!-- call js function -->
 <script th:inline="javascript">
   /*<![CDATA[*/
-  addQuestionMarkerToMap([[${ question }]], [[${status.index} + 1]]);
+  fügeFragenmarkerZurKarteHinzu([[${ frage }]], [[${status.index} + 1]]);
   /*]]>*/
 </script>
 </th:block>

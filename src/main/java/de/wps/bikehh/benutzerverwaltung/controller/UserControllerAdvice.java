@@ -4,8 +4,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
-import de.wps.bikehh.benutzerverwaltung.material.BikehhUserDetails;
 import de.wps.bikehh.benutzerverwaltung.material.Benutzer;
+import de.wps.bikehh.benutzerverwaltung.material.BikehhUserDetails;
 
 @ControllerAdvice
 public class UserControllerAdvice {

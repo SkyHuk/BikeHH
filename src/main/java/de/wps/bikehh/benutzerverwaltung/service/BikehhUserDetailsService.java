@@ -10,9 +10,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import de.wps.bikehh.benutzerverwaltung.material.Benutzer;
 import de.wps.bikehh.benutzerverwaltung.material.BikehhUserDetails;
 import de.wps.bikehh.benutzerverwaltung.material.Rollen;
-import de.wps.bikehh.benutzerverwaltung.material.Benutzer;
 import de.wps.bikehh.benutzerverwaltung.repository.UserAuthenticationRepository;
 
 @Service
@@ -27,29 +27,29 @@ public class BikehhUserDetailsService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-		if (!_userAuthenticationRepository.existsByEmailAddress(email)) {
+		if (!_userAuthenticationRepository.existsByEmailAdresse(email)) {
 			throw new UsernameNotFoundException("Unbekannter Nutzer: " + email);
 		}
 
-		Benutzer user = _userAuthenticationRepository.findByEmailAddress(email);
+		Benutzer user = _userAuthenticationRepository.findByEmailAdresse(email);
 
-		if (user.getIsLocked()) {
+		if (user.getIstGesperrt()) {
 			throw new LockedException("Nutzer ist gesperrt");
 		}
-		return new BikehhUserDetails(user, email, user.getEncryptedPassword(), createAuthorities(user));
+		return new BikehhUserDetails(user, email, user.getVerschluesseltesPasswort(), createAuthorities(user));
 	}
 
 	private String[] createAuthorities(Benutzer user) {
 		List<String> authorities = new ArrayList<>(3);
 
-		switch (user.getRole()) {
+		switch (user.getRolle()) {
 		case Rollen.ROLE_ADMIN:
 			authorities.add(Rollen.ROLE_ADMIN);
 		case Rollen.ROLE_USER:
 			authorities.add(Rollen.ROLE_USER);
 			break;
 		default:
-			throw new RuntimeException("Unbekannte Role (" + user.getRole() + ") von User " + user.getEmailAddress());
+			throw new RuntimeException("Unbekannte Role (" + user.getRolle() + ") von User " + user.getEmailAdresse());
 		}
 
 		return authorities.toArray(new String[authorities.size()]);

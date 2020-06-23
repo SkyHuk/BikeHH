@@ -1,0 +1,44 @@
+<html layout:decorate="~{layout/layout}">
+
+  <head>
+    <title>ADFC - Umfragen</title>
+  </head>
+
+  <body layout:fragment="content">
+
+    <div class="d-flex align-items-center justify-space-between">
+      <h2 class="my-4 mr-4">Umfragen</h2>
+      <input class="form-control" placeholder="Suche">
+    </div>
+    <div class="table-responsive mb-4">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Stadt</th>
+            <th>Straße</th>
+            <th>Title</th>
+            <th>Typ</th>
+            <th>Erstellungsdatum</th>
+            <th>Bestätigungen</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr  th:each="umfrage: ${umfragen}">
+           	<td th:text="${umfrage.adresse.stadt + ', ' + umfrage.adresse.postleitZahl}"></td>
+           	<td th:text="${umfrage.adresse.hausnummer!=null}?${umfrage.adresse.strasse + ' ' + umfrage.adresse.hausnummer}:${umfrage.adresse.strasse}"></td>
+           	<td th:text="${umfrage.titel}"></td>
+           	<td th:text="${umfrage.kategorie}"></td>
+           	<td th:text="${umfrage.erstelltAmDatum}"></td>
+           	<td th:text="${#lists.size(umfrage.bestaetigtVonBenutzern)}"></td>
+            <td>
+              <!--<a class="btn btn-sm btn-primary" th:text="${umfrage.id} + ' anzeigen'" th:href="@{/umfrage(values=${umfrage.id})}" target="_self"></a>-->
+              <a class="btn btn-sm btn-primary" th:href="@{/umfragen/{id}(id=${umfrage.id})}" target="_self">Anzeigen</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </body>
+</html>

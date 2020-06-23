@@ -18,16 +18,16 @@ public class Benutzer {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	private String encryptedPassword;
+	private String verschluesseltesPasswort;
 
-	private String emailAddress;
+	private String emailAdresse;
 
-	private String role;
+	private String rolle;
 
-	private boolean isLocked;
+	private boolean istGesperrt;
 
-	@ManyToMany(mappedBy = "confirmedByUsers", cascade = CascadeType.ALL)
-	private List<UmfrageDB> confirmedSurveys;
+	@ManyToMany(mappedBy = "bestaetigtVonBenutzern", cascade = CascadeType.ALL)
+	private List<UmfrageDB> bestaetigteUmfragen;
 
 	public Long getId() {
 		return id;
@@ -37,44 +37,44 @@ public class Benutzer {
 		this.id = id;
 	}
 
-	public String getEncryptedPassword() {
-		return encryptedPassword;
+	public String getVerschluesseltesPasswort() {
+		return verschluesseltesPasswort;
 	}
 
-	public void setEncryptedPassword(String encryptedPassword) {
-		this.encryptedPassword = encryptedPassword;
+	public void setVerschluesseltesPasswort(String encryptedPassword) {
+		this.verschluesseltesPasswort = encryptedPassword;
 	}
 
-	public String getEmailAddress() {
-		return emailAddress;
+	public String getEmailAdresse() {
+		return emailAdresse;
 	}
 
-	public void setEmailAddress(String emailAddress) {
-		this.emailAddress = emailAddress;
+	public void setEmailAdresse(String emailAddress) {
+		this.emailAdresse = emailAddress;
 	}
 
-	public String getRole() {
-		return role;
+	public String getRolle() {
+		return rolle;
 	}
 
-	public void setRole(String role) {
-		this.role = role;
+	public void setRolle(String role) {
+		this.rolle = role;
 	}
 
-	public boolean getIsLocked() {
-		return isLocked;
+	public boolean getIstGesperrt() {
+		return istGesperrt;
 	}
 
-	public void setIsLocked(boolean isLocked) {
-		this.isLocked = isLocked;
+	public void setIstGesperrt(boolean isLocked) {
+		this.istGesperrt = isLocked;
 	}
 
-	public List<UmfrageDB> getConfirmedSurveys() {
-		return confirmedSurveys;
+	public List<UmfrageDB> getBestaetigteUmfragen() {
+		return bestaetigteUmfragen;
 	}
 
-	public void setConfirmedSurveys(List<UmfrageDB> confirmedSurveys) {
-		this.confirmedSurveys = confirmedSurveys;
+	public void setBestaetigteUmfragen(List<UmfrageDB> confirmedSurveys) {
+		this.bestaetigteUmfragen = confirmedSurveys;
 	}
 
 }

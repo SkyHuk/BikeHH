@@ -6,7 +6,7 @@ import de.wps.bikehh.benutzerverwaltung.material.Benutzer;
 
 public interface UserAuthenticationRepository extends CrudRepository<Benutzer, Long> {
 
-	boolean existsByEmailAddress(String emailAddress);
+	boolean existsByEmailAdresse(String emailAdresse);
 
-	Benutzer findByEmailAddress(String emailAddress);
+	Benutzer findByEmailAdresse(String emailAdresse);
 }
