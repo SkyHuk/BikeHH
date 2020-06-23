@@ -73,14 +73,14 @@
                     <option v-for="option in kategorieOptionen" :value="option">{{ option.text }}</option>
                   </select>
 
-                  <select class="custom-select mb-2" v-if="kategorie1 && kategorie1.unteroption" v-model="kategorie2">
+                  <select class="custom-select mb-2" v-if="kategorie1 && kategorie1.unteroptionen" v-model="kategorie2">
                     <option selected>Kategorie 2</option>
-                    <option v-for="option in kategorie1.unteroption" :value="option">{{ option.text }}</option>
+                    <option v-for="option in kategorie1.unteroptionen" :value="option">{{ option.text }}</option>
                   </select>
 
-                  <select class="custom-select mb-2" v-if="kategorie2 && kategorie2.unteroption" v-model="kategorie3">
+                  <select class="custom-select mb-2" v-if="kategorie2 && kategorie2.unteroptionen" v-model="kategorie3">
                     <option selected>Kategorie 3</option>
-                    <option v-for="option in kategorie2.unteroption" :value="option">{{ option.text }}</option>
+                    <option v-for="option in kategorie2.unteroptionen" :value="option">{{ option.text }}</option>
                   </select>
                 </div>
 
@@ -254,7 +254,7 @@
     const erstelleUmfrageApp = new Vue({
       el: '#erstelleUmfrageApp',
       data: {
-    	  
+
     	umfrage: undefined,
     	editierModus: false,
         id: Math.floor(Math.random() * (100000 - 0 + 1)) + 0,
@@ -285,31 +285,40 @@
 
         kategorieOptionen: [
           {
+            id: 1,
             text: 'Hindernis',
-            unteroption: [
-              { text: '' },
+            unteroptionen: [
             ],
           },
           {
+            id: 2,
             text: 'Fahrbahnoberfläche',
-            unteroption: [
+            unteroptionen: [
               {
+                id: 3,
                 text: 'Verschmutzung',
-                unteroption: [
-                  { text: 'Schnee / Glatteis' },
+                unteroptionen: [
+                  { id: 4, text: 'Schnee / Glatteis' },
                 ],
               },
             ]
           },
-          { text: 'Verkehrsführung' },
-          { text: 'Abstellanlage' },
+          { id: 5, text: 'Verkehrsführung' },
+          { id: 6, text: 'Abstellanlage' },
         ],
       },
       mounted() {
-    	  
+
         this.umfrage = [(${umfrage}?${umfrage}:'null')]
         if (this.umfrage) {
           this.editierModus = true;
+          console.log(this.umfrage)
+          this.umfrage.fragen.forEach((frage) => {
+            frage.bedingungen.forEach((bedingung) => {
+              bedingung.frage = this.umfrage.fragen.find(f => f.id === bedingung.frageId)
+              bedingung.erwarteteAntwort = bedingung.frage.antworten.find(a => a.id === bedingung.erwarteteAntwortId)
+            })
+          })
         }
 
         if (!this.editierModus) {
@@ -337,9 +346,9 @@
           this.laengengrad = this.umfrage.laengengrad
           this.breitengrad = this.umfrage.breitengrad
           this.karte = L.map('mapid').setView([this.laengengrad, this.breitengrad], 16)
-			
+
           this.initialisiereKarte()
-	        
+
           var marker = L.marker([this.laengengrad, this.breitengrad]).addTo(this.karte)
           .bindPopup("<b>Ort der Umfrage</b><br/>")
           this.hauptMarker = marker
@@ -362,13 +371,13 @@
             autoPan: true
           }).addTo(self.karte)
           .bindPopup("<b>Hier wird die erstellte Umfrage sein.</b><br/>");
-          
+
           if (self.hauptMarker) {self.hauptMarker.remove()}
-   
+
           self.hauptMarker = marker
 
           self.fügeMarkerFahrtrichtungHinzu(laengengrad,breitengrad)
-          })
+        })
       },
       created() {
       },
