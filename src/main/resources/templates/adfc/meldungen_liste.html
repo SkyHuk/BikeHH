@@ -6,125 +6,30 @@
 
   <body layout:fragment="content">
 
-    <h2 class="mt-2">Meldungen</h2>
-    <form class="p-2 d-flex align-items-center">
-      <div class="px-2"><strong>Filter:</strong></div>
-      <select class="form-control mx-2">
-        <option selected disabled>Nach Status filtern</option>
-        <option>Erfasst</option>
-        <option>Bestätigt</option>
-        <!-- "In Bearbeitung" added here -->
-        <option>In Bearbeitung</option>
-        <option>Erledigt</option>
-      </select>
-      <input class="form-control mx-2" placeholder="Suche">
-      <button class="btn btn-outline-secondary">Exportiere</button>
-    </form>
-    <div class="table-responsive" style="overflow-x: hidden;">
-      <table class="table">
-          <thead>
-              <tr>
-                <th>#</th>
-                <th>Erstellungsdatum</th>
-                <th>Art</th>
-                <th>Standort</th>
-                <th>Umfrage</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td>3. Mai 2020</td>
-                <td>Schlagloch</td>
-                <td>Jungfernstieg</td>
-                <td><a href="/survey.html">Umfrage #42</a></td>
-                <td>Bestätigt</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>10. April 2020</td>
-                <td>Schnee</td>
-                <td>Stellingen</td>
-                <td><a href="/survey.html">Umfrage #42</a></td>
-                <td>Erfasst</td>
-              </tr>
-              <tr>
-                  <td colspan="5">
-                      <h5 class="mb-2">Meldung #2</h5>
-                      <div class="row">
-                        <div class="col-9">
-                          <p>Meldungstext. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor</p>
-
-                          <h6>Meldungsergebnisse</h6>
-                          <img class="img-responsive" src="https://via.placeholder.com/700x300">
-                        </div>
-                        <div class="col-3">
-                          <button class="btn btn-block btn-outline-secondary">Zeige auf Karte</button>
-                          <button class="btn btn-block btn-outline-secondary">Kontaktiere Ersteller</button>
-                          <button class="btn btn-block btn-outline-success">Als erledigt markieren</button>
-                          <button class="btn btn-block btn-outline-danger">Löschen</button>
-                        </div>
-                      </div>
-                  </td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>15. April 2020</td>
-                <td>Schnee</td>
-                <td>adipiscing</td>
-                <td><a href="/survey.html">Umfrage #42</a></td>
-                <td>Besätigt</td>
-              </tr>
-              <tr>
-                <td>4</td>
-                <td>15. April 2020</td>
-                <td>Schnee</td>
-                <td>adipiscing</td>
-                <td><a href="/survey.html">Umfrage #42</a></td>
-                <td>Besätigt</td>
-              </tr>
-              <tr>
-                <td>5</td>
-                <td>15. April 2020</td>
-                <td>Schnee</td>
-                <td>adipiscing</td>
-                <td><a href="/survey.html">Umfrage #42</a></td>
-                <td>Besätigt</td>
-              </tr>
-              <tr>
-                <td>5</td>
-                <td>15. April 2020</td>
-                <td>Schnee</td>
-                <td>adipiscing</td>
-                <td><a href="/survey.html">Umfrage #42</a></td>
-                <td>Besätigt</td>
-              </tr>
-              <tr>
-                <td>5</td>
-                <td>15. April 2020</td>
-                <td>Schnee</td>
-                <td>adipiscing</td>
-                <td><a href="/survey.html">Umfrage #42</a></td>
-                <td>Besätigt</td>
-              </tr>
-              <tr>
-                <td>5</td>
-                <td>15. April 2020</td>
-                <td>Schnee</td>
-                <td>adipiscing</td>
-                <td><a href="/survey.html">Umfrage #42</a></td>
-                <td>Besätigt</td>
-              </tr>
-              <tr>
-                <td>5</td>
-                <td>15. April 2020</td>
-                <td>Schnee</td>
-                <td>adipiscing</td>
-                <td><a href="/survey.html">Umfrage #42</a></td>
-                <td>Besätigt</td>
-              </tr>
-            </tbody>
+    <div class="d-flex align-items-center justify-space-between">
+      <h2 class="my-4 mr-4">Meldungen</h2>
+      <input class="form-control" placeholder="Suche">
+    </div>
+    <div class="table-responsive mb-4">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Umfrage</th>
+            <th>Fahrtrichtung</th>
+            <th>Text</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr  th:each="meldung: ${meldungen}">
+            <td th:text="${meldung.umfrage}"></td>
+            <td th:text="${meldung.fahrtrichtung}"></td>
+            <td th:text="${umfrage.text}"></td>
+            <td>
+              <a class="btn btn-sm btn-primary" th:href="@{/meldungen/{id}(id=${meldung.id})}" target="_self">Anzeigen</a>
+            </td>
+          </tr>
+        </tbody>
       </table>
     </div>
 

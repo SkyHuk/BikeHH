@@ -12,7 +12,7 @@ public class Bedingung {
 	private int id;
 
 	private int frageId;
-	private int erwarteteAntwortId;
+	private int antwortId;
 
 	public int getId() {
 		return id;
@@ -30,12 +30,12 @@ public class Bedingung {
 		this.frageId = frageId;
 	}
 
-	public int getErwarteteAntwortId() {
-		return erwarteteAntwortId;
+	public int getAntwortId() {
+		return antwortId;
 	}
 
-	public void setErwarteteAntwortId(int erwarteteAntwortId) {
-		this.erwarteteAntwortId = erwarteteAntwortId;
+	public void setAntwortId(int antwortId) {
+		this.antwortId = antwortId;
 	}
 
 }

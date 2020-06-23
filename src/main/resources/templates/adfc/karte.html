@@ -1,4 +1,4 @@
-<html layout:decorate="~{layout/layout}">
+<html layout:decorate="~{layout/layout}" xmlns:th="http://thymeleaf.org">
 
 <head>
 	<title>ADFC - Meldungen</title>
@@ -83,11 +83,11 @@ crossorigin=""></script>
 		function onMapClick(e) {
 			//create link to open "/umfrage-erstellen"
 			var a = document.createElement('a');
-			var laengengrad = e.latlng.lat;
-			var breitengrad = e.latlng.lng;
+			const laengengrad = e.latlng.lat;
+			const breitengrad = e.latlng.lng;
 
 			//text node
-			var link = document.createTextNode("Hier klicken, um eine Umfrage an Position (" + laengengrad.toFixed(4) + ", " + breitengrad.toFixed(4) + ") zu erstellen");
+			const link = document.createTextNode("Hier klicken, um eine Umfrage an Position (" + laengengrad.toFixed(4) + ", " + breitengrad.toFixed(4) + ") zu erstellen");
 
 			// Append text node to anchor element
 			a.appendChild(link);
@@ -115,11 +115,11 @@ crossorigin=""></script>
 			var fragenHTML = "";
 			var antwortenHTML = "";
 			for (var i = 0; i < fragen.length; i++) {
-				for (var k = 0; k < fragen[i].antworten.length; k++) {
+				for (var k = 0; k < fragen[i].antwortMoeglichkeiten.length; k++) {
 					if (k > 0) {
 						antwortenHTML += ", ";
 					}
-					antwortenHTML += fragen[i].antworten[k].text;
+					antwortenHTML += fragen[i].antwortMoeglichkeiten[k].text;
 				}
 				fragenHTML += "<li>" + fragen[i].title + " [" + antwortenHTML + "]" + " (Freitext-Antwort: " + fragen[i].erlaubeBenutzerdefinierteAntwort + ")" + "</li>";
 				antwortenHTML = "";
@@ -127,9 +127,9 @@ crossorigin=""></script>
 
 			var adresseHTML = "";
 			if (adresse.hausnummer != undefined) {
-				adresseHTML = "Adresse: " + adresse.straße + " " + adresse.hausnummer + ", " + adresse.postleitZahl + ", " + adresse.stadt + "<br/>";
+				adresseHTML = "Adresse: " + adresse.strasse + " " + adresse.hausnummer + ", " + adresse.postleitZahl + ", " + adresse.stadt + "<br/>";
 			} else {
-				adresseHTML = "Adresse: " + adresse.straße + ", " + adresse.postleitZahl + ", " + adresse.stadt + "<br/>";
+				adresseHTML = "Adresse: " + adresse.strasse + ", " + adresse.postleitZahl + ", " + adresse.stadt + "<br/>";
 			}
 
 			L.marker([laengengrad, breitengrad]).addTo(karte)
@@ -155,8 +155,11 @@ crossorigin=""></script>
 	<!-- call js function -->
 	<script th:inline="javascript">
 		/*<![CDATA[*/
-		fügeUmfrageZurKarteHinzu([[${ umfrage.id }]], [[${ umfrage.laengengrad }]], [[${ umfrage.breitengrad }]], [[${ umfrage.kategorie }]],
-			[[${ umfrage.erstelltAmDatum }]], [[${ umfrage.bestaetigtVonBenutzern }]], [[${ umfrage.bestaetigtSchwellenwert }]], [[${ umfrage.titel }]], [[${ umfrage.fragen }]], [[${ umfrage.startDatum }]], [[${ umfrage.endDatum }]], [[${ umfrage.adresse }]]);
+		/*fügeUmfrageZurKarteHinzu([[${ umfrage.id }]], [[${ umfrage.laengengrad }]],
+			[[${ umfrage.breitengrad }]], [[${ umfrage.kategorie }]], [[${ umfrage.erstelltAmDatum }]],
+			[[${ umfrage.bestaetigtVonBenutzern }]], [[${ umfrage.bestaetigtSchwellenwert }]], 
+			[[${ umfrage.titel }]], [[${ umfrage.fragen }]], [[${ umfrage.startDatum }]],
+			[[${ umfrage.endDatum }]], [[${ umfrage.adresse }]]);*/
 		/*]]>*/
 	</script>
 </th:block>

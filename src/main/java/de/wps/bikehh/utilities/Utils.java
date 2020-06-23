@@ -105,16 +105,20 @@ public class Utils {
 
 			// TODO teste mit Bedingungen
 			// validate Survey and save to files
-			if (umfrage.getTitel() != null && !umfrage.getTitel().isEmpty() && startDatum != null && endDatum != null
-					&& (startDatum.after(getHeutigesDatum()) || startDatum.equals(getHeutigesDatum()))
-					&& (endDatum.after(startDatum) || endDatum.equals(startDatum)) && umfrage.getFragen() != null
-					&& umfrage.getFragen().length > 0 && fragenHabenTitel(umfrage.getFragen())
-					&& fragenHabenAntworten(umfrage.getFragen()) && umfrage.getErstelltAmDatum() != null
-					&& !umfrage.getErstelltAmDatum().isEmpty() && umfrage.getBreitengrad() != 0
-					&& umfrage.getLaengengrad() != 0 && umfrage.getKategorie() != null
-					&& !umfrage.getKategorie().isEmpty() && umfrage.getBestaetigtVonBenutzern() != null
-					&& umfrage.getErsteller() != null && !umfrage.getErsteller().isEmpty()
-					&& umfrage.getAdresse() != null) {
+			if (umfrage
+					.getTitel() != null/*
+										 * && !umfrage.getTitel().isEmpty() && startDatum != null && endDatum != null &&
+										 * (startDatum.after(getHeutigesDatum()) ||
+										 * startDatum.equals(getHeutigesDatum())) && (endDatum.after(startDatum) ||
+										 * endDatum.equals(startDatum)) && umfrage.getFragen() != null &&
+										 * umfrage.getFragen().length > 0 && fragenHabenTitel(umfrage.getFragen()) &&
+										 * fragenHabenAntworten(umfrage.getFragen()) && umfrage.getErstelltAmDatum() !=
+										 * null && !umfrage.getErstelltAmDatum().isEmpty() && umfrage.getBreitengrad()
+										 * != 0 && umfrage.getLaengengrad() != 0 && umfrage.getKategorie() != null &&
+										 * !umfrage.getKategorie().isEmpty() && umfrage.getBestaetigtVonBenutzern() !=
+										 * null && umfrage.getErsteller() != null && !umfrage.getErsteller().isEmpty()
+										 * && umfrage.getAdresse() != null
+										 */) {
 
 				System.out
 						.println("JSONString ist valide. Beginne Speicherung des JSONs im angegebenen Verzeichnis ...");
@@ -273,7 +277,7 @@ public class Utils {
 	private static boolean fragenHabenAntworten(Frage[] fragen) {
 		boolean bFragenHabenAntwort = false;
 		for (Frage frage : fragen) {
-			if (frage.getAntworten() != null && frage.getAntworten().size() > 0) {
+			if (frage.getAntwortMoeglichkeiten() != null && frage.getAntwortMoeglichkeiten().size() > 0) {
 				bFragenHabenAntwort = true;
 			} else {
 				System.out.println("fragenHabenAntworten gibt zurueck: " + false);

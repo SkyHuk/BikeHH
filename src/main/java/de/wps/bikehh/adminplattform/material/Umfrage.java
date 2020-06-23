@@ -1,26 +1,61 @@
 package de.wps.bikehh.adminplattform.material;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import de.wps.bikehh.benutzerverwaltung.material.Benutzer;
+
 /**
  * Test-Klasse für eine Umfrage (mit JSON-Dateien, non-Db-Version)
  *
  * @author amnesica
  *
  */
+
+@Entity
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Umfrage {
 
+	@Id
+	@GeneratedValue
 	private int id;
 	private double laengengrad;
 	private double breitengrad;
+
+	// @ManyToOne(fetch = FetchType.LAZY, targetEntity = Kategorie.class)
+	// @JoinColumn(name = "kategorie", referencedColumnName = "Id", nullable =
+	// false)
+	// private Kategorie kategorie;
 	private String kategorie;
 	private String startDatum;
 	private String endDatum;
 	private String erstelltAmDatum;
-	private String[] bestaetigtVonBenutzern;
+	private boolean istBestaetigt;
+
+	@ManyToMany(cascade = CascadeType.ALL)
+	private List<Benutzer> bestaetigtVonBenutzern;
 	private int bestaetigtSchwellenwert;
 	private String titel;
-	private Frage[] fragen;
-	private String ersteller;
+
+	@OneToMany(cascade = CascadeType.ALL)
+	private List<Frage> fragen;
+
+	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Benutzer.class, cascade = CascadeType.ALL)
+	private Benutzer ersteller;
+
 	private boolean manuellErstellt;
+
+	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Adresse.class, cascade = CascadeType.ALL)
 	private Adresse adresse;
 
 	public int getId() {
@@ -47,14 +82,6 @@ public class Umfrage {
 		this.breitengrad = breitengrad;
 	}
 
-	public String getKategorie() {
-		return kategorie;
-	}
-
-	public void setKategorie(String kategorie) {
-		this.kategorie = kategorie;
-	}
-
 	public String getStartDatum() {
 		return startDatum;
 	}
@@ -71,20 +98,20 @@ public class Umfrage {
 		this.endDatum = endDatum;
 	}
 
+	public boolean isIstBestaetigt() {
+		return istBestaetigt || getBestaetigtVonBenutzern().size() <= getBestaetigtSchwellenwert();
+	}
+
+	public void setIstBestaetigt(boolean istBestaetigt) {
+		this.istBestaetigt = istBestaetigt;
+	}
+
 	public String getErstelltAmDatum() {
 		return erstelltAmDatum;
 	}
 
 	public void setErstelltAmDatum(String erstelltAmDatum) {
 		this.erstelltAmDatum = erstelltAmDatum;
-	}
-
-	public String[] getBestaetigtVonBenutzern() {
-		return bestaetigtVonBenutzern;
-	}
-
-	public void setBestaetigtVonBenutzern(String[] bestaetigtVonBenutzern) {
-		this.bestaetigtVonBenutzern = bestaetigtVonBenutzern;
 	}
 
 	public int getBestaetigtSchwellenwert() {
@@ -101,22 +128,6 @@ public class Umfrage {
 
 	public void setTitel(String titel) {
 		this.titel = titel;
-	}
-
-	public Frage[] getFragen() {
-		return fragen;
-	}
-
-	public void setFragen(Frage[] fragen) {
-		this.fragen = fragen;
-	}
-
-	public String getErsteller() {
-		return ersteller;
-	}
-
-	public void setErsteller(String ersteller) {
-		this.ersteller = ersteller;
 	}
 
 	public boolean isManuellErstellt() {
@@ -137,6 +148,43 @@ public class Umfrage {
 
 	public boolean wurdeManuellErstellt() {
 		return manuellErstellt;
+	}
+
+	/*
+	 * public Kategorie getKategorie() { return kategorie; }
+	 * 
+	 * public void setKategorie(Kategorie kategorie) { this.kategorie = kategorie; }
+	 */
+	public String getKategorie() {
+		return kategorie;
+	}
+
+	public void setKategorie(String kategorie) {
+		this.kategorie = kategorie;
+	}
+
+	public List<Benutzer> getBestaetigtVonBenutzern() {
+		return bestaetigtVonBenutzern;
+	}
+
+	public void setBestaetigtVonBenutzern(List<Benutzer> bestaetigtVonBenutzern) {
+		this.bestaetigtVonBenutzern = bestaetigtVonBenutzern;
+	}
+
+	public List<Frage> getFragen() {
+		return fragen;
+	}
+
+	public void setFragen(List<Frage> fragen) {
+		this.fragen = fragen;
+	}
+
+	public Benutzer getErsteller() {
+		return ersteller;
+	}
+
+	public void setErsteller(Benutzer ersteller) {
+		this.ersteller = ersteller;
 	}
 
 }

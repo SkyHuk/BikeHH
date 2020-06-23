@@ -2,7 +2,7 @@ package de.wps.bikehh.adminplattform.repository;
 
 import org.springframework.data.repository.CrudRepository;
 
-import de.wps.bikehh.adminplattform.material.UmfrageDB;
+import de.wps.bikehh.adminplattform.material.Umfrage;
 
-public interface UmfrageRepository extends CrudRepository<UmfrageDB, Long> {
+public interface UmfrageRepository extends CrudRepository<Umfrage, Integer> {
 }

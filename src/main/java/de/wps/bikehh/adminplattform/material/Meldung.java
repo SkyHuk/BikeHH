@@ -2,16 +2,33 @@ package de.wps.bikehh.adminplattform.material;
 
 import java.util.List;
 
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+@Entity
 public class Meldung {
 
+	@Id
+	@GeneratedValue
 	private int id;
+
 	private double laengengrad;
 	private double breitengrad;
-	private int umfrageId; // leer beim postRequest, danach wird Umfrage generiert und umfrageId gesetzt
-	private List<FrageAntwort> antwortenAufFragen;
+
+	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Umfrage.class)
+	private Umfrage umfrage; // leer beim postRequest, danach wird Umfrage generiert und umfrageId gesetzt
+	@OneToMany(fetch = FetchType.LAZY, targetEntity = Antwort.class)
+	private List<Antwort> antwortenAufFragen;
+
 	private double fahrtrichtung; // Winkel im Bogenmaß zu Norden
-	private String meldungsText; // leer wenn antwort auf Meldung? mit Georg besprechen
-	private Kategorie kategorie;
+	private String text; // leer wenn antwort auf Meldung? mit Georg besprechen
+
+	// @ManyToOne(fetch = FetchType.LAZY, targetEntity = Kategorie.class)
+	// private Kategorie kategorie;
 
 	public int getId() {
 		return id;
@@ -37,19 +54,19 @@ public class Meldung {
 		this.breitengrad = breitengrad;
 	}
 
-	public int getUmfrageId() {
-		return umfrageId;
+	public Umfrage getUmfrage() {
+		return umfrage;
 	}
 
-	public void setUmfrageId(int umfrageId) {
-		this.umfrageId = umfrageId;
+	public void setUmfrage(Umfrage umfrage) {
+		this.umfrage = umfrage;
 	}
 
-	public List<FrageAntwort> getAntwortenAufFragen() {
+	public List<Antwort> getAntwortenAufFragen() {
 		return antwortenAufFragen;
 	}
 
-	public void setAntwortenAufFragen(List<FrageAntwort> antwortenAufFragen) {
+	public void setAntwortenAufFragen(List<Antwort> antwortenAufFragen) {
 		this.antwortenAufFragen = antwortenAufFragen;
 	}
 
@@ -61,20 +78,18 @@ public class Meldung {
 		this.fahrtrichtung = fahrtrichtung;
 	}
 
-	public String getMeldungsText() {
-		return meldungsText;
+	public String getText() {
+		return text;
 	}
 
-	public void setMeldungsText(String meldungsText) {
-		this.meldungsText = meldungsText;
+	public void setText(String text) {
+		this.text = text;
 	}
 
-	public Kategorie getKategorie() {
-		return kategorie;
-	}
-
-	public void setKategorie(Kategorie kategorie) {
-		this.kategorie = kategorie;
-	}
+	/*
+	 * public Kategorie getKategorie() { return kategorie; }
+	 * 
+	 * public void setKategorie(Kategorie kategorie) { this.kategorie = kategorie; }
+	 */
 
 }

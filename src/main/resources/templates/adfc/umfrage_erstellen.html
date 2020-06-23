@@ -123,9 +123,9 @@
 
                 <div class="form-group">
                   <label>Antwortmöglichkeiten</label>
-                  <div v-for="antwort in frage.antworten" class="d-flex justify-space-between mb-4">
-                    <input class="form-control" v-model="antwort.text">
-                    <button type="button" class="btn text-danger ml-3" @click="entferneAntwort(frage, antwort)">
+                  <div v-for="antwortMoeglichkeit in frage.antwortenMoeglichkeiten" class="d-flex justify-space-between mb-4">
+                    <input class="form-control" v-model="antwortMoeglichkeit.text">
+                    <button type="button" class="btn text-danger ml-3" @click="entferneAntwort(frage, antwortMoeglichkeit)">
                       <span><i class="far fa-trash-alt"></i></span>
                     </button>
                   </div>
@@ -149,10 +149,10 @@
                           <option default disabled>-</option>
                           <option v-for="frage in fragen" :value="frage">{{ frage.titel }}</option>
                         </select>
-                        <label for="'bedingung-antwort' + index">mit:</label>
-                        <select id="'bedingung-antwort' + index" v-if="bedingung.frage"
+                        <label for="'bedingung-antwortMoeglichkeit' + index">mit:</label>
+                        <select id="'bedingung-antwortMoeglichkeit' + index" v-if="bedingung.frage"
                           v-model="bedingung.erwarteteAntwort">
-                          <option v-for="antwort in bedingung.frage.antworten" :value="antwort">{{ antwort.text }}
+                          <option v-for="antwortMoeglichkeit in bedingung.frage.antwortMoeglichkeiten" :value="antwortMoeglichkeit">{{ antwortMoeglichkeit.text }}
                           </option>
                         </select>
                         <label>beantwortet wurde.</label>
@@ -387,7 +387,7 @@
         fuegeFrageHinzu() {
           this.fragen.push({
             titel: '',
-            antworten: [
+            antwortMoeglichkeiten: [
               { text: 'Ja', },
               { text: 'Nein', },
             ],
@@ -403,13 +403,13 @@
           //console.log(index)
           this.fragen.splice(index, 1);
         },
-        // add antwort
-        fuegeAntwortHinzu(frage) {
-          frage.antworten.push({ text: '' });
+        // add antwortMoeglichkeit
+        fuegeAntwortMoeglichkeitHinzu(frage) {
+          frage.antwortMoeglichkeiten.push({ text: '' });
         },
-        // delete latest antwort in frage.antworten
-        entferneAntwort(frage, antwort) {
-          frage.antworten.splice(frage.antworten.indexOf(antwort), 1)
+        // delete latest antwortMoeglichkeit in frage.antworten
+        entferneAntwort(frage, antwortMoeglichkeit) {
+          frage.antwortMoeglichkeit.splice(frage.antwortMoeglichkeiten.indexOf(antwortMoeglichkeit), 1)
         },
         // add location (green marker) to frage on map,
         // only if frage does not have location already
@@ -469,9 +469,9 @@
           frage.bedingungen.splice(frage.bedingungen.indexOf(bedingung), 1)
 
         },
-        // check if all fragen have at least one antwort
+        // check if all fragen have at least one antwortMoeglichkeit
         habenAlleFragenAntworten(fragen) {
-          return fragen.filter(q => q.antworten.length > 0).length === fragen.length
+          return fragen.filter(q => q.antwortMoeglichkeiten.length > 0).length === fragen.length
 
         },
         // check if all fragen have a title
@@ -546,7 +546,7 @@
                 adresse.stadt = getRequest.response.address.town;
               }
               adresse.postleitZahl = getRequest.response.address.postcode;
-              adresse.straße = getRequest.response.address.road;
+              adresse.strasse = getRequest.response.address.road;
               adresse.hausnummer = getRequest.response.address.house_number; // not guaranteed to be present!
               data.adresse = adresse;
               self.postJson(data)
@@ -560,7 +560,7 @@
           if (!this.editierModus) {
 
             data.bestaetigtVonBenutzern = []
-            data.ersteller = '[[${ benutzer }?${benutzer.emailAdresse}:null]]'
+            data.ersteller = [(${benutzer}?${benutzer}:'null')]
             // get date
             // generate a zeitstempel
             var zeitstempel = Number(new Date())
@@ -580,7 +580,7 @@
           data.endDatum = this.endDatum;
           data.bestaetigtSchwellenwert = this.bestaetigtSchwellenwert;
 
-          // map fragen and expected antwort to their indices to avoid circular json
+          // map fragen and expected antwortMoeglichkeit to their indices to avoid circular json
           data.fragen = this.fragen.map((frage) => {
             var rtn = {
               ...frage,
