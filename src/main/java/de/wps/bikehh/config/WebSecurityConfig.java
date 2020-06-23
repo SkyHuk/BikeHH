@@ -14,7 +14,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		String[] publicUrls = { "/", "/img/logo.png", "/logout", "/generated/css/*", "/generated/js/*",
+		String[] publicUrls = { "/", "/login", "/img/logo.png", "/logout", "/generated/css/*", "/generated/js/*",
 				"/generated/webfonts/*", "/h2/**" };
 
 		http.authorizeRequests().antMatchers(publicUrls).permitAll().anyRequest().authenticated().and()

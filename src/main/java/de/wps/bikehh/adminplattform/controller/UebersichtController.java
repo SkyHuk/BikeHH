@@ -10,6 +10,6 @@ public class UebersichtController {
 
 	@GetMapping
 	public String zeigeUebersicht() {
-		return "adfc/dashboard";
+		return "adfc/uebersicht";
 	}
 }

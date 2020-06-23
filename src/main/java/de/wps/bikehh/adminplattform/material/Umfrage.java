@@ -11,8 +11,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import de.wps.bikehh.benutzerverwaltung.material.Benutzer;
 
 /**
@@ -23,7 +21,6 @@ import de.wps.bikehh.benutzerverwaltung.material.Benutzer;
  */
 
 @Entity
-@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Umfrage {
 
 	@Id
@@ -50,12 +47,12 @@ public class Umfrage {
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Frage> fragen;
 
-	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Benutzer.class, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER, targetEntity = Benutzer.class, cascade = CascadeType.ALL)
 	private Benutzer ersteller;
 
 	private boolean manuellErstellt;
 
-	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Adresse.class, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER, targetEntity = Adresse.class, cascade = CascadeType.ALL)
 	private Adresse adresse;
 
 	public int getId() {
