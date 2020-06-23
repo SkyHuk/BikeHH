@@ -2,9 +2,6 @@ package de.wps.bikehh.adminplattform.material;
 
 import java.util.List;
 
-import javax.persistence.Entity;
-
-@Entity
 public class Meldung {
 
 	private int id;
