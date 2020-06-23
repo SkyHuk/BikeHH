@@ -255,8 +255,8 @@
       el: '#erstelleUmfrageApp',
       data: {
 
-    	umfrage: undefined,
-    	editierModus: false,
+        umfrage: undefined,
+        editierModus: false,
         id: Math.floor(Math.random() * (100000 - 0 + 1)) + 0,
         titel: '',
         kategorie: '',
@@ -265,6 +265,7 @@
         bestaetigtSchwellenwert: 10,
         fragen: [],
         manuellErstellt: true,
+        fahrtrichtung: 0,
 
         laengengrad: [[${ laengengrad }?${laengengrad}:0]],
         breitengrad: [[${ breitengrad }?${breitengrad}:0]],
@@ -273,6 +274,7 @@
         hauptMarker: null,
         polyline: null,
         decorator: null,
+        drehMarker: null,
 
         zeigeErfolgBenachrichtigung: false,
         formatierungsFehler: null,
@@ -391,6 +393,7 @@
             ],
             bedingungen: [],
             marker: null,
+            pfeil: null,
             erlaubeBenutzerdefinierteAntwort: this.erlaubeBenutzerdefinierteAntwort ? true : false
           })
         },
@@ -436,6 +439,10 @@
 
             frage.marker = marker;
 
+            /* if (koordinaten) {
+              frage.pfeil = this.fügeMarkerFahrtrichtungHinzu(koordinaten.getLatLng().lat, koordinaten.getLatLng().lng)
+            } */
+
           } else {
             bestehenderMarker.openPopup();
           }
@@ -446,6 +453,8 @@
           if (marker) {
             marker.remove();
             frage.marker = null;
+            frage.pfeil.remove()
+            frage.pfeil = null
           }
         },
         // add bedingung
@@ -471,7 +480,7 @@
 
         },
         setzeKarteZuruek() {
-          if (this.hauptMarker) {this.hauptMarker.remove()}    
+          if (this.hauptMarker) {this.hauptMarker.remove()}
           this.fragen.forEach((frage) => {
             if (frage.marker) {
               frage.marker.remove()
@@ -716,34 +725,107 @@
             zoomOffset: -1
           }).addTo(this.karte);
         },
-        fügeMarkerFahrtrichtungHinzu(lat, lng) {
-          const lineLength = 0.002
-          const halfLineLength = lineLength / 2
+        fügeMarkerFahrtrichtungHinzu(lat, lng, initialerWinkel) {
+          initialerWinkel = initialerWinkel || Math.PI/4
 
-          const polyline = L.polyline([
-            [lat - halfLineLength, lng - halfLineLength],
-            [lat + halfLineLength, lng + halfLineLength],
+          if (this.polyline) {
+            this.polyline.remove()
+          }
+
+          if (this.decorator) {
+            this.decorator.remove()
+          }
+
+          if (this.drehMarker) {
+            this.drehMarker.remove()
+          }
+
+          const pfeilLaenge = 0.002
+          const halbePfeilLaenge = pfeilLaenge / 2
+          const drehMarkerOffset = 0.0005
+
+          let gedrehtesX = (Math.cos(initialerWinkel) * halbePfeilLaenge) // - (Math.sin(initialerWinkel) * initialY)
+          const gedrehtesY = (Math.sin(initialerWinkel) * halbePfeilLaenge) // + (Math.cos(initialerWinkel) * initialY)
+
+          // skalieren auf der x Achse je nach Winkel um Länge des Pfeils angenähert zu erhalten
+          gedrehtesX *= Math.abs(Math.cos(initialerWinkel) * 2)
+
+          let polyline = this.polyline = L.polyline([
+            [lat - gedrehtesY, lng - gedrehtesX],
+            [lat + gedrehtesY, lng + gedrehtesX],
           ], {
-            color: '#f00',
             weight: 2,
           }).addTo(this.karte)
 
-          if (this.polyline) {this.polyline.remove()}
-          this.polyline = polyline;
+          // this.markers.addLayer(polyline)
 
-          const decorator = L.polylineDecorator(polyline, {
+          let decorator = this.decorator = L.polylineDecorator(polyline, {
             patterns: [
-              { offset: '100%', repeat: 0, symbol: L.Symbol.arrowHead({ pixelSize: 20, polygon: false, pathOptions: { stroke: true, color: 'f00' } }) 
-              },
+              { offset: '100%', repeat: 0, symbol: L.Symbol.arrowHead({ pixelSize: 20, polygon: false, pathOptions: { stroke: true } }) },
             ]
           }).addTo(this.karte)
 
-          if (this.decorator) {this.decorator.remove()}
-          this.decorator = decorator;
-		    },       
+          // this.markers.addLayer(decorator)
+
+          const onRotate = (e) => {
+            const x = e.latlng.lat - lat
+            const y = e.latlng.lng - lng
+            const angle = Math.atan2(x, y)
+
+            // rotiere 90° nach links
+            this.fahrtrichtung = angle - (Math.PI / 2)
+
+            // arrow pointing straight right
+            const initialX = halbePfeilLaenge
+            const initialY = 0.0
+
+            let gedrehtesX = (Math.cos(angle) * initialX) // - (Math.sin(angle) * initialY)
+            const gedrehtesY = (Math.sin(angle) * initialX) // + (Math.cos(angle) * initialY)
+
+            // skalieren auf der x Achse je nach Winkel um Länge des Pfeils angenähert zu erhalten
+            gedrehtesX *= Math.abs(Math.cos(angle) * 2)
+
+            // console.log('length after rotate', Math.sqrt(Math.pow(gedrehtesX, 2) + Math.pow(gedrehtesY, 2)))
+
+            const newStart = [
+              lat - gedrehtesY,
+              lng - gedrehtesX,
+            ]
+
+            const newEnd = [
+              lat + gedrehtesY,
+              lng + gedrehtesX,
+            ]
+
+            polyline.setLatLngs([newStart, newEnd])
+
+            this.karte.removeLayer(decorator)
+            this.decorator = decorator = L.polylineDecorator(polyline, {
+              patterns: [
+                { offset: '100%', repeat: 0, symbol: L.Symbol.arrowHead({ pixelSize: 20, polygon: false, pathOptions: { stroke: true } }) },
+              ]
+            }).addTo(this.karte)
+          }
+
+          let drehMarker
+
+          const fuegeDrehmarkerHinzu = () => {
+            this.drehMarker = drehMarker = L.marker([lat + halbePfeilLaenge + drehMarkerOffset, lng + halbePfeilLaenge + drehMarkerOffset], {
+              draggable: true,
+              autoPan: false,
+              // icon: L.Icon({ })
+            }).addTo(this.karte).on('drag', onRotate)
+
+            // this.markers.addLayer(drehMarker)
+          }
+
+          fuegeDrehmarkerHinzu()
+
+          return polyline
+        },
       },
     })
   </script>
-</body>	
+</body>
 
 </html>
