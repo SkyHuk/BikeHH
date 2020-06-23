@@ -23,7 +23,6 @@ public class KartenController {
 
 		List<Umfrage> umfragen = umfragenService.getAlleUmfragen();
 
-		System.out.println(umfragen.size());
 		model.addAttribute("umfragen", umfragen);
 		return "adfc/karte";
 	}

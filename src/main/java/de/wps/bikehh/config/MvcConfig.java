@@ -11,11 +11,11 @@ public class MvcConfig implements WebMvcConfigurer {
 	public void addViewControllers(ViewControllerRegistry registry) {
 		registry.addViewController("/login").setViewName("login");
 		registry.addViewController("/logout").setViewName("logout");
-		registry.addViewController("/umfragen").setViewName("survey_list");
-		registry.addViewController("/karte").setViewName("map");
-		registry.addViewController("/meldungen").setViewName("report_list");
-		registry.addViewController("/umfrage-erstellen").setViewName("create_survey");
-		registry.addViewController("/uebersicht").setViewName("dashboard");
+		registry.addViewController("/umfragen").setViewName("umfrage_liste");
+		registry.addViewController("/karte").setViewName("karte");
+		registry.addViewController("/meldungen").setViewName("meldungen_list");
+		registry.addViewController("/umfrage-erstellen").setViewName("umfrage_erstellen");
+		registry.addViewController("/uebersicht").setViewName("uebersicht");
 		registry.addRedirectViewController("/", "/uebersicht"); // alt: "/welcome/"
 
 	}
