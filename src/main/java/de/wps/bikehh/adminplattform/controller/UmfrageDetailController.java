@@ -12,7 +12,7 @@ import de.wps.bikehh.adminplattform.material.Umfrage;
 import de.wps.bikehh.utilities.Utils;
 
 @Controller
-@RequestMapping("umfragen/{surveyId}")
+@RequestMapping("umfragen/{umfrageId}")
 public class UmfrageDetailController {
 
 	/**

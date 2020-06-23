@@ -11,8 +11,8 @@ public class Bedingung {
 	@GeneratedValue
 	private int id;
 
-	private String frage;
-	private String erwarteteAntwort;
+	private int frageId;
+	private int erwarteteAntwortId;
 
 	public int getId() {
 		return id;
@@ -22,20 +22,20 @@ public class Bedingung {
 		this.id = id;
 	}
 
-	public String getFrage() {
-		return frage;
+	public int getFrageId() {
+		return frageId;
 	}
 
-	public void setFrage(String frage) {
-		this.frage = frage;
+	public void setFrageId(int frageId) {
+		this.frageId = frageId;
 	}
 
-	public String getErwarteteAntwort() {
-		return erwarteteAntwort;
+	public int getErwarteteAntwortId() {
+		return erwarteteAntwortId;
 	}
 
-	public void setErwarteteAntwort(String erwarteteAntwort) {
-		this.erwarteteAntwort = erwarteteAntwort;
+	public void setErwarteteAntwortId(int erwarteteAntwortId) {
+		this.erwarteteAntwortId = erwarteteAntwortId;
 	}
 
 }

@@ -35,8 +35,8 @@ public class UmfrageErstellenController {
 	public String zeigeUmfragenErsteller(@ModelAttribute("bikehh_user") Benutzer benutzer,
 			@RequestParam(required = false, name = "koordinaten") double[] koordinaten, Model model) {
 		if (koordinaten != null) {
-			model.addAttribute("breitengrad", koordinaten[0]);
-			model.addAttribute("laengengrad", koordinaten[1]);
+			model.addAttribute("laengengrad", koordinaten[0]);
+			model.addAttribute("breitengrad", koordinaten[1]);
 		} else {
 			model.addAttribute("breitengrad", 0);
 			model.addAttribute("laengengrad", 0);

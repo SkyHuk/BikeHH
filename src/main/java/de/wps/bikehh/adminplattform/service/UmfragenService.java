@@ -11,23 +11,23 @@ import de.wps.bikehh.adminplattform.repository.UmfrageRepository;
 public class UmfragenService {
 
 	@Autowired
-	UmfrageRepository surveyRepository;
+	UmfrageRepository umfrageRepository;
 
 	public List<UmfrageDB> getAlleUmfragen() {
 		List<UmfrageDB> surveys = new ArrayList<UmfrageDB>();
-		surveyRepository.findAll().forEach(survey -> surveys.add(survey));
+		umfrageRepository.findAll().forEach(survey -> surveys.add(survey));
 		return surveys;
 	}
 
 	public UmfrageDB getUmfrageNachId(int id) {
-		return surveyRepository.findById((long) id).get();
+		return umfrageRepository.findById((long) id).get();
 	}
 
 	public void speichereOderUpdateUmfrage(UmfrageDB survey) {
-		surveyRepository.save(survey);
+		umfrageRepository.save(survey);
 	}
 
 	public void loesche(int id) {
-		surveyRepository.deleteById((long) id);
+		umfrageRepository.deleteById((long) id);
 	}
 }

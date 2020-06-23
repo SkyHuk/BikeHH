@@ -32,7 +32,7 @@
             </ol>
           </nav>
           <div>
-            <h6 class="mb-2 text-muted">Ort: <span class="badge badge-secondary" th:text="${umfrage.adresse.hausnummer!=null}?${umfrage.adresse.straße + ' ' + umfrage.adresse.hausnummer + ', ' + umfrage.adresse.postleitZahl + ', ' + umfrage.adresse.stadt}:${umfrage.adresse.straße + ', ' + umfrage.adresse.postleitZahl + ', ' + umfrage.adresse.stadt}"></span></h6>
+            <h6 class="mb-2 text-muted">Ort: <span class="badge badge-secondary" th:text="${umfrage.adresse.hausnummer!=null}?${umfrage.adresse.strasse + ' ' + umfrage.adresse.hausnummer + ', ' + umfrage.adresse.postleitZahl + ', ' + umfrage.adresse.stadt}:${umfrage.adresse.strasse + ', ' + umfrage.adresse.postleitZahl + ', ' + umfrage.adresse.stadt}"></span></h6>
           </div>
           <div>
             <h6 class="mb-2 text-muted">Ersteller: <span class="badge badge-secondary" th:text="${umfrage.ersteller}"></span></h6>
@@ -81,7 +81,7 @@
           <div class="row">
             <div class="col-9">
               <a href="#"><strong>User #1234</strong></a>
-              <p>Die Autos rasen über den Radfahrstreifen. Ein wahnsinnger Rader hat mich eben fast umgenietet!!! Bitte sofort anzeigen Kenzeichen KI-LL 666"Hintergrund: Veloroute 3, die Fahrradstraße "Uferstraße"</p>
+              <p>Die Autos rasen über den Radfahrstreifen. Ein wahnsinnger Rader hat mich eben fast umgenietet!!! Bitte sofort anzeigen Kenzeichen KI-LL 666"Hintergrund: Veloroute 3, die Fahrradstrasse "Uferstrasse"</p>
             </div>
           </div>
         </span>
@@ -130,7 +130,7 @@
               <h5 class="mb-2">Meldung #1</h5>
               <div class="row">
                 <div class="col-9">
-                  <p>Die Autos rasen über den Radfahrstreifen. Ein wahnsinnger Rader hat mich eben fast umgenietet!!! Bitte sofort anzeigen Kenzeichen KI-LL 666 "Hintergrund: Veloroute 3, die Fahrradstraße "Uferstraße"</p>
+                  <p>Die Autos rasen über den Radfahrstreifen. Ein wahnsinnger Rader hat mich eben fast umgenietet!!! Bitte sofort anzeigen Kenzeichen KI-LL 666 "Hintergrund: Veloroute 3, die Fahrradstrasse "Uferstrasse"</p>
 
                   <h6>Meldungsergebnisse</h6>
                   <img class="img-responsive" src="https://via.placeholder.com/700x300">
@@ -209,7 +209,7 @@
 
     // coordinates passed from controller
     var breitengrad = [[${umfrage.laengengrad}]];
-    var laengengrad = [[${survey.breitengrad}]];
+    var laengengrad = [[${umfrage.breitengrad}]];
 
   // init map
 
@@ -260,7 +260,7 @@
     window.location.href = "mailto:" + mailAdresse + "?subject="+ betreff + "&body=";
   };
 </script>
-<th:block th:each="frage,status : ${umfrage.fragenfragen}">
+<th:block th:each="frage,status : ${umfrage.fragen}">
 <!-- call js function -->
 <script th:inline="javascript">
   /*<![CDATA[*/
