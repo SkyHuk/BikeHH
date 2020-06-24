@@ -14,26 +14,34 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		String[] publicUrls = { "/", "/img/logo.png", "/logout", "/generated/css/*", "/generated/js/*",
-				"/generated/webfonts/*", "/h2/**" };
+		String[] publicUrls = {
+				"/",
+				"/img/**",
+				"/logout",
+				"/generated/css/*",
+				"/generated/js/*",
+				"/generated/webfonts/*",
+				"/h2/**"
+		};
 
-		http.authorizeRequests().antMatchers(publicUrls).permitAll().anyRequest().authenticated().and().formLogin()
-				.loginPage("/login").permitAll().and().logout()
-				// .formLogin().loginPage("/login").defaultSuccessUrl("/uebersicht").permitAll().and().logout()
+		http.authorizeRequests().antMatchers(publicUrls).permitAll().anyRequest().authenticated()
+				.and()
+				.formLogin().loginPage("/login").permitAll()
+				.and()
+				.logout()
 				.logoutSuccessUrl("/login?logout").logoutUrl("/logout")
-				.logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET")).invalidateHttpSession(true)
+				.logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
+				.invalidateHttpSession(true)
 				.deleteCookies("JSESSIONID").permitAll();
+
 		http.csrf().ignoringAntMatchers("/h2/**");
 		http.headers().frameOptions().sameOrigin();
-		/*
-		 * http.httpBasic(). and() .authorizeRequests().antMatchers(HttpMethod.POST,
-		 * "/umfrage-erstellen").hasRole("ADMIN");
-		 */
 	}
 
 	@Override
 	public void configure(WebSecurity webSecurity) throws Exception {
-		webSecurity.ignoring().antMatchers(HttpMethod.POST, "/umfrage-erstellen");
+		webSecurity.ignoring().antMatchers(HttpMethod.POST,
+				"/umfrage-erstellen");
 		super.configure(webSecurity);
 	}
 }

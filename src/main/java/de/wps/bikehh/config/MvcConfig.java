@@ -9,14 +9,7 @@ public class MvcConfig implements WebMvcConfigurer {
 
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
+		registry.addRedirectViewController("/", "/uebersicht");
 		registry.addViewController("/login").setViewName("login");
-		registry.addViewController("/logout").setViewName("logout");
-		registry.addViewController("/umfragen").setViewName("umfrage_liste");
-		registry.addViewController("/karte").setViewName("karte");
-		registry.addViewController("/meldungen").setViewName("meldungen_list");
-		registry.addViewController("/umfrage-erstellen").setViewName("umfrage_erstellen");
-		registry.addViewController("/uebersicht").setViewName("uebersicht");
-		registry.addRedirectViewController("/", "/uebersicht"); // alt: "/welcome/"
-
 	}
 }
