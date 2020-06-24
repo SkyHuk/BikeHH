@@ -2,129 +2,60 @@
 <html lang="de">
 
 <body>
-  <!--<nav th:fragment="navbar"
-		class="container navbar navbar-expand-md navbar-dark py-md-0 h-md-55px">
-		<button class="navbar-toggler" type="button" data-toggle="collapse"
-			data-target="#navbarSupportedContent"
-			aria-controls="navbarSupportedContent" aria-expanded="false"
-			aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
+	<nav th:fragment="navbar" id="sidebarMenu"
+		class="col-md-3 col-lg-2 bg-primary sidebar">
+		<div class="sidebar-sticky">
+			<div class="text-center mb-4">
+				<img src="../static/img/logo.png" th:src="@{img/logo.png}"
+					class="img-fluid" />
 
-		<div class="collapse navbar-collapse h-100" id="navbarSupportedContent">
-			<ul class="navbar-nav mr-auto h-100">
-				<li class="nav-item py-md-2 mx-md-2"
-					th:classappend="${#request.getServletPath().startsWith('/welcome') ? 'active-nav-border font-weight-bold' : ''}">
-				<a class="nav-link text-secondary px-0 py-md-2"
-					th:href="@{/welcome}" sec:authorize-url="/welcome"> <i
-						class="fas fa-stopwatch"></i> Willkommen
-				</a></li>
-			</ul>
-			<ul class="navbar-nav h-100" sec:authorize="isAuthenticated()">
-<!-- Desktop -->
-  <!--
-				<li class="nav-item dropdown d-none d-md-block py-md-2">
-					<a class="nav-link text-secondary dropdown-toggle py-md-2" href="#" id="navbarDropdownMenuLink" 
-					role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
- 					<i class="fas fa-user-circle"></i> Benutzer
-					</a>
-					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-			          <a class="dropdown-item" th:href="@{/userprofile/}"><i class="fas fa-id-card fa-fw"></i> Benutzerprofil</a>
-			          <div class="dropdown-divider"></div>
-			          <a class="dropdown-item" th:href="@{/logout}"><i class="fas fa-sign-out-alt fa-fw"></i> Logout</a>
-			        </div>
-				</li>
-<!-- Mobile -->
-  <!--
-				<li class="nav-item d-md-none"
-				th:classappend="${#request.getServletPath().startsWith('/userprofile') ? 'active-nav-border font-weight-bold' : ''}">
-					<a class="nav-link text-secondary dropdown-item px-0" th:href="@{/userprofile/}"><i class="fas fa-id-card"></i> Benutzerprofil</a>
-				</li>
-				<li class="nav-item d-md-none">
-					<a class="nav-link text-secondary dropdown-item px-0" th:href="@{/logout}"><i class="fas fa-sign-out-alt"></i> Logout</a>
-				</li>
-			</ul>
+				<h3>Bicyclist Admin</h3>
+				<hr class="my-4">
+			</div>
+			<div sec:authorize="isAuthenticated()">
+				<ul class="nav flex-column">
+					<li class="nav-item"><a class="nav-link" href="/uebersicht"
+						th:classappend="${#request.getServletPath().startsWith('/uebersicht') ? 'active' : ''}">
+							<span><i class="fas fa-chart-line"></i></span> Übersicht <span
+							class="sr-only">(current)</span>
+					</a></li>
+					<li class="nav-item"><a class="nav-link" href="/umfragen"
+						th:classappend="${#request.getServletPath().startsWith('/umfragen') ? 'active' : ''}">
+							<span><i class="fas fa-file-alt"></i></span> Umfragen
+					</a></li>
+					<li class="nav-item"><a class="nav-link" href="/meldungen"
+						th:classappend="${#request.getServletPath().startsWith('/meldungen') ? 'active' : ''}">
+							<span><i class="fas fa-map-marker-alt"></i></span> Meldungen
+					</a></li>
+					<li class="nav-item"><a class="nav-link" href="/karte"
+						th:classappend="${#request.getServletPath().startsWith('/karte') ? 'active' : ''}">
+							<span><i class="fas fa-map-marked-alt"></i></span> Karte
+					</a></li>
+					<li class="nav-item"><a class="nav-link"
+						href="/umfrage-erstellen"
+						th:classappend="${#request.getServletPath().startsWith('/umfrage-erstellen') ? 'active' : ''}">
+							<span><i class="fas fa-folder-plus"></i></span> Umfrage erstellen
+					</a></li>
+				</ul>
+
+			</div>
+			<div sec:authorize="isAuthenticated()">
+				<hr class="my-4">
+				<ul class="nav flex-column mb-2">
+					<li class="nav-item"><a class="nav-link" href="/"> <span><i
+								class="fas fa-user-circle"></i></span> <span
+							th:text="${bikehh_user.emailAdresse}"></span>
+					</a></li>
+					<li class="nav-item">
+						<form>
+							<a class="nav-link" href="/logout"> <span><i
+									class="fas fa-sign-out-alt"></i></span> <span>Ausloggen</span>
+							</a>
+						</form>
+					</li>
+				</ul>
+			</div>
 		</div>
-	</nav>-->
-
-  <nav th:fragment="navbar" id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-primary sidebar collapse px-0">
-    <div class="sidebar-sticky">
-      <div class="text-center mb-4">
-        <img src="../static/img/logo.png" th:src="@{img/logo.png}" class="img-fluid" />
-
-        <h3>Bicyclist Admin</h3>
-      </div>
-      <hr class="my-4">
-      <ul class="nav flex-column">
-        <li class="nav-item">
-          <a class="nav-link" href="/uebersicht" th:classappend="${#request.getServletPath().startsWith('/uebersicht') ? 'active' : ''}"
-            >
-              <span><i class="fas fa-chart-line"></i></span>
-              Übersicht <span class="sr-only">(current)</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a
-              class="nav-link"
-              href="/umfragen"
-              th:classappend="${#request.getServletPath().startsWith('/umfragen') ? 'active' : ''}"
-            >
-              <span><i class="fas fa-file-alt"></i></span>
-              Umfragen
-            </a>
-          </li>
-          <li class="nav-item">
-            <a
-              class="nav-link"
-              href="/meldungen"
-              th:classappend="${#request.getServletPath().startsWith('/meldungen') ? 'active' : ''}"
-            >
-              <span><i class="fas fa-map-marker-alt"></i></span>
-              Meldungen
-            </a>
-          </li>
-          <li class="nav-item">
-            <a
-              class="nav-link"
-              href="/karte"
-              th:classappend="${#request.getServletPath().startsWith('/karte') ? 'active' : ''}"
-            >
-              <span><i class="fas fa-map-marked-alt"></i></span>
-              Karte
-            </a>
-          </li>
-          <li class="nav-item">
-            <a
-              class="nav-link"
-              href="/umfrage-erstellen"
-              th:classappend="${#request.getServletPath().startsWith('/umfrage-erstellen') ? 'active' : ''}"
-            >
-              <span><i class="fas fa-folder-plus"></i></span>
-              Umfrage erstellen
-            </a>
-          </li>
-        </ul>
-
-        <hr class="my-4">
-
-       <ul class="nav flex-column mb-2">
-          <li class="nav-item">
-            <a class="nav-link" href="/">
-              <span><i class="fas fa-user-circle"></i></span>
-              <!--<span th:text="${currentUser ? currentUser.email : ''}"></span>-->
-              <span>Nutzer #1234</span>
-            </a>
-          </li>
-          <li class="nav-item">
-          <form>
-			 <a class="nav-link" href="/logout">
-          		<span><i class="fas fa-sign-out-alt"></i></span>
-          		<span>Ausloggen</span>
-            </a>
-          </form>
-          </li>
-        </ul>
-      </div>
-    </nav>
+	</nav>
 </body>
 </html>
