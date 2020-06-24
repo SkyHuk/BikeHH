@@ -33,4 +33,9 @@ public class UmfragenService {
 	public void loesche(int id) {
 		umfrageRepository.deleteById((int) id);
 	}
+
+	// Setze UmfrageRepository fuer Tests
+	public void setUmfrageRepository(UmfrageRepository umfrageRepository) {
+		this.umfrageRepository = umfrageRepository;
+	}
 }
