@@ -10,7 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
-import de.wps.bikehh.adminplattform.material.Umfrage;
+import de.wps.bikehh.umfragen.material.Umfrage;
 
 @Entity
 public class Benutzer {

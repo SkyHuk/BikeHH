@@ -1,4 +1,4 @@
-package de.wps.bikehh.adminplattform.material;
+package de.wps.bikehh.meldungen.material;
 
 import java.util.List;
 
@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
+import de.wps.bikehh.umfragen.material.Umfrage;
 
 @Entity
 public class Meldung {

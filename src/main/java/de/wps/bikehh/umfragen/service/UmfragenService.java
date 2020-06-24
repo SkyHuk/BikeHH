@@ -1,4 +1,4 @@
-package de.wps.bikehh.adminplattform.service;
+package de.wps.bikehh.umfragen.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,8 +6,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import de.wps.bikehh.adminplattform.material.Umfrage;
-import de.wps.bikehh.adminplattform.repository.UmfrageRepository;
+import de.wps.bikehh.umfragen.material.Umfrage;
+import de.wps.bikehh.umfragen.repository.UmfrageRepository;
 
 @Service
 public class UmfragenService {

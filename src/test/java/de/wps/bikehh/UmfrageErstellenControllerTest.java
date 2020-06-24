@@ -9,10 +9,10 @@ import static org.mockito.Mockito.when;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.server.ResponseStatusException;
 
-import de.wps.bikehh.adminplattform.controller.UmfrageErstellenController;
-import de.wps.bikehh.adminplattform.material.Umfrage;
-import de.wps.bikehh.adminplattform.repository.UmfrageRepository;
-import de.wps.bikehh.adminplattform.service.UmfragenService;
+import de.wps.bikehh.umfragen.material.Umfrage;
+import de.wps.bikehh.umfragen.repository.UmfrageRepository;
+import de.wps.bikehh.umfragen.service.UmfragenService;
+import de.wps.bikehh.umfragenerstellen.controller.UmfrageErstellenController;
 
 public class UmfrageErstellenControllerTest {
 

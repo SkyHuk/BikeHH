@@ -1,4 +1,4 @@
-package de.wps.bikehh.adminplattform.service;
+package de.wps.bikehh.meldungen.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,8 +6,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import de.wps.bikehh.adminplattform.material.Meldung;
-import de.wps.bikehh.adminplattform.repository.MeldungRepository;
+import de.wps.bikehh.meldungen.material.Meldung;
+import de.wps.bikehh.meldungen.repository.MeldungRepository;
 
 @Service
 public class MeldungService {

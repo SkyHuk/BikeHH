@@ -1,10 +1,12 @@
-package de.wps.bikehh.adminplattform.material;
+package de.wps.bikehh.meldungen.material;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+
+import de.wps.bikehh.umfragen.material.Frage;
 
 @Entity
 public class Antwort {

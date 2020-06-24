@@ -1,4 +1,4 @@
-package de.wps.bikehh.adminplattform.controller;
+package de.wps.bikehh.karte.controller;
 
 import java.util.List;
 
@@ -8,8 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import de.wps.bikehh.adminplattform.material.Umfrage;
-import de.wps.bikehh.adminplattform.service.UmfragenService;
+import de.wps.bikehh.umfragen.material.Umfrage;
+import de.wps.bikehh.umfragen.service.UmfragenService;
 
 @Controller
 @RequestMapping("karte")

@@ -1,4 +1,4 @@
-package de.wps.bikehh.adminplattform.material;
+package de.wps.bikehh.umfragen.material;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

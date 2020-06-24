@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import de.wps.bikehh.adminplattform.material.Frage;
-import de.wps.bikehh.adminplattform.material.Umfrage;
+import de.wps.bikehh.umfragen.material.Frage;
+import de.wps.bikehh.umfragen.material.Umfrage;
 
 public class Utils {
 

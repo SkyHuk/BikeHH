@@ -1,4 +1,4 @@
-package de.wps.bikehh.adminplattform.controller;
+package de.wps.bikehh.meldungen.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
