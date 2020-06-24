@@ -71,6 +71,8 @@
           <div th:each="frage : ${umfrage.fragen}">
            <div th:text="${frage.titel}"></div>
            <ul>
+
+            <li th:if="${frage.erlaubeBenutzerdefinierteAntwort}">[Freitextantwort]</li>
             <div th:each="antwortMoeglichkeit : ${frage.antwortMoeglichkeiten}">
              <li th:text="${antwortMoeglichkeit.text}"></li>
            </div>

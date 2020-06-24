@@ -2,6 +2,7 @@ package de.wps.bikehh.utilities;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -35,16 +36,32 @@ public class Utils {
 					endDatum = konvertiereStringDatumZuDate(umfrage.getEndDatum());
 				}
 
+				List<Frage> fragenOhneAntworten = new ArrayList<Frage>();
+				for (Frage frage : umfrage.getFragen()) {
+					if (frage.getAntwortMoeglichkeiten().size() < 1) {
+						fragenOhneAntworten.add(frage);
+					}
+				}
+				boolean alleFragenOhneAntwortenErlaubenBenutzerDefinierteAntworten = true;
+				for (Frage frage : fragenOhneAntworten) {
+					if (!frage.isErlaubeBenutzerdefinierteAntwort()) {
+						alleFragenOhneAntwortenErlaubenBenutzerDefinierteAntworten = false;
+						break;
+					}
+				}
+
+				System.out.println(alleFragenOhneAntwortenErlaubenBenutzerDefinierteAntworten);
 				if (umfrage.getTitel() != null && !umfrage.getTitel().isEmpty() && startDatum != null
 						&& endDatum != null
 						&& (startDatum.after(getHeutigesDatum()) || startDatum.equals(getHeutigesDatum()))
 						&& (endDatum.after(startDatum) || endDatum.equals(startDatum)) && umfrage.getFragen() != null
 						&& umfrage.getFragen().size() > 0 && fragenHabenTitel(umfrage.getFragen())
-						&& fragenHabenAntworten(umfrage.getFragen()) && umfrage.getErstelltAmDatum() != null
-						&& !umfrage.getErstelltAmDatum().isEmpty() && umfrage.getBreitengrad() != 0
-						&& umfrage.getLaengengrad() != 0 && umfrage.getKategorie() != null
-						&& umfrage.getBestaetigtVonBenutzern() != null && umfrage.getErsteller() != null
-						&& umfrage.getAdresse() != null) {
+						&& (fragenHabenAntworten(umfrage.getFragen())
+								|| alleFragenOhneAntwortenErlaubenBenutzerDefinierteAntworten)
+						&& umfrage.getErstelltAmDatum() != null && !umfrage.getErstelltAmDatum().isEmpty()
+						&& umfrage.getBreitengrad() != 0 && umfrage.getLaengengrad() != 0
+						&& umfrage.getKategorie() != null && umfrage.getBestaetigtVonBenutzern() != null
+						&& umfrage.getErsteller() != null && umfrage.getAdresse() != null) {
 
 					System.out.println("Validierung war erfolgreich.");
 					return true;
