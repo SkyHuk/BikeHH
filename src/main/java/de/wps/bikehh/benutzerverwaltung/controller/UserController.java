@@ -5,8 +5,10 @@ import de.wps.bikehh.benutzerverwaltung.dto.request.UpdateUserDetailsRequestMode
 import de.wps.bikehh.benutzerverwaltung.dto.request.UserDetailsRequestModel;
 import de.wps.bikehh.benutzerverwaltung.dto.response.UserDetailsResponseModel;
 import de.wps.bikehh.benutzerverwaltung.exception.ApiRequestException;
+import de.wps.bikehh.benutzerverwaltung.exception.ErrorCode;
 import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.benutzerverwaltung.service.UserDetailService;
+import de.wps.bikehh.benutzerverwaltung.util.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -39,6 +41,10 @@ public class UserController {
         String email = requestUserDetails.getEmail();
         String password = requestUserDetails.getPassword();
 
+        if (!Validation.isEmailValid(email) || !Validation.isPasswordValid(password)) {
+            throw new ApiRequestException(ErrorCode.bad_credentials, HttpStatus.BAD_REQUEST);
+        }
+
         _UserDetailService.createUser(email, password);
     }
 
@@ -63,6 +69,11 @@ public class UserController {
 
         String passwordOld = passwordRequestModel.getOldPassword();
         String passwordNew = passwordRequestModel.getNewPassword();
+
+
+        if (!Validation.isPasswordValid(passwordNew)) {
+            throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
+        }
 
         _UserDetailService.updatePassword(user, passwordOld, passwordNew);
     }

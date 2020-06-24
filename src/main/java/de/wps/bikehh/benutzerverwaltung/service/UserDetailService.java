@@ -79,9 +79,7 @@ public class UserDetailService implements UserDetailsService {
     }
 
     private void createUserEntity(String email, String password, String role) throws ApiRequestException {
-        if (!Validation.isEmailValid(email) || !Validation.isPasswordValid(password)) {
-            throw new ApiRequestException(ErrorCode.bad_credentials, HttpStatus.BAD_REQUEST);
-        }
+
         if (_userAuthenticationRepository.existsByEmailAddress(email)) {
             throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
         }
@@ -121,9 +119,6 @@ public class UserDetailService implements UserDetailsService {
     }
 
     public void updatePassword(User user, String passwordOld, String passwordNew) throws ApiRequestException {
-        if (!Validation.isPasswordValid(passwordNew)) {
-            throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
-        }
 
         PasswordEncoderService encoder = new PasswordEncoderService();
         if (!encoder.matches(passwordOld, user.getEncryptedPassword())) {
