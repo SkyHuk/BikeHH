@@ -257,7 +257,7 @@
 
         umfrage: undefined,
         editierModus: false,
-        id: Math.floor(Math.random() * (100000 - 0 + 1)) + 0,
+        //id: Math.floor(Math.random() * (100000 - 0 + 1)) + 0,
         titel: '',
         kategorie: '',
         startDatum: null,
@@ -318,7 +318,7 @@
           this.umfrage.fragen.forEach((frage) => {
             frage.bedingungen.forEach((bedingung) => {
               bedingung.frage = this.umfrage.fragen.find(f => f.id === bedingung.frageId)
-              bedingung.erwarteteAntwort = bedingung.frage.antworten.find(a => a.id === bedingung.erwarteteAntwortId)
+              bedingung.erwarteteAntwort = bedingung.frage.antworten.find(a => a.id === bedingung.antwortId)
             })
           })
         }
@@ -344,7 +344,7 @@
         } else {
           document.getElementById("headline").innerHTML = "Umfrage bearbeiten";
           document.getElementById("submitButton").innerHTML = "Umfrage bearbeiten";
-          this.id = this.umfrage.id
+          //this.id = this.umfrage.id
           this.laengengrad = this.umfrage.laengengrad
           this.breitengrad = this.umfrage.breitengrad
           this.karte = L.map('mapid').setView([this.laengengrad, this.breitengrad], 16)
@@ -573,7 +573,7 @@
           }
 
           // get data
-          data.id = this.id
+          //data.id = this.id
           data.manuellErstellt = this.manuellErstellt
           data.titel = this.titel;
           data.startDatum = this.startDatum;

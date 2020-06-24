@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
 
@@ -73,13 +74,12 @@ public class UmfrageErstellenController {
 	 */
 	@RequestMapping(method = RequestMethod.POST)
 	@PostMapping("/umfragen")
-	public String speichereUmfrage(@RequestBody String jsonString) {
+	@ResponseBody
+	public int speichereUmfrage(@RequestBody String jsonString) {
 
 		Umfrage umfrage = new Gson().fromJson(jsonString, Umfrage.class);
 
-		umfragenService.speichereOderUpdateUmfrage(umfrage);
-
-		return "adfc/umfragen_liste";
+		return umfragenService.speichereOderUpdateUmfrage(umfrage);
 	}
 
 }
