@@ -12,14 +12,14 @@ import org.springframework.web.server.ResponseStatusException;
 import de.wps.bikehh.umfragen.material.Umfrage;
 import de.wps.bikehh.umfragen.repository.UmfrageRepository;
 import de.wps.bikehh.umfragen.service.UmfragenService;
-import de.wps.bikehh.umfragenerstellen.controller.UmfrageErstellenController;
+import de.wps.bikehh.umfragenerstellen.controller.UmfrageErstellenRestController;
 
 public class UmfrageErstellenControllerTest {
 
 	private Umfrage umfrage;
 	private UmfrageRepository umfrageRepository;
 	private UmfragenService umfragenService;
-	private UmfrageErstellenController umfragenErstellenController;
+	private UmfrageErstellenRestController umfragenErstellenRestController;
 
 	public UmfrageErstellenControllerTest() {
 		this.umfrage = mock(Umfrage.class);
@@ -33,14 +33,13 @@ public class UmfrageErstellenControllerTest {
 		this.umfragenService.setUmfrageRepository(this.umfrageRepository);
 
 		// mocke Controller
-		this.umfragenErstellenController = new UmfrageErstellenController();
-		this.umfragenErstellenController.setUmfragenService(this.umfragenService);
+		this.umfragenErstellenRestController = new UmfrageErstellenRestController(this.umfragenService);
 	}
 
 	@Test
 	public void vollstaendigeUmfragenWerdenRichtigValidiert() {
 		String jsonString = "{\"bestaetigtVonBenutzern\":[],\"ersteller\":{\"id\":1,\"verschluesseltesPasswort\":\"sha: uwXzywW1mNUAWQZIaRA3cvRyyQQ=\",\"emailAdresse\":\"admin@chef.lol\",\"rolle\":\"administrator\",\"istGesperrt\":false,\"bestaetigteUmfragen\":[]},\"erstelltAmDatum\":\"2020-06-24T13:04:07.908Z\",\"manuellErstellt\":true,\"titel\":\"TitelDerUmfrage\",\"startDatum\":\"2020-06-24\",\"endDatum\":\"2020-06-30\",\"bestaetigtSchwellenwert\":\"15\",\"fragen\":[{\"titel\":\"TitelFrage1\",\"antwortMoeglichkeiten\":[{\"text\":\"Ja\"},{\"text\":\"Nein\"}],\"bedingungen\":[],\"pfeil\":null,\"erlaubeBenutzerdefinierteAntwort\":true,\"laengengrad\":53.541323635096255,\"breitengrad\":9.843106269836428},{\"titel\":\"TitelFrage2\",\"antwortMoeglichkeiten\":[{\"text\":\"Ja\"},{\"text\":\"Nein\"}],\"bedingungen\":[{\"frage\":\"TitelFrage1\",\"erwarteteAntwort\":\"Ja\"}],\"pfeil\":null,\"erlaubeBenutzerdefinierteAntwort\":false,\"laengengrad\":53.538673691728555,\"breitengrad\":9.845724105834963}],\"kategorie\":{\"name\":\"Verkehrsführung\"},\"laengengrad\":53.53707140353033,\"breitengrad\":9.83908653171966,\"adresse\":{\"stadt\":\"Hamburg\",\"postleitZahl\":\"21129\",\"strasse\":\"Neßdeich\"}}";
-		assertEquals(0, umfragenErstellenController.speichereUmfrage(jsonString));
+		assertEquals(0, umfragenErstellenRestController.speichereUmfrage(jsonString));
 		System.out.println("----Naechster Test----");
 	}
 
@@ -49,7 +48,7 @@ public class UmfrageErstellenControllerTest {
 		String jsonStringTitelFehlt = "{\"bestaetigtVonBenutzern\":[],\"ersteller\":{\"id\":1,\"verschluesseltesPasswort\":\"sha: uwXzywW1mNUAWQZIaRA3cvRyyQQ=\",\"emailAdresse\":\"admin@chef.lol\",\"rolle\":\"administrator\",\"istGesperrt\":false,\"bestaetigteUmfragen\":[]},\"erstelltAmDatum\":\"2020-06-24T13:04:07.908Z\",\"manuellErstellt\":true,\"titel\":\"\",\"startDatum\":\"2020-06-24\",\"endDatum\":\"2020-06-30\",\"bestaetigtSchwellenwert\":\"15\",\"fragen\":[{\"titel\":\"TitelFrage1\",\"antwortMoeglichkeiten\":[{\"text\":\"Ja\"},{\"text\":\"Nein\"}],\"bedingungen\":[],\"pfeil\":null,\"erlaubeBenutzerdefinierteAntwort\":true,\"laengengrad\":53.541323635096255,\"breitengrad\":9.843106269836428},{\"titel\":\"TitelFrage2\",\"antwortMoeglichkeiten\":[{\"text\":\"Ja\"},{\"text\":\"Nein\"}],\"bedingungen\":[{\"frage\":\"TitelFrage1\",\"erwarteteAntwort\":\"Ja\"}],\"pfeil\":null,\"erlaubeBenutzerdefinierteAntwort\":false,\"laengengrad\":53.538673691728555,\"breitengrad\":9.845724105834963}],\"kategorie\":{\"name\":\"Verkehrsführung\"},\"laengengrad\":53.53707140353033,\"breitengrad\":9.83908653171966,\"adresse\":{\"stadt\":\"Hamburg\",\"postleitZahl\":\"21129\",\"strasse\":\"Neßdeich\"}}";
 
 		Exception exception = assertThrows(ResponseStatusException.class, () -> {
-			umfragenErstellenController.speichereUmfrage(jsonStringTitelFehlt);
+			umfragenErstellenRestController.speichereUmfrage(jsonStringTitelFehlt);
 		});
 
 		String expectedMessage = "406 NOT_ACCEPTABLE \"Umfrage ist nicht valide und wird nicht gespeichert\"";
@@ -64,7 +63,7 @@ public class UmfrageErstellenControllerTest {
 		String jsonStringTitelFehlt = "{\"bestaetigtVonBenutzern\":[],\"ersteller\":{\"id\":1,\"verschluesseltesPasswort\":\"sha: uwXzywW1mNUAWQZIaRA3cvRyyQQ=\",\"emailAdresse\":\"admin@chef.lol\",\"rolle\":\"administrator\",\"istGesperrt\":false,\"bestaetigteUmfragen\":[]},\"erstelltAmDatum\":\"2020-06-24T13:04:07.908Z\",\"manuellErstellt\":true,\"titel\":\"\",\"startDatum\":\"2020-06-20\",\"endDatum\":\"2020-06-30\",\"bestaetigtSchwellenwert\":\"15\",\"fragen\":[{\"titel\":\"TitelFrage1\",\"antwortMoeglichkeiten\":[{\"text\":\"Ja\"},{\"text\":\"Nein\"}],\"bedingungen\":[],\"pfeil\":null,\"erlaubeBenutzerdefinierteAntwort\":true,\"laengengrad\":53.541323635096255,\"breitengrad\":9.843106269836428},{\"titel\":\"TitelFrage2\",\"antwortMoeglichkeiten\":[{\"text\":\"Ja\"},{\"text\":\"Nein\"}],\"bedingungen\":[{\"frage\":\"TitelFrage1\",\"erwarteteAntwort\":\"Ja\"}],\"pfeil\":null,\"erlaubeBenutzerdefinierteAntwort\":false,\"laengengrad\":53.538673691728555,\"breitengrad\":9.845724105834963}],\"kategorie\":{\"name\":\"Verkehrsführung\"},\"laengengrad\":53.53707140353033,\"breitengrad\":9.83908653171966,\"adresse\":{\"stadt\":\"Hamburg\",\"postleitZahl\":\"21129\",\"strasse\":\"Neßdeich\"}}";
 
 		Exception exception = assertThrows(ResponseStatusException.class, () -> {
-			umfragenErstellenController.speichereUmfrage(jsonStringTitelFehlt);
+			umfragenErstellenRestController.speichereUmfrage(jsonStringTitelFehlt);
 		});
 
 		String expectedMessage = "406 NOT_ACCEPTABLE \"Umfrage ist nicht valide und wird nicht gespeichert\"";
@@ -79,7 +78,7 @@ public class UmfrageErstellenControllerTest {
 		String jsonStringTitelFehlt = "{\"bestaetigtVonBenutzern\":[],\"ersteller\":{\"id\":1,\"verschluesseltesPasswort\":\"sha: uwXzywW1mNUAWQZIaRA3cvRyyQQ=\",\"emailAdresse\":\"admin@chef.lol\",\"rolle\":\"administrator\",\"istGesperrt\":false,\"bestaetigteUmfragen\":[]},\"erstelltAmDatum\":\"2020-06-24T13:04:07.908Z\",\"manuellErstellt\":true,\"titel\":\"\",\"startDatum\":\"2020-06-24\",\"endDatum\":\"2020-06-23\",\"bestaetigtSchwellenwert\":\"15\",\"fragen\":[{\"titel\":\"TitelFrage1\",\"antwortMoeglichkeiten\":[{\"text\":\"Ja\"},{\"text\":\"Nein\"}],\"bedingungen\":[],\"pfeil\":null,\"erlaubeBenutzerdefinierteAntwort\":true,\"laengengrad\":53.541323635096255,\"breitengrad\":9.843106269836428},{\"titel\":\"TitelFrage2\",\"antwortMoeglichkeiten\":[{\"text\":\"Ja\"},{\"text\":\"Nein\"}],\"bedingungen\":[{\"frage\":\"TitelFrage1\",\"erwarteteAntwort\":\"Ja\"}],\"pfeil\":null,\"erlaubeBenutzerdefinierteAntwort\":false,\"laengengrad\":53.538673691728555,\"breitengrad\":9.845724105834963}],\"kategorie\":{\"name\":\"Verkehrsführung\"},\"laengengrad\":53.53707140353033,\"breitengrad\":9.83908653171966,\"adresse\":{\"stadt\":\"Hamburg\",\"postleitZahl\":\"21129\",\"strasse\":\"Neßdeich\"}}";
 
 		Exception exception = assertThrows(ResponseStatusException.class, () -> {
-			umfragenErstellenController.speichereUmfrage(jsonStringTitelFehlt);
+			umfragenErstellenRestController.speichereUmfrage(jsonStringTitelFehlt);
 		});
 
 		String expectedMessage = "406 NOT_ACCEPTABLE \"Umfrage ist nicht valide und wird nicht gespeichert\"";

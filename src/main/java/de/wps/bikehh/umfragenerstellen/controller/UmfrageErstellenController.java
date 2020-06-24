@@ -18,8 +18,12 @@ import de.wps.bikehh.umfragen.service.UmfragenService;
 @RequestMapping("umfrage-erstellen")
 public class UmfrageErstellenController {
 
+	private UmfragenService umfragenService;
+
 	@Autowired
-	UmfragenService umfragenService;
+	public UmfrageErstellenController(UmfragenService umfragenService) {
+		this.umfragenService = umfragenService;
+	}
 
 	/**
 	 * Öffnet umfrage_erstellen.html mit optional Koordinaten. Koordinaten werden
