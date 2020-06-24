@@ -10,22 +10,17 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.mock;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
+
 @RunWith(MockitoJUnitRunner.class)
-//@RunWith(SpringRunner.class)
 public class UserDetailServiceTest {
 
     //@Autowired
@@ -82,15 +77,11 @@ public class UserDetailServiceTest {
         Mockito.verify(userRepository).save(Mockito.any(User.class));
 
 
-
-
         //List<User> allUser = Arrays.asList(new User("test@mail.com", "Password123"), new User("another@mail.com", "anotherPassword123"), new User("test2@mail.com", "Password123"));
         //when(userRepository.save(Mockito.any(User.class))).then
         // then add to allUser list
         //userDetailService.createUser("jasdkasd", "jaskdjaskl");
         //check if user is in the list
-
-
 
 
     }
