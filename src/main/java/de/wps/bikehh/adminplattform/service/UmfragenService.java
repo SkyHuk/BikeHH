@@ -25,8 +25,9 @@ public class UmfragenService {
 		return umfrageRepository.findById((int) id).get();
 	}
 
-	public void speichereOderUpdateUmfrage(Umfrage survey) {
-		umfrageRepository.save(survey);
+	public int speichereOderUpdateUmfrage(Umfrage umfrage) {
+		umfrageRepository.save(umfrage);
+		return umfrage.getId();
 	}
 
 	public void loesche(int id) {

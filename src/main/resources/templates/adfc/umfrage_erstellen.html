@@ -73,14 +73,14 @@
                     <option v-for="option in kategorieOptionen" :value="option">{{ option.text }}</option>
                   </select>
 
-                  <select class="custom-select mb-2" v-if="kategorie1 && kategorie1.unteroption" v-model="kategorie2">
+                  <select class="custom-select mb-2" v-if="kategorie1 && kategorie1.unteroptionen" v-model="kategorie2">
                     <option selected>Kategorie 2</option>
-                    <option v-for="option in kategorie1.unteroption" :value="option">{{ option.text }}</option>
+                    <option v-for="option in kategorie1.unteroptionen" :value="option">{{ option.text }}</option>
                   </select>
 
-                  <select class="custom-select mb-2" v-if="kategorie2 && kategorie2.unteroption" v-model="kategorie3">
+                  <select class="custom-select mb-2" v-if="kategorie2 && kategorie2.unteroptionen" v-model="kategorie3">
                     <option selected>Kategorie 3</option>
-                    <option v-for="option in kategorie2.unteroption" :value="option">{{ option.text }}</option>
+                    <option v-for="option in kategorie2.unteroptionen" :value="option">{{ option.text }}</option>
                   </select>
                 </div>
 
@@ -254,10 +254,10 @@
     const erstelleUmfrageApp = new Vue({
       el: '#erstelleUmfrageApp',
       data: {
-    	  
-    	umfrage: undefined,
-    	editierModus: false,
-        id: Math.floor(Math.random() * (100000 - 0 + 1)) + 0,
+
+        umfrage: undefined,
+        editierModus: false,
+        //id: Math.floor(Math.random() * (100000 - 0 + 1)) + 0,
         titel: '',
         kategorie: '',
         startDatum: null,
@@ -265,6 +265,7 @@
         bestaetigtSchwellenwert: 10,
         fragen: [],
         manuellErstellt: true,
+        fahrtrichtung: 0,
 
         laengengrad: [[${ laengengrad }?${laengengrad}:0]],
         breitengrad: [[${ breitengrad }?${breitengrad}:0]],
@@ -273,6 +274,7 @@
         hauptMarker: null,
         polyline: null,
         decorator: null,
+        drehMarker: null,
 
         zeigeErfolgBenachrichtigung: false,
         formatierungsFehler: null,
@@ -285,31 +287,40 @@
 
         kategorieOptionen: [
           {
+            id: 1,
             text: 'Hindernis',
-            unteroption: [
-              { text: '' },
+            unteroptionen: [
             ],
           },
           {
+            id: 2,
             text: 'Fahrbahnoberfläche',
-            unteroption: [
+            unteroptionen: [
               {
+                id: 3,
                 text: 'Verschmutzung',
-                unteroption: [
-                  { text: 'Schnee / Glatteis' },
+                unteroptionen: [
+                  { id: 4, text: 'Schnee / Glatteis' },
                 ],
               },
             ]
           },
-          { text: 'Verkehrsführung' },
-          { text: 'Abstellanlage' },
+          { id: 5, text: 'Verkehrsführung' },
+          { id: 6, text: 'Abstellanlage' },
         ],
       },
       mounted() {
-    	  
+
         this.umfrage = [(${umfrage}?${umfrage}:'null')]
         if (this.umfrage) {
           this.editierModus = true;
+          console.log(this.umfrage)
+          this.umfrage.fragen.forEach((frage) => {
+            frage.bedingungen.forEach((bedingung) => {
+              bedingung.frage = this.umfrage.fragen.find(f => f.id === bedingung.frageId)
+              bedingung.erwarteteAntwort = bedingung.frage.antworten.find(a => a.id === bedingung.antwortId)
+            })
+          })
         }
 
         if (!this.editierModus) {
@@ -333,13 +344,13 @@
         } else {
           document.getElementById("headline").innerHTML = "Umfrage bearbeiten";
           document.getElementById("submitButton").innerHTML = "Umfrage bearbeiten";
-          this.id = this.umfrage.id
+          //this.id = this.umfrage.id
           this.laengengrad = this.umfrage.laengengrad
           this.breitengrad = this.umfrage.breitengrad
           this.karte = L.map('mapid').setView([this.laengengrad, this.breitengrad], 16)
-			
+
           this.initialisiereKarte()
-	        
+
           var marker = L.marker([this.laengengrad, this.breitengrad]).addTo(this.karte)
           .bindPopup("<b>Ort der Umfrage</b><br/>")
           this.hauptMarker = marker
@@ -362,13 +373,13 @@
             autoPan: true
           }).addTo(self.karte)
           .bindPopup("<b>Hier wird die erstellte Umfrage sein.</b><br/>");
-          
+
           if (self.hauptMarker) {self.hauptMarker.remove()}
-   
+
           self.hauptMarker = marker
 
           self.fügeMarkerFahrtrichtungHinzu(laengengrad,breitengrad)
-          })
+        })
       },
       created() {
       },
@@ -382,6 +393,7 @@
             ],
             bedingungen: [],
             marker: null,
+            pfeil: null,
             erlaubeBenutzerdefinierteAntwort: this.erlaubeBenutzerdefinierteAntwort ? true : false
           })
         },
@@ -427,6 +439,10 @@
 
             frage.marker = marker;
 
+            /* if (koordinaten) {
+              frage.pfeil = this.fügeMarkerFahrtrichtungHinzu(koordinaten.getLatLng().lat, koordinaten.getLatLng().lng)
+            } */
+
           } else {
             bestehenderMarker.openPopup();
           }
@@ -437,6 +453,8 @@
           if (marker) {
             marker.remove();
             frage.marker = null;
+            frage.pfeil.remove()
+            frage.pfeil = null
           }
         },
         // add bedingung
@@ -462,7 +480,7 @@
 
         },
         setzeKarteZuruek() {
-          if (this.hauptMarker) {this.hauptMarker.remove()}    
+          if (this.hauptMarker) {this.hauptMarker.remove()}
           this.fragen.forEach((frage) => {
             if (frage.marker) {
               frage.marker.remove()
@@ -555,7 +573,7 @@
           }
 
           // get data
-          data.id = this.id
+          //data.id = this.id
           data.manuellErstellt = this.manuellErstellt
           data.titel = this.titel;
           data.startDatum = this.startDatum;
@@ -707,34 +725,107 @@
             zoomOffset: -1
           }).addTo(this.karte);
         },
-        fügeMarkerFahrtrichtungHinzu(lat, lng) {
-          const lineLength = 0.002
-          const halfLineLength = lineLength / 2
+        fügeMarkerFahrtrichtungHinzu(lat, lng, initialerWinkel) {
+          initialerWinkel = initialerWinkel || Math.PI/4
 
-          const polyline = L.polyline([
-            [lat - halfLineLength, lng - halfLineLength],
-            [lat + halfLineLength, lng + halfLineLength],
+          if (this.polyline) {
+            this.polyline.remove()
+          }
+
+          if (this.decorator) {
+            this.decorator.remove()
+          }
+
+          if (this.drehMarker) {
+            this.drehMarker.remove()
+          }
+
+          const pfeilLaenge = 0.002
+          const halbePfeilLaenge = pfeilLaenge / 2
+          const drehMarkerOffset = 0.0005
+
+          let gedrehtesX = (Math.cos(initialerWinkel) * halbePfeilLaenge) // - (Math.sin(initialerWinkel) * initialY)
+          const gedrehtesY = (Math.sin(initialerWinkel) * halbePfeilLaenge) // + (Math.cos(initialerWinkel) * initialY)
+
+          // skalieren auf der x Achse je nach Winkel um Länge des Pfeils angenähert zu erhalten
+          gedrehtesX *= Math.abs(Math.cos(initialerWinkel) * 2)
+
+          let polyline = this.polyline = L.polyline([
+            [lat - gedrehtesY, lng - gedrehtesX],
+            [lat + gedrehtesY, lng + gedrehtesX],
           ], {
-            color: '#f00',
             weight: 2,
           }).addTo(this.karte)
 
-          if (this.polyline) {this.polyline.remove()}
-          this.polyline = polyline;
+          // this.markers.addLayer(polyline)
 
-          const decorator = L.polylineDecorator(polyline, {
+          let decorator = this.decorator = L.polylineDecorator(polyline, {
             patterns: [
-              { offset: '100%', repeat: 0, symbol: L.Symbol.arrowHead({ pixelSize: 20, polygon: false, pathOptions: { stroke: true, color: 'f00' } }) 
-              },
+              { offset: '100%', repeat: 0, symbol: L.Symbol.arrowHead({ pixelSize: 20, polygon: false, pathOptions: { stroke: true } }) },
             ]
           }).addTo(this.karte)
 
-          if (this.decorator) {this.decorator.remove()}
-          this.decorator = decorator;
-		    },       
+          // this.markers.addLayer(decorator)
+
+          const onRotate = (e) => {
+            const x = e.latlng.lat - lat
+            const y = e.latlng.lng - lng
+            const angle = Math.atan2(x, y)
+
+            // rotiere 90° nach links
+            this.fahrtrichtung = angle - (Math.PI / 2)
+
+            // arrow pointing straight right
+            const initialX = halbePfeilLaenge
+            const initialY = 0.0
+
+            let gedrehtesX = (Math.cos(angle) * initialX) // - (Math.sin(angle) * initialY)
+            const gedrehtesY = (Math.sin(angle) * initialX) // + (Math.cos(angle) * initialY)
+
+            // skalieren auf der x Achse je nach Winkel um Länge des Pfeils angenähert zu erhalten
+            gedrehtesX *= Math.abs(Math.cos(angle) * 2)
+
+            // console.log('length after rotate', Math.sqrt(Math.pow(gedrehtesX, 2) + Math.pow(gedrehtesY, 2)))
+
+            const newStart = [
+              lat - gedrehtesY,
+              lng - gedrehtesX,
+            ]
+
+            const newEnd = [
+              lat + gedrehtesY,
+              lng + gedrehtesX,
+            ]
+
+            polyline.setLatLngs([newStart, newEnd])
+
+            this.karte.removeLayer(decorator)
+            this.decorator = decorator = L.polylineDecorator(polyline, {
+              patterns: [
+                { offset: '100%', repeat: 0, symbol: L.Symbol.arrowHead({ pixelSize: 20, polygon: false, pathOptions: { stroke: true } }) },
+              ]
+            }).addTo(this.karte)
+          }
+
+          let drehMarker
+
+          const fuegeDrehmarkerHinzu = () => {
+            this.drehMarker = drehMarker = L.marker([lat + halbePfeilLaenge + drehMarkerOffset, lng + halbePfeilLaenge + drehMarkerOffset], {
+              draggable: true,
+              autoPan: false,
+              // icon: L.Icon({ })
+            }).addTo(this.karte).on('drag', onRotate)
+
+            // this.markers.addLayer(drehMarker)
+          }
+
+          fuegeDrehmarkerHinzu()
+
+          return polyline
+        },
       },
     })
   </script>
-</body>	
+</body>
 
 </html>
