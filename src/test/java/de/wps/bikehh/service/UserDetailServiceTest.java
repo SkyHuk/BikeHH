@@ -4,7 +4,7 @@ import de.wps.bikehh.benutzerverwaltung.dto.request.UpdateUserDetailsRequestMode
 import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.benutzerverwaltung.repository.UserAuthenticationRepository;
 import de.wps.bikehh.benutzerverwaltung.service.*;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -15,9 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @RunWith(MockitoJUnitRunner.class)
@@ -25,11 +23,11 @@ public class UserDetailServiceTest {
 
     //@Autowired
     @Mock
-    private AuthService authService;
+    AuthService authService;
     @Mock
-    private VerifyDetailService verifyDetailService;
+    VerifyDetailService verifyDetailService;
     @Mock
-    private PasswordDetailService passwordDetailService;
+    PasswordDetailService passwordDetailService;
 
 
     @Mock
@@ -70,8 +68,8 @@ public class UserDetailServiceTest {
 
     @Test
     public void testCreateUser() {
-        when(userRepository.existsByEmailAddress("test@web.de")).thenReturn(true);
-        when(userRepository.save(Mockito.any(User.class))).thenReturn(new User());
+        //when(userRepository.existsByEmailAddress("test@web.de")).thenReturn(true);
+        //when(userRepository.save(Mockito.any(User.class))).thenReturn(new User());
         userDetailService.createUser("test@web.de", "Test1234");
         Mockito.verify(userRepository).existsByEmailAddress(anyString());
         Mockito.verify(userRepository).save(Mockito.any(User.class));
@@ -102,7 +100,10 @@ public class UserDetailServiceTest {
     @Test
     public void testDeleteUser() {
         User user = new User();
+        user.setId(1L);
+
         userDetailService.deleteUser(user);
+
         Mockito.verify(userRepository).delete(Mockito.any(User.class));
         Mockito.verify(authService).logoutAllSession(anyLong());
         Mockito.verify(verifyDetailService).deleteVerification(anyLong());
@@ -128,6 +129,7 @@ public class UserDetailServiceTest {
         List<User> result = userDetailService.retrieveUsers();
         assertEquals(3, result.size());
     }
+
 /*
     @Test
     public void testGetUserById() {

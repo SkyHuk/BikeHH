@@ -79,7 +79,6 @@ public class UserDetailService implements UserDetailsService {
     }
 
     private void createUserEntity(String email, String password, String role) throws ApiRequestException {
-
         if (_userAuthenticationRepository.existsByEmailAddress(email)) {
             throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
         }
