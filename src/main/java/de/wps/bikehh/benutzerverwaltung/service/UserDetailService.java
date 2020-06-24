@@ -176,16 +176,4 @@ public class UserDetailService implements UserDetailsService {
         return _userAuthenticationRepository.save(user);
     }
 
-
-    //only for testing purposes
-    public List<User> getAll(String password){
-        return StreamSupport.stream(_userAuthenticationRepository.findAll().spliterator(), false)
-                .filter(user -> user.getEncryptedPassword().equals(password))
-                .collect(Collectors.toList());
-    }
-
-    public List<User> getAllUser(){
-        return StreamSupport.stream(_userAuthenticationRepository.findAll().spliterator(), false)
-                .collect(Collectors.toList());
-    }
 }

@@ -41,11 +41,12 @@ public class User {
         this.encryptedPassword = encryptedPassword;
     }
 
-    public User(Long id, String email, String encryptedPassword) {
-        this.id = id;
+    public User(String email, String encryptedPassword, String role) {
+        this.role = role;
         this.emailAddress = email;
         this.encryptedPassword = encryptedPassword;
     }
+
 
     public User() {}
 

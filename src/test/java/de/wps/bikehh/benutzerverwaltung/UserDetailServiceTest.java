@@ -1,6 +1,7 @@
-package de.wps.bikehh.service;
+package de.wps.bikehh.benutzerverwaltung;
 
 import de.wps.bikehh.benutzerverwaltung.dto.request.UpdateUserDetailsRequestModel;
+import de.wps.bikehh.benutzerverwaltung.material.Roles;
 import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.benutzerverwaltung.repository.UserAuthenticationRepository;
 import de.wps.bikehh.benutzerverwaltung.service.*;
@@ -11,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import javax.management.relation.Role;
 import java.util.Arrays;
 import java.util.List;
 
@@ -36,52 +38,14 @@ public class UserDetailServiceTest {
     private UserDetailService userDetailService;
 
 
-    /*@Before
-    public void init(){
-        List<User> allUser = Arrays.asList(new User("test@mail.com", "Password123"), new User("another@mail.com", "anotherPassword123"), new User("test2@mail.com", "Password123"));
-
-        //UserAuthenticationRepository userRepository = mock(UserAuthenticationRepository.class);
-        when(userRepository.findAll()).thenReturn(allUser);
-    }*/
-
-    //only for testing purposes
-    @Test
-    public void getUser() {
-        List<User> allUser = Arrays.asList(new User("test@mail.com", "Password123"), new User("another@mail.com", "anotherPassword123"), new User("test2@mail.com", "Password123"));
-        when(userRepository.findAll()).thenReturn(allUser);
-
-        List<User> result = userDetailService.getAll("Password123");
-        System.out.println(result.size());
-    }
-
-    @Test
-    public void getAllUser() {
-        List<User> allUser = Arrays.asList(new User("test@mail.com", "Password123"), new User("another@mail.com", "anotherPassword123"), new User("test2@mail.com", "Password123"));
-        when(userRepository.findAll()).thenReturn(allUser);
-
-        List<User> result = userDetailService.getAllUser();
-        System.out.println(result.size());
-        System.out.println(result.get(0).getEncryptedPassword());
-    }
 
     //------------------
 
     @Test
     public void testCreateUser() {
-        //when(userRepository.existsByEmailAddress("test@web.de")).thenReturn(true);
-        //when(userRepository.save(Mockito.any(User.class))).thenReturn(new User());
         userDetailService.createUser("test@web.de", "Test1234");
         Mockito.verify(userRepository).existsByEmailAddress(anyString());
         Mockito.verify(userRepository).save(Mockito.any(User.class));
-
-
-        //List<User> allUser = Arrays.asList(new User("test@mail.com", "Password123"), new User("another@mail.com", "anotherPassword123"), new User("test2@mail.com", "Password123"));
-        //when(userRepository.save(Mockito.any(User.class))).then
-        // then add to allUser list
-        //userDetailService.createUser("jasdkasd", "jaskdjaskl");
-        //check if user is in the list
-
-
     }
 
     @Test
@@ -123,11 +87,12 @@ public class UserDetailServiceTest {
 
     @Test
     public void testRetrieveUsers() {
-        List<User> allUser = Arrays.asList(new User("test@mail.com", "Password123"), new User("another@mail.com", "anotherPassword123"), new User("test2@mail.com", "Password123"));
+        List<User> allUser = Arrays.asList(new User("test@mail.com", "Password123", Roles.ROLE_USER), new User("another@mail.com", "anotherPassword123", Roles.ROLE_USER), new User("test2@mail.com", "Password123", Roles.ROLE_ADMIN));
         when(userRepository.findAll()).thenReturn(allUser);
+        Mockito.verify(userRepository).findAll();
 
         List<User> result = userDetailService.retrieveUsers();
-        assertEquals(3, result.size());
+        assertEquals(2, result.size());
     }
 
 /*
