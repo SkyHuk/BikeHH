@@ -61,6 +61,7 @@ public class UmfrageErstellenController {
 		Umfrage umfrage = umfragenService.getUmfrageNachId(umfrageId);
 
 		String jsonUmfrage = new Gson().toJson(umfrage);
+		System.out.println(jsonUmfrage);
 		model.addAttribute("umfrage", jsonUmfrage);
 		return "adfc/umfrage_erstellen";
 	}
@@ -78,8 +79,16 @@ public class UmfrageErstellenController {
 	public int speichereUmfrage(@RequestBody String jsonString) {
 
 		Umfrage umfrage = new Gson().fromJson(jsonString, Umfrage.class);
+		if (umfrage.getId() == 0) {
+			// die umfrage ist neu erstellt worden und nicht eine alte bearbeitete
+			return umfragenService.speichereOderUpdateUmfrage(umfrage);
+		}
+		int neueUmfrage = umfragenService.speichereOderUpdateUmfrage(umfrage);
+		// eine alte Umfrage wurde bearbeitet, muss geupdated werden
+		Umfrage oldUmfrage = umfragenService.getUmfrageNachId(neueUmfrage);
+		oldUmfrage.merge(umfrage);
 
-		return umfragenService.speichereOderUpdateUmfrage(umfrage);
+		return oldUmfrage.getId();
 	}
 
 }

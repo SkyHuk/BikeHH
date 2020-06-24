@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -33,7 +34,8 @@ public class Umfrage {
 	// @JoinColumn(name = "kategorie", referencedColumnName = "Id", nullable =
 	// false)
 	// private Kategorie kategorie;
-	private String kategorie;
+	@ManyToOne(targetEntity = Kategorie.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Kategorie kategorie;
 	private String startDatum;
 	private String endDatum;
 	private String erstelltAmDatum;
@@ -44,16 +46,37 @@ public class Umfrage {
 	private int bestaetigtSchwellenwert;
 	private String titel;
 
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(targetEntity = Frage.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "umfrage", referencedColumnName = "id", nullable = false)
 	private List<Frage> fragen;
 
-	@ManyToOne(fetch = FetchType.EAGER, targetEntity = Benutzer.class, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER, targetEntity = Benutzer.class)
 	private Benutzer ersteller;
 
 	private boolean manuellErstellt;
 
 	@ManyToOne(fetch = FetchType.EAGER, targetEntity = Adresse.class, cascade = CascadeType.ALL)
 	private Adresse adresse;
+
+	public Umfrage merge(Umfrage umfrage) {
+		setAdresse(umfrage.getAdresse());
+		setBestaetigtSchwellenwert(umfrage.getBestaetigtSchwellenwert());
+		setBestaetigtVonBenutzern(umfrage.getBestaetigtVonBenutzern());
+		setBreitengrad(umfrage.getBreitengrad());
+		setLaengengrad(umfrage.getLaengengrad());
+		setEndDatum(umfrage.getEndDatum());
+		setStartDatum(umfrage.getStartDatum());
+		setErsteller(umfrage.getErsteller());
+		setErstelltAmDatum(umfrage.getErstelltAmDatum());
+		setFragen(umfrage.getFragen());
+		setId(umfrage.getId());
+		setIstBestaetigt(umfrage.getIstBestaetigt());
+		setKategorie(umfrage.getKategorie());
+		setManuellErstellt(umfrage.getManuellErstellt());
+		setTitel(umfrage.getTitel());
+
+		return umfrage;
+	}
 
 	public int getId() {
 		return id;
@@ -95,7 +118,7 @@ public class Umfrage {
 		this.endDatum = endDatum;
 	}
 
-	public boolean isIstBestaetigt() {
+	public boolean getIstBestaetigt() {
 		return istBestaetigt || getBestaetigtVonBenutzern().size() <= getBestaetigtSchwellenwert();
 	}
 
@@ -127,7 +150,7 @@ public class Umfrage {
 		this.titel = titel;
 	}
 
-	public boolean isManuellErstellt() {
+	public boolean getManuellErstellt() {
 		return manuellErstellt;
 	}
 
@@ -143,20 +166,16 @@ public class Umfrage {
 		this.adresse = adresse;
 	}
 
-	public boolean wurdeManuellErstellt() {
-		return manuellErstellt;
-	}
-
 	/*
 	 * public Kategorie getKategorie() { return kategorie; }
 	 * 
 	 * public void setKategorie(Kategorie kategorie) { this.kategorie = kategorie; }
 	 */
-	public String getKategorie() {
+	public Kategorie getKategorie() {
 		return kategorie;
 	}
 
-	public void setKategorie(String kategorie) {
+	public void setKategorie(Kategorie kategorie) {
 		this.kategorie = kategorie;
 	}
 

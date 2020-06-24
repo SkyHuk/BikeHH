@@ -28,7 +28,7 @@
            	<td th:text="${umfrage.adresse.stadt + ', ' + umfrage.adresse.postleitZahl}"></td>
            	<td th:text="${umfrage.adresse.hausnummer!=null}?${umfrage.adresse.strasse + ' ' + umfrage.adresse.hausnummer}:${umfrage.adresse.strasse}"></td>
            	<td th:text="${umfrage.titel}"></td>
-           	<td th:text="${umfrage.kategorie}"></td>
+           	<td th:text="${umfrage.kategorie.name}"></td>
            	<td th:text="${umfrage.erstelltAmDatum}"></td>
            	<td th:text="${#lists.size(umfrage.bestaetigtVonBenutzern)}"></td>
             <td>

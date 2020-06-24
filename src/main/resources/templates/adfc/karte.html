@@ -121,7 +121,7 @@ crossorigin=""></script>
 					}
 					antwortenHTML += fragen[i].antwortMoeglichkeiten[k].text;
 				}
-				fragenHTML += "<li>" + fragen[i].title + " [" + antwortenHTML + "]" + " (Freitext-Antwort: " + fragen[i].erlaubeBenutzerdefinierteAntwort + ")" + "</li>";
+				fragenHTML += "<li>" + fragen[i].titel + " [" + antwortenHTML + "]" + " (Freitext-Antwort: " + fragen[i].erlaubeBenutzerdefinierteAntwort + ")" + "</li>";
 				antwortenHTML = "";
 			}
 
@@ -137,7 +137,7 @@ crossorigin=""></script>
 				'<a href="umfragen/' + id +'"><b>Umfrage Id ' + id +'</b></a>' + 
 				": " + titel + "<br/>" +
 				adresseHTML +
-				"Kategorie: " + kategorie + "<br/>" +
+				"Kategorie: " + kategorie.name + "<br/>" +
 				"Erstellt am: " + erstelltAmDatum + "<br/>" +
 				"Dauer: " + startDatum + " bis " + endDatum + "<br/>" +
 				bestaetigungen +

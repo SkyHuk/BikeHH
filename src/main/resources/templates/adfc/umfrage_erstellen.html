@@ -123,7 +123,7 @@
 
                 <div class="form-group">
                   <label>Antwortmöglichkeiten</label>
-                  <div v-for="antwortMoeglichkeit in frage.antwortenMoeglichkeiten" class="d-flex justify-space-between mb-4">
+                  <div v-for="antwortMoeglichkeit in frage.antwortMoeglichkeiten" class="d-flex justify-space-between mb-4">
                     <input class="form-control" v-model="antwortMoeglichkeit.text">
                     <button type="button" class="btn text-danger ml-3" @click="entferneAntwort(frage, antwortMoeglichkeit)">
                       <span><i class="far fa-trash-alt"></i></span>
@@ -254,7 +254,7 @@
     const erstelleUmfrageApp = new Vue({
       el: '#erstelleUmfrageApp',
       data: {
-
+        id: null, // is injected as server response, used to open umfrage once created
         umfrage: undefined,
         editierModus: false,
         //id: Math.floor(Math.random() * (100000 - 0 + 1)) + 0,
@@ -313,12 +313,17 @@
 
         this.umfrage = [(${umfrage}?${umfrage}:'null')]
         if (this.umfrage) {
+        	this.id = this.umfrage.id 
           this.editierModus = true;
           console.log(this.umfrage)
           this.umfrage.fragen.forEach((frage) => {
             frage.bedingungen.forEach((bedingung) => {
               bedingung.frage = this.umfrage.fragen.find(f => f.id === bedingung.frageId)
-              bedingung.erwarteteAntwort = bedingung.frage.antworten.find(a => a.id === bedingung.antwortId)
+
+              /*this.umfrage.fragen.forEach((frage1) => {
+                frage1.antwortMoeglichkeit
+              })*/
+              bedingung.erwarteteAntwort = this.umfrage.fragen.find(f => f.antwortMoeglichkeiten.find(moeglichkeit => moeglichkeit.id === bedingung.antwortId))
             })
           })
         }
@@ -573,7 +578,9 @@
           }
 
           // get data
-          //data.id = this.id
+          if (this.id) {
+            data.id = this.id
+          }
           data.manuellErstellt = this.manuellErstellt
           data.titel = this.titel;
           data.startDatum = this.startDatum;
@@ -612,12 +619,12 @@
             }
 
             // TODO: find kategorie recursively
-            data.kategorie = { name: this.kategorie3 ? this.kategorie3.text : this.kategorie2 ? this.kategorie2.text : this.kategorie1.text }
+            data.kategorie = { name: this.kategorie3 ? this.kategorie3.text : this.kategorie2 ? this.kategorie2.text : this.kategorie1.text}
 
           }
 
           // TEMPORARY: only string
-          data.kategorie = data.kategorie.name
+          //data.kategorie = data.kategorie.name
 
           console.log('kategorie', data.kategorie)
 
@@ -670,7 +677,7 @@
           request.onload = function (e) {
             if (request.status == 200) {
               self.behandelErfolg();
-
+              self.id = request.response
             } else {
               self.behandelFehler(null, "server");
             }
