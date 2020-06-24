@@ -14,17 +14,17 @@ public class UmfragenService {
 	UmfrageRepository umfrageRepository;
 
 	public List<UmfrageDB> getAlleUmfragen() {
-		List<UmfrageDB> surveys = new ArrayList<UmfrageDB>();
-		umfrageRepository.findAll().forEach(survey -> surveys.add(survey));
-		return surveys;
+		List<UmfrageDB> umfragen = new ArrayList<UmfrageDB>();
+		umfrageRepository.findAll().forEach(umfrage -> umfragen.add(umfrage));
+		return umfragen;
 	}
 
 	public UmfrageDB getUmfrageNachId(int id) {
 		return umfrageRepository.findById((long) id).get();
 	}
 
-	public void speichereOderUpdateUmfrage(UmfrageDB survey) {
-		umfrageRepository.save(survey);
+	public void speichereOderUpdateUmfrage(UmfrageDB umfrage) {
+		umfrageRepository.save(umfrage);
 	}
 
 	public void loesche(int id) {
