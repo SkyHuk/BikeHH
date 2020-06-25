@@ -1,13 +1,11 @@
 package de.wps.bikehh.benutzerverwaltung.exception;
 
 public class ApiException {
-    //private final HttpStatus httpStatus;
     private final String errorCode;
     private final String errorMessage;
 
 
     public ApiException(String errorCode) {
-        //this.httpStatus = httpStatus;
         this.errorCode = errorCode;
         this.errorMessage = errorMessage(errorCode);
     }
@@ -25,7 +23,7 @@ public class ApiException {
             case ErrorCode.bad_request:
                 return "bad request made";
             case ErrorCode.unauthorized:
-                return "is unauthorized";
+                return "access token invalid or not found";
             case ErrorCode.method_not_found:
                 return "Http method not found";
             case ErrorCode.not_found:
@@ -42,10 +40,6 @@ public class ApiException {
 
         return "unknown error code";
     }
-
-    /*public HttpStatus getHttpStatus() {
-        return httpStatus;
-    }*/
 
     @Override
     public String toString() {
