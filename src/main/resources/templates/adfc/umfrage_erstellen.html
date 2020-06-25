@@ -590,6 +590,7 @@
           if (this.id) {
             data.id = this.id
           }
+          data.bearbeitet = this.editierModus
           data.manuellErstellt = this.manuellErstellt
           data.titel = this.titel;
           data.startDatum = this.startDatum;
@@ -706,7 +707,7 @@
             return
           }
 
-          if (this.startDatum < new Date().toJSON().slice(0, 10)) {
+          if (this.startDatum < new Date().toJSON().slice(0, 10) || !data.bearbeitet) {
             this.behandelFehler('Das Startdatum darf nicht in der Vergangenheit liegen.')
             return
           }

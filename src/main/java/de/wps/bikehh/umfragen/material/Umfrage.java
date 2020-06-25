@@ -40,6 +40,7 @@ public class Umfrage {
 	private String endDatum;
 	private String erstelltAmDatum;
 	private boolean istBestaetigt;
+	private boolean bearbeitet;
 
 	@ManyToMany(cascade = CascadeType.ALL)
 	private List<Benutzer> bestaetigtVonBenutzern;
@@ -70,7 +71,7 @@ public class Umfrage {
 		setErstelltAmDatum(umfrage.getErstelltAmDatum());
 		setFragen(umfrage.getFragen());
 		setId(umfrage.getId());
-		setIstBestaetigt(umfrage.getIstBestaetigt());
+		setIstBestaetigt(umfrage.istBestaetigt());
 		setKategorie(umfrage.getKategorie());
 		setManuellErstellt(umfrage.getManuellErstellt());
 		setTitel(umfrage.getTitel());
@@ -118,7 +119,7 @@ public class Umfrage {
 		this.endDatum = endDatum;
 	}
 
-	public boolean getIstBestaetigt() {
+	public boolean istBestaetigt() {
 		return istBestaetigt || getBestaetigtVonBenutzern().size() <= getBestaetigtSchwellenwert();
 	}
 
@@ -140,6 +141,14 @@ public class Umfrage {
 
 	public void setBestaetigtSchwellenwert(int bestaetigtSchwellenwert) {
 		this.bestaetigtSchwellenwert = bestaetigtSchwellenwert;
+	}
+
+	public boolean isBearbeitet() {
+		return bearbeitet;
+	}
+
+	public void setBearbeitet(boolean bearbeitet) {
+		this.bearbeitet = bearbeitet;
 	}
 
 	public String getTitel() {
@@ -166,11 +175,6 @@ public class Umfrage {
 		this.adresse = adresse;
 	}
 
-	/*
-	 * public Kategorie getKategorie() { return kategorie; }
-	 * 
-	 * public void setKategorie(Kategorie kategorie) { this.kategorie = kategorie; }
-	 */
 	public Kategorie getKategorie() {
 		return kategorie;
 	}

@@ -50,10 +50,10 @@ public class Utils {
 					}
 				}
 
-				System.out.println(alleFragenOhneAntwortenErlaubenBenutzerDefinierteAntworten);
 				if (umfrage.getTitel() != null && !umfrage.getTitel().isEmpty() && startDatum != null
 						&& endDatum != null
-						&& (startDatum.after(getHeutigesDatum()) || startDatum.equals(getHeutigesDatum()))
+						&& (startDatum.after(getHeutigesDatum()) || startDatum.equals(getHeutigesDatum())
+								|| umfrage.isBearbeitet())
 						&& (endDatum.after(startDatum) || endDatum.equals(startDatum)) && umfrage.getFragen() != null
 						&& umfrage.getFragen().size() > 0 && fragenHabenTitel(umfrage.getFragen())
 						&& (fragenHabenAntworten(umfrage.getFragen())
