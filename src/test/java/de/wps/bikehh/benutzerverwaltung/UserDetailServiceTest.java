@@ -99,8 +99,9 @@ public class UserDetailServiceTest {
 
     @Test
     public void testGetUserById() {
-        User user = new User();
+        User user = new User("test@test.com", "Password1234");
         user.setId((long) 222);
+        when(userRepository.existsById(anyLong())).thenReturn(true);
         userDetailService.getUserById(user.getId());
         Mockito.verify(userRepository).existsById(anyLong());
         Mockito.verify(userRepository).findById(anyLong());
@@ -108,8 +109,9 @@ public class UserDetailServiceTest {
 
     @Test
     public void testDeleteUserById() {
-        User user = new User();
+        User user = new User("test1@test.com", "Password1234");
         user.setId((long) 111);
+        when(userRepository.existsById(anyLong())).thenReturn(true);
         userDetailService.deleteUserById(user.getId());
         Mockito.verify(userRepository).existsById(anyLong());
         Mockito.verify(userRepository).delete(Mockito.any(User.class));
@@ -117,8 +119,10 @@ public class UserDetailServiceTest {
 
     @Test
     public void testUpdateUserById() {
-        User user = new User();
+        User user = new User("test2@test.com", "Password1234");
         user.setId((long) 123);
+        when(userRepository.existsById(anyLong())).thenReturn(true);
+        //when(userRepository.findById(anyLong())).thenReturn(user);
         UpdateUsersDetailsRequestModel userUpdate = new UpdateUsersDetailsRequestModel();
         userDetailService.updateUserById(user.getId(), userUpdate);
         Mockito.verify(userRepository).existsById(anyLong());
