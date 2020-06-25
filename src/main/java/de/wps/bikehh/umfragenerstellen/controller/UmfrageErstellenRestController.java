@@ -61,10 +61,4 @@ public class UmfrageErstellenRestController {
 					"Umfrage ist nicht valide und wird nicht gespeichert");
 		}
 	}
-
-	// Setze UmfragenService fuer Tests
-	public void setUmfragenService(UmfragenService umfragenService) {
-		this.umfragenService = umfragenService;
-	}
-
 }

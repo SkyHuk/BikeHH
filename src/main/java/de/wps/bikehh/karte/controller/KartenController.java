@@ -16,7 +16,11 @@ import de.wps.bikehh.umfragen.service.UmfragenService;
 public class KartenController {
 
 	@Autowired
-	UmfragenService umfragenService;
+	private UmfragenService umfragenService;
+
+	public KartenController(UmfragenService umfragenService) {
+		this.umfragenService = umfragenService;
+	}
 
 	@GetMapping
 	public String zeigeKarte(Model model) {

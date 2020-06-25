@@ -32,6 +32,21 @@ public class Meldung {
 	// @ManyToOne(fetch = FetchType.LAZY, targetEntity = Kategorie.class)
 	// private Kategorie kategorie;
 
+	protected Meldung() {
+		// required by JPA
+	}
+
+	public Meldung(int id, double laengengrad, double breitengrad, Umfrage umfrage, List<Antwort> antwortenAufFragen,
+			double fahrtrichtung, String text) {
+		this.id = id;
+		this.laengengrad = laengengrad;
+		this.breitengrad = breitengrad;
+		this.umfrage = umfrage;
+		this.antwortenAufFragen = antwortenAufFragen;
+		this.fahrtrichtung = fahrtrichtung;
+		this.text = text;
+	}
+
 	public int getId() {
 		return id;
 	}

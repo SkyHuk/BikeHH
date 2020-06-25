@@ -13,7 +13,11 @@ import de.wps.bikehh.meldungen.repository.MeldungRepository;
 public class MeldungService {
 
 	@Autowired
-	MeldungRepository meldungRepository;
+	private MeldungRepository meldungRepository;
+
+	public MeldungService(MeldungRepository meldungRepository) {
+		this.meldungRepository = meldungRepository;
+	}
 
 	public List<Meldung> getAlleMeldungen() {
 		List<Meldung> meldungen = new ArrayList<Meldung>();

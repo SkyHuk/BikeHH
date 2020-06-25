@@ -30,6 +30,21 @@ public class Benutzer {
 	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "bestaetigtVonBenutzern", cascade = CascadeType.ALL)
 	private List<Umfrage> bestaetigteUmfragen;
 
+	protected Benutzer() {
+		// required by JPA
+	}
+
+	public Benutzer(Long id, String verschluesseltesPasswort, String emailAdresse, String rolle, boolean istGesperrt,
+			List<Umfrage> bestaetigteUmfragen) {
+		super();
+		this.id = id;
+		this.verschluesseltesPasswort = verschluesseltesPasswort;
+		this.emailAdresse = emailAdresse;
+		this.rolle = rolle;
+		this.istGesperrt = istGesperrt;
+		this.bestaetigteUmfragen = bestaetigteUmfragen;
+	}
+
 	public Long getId() {
 		return id;
 	}
