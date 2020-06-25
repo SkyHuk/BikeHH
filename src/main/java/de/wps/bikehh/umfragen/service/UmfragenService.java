@@ -13,7 +13,13 @@ import de.wps.bikehh.umfragen.repository.UmfrageRepository;
 public class UmfragenService {
 
 	@Autowired
-	UmfrageRepository umfrageRepository;
+	private UmfrageRepository umfrageRepository;
+
+	@Autowired
+	public UmfragenService(UmfrageRepository umfrageRepository) {
+		this.umfrageRepository = umfrageRepository;
+
+	}
 
 	public List<Umfrage> getAlleUmfragen() {
 		List<Umfrage> umfragen = new ArrayList<Umfrage>();
