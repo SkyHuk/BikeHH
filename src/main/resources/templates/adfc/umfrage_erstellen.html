@@ -95,6 +95,13 @@
 
               </div>
 
+              <div class="form-check mb-2">
+                  <input class="form-check-input" type="checkbox" v-model="fahrtrichtung" @click="setzeFahrtrichtung()" id="fahrtrichtungCheckbox">
+                  <label class="form-check-label" for="fahrtrichtungCheckbox">
+                    Fahrtrichtung
+                  </label>
+                </div>
+
             </div>
 
             <div class="col">
@@ -183,6 +190,15 @@
                     löschen</button>
                 </div>
 
+                <div v-if="frage.marker"class="form-group">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" @click="setzeFahrtrichtung(frage, frage.marker)" v-model="frage.fahrtrichtung">
+                      <label class="form-check-label">                  
+                      Fahrtrichtung
+                    </label>
+                  </div>
+                </div>
+
               </div>
 
               <hr>
@@ -264,7 +280,7 @@
         bestaetigtSchwellenwert: 10,
         fragen: [],
         manuellErstellt: true,
-        fahrtrichtung: 0,
+        fahrtrichtung: false,
 
         laengengrad: [[${ laengengrad }?${laengengrad}:0]],
         breitengrad: [[${ breitengrad }?${breitengrad}:0]],
@@ -379,10 +395,8 @@
           .bindPopup("<b>Hier wird die erstellte Umfrage sein.</b><br/>");
 
           if (self.hauptMarker) {self.hauptMarker.remove()}
-
           self.hauptMarker = marker
 
-          self.fuegeMarkerFahrtrichtungHinzu(laengengrad,breitengrad)
         })
       },
       created() {
@@ -397,7 +411,10 @@
             ],
             bedingungen: [],
             marker: null,
-            pfeil: null,
+            fahrtrichtung: false,
+            pfeillinie: null,
+            pfeilspitze: null,
+            drehMarker: null,
             erlaubeBenutzerdefinierteAntwort: this.erlaubeBenutzerdefinierteAntwort ? true : false
           })
         },
@@ -440,7 +457,7 @@
             marker.on('dragend', function (event) {
               marker.bindPopup('<b>Ort für Frage ' + index + ' </b>');
             });
-            frage.pfeil = this.fuegeMarkerFahrtrichtungHinzu(koordinaten.lat, koordinaten.lng)
+            //frage.pfeil = this.fuegeMarkerFahrtrichtungHinzu(koordinaten.lat, koordinaten.lng)
             frage.marker = marker;
 
             /* if (koordinaten) {
@@ -457,8 +474,9 @@
           if (marker) {
             marker.remove();
             frage.marker = null;
-            frage.pfeil.remove()
-            frage.pfeil = null
+            if (frage.pfeillinie) {
+              this.entferneFahrtrichtung(frage)
+            }
           }
         },
         // add bedingung
@@ -742,20 +760,8 @@
             zoomOffset: -1
           }).addTo(this.karte);
         },
-        fuegeMarkerFahrtrichtungHinzu(lat, lng, initialerWinkel) {
+        fuegeMarkerFahrtrichtungHinzu(lat, lng, initialerWinkel, frage) {
           initialerWinkel = initialerWinkel || Math.PI/4
-
-          if (this.polyline) {
-            this.polyline.remove()
-          }
-
-          if (this.decorator) {
-            this.decorator.remove()
-          }
-
-          if (this.drehMarker) {
-            this.drehMarker.remove()
-          }
 
           const pfeilLaenge = 0.002
           const halbePfeilLaenge = pfeilLaenge / 2
@@ -776,7 +782,7 @@
 
           // this.markers.addLayer(polyline)
 
-          let decorator = this.decorator = L.polylineDecorator(polyline, {
+          let decorator = L.polylineDecorator(polyline, {
             patterns: [
               { offset: '100%', repeat: 0, symbol: L.Symbol.arrowHead({ pixelSize: 20, polygon: false, pathOptions: { stroke: true } }) },
             ]
@@ -790,7 +796,11 @@
             const angle = Math.atan2(x, y)
 
             // rotiere 90° nach links
-            this.fahrtrichtung = angle - (Math.PI / 2)
+            if (frage) {
+              frage.fahrtrichtung = angle - (Math.PI / 2)
+            } else {
+              this.fahrtrichtung = angle - (Math.PI / 2)
+            }
 
             // arrow pointing straight right
             const initialX = halbePfeilLaenge
@@ -817,7 +827,7 @@
             polyline.setLatLngs([newStart, newEnd])
 
             this.karte.removeLayer(decorator)
-            this.decorator = decorator = L.polylineDecorator(polyline, {
+            decorator = L.polylineDecorator(polyline, {
               patterns: [
                 { offset: '100%', repeat: 0, symbol: L.Symbol.arrowHead({ pixelSize: 20, polygon: false, pathOptions: { stroke: true } }) },
               ]
@@ -827,18 +837,76 @@
           let drehMarker
 
           const fuegeDrehmarkerHinzu = () => {
-            this.drehMarker = drehMarker = L.marker([lat + halbePfeilLaenge + drehMarkerOffset, lng + halbePfeilLaenge + drehMarkerOffset], {
+            var gelbesIcon = new L.Icon({
+              iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-yellow.png',
+              shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+              iconSize: [25, 41],
+              iconAnchor: [12, 41],
+              popupAnchor: [1, -34],
+              shadowSize: [41, 41]
+            });
+            drehMarker = L.marker([lat + halbePfeilLaenge + drehMarkerOffset, lng + halbePfeilLaenge + drehMarkerOffset], {
               draggable: true,
               autoPan: false,
-              // icon: L.Icon({ })
+              icon: gelbesIcon
             }).addTo(this.karte).on('drag', onRotate)
-
-            // this.markers.addLayer(drehMarker)
+            if (frage) {
+              frage.drehMarker = drehMarker
+            } else {
+              this.drehMarker = drehMarker
+            }
           }
-
           fuegeDrehmarkerHinzu()
 
+          if (frage) {
+            frage.pfeillinie = polyline
+            frage.pfeilspitze = decorator
+          } else {
+            this.polyline = polyline
+            this.decorator = decorator
+          }
           return polyline
+        },
+        entferneFehlermeldung() {
+          this.formatierungsFehler = null
+        },
+        setzeFahrtrichtung(frage, marker) {
+          if (!marker) { //soll wohl der hauptMarker sein
+            if (this.hauptMarker) {
+              if (!this.fahrtrichtung) {
+                const markerKoordinaten = this.hauptMarker.getLatLng()
+                this.fuegeMarkerFahrtrichtungHinzu(markerKoordinaten.lat, markerKoordinaten.lng, 0)
+              } else {
+                this.entferneFahrtrichtung()
+              }
+            } else {
+              //hauptMarker nicht gesetzt
+              this.behandelFehler('Es muss ein Ort ausgewählt sein um eine Fahrtrichtung zu setzen.')
+              var self = this
+              setInterval(function(){self.entferneFehlermeldung()},3000);
+            }
+          } else {
+            if (frage.pfeillinie) {
+              this.entferneFahrtrichtung(frage)
+            } else {
+              this.fuegeMarkerFahrtrichtungHinzu(marker.getLatLng().lat, marker.getLatLng().lng, 0, frage)
+            }
+          }
+
+        },
+        entferneFahrtrichtung(frage) {
+          if (!frage) {
+            this.polyline.remove()
+            this.decorator.remove()
+            this.drehMarker.remove()
+          } else {
+            frage.pfeillinie.remove()
+            frage.pfeillinie = null
+            frage.pfeilspitze.remove()
+            frage.pfeilspitze = null
+            frage.drehMarker.remove()
+            frage.drehMarker = null
+          }
         },
       },
     })

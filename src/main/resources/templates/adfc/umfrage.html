@@ -40,9 +40,10 @@
           <div>
             <h6 class="mb-2 text-muted">
               <span>Bestätigt von:</span>
-              <span class="badge badge-primary mr-2" th:each="benutzer : ${umfrage.bestaetigtVonBenutzern}">
+              <span th:if="${#lists.size(umfrage.bestaetigtVonBenutzern) > 0}"class="badge badge-primary mr-2" th:each="benutzer : ${umfrage.bestaetigtVonBenutzern}">
                 <span th:text="${benutzer.emailAdresse}"></span>
               </span>
+              <span th:if="${#lists.size(umfrage.bestaetigtVonBenutzern) == 0}"class="badge badge-primary mr-2">keine Bestätigungen</span>
             </h6>
           </div>
           <div>
