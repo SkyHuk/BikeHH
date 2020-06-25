@@ -14,10 +14,14 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import javax.management.relation.Role;
+import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 
 
@@ -90,7 +94,6 @@ public class UserDetailServiceTest {
     public void testRetrieveUsers() {
         List<User> allUser = Arrays.asList(new User("test@mail.com", "Password123", Roles.ROLE_USER), new User("another@mail.com", "anotherPassword123", Roles.ROLE_USER), new User("test2@mail.com", "Password123", Roles.ROLE_ADMIN));
         when(userRepository.findAll()).thenReturn(allUser);
-        Mockito.verify(userRepository).findAll();
 
         List<User> result = userDetailService.retrieveUsers();
         assertEquals(2, result.size());
@@ -100,7 +103,7 @@ public class UserDetailServiceTest {
     @Test
     public void testGetUserById() {
         User user = new User("test@test.com", "Password1234");
-        user.setId((long) 222);
+        user.setId(222L);
         when(userRepository.existsById(anyLong())).thenReturn(true);
         userDetailService.getUserById(user.getId());
         Mockito.verify(userRepository).existsById(anyLong());
@@ -110,34 +113,25 @@ public class UserDetailServiceTest {
     @Test
     public void testDeleteUserById() {
         User user = new User("test1@test.com", "Password1234");
-        user.setId((long) 111);
+        user.setId(111L);
         when(userRepository.existsById(anyLong())).thenReturn(true);
+
         userDetailService.deleteUserById(user.getId());
+
         Mockito.verify(userRepository).existsById(anyLong());
-        Mockito.verify(userRepository).delete(Mockito.any(User.class));
+        Mockito.verify(userRepository).deleteById(anyLong());
     }
 
     @Test
     public void testUpdateUserById() {
         User user = new User("test2@test.com", "Password1234");
-        user.setId((long) 123);
+        user.setId(123L);
         when(userRepository.existsById(anyLong())).thenReturn(true);
-        //when(userRepository.findById(anyLong())).thenReturn(user);
+        when(userRepository.findById(anyLong())).thenReturn(java.util.Optional.of(user));
+        when(userRepository.save(any(User.class))).thenReturn(new User());
+
         UpdateUsersDetailsRequestModel userUpdate = new UpdateUsersDetailsRequestModel();
-        userDetailService.updateUserById(user.getId(), userUpdate);
-        Mockito.verify(userRepository).existsById(anyLong());
-        Mockito.verify(userRepository).findById(anyLong());
-        if (user.getIsLocked()) {
-            Mockito.verify(authService).logoutAllSession(anyLong());
-            Mockito.verify(verifyDetailService).deleteVerification(anyLong());
-            Mockito.verify(passwordDetailService).deleteResetToken(anyLong());
-        }
-        Mockito.verify(userRepository).save(Mockito.any(User.class));
+        userUpdate.setIsLocked(false);
+        assertThat(userDetailService.updateUserById(user.getId(), userUpdate), is(notNullValue()));
     }
-
-    @Test
-    public void testGetCurrentUser() {
-
-    }
-
 }

@@ -33,7 +33,7 @@ public class UserController {
     @ResponseBody
     public UserDetailsResponseModel getCurrentUser(Authentication auth) throws ApiRequestException {
         User user = (User) auth.getPrincipal();
-        return _UserDetailService.getCurrentUser(user);
+        return new UserDetailsResponseModel(user);
     }
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})

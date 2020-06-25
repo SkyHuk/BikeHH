@@ -93,10 +93,6 @@ public class UserDetailService implements UserDetailsService {
         _verifyDetailService.requestVerificationMail(user.getEmailAddress());
     }
 
-    public UserDetailsResponseModel getCurrentUser(User user) throws ApiRequestException {
-        return new UserDetailsResponseModel(user);
-    }
-
     public void updateUser(User user, UpdateUserDetailsRequestModel userUpdate) throws ApiRequestException {
         if (user.getIsLocked()) {
             throw new ApiRequestException(ErrorCode.unauthorized, HttpStatus.UNAUTHORIZED);
