@@ -1,6 +1,7 @@
 package de.wps.bikehh.benutzerverwaltung;
 
 import de.wps.bikehh.benutzerverwaltung.dto.request.UpdateUserDetailsRequestModel;
+import de.wps.bikehh.benutzerverwaltung.dto.request.UpdateUsersDetailsRequestModel;
 import de.wps.bikehh.benutzerverwaltung.material.Roles;
 import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.benutzerverwaltung.repository.UserAuthenticationRepository;
@@ -95,32 +96,44 @@ public class UserDetailServiceTest {
         assertEquals(2, result.size());
     }
 
-/*
+
     @Test
     public void testGetUserById() {
-
+        User user = new User();
+        user.setId((long) 222);
+        userDetailService.getUserById(user.getId());
+        Mockito.verify(userRepository).existsById(anyLong());
+        Mockito.verify(userRepository).findById(anyLong());
     }
 
     @Test
     public void testDeleteUserById() {
-        when(userRepository.delete(Mockito.any(User.class));).then;  ??????????
         User user = new User();
+        user.setId((long) 111);
         userDetailService.deleteUserById(user.getId());
+        Mockito.verify(userRepository).existsById(anyLong());
         Mockito.verify(userRepository).delete(Mockito.any(User.class));
     }
 
     @Test
     public void testUpdateUserById() {
-        when(userRepository.save(Mockito.any(User.class))).thenReturn(new User());
         User user = new User();
-        UpdateUsersDetailsRequestModel userUpdate = null;
+        user.setId((long) 123);
+        UpdateUsersDetailsRequestModel userUpdate = new UpdateUsersDetailsRequestModel();
         userDetailService.updateUserById(user.getId(), userUpdate);
+        Mockito.verify(userRepository).existsById(anyLong());
+        Mockito.verify(userRepository).findById(anyLong());
+        if (user.getIsLocked()) {
+            Mockito.verify(authService).logoutAllSession(anyLong());
+            Mockito.verify(verifyDetailService).deleteVerification(anyLong());
+            Mockito.verify(passwordDetailService).deleteResetToken(anyLong());
+        }
         Mockito.verify(userRepository).save(Mockito.any(User.class));
     }
 
     @Test
     public void testGetCurrentUser() {
 
-    }*/
+    }
 
 }
