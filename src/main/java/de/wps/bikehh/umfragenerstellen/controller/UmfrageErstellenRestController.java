@@ -25,7 +25,6 @@ public class UmfrageErstellenRestController {
 	@Autowired
 	public UmfrageErstellenRestController(UmfragenService umfragenService) {
 		this.umfragenService = umfragenService;
-
 	}
 
 	/**

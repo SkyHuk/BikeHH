@@ -2,6 +2,7 @@ package de.wps.bikehh;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import de.wps.bikehh.meldungen.material.Meldung;
 import de.wps.bikehh.meldungen.repository.MeldungRepository;
@@ -49,13 +51,13 @@ public class MeldungServiceTest {
 
 	@Test
 	public void speichereOderUpdateMeldungTest() {
-		// TODO Test ausfüllen
 		meldungService.speichereOderUpdateMeldung(meldung);
+		Mockito.verify(meldungRepository, times(1)).save(meldung);
 	}
 
 	@Test
 	public void loescheTest() {
-		// TODO Test ausfüllen
 		meldungService.loesche(meldung.getId());
+		Mockito.verify(meldungRepository, times(1)).deleteById((long) meldung.getId());
 	}
 }

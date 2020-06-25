@@ -12,7 +12,6 @@ import de.wps.bikehh.umfragen.repository.UmfrageRepository;
 @Service
 public class UmfragenService {
 
-	@Autowired
 	private UmfrageRepository umfrageRepository;
 
 	@Autowired

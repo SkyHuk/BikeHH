@@ -12,9 +12,9 @@ import de.wps.bikehh.meldungen.repository.MeldungRepository;
 @Service
 public class MeldungService {
 
-	@Autowired
 	private MeldungRepository meldungRepository;
 
+	@Autowired
 	public MeldungService(MeldungRepository meldungRepository) {
 		this.meldungRepository = meldungRepository;
 	}
