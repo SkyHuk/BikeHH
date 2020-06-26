@@ -123,7 +123,7 @@
                     <input class="form-check-input" type="checkbox" v-model="frage.erlaubeBenutzerdefinierteAntwort"
                       id="erlaubeBenutzerdefinierteAntwortCheckbox">
                     <!--<label class="form-check-label" for="erlaubeBenutzerdefinierteAntwortCheckbox">-->
-                      <label class="form-check-label">                  
+                      <label class="form-check-label">
                       Erlaube Freitext-Antwort
                     </label>
                   </div>
@@ -192,8 +192,8 @@
 
                 <div v-if="frage.marker"class="form-group">
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" @click="setzeFahrtrichtung(frage, frage.marker)" v-model="frage.fahrtrichtung">
-                      <label class="form-check-label">                  
+                    <input class="form-check-input" type="checkbox" @click="setzeFahrtrichtung(frage)" v-model="frage.fahrtrichtung">
+                      <label class="form-check-label">
                       Fahrtrichtung
                     </label>
                   </div>
@@ -328,7 +328,7 @@
 
         this.umfrage = [(${umfrage}?${umfrage}:'null')]
         if (this.umfrage) {
-        	this.id = this.umfrage.id 
+        	this.id = this.umfrage.id
           this.editierModus = true;
           console.log(this.umfrage)
           this.umfrage.fragen.forEach((frage) => {
@@ -342,6 +342,8 @@
             })
           })
         }
+
+        const self = this
 
         if (!this.editierModus) {
 
@@ -373,6 +375,7 @@
 
           var marker = L.marker([this.laengengrad, this.breitengrad]).addTo(this.karte)
           .bindPopup("<b>Ort der Umfrage</b><br/>")
+          .on('drag', self.setzteHauptmarkerZurueck)
           this.hauptMarker = marker
           this.titel = this.umfrage.titel
           this.kategorie = this.umfrage.kategorie
@@ -382,7 +385,7 @@
           this.bestaetigtSchwellenwert = this.umfrage.bestaetigtSchwellenwert
           this.manuellErstellt = this.umfrage.manuellErstellt
         }
-        const self = this
+
         this.karte.on('click', function (e) {
           const laengengrad = e.latlng.lat
           const breitengrad = e.latlng.lng
@@ -392,10 +395,15 @@
             draggable: true,
             autoPan: true
           }).addTo(self.karte)
-          .bindPopup("<b>Hier wird die erstellte Umfrage sein.</b><br/>");
+          .bindPopup("<b>Hier wird die erstellte Umfrage sein.</b><br/>")
+          .on('drag', self.setzteHauptmarkerZurueck);
 
           if (self.hauptMarker) {self.hauptMarker.remove()}
           self.hauptMarker = marker
+
+          if (self.fahrtrichtung) {
+            self.setzteHauptmarkerZurueck()
+          }
 
         })
       },
@@ -761,17 +769,24 @@
           }).addTo(this.karte);
         },
         fuegeMarkerFahrtrichtungHinzu(lat, lng, initialerWinkel, frage) {
-          initialerWinkel = initialerWinkel || Math.PI/4
+          if (!initialerWinkel) {
+            initialerWinkel = Math.PI/4
+            if (frage) {
+              frage.fahrtrichtung = initialerWinkel - (Math.PI / 2)
+            } else {
+              this.fahrtrichtung = initialerWinkel - (Math.PI / 2)
+            }
+          }
 
           const pfeilLaenge = 0.002
           const halbePfeilLaenge = pfeilLaenge / 2
           const drehMarkerOffset = 0.0005
 
-          let gedrehtesX = (Math.cos(initialerWinkel) * halbePfeilLaenge) // - (Math.sin(initialerWinkel) * initialY)
+          let gedrehtesX = (Math.cos(initialerWinkel) * halbePfeilLaenge * 2) // - (Math.sin(initialerWinkel) * initialY)
           const gedrehtesY = (Math.sin(initialerWinkel) * halbePfeilLaenge) // + (Math.cos(initialerWinkel) * initialY)
 
           // skalieren auf der x Achse je nach Winkel um Länge des Pfeils angenähert zu erhalten
-          gedrehtesX *= Math.abs(Math.cos(initialerWinkel) * 2)
+          // gedrehtesX *= Math.abs(Math.cos(initialerWinkel) * 2)
 
           let polyline = this.polyline = L.polyline([
             [lat - gedrehtesY, lng - gedrehtesX],
@@ -806,11 +821,11 @@
             const initialX = halbePfeilLaenge
             const initialY = 0.0
 
-            let gedrehtesX = (Math.cos(angle) * initialX) // - (Math.sin(angle) * initialY)
+            let gedrehtesX = (Math.cos(angle) * initialX * 2) // - (Math.sin(angle) * initialY)
             const gedrehtesY = (Math.sin(angle) * initialX) // + (Math.cos(angle) * initialY)
 
             // skalieren auf der x Achse je nach Winkel um Länge des Pfeils angenähert zu erhalten
-            gedrehtesX *= Math.abs(Math.cos(angle) * 2)
+            // gedrehtesX *= Math.abs(Math.sin(angle) * 2)
 
             // console.log('length after rotate', Math.sqrt(Math.pow(gedrehtesX, 2) + Math.pow(gedrehtesY, 2)))
 
@@ -826,17 +841,22 @@
 
             polyline.setLatLngs([newStart, newEnd])
 
-            this.karte.removeLayer(decorator)
+            decorator.remove()
             decorator = L.polylineDecorator(polyline, {
               patterns: [
                 { offset: '100%', repeat: 0, symbol: L.Symbol.arrowHead({ pixelSize: 20, polygon: false, pathOptions: { stroke: true } }) },
               ]
             }).addTo(this.karte)
+            if (frage) {
+              frage.pfeilspitze = decorator
+            } else {
+              this.decorator = decorator
+            }
           }
 
           let drehMarker
 
-          const fuegeDrehmarkerHinzu = () => {
+          const fuegeDrehmarkerHinzu = (drehMarkerPos) => {
             var gelbesIcon = new L.Icon({
               iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-yellow.png',
               shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
@@ -845,7 +865,8 @@
               popupAnchor: [1, -34],
               shadowSize: [41, 41]
             });
-            drehMarker = L.marker([lat + halbePfeilLaenge + drehMarkerOffset, lng + halbePfeilLaenge + drehMarkerOffset], {
+
+            drehMarker = L.marker(drehMarkerPos, {
               draggable: true,
               autoPan: false,
               icon: gelbesIcon
@@ -856,7 +877,24 @@
               this.drehMarker = drehMarker
             }
           }
-          fuegeDrehmarkerHinzu()
+
+          let drehMarkerPos = [
+            lat + ( (halbePfeilLaenge + drehMarkerOffset) * Math.sin(initialerWinkel) ),
+            lng + ( (halbePfeilLaenge + drehMarkerOffset) * Math.cos(initialerWinkel) ),
+
+          ]
+
+          if (frage && frage.drehMarker) {
+            frage.drehMarker.off('drag')
+            frage.drehMarker.on('drag', onRotate)
+            frage.drehMarker.setLatLng(drehMarkerPos)
+          } else if (this.drehMarker) {
+            this.drehMarker.off('drag')
+            this.drehMarker.on('drag', onRotate)
+            this.drehMarker.setLatLng(drehMarkerPos)
+          } else {
+            fuegeDrehmarkerHinzu(drehMarkerPos)
+          }
 
           if (frage) {
             frage.pfeillinie = polyline
@@ -870,12 +908,21 @@
         entferneFehlermeldung() {
           this.formatierungsFehler = null
         },
-        setzeFahrtrichtung(frage, marker) {
-          if (!marker) { //soll wohl der hauptMarker sein
+        setzteHauptmarkerZurueck(e) {
+          if (this.fahrtrichtung) {
+            // this.entferneFahrtrichtung()
+            this.polyline.remove()
+            this.decorator.remove()
+            const markerKoordinaten = this.hauptMarker.getLatLng()
+            this.fuegeMarkerFahrtrichtungHinzu(markerKoordinaten.lat, markerKoordinaten.lng, this.fahrtrichtung + (Math.PI / 2))
+          }
+        },
+        setzeFahrtrichtung(frage) {
+          if (!frage) { //soll wohl der hauptMarker sein
             if (this.hauptMarker) {
               if (!this.fahrtrichtung) {
                 const markerKoordinaten = this.hauptMarker.getLatLng()
-                this.fuegeMarkerFahrtrichtungHinzu(markerKoordinaten.lat, markerKoordinaten.lng, 0)
+                this.fuegeMarkerFahrtrichtungHinzu(markerKoordinaten.lat, markerKoordinaten.lng)
               } else {
                 this.entferneFahrtrichtung()
               }
@@ -889,7 +936,7 @@
             if (frage.pfeillinie) {
               this.entferneFahrtrichtung(frage)
             } else {
-              this.fuegeMarkerFahrtrichtungHinzu(marker.getLatLng().lat, marker.getLatLng().lng, 0, frage)
+              this.fuegeMarkerFahrtrichtungHinzu(frage.marker.getLatLng().lat, frage.marker.getLatLng().lng, undefined, frage)
             }
           }
 
