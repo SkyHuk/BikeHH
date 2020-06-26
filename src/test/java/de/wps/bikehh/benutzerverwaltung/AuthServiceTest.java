@@ -71,7 +71,7 @@ public class AuthServiceTest {
     public void testLogoutAllSession() {
         Long testId = 14524L;
         List<Session> sessionsByUser = Arrays.asList(new Session(), new Session(), new Session());
-        when(_sessionRepository.findAllByUserId((long) testId)).thenReturn(sessionsByUser);
+        when(_sessionRepository.findAllByUserId(testId)).thenReturn(sessionsByUser);
 
         _authService.logoutAllSession(testId);
         verify(_sessionRepository, times(3)).delete(any(Session.class));

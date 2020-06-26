@@ -13,8 +13,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import javax.management.relation.Role;
-import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
 

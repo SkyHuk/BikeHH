@@ -31,12 +31,8 @@ public class VerifyDetailService {
     }
 
     public void requestVerificationMail(String email) throws ApiRequestException {
-        if (!Validation.isEmailValid(email)) {
-            throw new ApiRequestException(ErrorCode.bad_credentials, HttpStatus.BAD_REQUEST);
-        }
-
         if (!_userAuthenticationRepository.existsByEmailAddress(email)) {
-            throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
+            return;
         }
 
         User user = _userAuthenticationRepository.findByEmailAddress(email);
@@ -68,12 +64,9 @@ public class VerifyDetailService {
         model.put("link", redirectLink);
         mail.setModel(model);
 
-        try {
-            _smtpService.sendMail(mail, SmtpService.Templates.VERIFY);
-        } catch (Exception e) {
-            String message = String.format("failed to send verification mail to %s. Error was: %s", mail.getTo(), e.getMessage());
-            Logger.logger.error(message);
-        }
+
+        _smtpService.sendMail(mail, SmtpService.Templates.VERIFY);
+
     }
 
     public void verifyUser(String token) throws ApiRequestException {

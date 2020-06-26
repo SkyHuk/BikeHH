@@ -31,10 +31,6 @@ public class PasswordDetailService {
     }
 
     public void requestResetMail(String email) throws ApiRequestException {
-        if (!Validation.isEmailValid(email)) {
-            throw new ApiRequestException(ErrorCode.bad_credentials, HttpStatus.BAD_REQUEST);
-        }
-
         if (!_userAuthenticationRepository.existsByEmailAddress(email)) {
             return;
         }
