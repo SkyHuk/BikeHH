@@ -16,21 +16,19 @@ import java.io.IOException;
 
 public class OAuthFilter extends OncePerRequestFilter {
 
-
     String authorizationHeader = "Authorization";
-    String apiKeyHeader = "x-api-key";
+    String apiKeyHeader = "X-API-Key";
     private String apiKeyValue = "bd8dc5a6-53dc-47a9-ab63-6799ea0d59c3";
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        System.out.println("oAuthFilter");
         String accessToken = request.getHeader(authorizationHeader);
         String apiKey = request.getHeader(apiKeyHeader);
 
         if (accessToken == null || apiKey == null) {
-            ApiException exception = new ApiException(ErrorCode.bad_request);
+            ApiException exception = new ApiException(ErrorCode.unauthorized);
 
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             response.getWriter().write(exception.toString());
