@@ -192,7 +192,7 @@
 
                 <div v-if="frage.marker"class="form-group">
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" @click="setzeFahrtrichtung(frage)" v-model="frage.fahrtrichtung">
+                    <input class="form-check-input" type="checkbox" @click="setzeFahrtrichtung(frage)">
                       <label class="form-check-label">
                       Fahrtrichtung
                     </label>
@@ -465,6 +465,15 @@
             marker.on('dragend', function (event) {
               marker.bindPopup('<b>Ort für Frage ' + index + ' </b>');
             });
+            marker.on('drag', () => {
+              if (frage.fahrtrichtung) {
+                // this.entferneFahrtrichtung()
+                frage.pfeillinie.remove()
+                frage.pfeilspitze.remove()
+                const markerKoordinaten = marker.getLatLng()
+                this.fuegeMarkerFahrtrichtungHinzu(markerKoordinaten.lat, markerKoordinaten.lng, frage.fahrtrichtung + (Math.PI / 2), frage)
+              }
+            })
             //frage.pfeil = this.fuegeMarkerFahrtrichtungHinzu(koordinaten.lat, koordinaten.lng)
             frage.marker = marker;
 
@@ -788,7 +797,7 @@
           // skalieren auf der x Achse je nach Winkel um Länge des Pfeils angenähert zu erhalten
           // gedrehtesX *= Math.abs(Math.cos(initialerWinkel) * 2)
 
-          let polyline = this.polyline = L.polyline([
+          let polyline = L.polyline([
             [lat - gedrehtesY, lng - gedrehtesX],
             [lat + gedrehtesY, lng + gedrehtesX],
           ], {
@@ -888,7 +897,7 @@
             frage.drehMarker.off('drag')
             frage.drehMarker.on('drag', onRotate)
             frage.drehMarker.setLatLng(drehMarkerPos)
-          } else if (this.drehMarker) {
+          } else if (!frage && this.drehMarker) {
             this.drehMarker.off('drag')
             this.drehMarker.on('drag', onRotate)
             this.drehMarker.setLatLng(drehMarkerPos)
