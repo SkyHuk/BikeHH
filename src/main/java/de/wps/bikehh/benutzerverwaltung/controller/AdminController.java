@@ -1,5 +1,9 @@
 package de.wps.bikehh.benutzerverwaltung.controller;
 
+//Deprecated
+
+/*
+
 import de.wps.bikehh.benutzerverwaltung.dto.request.UpdateUsersDetailsRequestModel;
 import de.wps.bikehh.benutzerverwaltung.dto.request.UserDetailsRequestModel;
 import de.wps.bikehh.benutzerverwaltung.exception.ApiRequestException;
@@ -71,3 +75,4 @@ public class AdminController {
         }
     }
 }
+*/
