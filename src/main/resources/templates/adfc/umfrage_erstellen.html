@@ -944,8 +944,11 @@
         entferneFahrtrichtung(frage) {
           if (!frage) {
             this.polyline.remove()
+            this.polyline = null
             this.decorator.remove()
+            this.decorator = null
             this.drehMarker.remove()
+            this.drehMarker = null
           } else {
             frage.pfeillinie.remove()
             frage.pfeillinie = null
