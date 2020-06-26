@@ -733,7 +733,7 @@
             return
           }
 
-          if (this.startDatum < new Date().toJSON().slice(0, 10) || !data.bearbeitet) {
+          if (this.startDatum < new Date().toJSON().slice(0, 10) && !data.bearbeitet) {
             this.behandelFehler('Das Startdatum darf nicht in der Vergangenheit liegen.')
             return
           }
