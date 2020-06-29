@@ -35,20 +35,20 @@
             <h6 class="mb-2 text-muted">Ort: <span class="badge badge-secondary" th:text="${umfrage.adresse.hausnummer!=null}?${umfrage.adresse.strasse + ' ' + umfrage.adresse.hausnummer + ', ' + umfrage.adresse.postleitZahl + ', ' + umfrage.adresse.stadt}:${umfrage.adresse.strasse + ', ' + umfrage.adresse.postleitZahl + ', ' + umfrage.adresse.stadt}"></span></h6>
           </div>
           <div>
-            <h6 class="mb-2 text-muted">Ersteller: <span class="badge badge-secondary" th:text="${umfrage.ersteller.emailAdresse}"></span></h6>
+            <h6 class="mb-2 text-muted">Ersteller: <span class="badge badge-secondary" th:text="${umfrage.ersteller.emailAddress}"></span></h6>
           </div>
           <div>
             <h6 class="mb-2 text-muted">
               <span>Bestätigt von:</span>
-              <span th:if="${#lists.size(umfrage.bestaetigtVonBenutzern) > 0}"class="badge badge-primary mr-2" th:each="benutzer : ${umfrage.bestaetigtVonBenutzern}">
-                <span th:text="${benutzer.emailAdresse}"></span>
+              <span th:if="${#lists.size(umfrage.bestaetigtVonUsern) > 0}"class="badge badge-primary mr-2" th:each="benutzer : ${umfrage.bestaetigtVonUsern}">
+                <span th:text="${benutzer.emailAddress}"></span>
               </span>
-              <span th:if="${#lists.size(umfrage.bestaetigtVonBenutzern) == 0}"class="badge badge-primary mr-2">keine Bestätigungen</span>
+              <span th:if="${#lists.size(umfrage.bestaetigtVonUsern) == 0}"class="badge badge-primary mr-2">keine Bestätigungen</span>
             </h6>
           </div>
           <div>
-            <!--<h6 class="mb-2 text-muted">Bestätigungspunkte: <span class="badge badge-secondary" th:text="${umfrage.bestaetigtVonBenutzern.length + '/' + umfrage.bestaetigtSchwellenwert}"></span></h6>-->
-            <h6 class="mb-2 text-muted">Bestätigungspunkte: <span class="badge badge-secondary" th:text="${#lists.size(umfrage.bestaetigtVonBenutzern) + '/' + umfrage.bestaetigtSchwellenwert}"></span></h6>
+            <!--<h6 class="mb-2 text-muted">Bestätigungspunkte: <span class="badge badge-secondary" th:text="${umfrage.bestaetigtVonUsern.length + '/' + umfrage.bestaetigtSchwellenwert}"></span></h6>-->
+            <h6 class="mb-2 text-muted">Bestätigungspunkte: <span class="badge badge-secondary" th:text="${#lists.size(umfrage.bestaetigtVonUsern) + '/' + umfrage.bestaetigtSchwellenwert}"></span></h6>
           </div>
 
           <p class="card-text mb-4" th:text="${umfrage.titel}"></p>

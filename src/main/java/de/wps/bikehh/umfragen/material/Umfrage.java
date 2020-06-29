@@ -12,7 +12,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import de.wps.bikehh.benutzerverwaltung.material.Benutzer;
+import de.wps.bikehh.benutzerverwaltung.material.User;
 
 /**
  * Test-Klasse für eine Umfrage (mit JSON-Dateien, non-Db-Version)
@@ -43,7 +43,7 @@ public class Umfrage {
 	private boolean bearbeitet;
 
 	@ManyToMany(cascade = CascadeType.ALL)
-	private List<Benutzer> bestaetigtVonBenutzern;
+	private List<User> bestaetigtVonUsern;
 	private int bestaetigtSchwellenwert;
 	private String titel;
 
@@ -51,8 +51,8 @@ public class Umfrage {
 	@JoinColumn(name = "umfrage", referencedColumnName = "id", nullable = false)
 	private List<Frage> fragen;
 
-	@ManyToOne(fetch = FetchType.EAGER, targetEntity = Benutzer.class)
-	private Benutzer ersteller;
+	@ManyToOne(fetch = FetchType.EAGER, targetEntity = User.class)
+	private User ersteller;
 
 	private boolean manuellErstellt;
 
@@ -62,7 +62,7 @@ public class Umfrage {
 	public Umfrage merge(Umfrage umfrage) {
 		setAdresse(umfrage.getAdresse());
 		setBestaetigtSchwellenwert(umfrage.getBestaetigtSchwellenwert());
-		setBestaetigtVonBenutzern(umfrage.getBestaetigtVonBenutzern());
+		setBestaetigtVonUsern(umfrage.getBestaetigtVonUsern());
 		setBreitengrad(umfrage.getBreitengrad());
 		setLaengengrad(umfrage.getLaengengrad());
 		setEndDatum(umfrage.getEndDatum());
@@ -120,7 +120,7 @@ public class Umfrage {
 	}
 
 	public boolean istBestaetigt() {
-		return istBestaetigt || getBestaetigtVonBenutzern().size() <= getBestaetigtSchwellenwert();
+		return istBestaetigt || getBestaetigtVonUsern().size() <= getBestaetigtSchwellenwert();
 	}
 
 	public void setIstBestaetigt(boolean istBestaetigt) {
@@ -183,12 +183,12 @@ public class Umfrage {
 		this.kategorie = kategorie;
 	}
 
-	public List<Benutzer> getBestaetigtVonBenutzern() {
-		return bestaetigtVonBenutzern;
+	public List<User> getBestaetigtVonUsern() {
+		return bestaetigtVonUsern;
 	}
 
-	public void setBestaetigtVonBenutzern(List<Benutzer> bestaetigtVonBenutzern) {
-		this.bestaetigtVonBenutzern = bestaetigtVonBenutzern;
+	public void setBestaetigtVonUsern(List<User> bestaetigtVonUsern) {
+		this.bestaetigtVonUsern = bestaetigtVonUsern;
 	}
 
 	public List<Frage> getFragen() {
@@ -199,11 +199,11 @@ public class Umfrage {
 		this.fragen = fragen;
 	}
 
-	public Benutzer getErsteller() {
+	public User getErsteller() {
 		return ersteller;
 	}
 
-	public void setErsteller(Benutzer ersteller) {
+	public void setErsteller(User ersteller) {
 		this.ersteller = ersteller;
 	}
 

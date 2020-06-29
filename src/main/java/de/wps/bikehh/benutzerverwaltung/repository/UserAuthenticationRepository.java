@@ -2,11 +2,11 @@ package de.wps.bikehh.benutzerverwaltung.repository;
 
 import org.springframework.data.repository.CrudRepository;
 
-import de.wps.bikehh.benutzerverwaltung.material.Benutzer;
+import de.wps.bikehh.benutzerverwaltung.material.User;
 
-public interface UserAuthenticationRepository extends CrudRepository<Benutzer, Long> {
+public interface UserAuthenticationRepository extends CrudRepository<User, Long> {
 
-	boolean existsByEmailAdresse(String emailAdresse);
+	boolean existsByEmailAddress(String emailAdresse);
 
-	Benutzer findByEmailAdresse(String emailAdresse);
+	User findByEmailAddress(String emailAdresse);
 }

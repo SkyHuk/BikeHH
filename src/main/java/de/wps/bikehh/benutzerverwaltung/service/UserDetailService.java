@@ -1,15 +1,8 @@
 package de.wps.bikehh.benutzerverwaltung.service;
 
-import de.wps.bikehh.benutzerverwaltung.dto.request.UpdateUserDetailsRequestModel;
-import de.wps.bikehh.benutzerverwaltung.dto.request.UpdateUsersDetailsRequestModel;
-import de.wps.bikehh.benutzerverwaltung.dto.response.UserDetailsResponseModel;
-import de.wps.bikehh.benutzerverwaltung.exception.ApiRequestException;
-import de.wps.bikehh.benutzerverwaltung.exception.ErrorCode;
-import de.wps.bikehh.benutzerverwaltung.material.BikehhUserDetails;
-import de.wps.bikehh.benutzerverwaltung.material.Roles;
-import de.wps.bikehh.benutzerverwaltung.material.User;
-import de.wps.bikehh.benutzerverwaltung.repository.UserAuthenticationRepository;
-import de.wps.bikehh.benutzerverwaltung.util.Validation;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,159 +10,163 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
+import de.wps.bikehh.benutzerverwaltung.dto.request.UpdateUserDetailsRequestModel;
+import de.wps.bikehh.benutzerverwaltung.dto.request.UpdateUsersDetailsRequestModel;
+import de.wps.bikehh.benutzerverwaltung.exception.ApiRequestException;
+import de.wps.bikehh.benutzerverwaltung.exception.ErrorCode;
+import de.wps.bikehh.benutzerverwaltung.material.BikehhUserDetails;
+import de.wps.bikehh.benutzerverwaltung.material.Rollen;
+import de.wps.bikehh.benutzerverwaltung.material.User;
+import de.wps.bikehh.benutzerverwaltung.repository.UserAuthenticationRepository;
 
 @Service
 public class UserDetailService implements UserDetailsService {
 
-    private UserAuthenticationRepository _userAuthenticationRepository;
-    private VerifyDetailService _verifyDetailService;
-    private PasswordDetailService _passwordDetailService;
-    private AuthService _authService;
+	private UserAuthenticationRepository _userAuthenticationRepository;
+	private VerifyDetailService _verifyDetailService;
+	private PasswordDetailService _passwordDetailService;
+	private AuthService _authService;
 
-    @Autowired
-    public UserDetailService(UserAuthenticationRepository userAuthenticationRepository, VerifyDetailService verifyDetailService, PasswordDetailService passwordDetailService, AuthService authService) {
-        this._userAuthenticationRepository = userAuthenticationRepository;
-        this._verifyDetailService = verifyDetailService;
-        this._authService = authService;
-        this._passwordDetailService = passwordDetailService;
-    }
+	@Autowired
+	public UserDetailService(UserAuthenticationRepository userAuthenticationRepository,
+			VerifyDetailService verifyDetailService, PasswordDetailService passwordDetailService,
+			AuthService authService) {
+		this._userAuthenticationRepository = userAuthenticationRepository;
+		this._verifyDetailService = verifyDetailService;
+		this._authService = authService;
+		this._passwordDetailService = passwordDetailService;
+	}
 
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        if (!_userAuthenticationRepository.existsByEmailAddress(email)) {
-            throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
-        }
+	@Override
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+		if (!_userAuthenticationRepository.existsByEmailAddress(email)) {
+			throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
+		}
 
-        User user = _userAuthenticationRepository.findByEmailAddress(email);
+		User user = _userAuthenticationRepository.findByEmailAddress(email);
 
-        if (user.getIsLocked()) {
-            throw new ApiRequestException(ErrorCode.unauthorized, HttpStatus.UNAUTHORIZED);
-        }
-        return new BikehhUserDetails(user, email, user.getEncryptedPassword(), createAuthorities(user));
-    }
+		if (user.getIsLocked()) {
+			throw new ApiRequestException(ErrorCode.unauthorized, HttpStatus.UNAUTHORIZED);
+		}
+		return new BikehhUserDetails(user, email, user.getEncryptedPassword(), createAuthorities(user));
+	}
 
+	private String[] createAuthorities(User user) {
+		List<String> authorities = new ArrayList<>(3);
 
-    private String[] createAuthorities(User user) {
-        List<String> authorities = new ArrayList<>(3);
+		switch (user.getRole()) {
+		case Rollen.ROLE_ADMIN:
+			authorities.add(Rollen.ROLE_ADMIN);
+		case Rollen.ROLE_USER:
+			authorities.add(Rollen.ROLE_USER);
+			break;
+		default:
+			throw new RuntimeException("Unbekannte Role (" + user.getRole() + ") von User " + user.getEmailAddress());
+		}
 
-        switch (user.getRole()) {
-            case Roles.ROLE_ADMIN:
-                authorities.add(Roles.ROLE_ADMIN);
-            case Roles.ROLE_USER:
-                authorities.add(Roles.ROLE_USER);
-                break;
-            default:
-                throw new RuntimeException("Unbekannte Role (" + user.getRole() + ") von User " + user.getEmailAddress());
-        }
+		return authorities.toArray(new String[authorities.size()]);
+	}
 
-        return authorities.toArray(new String[authorities.size()]);
-    }
+	public void createUser(String email, String password) throws ApiRequestException {
+		createUserEntity(email, password, Rollen.ROLE_USER);
+	}
 
+	public void createAdmin(String email, String password) {
+		createUserEntity(email, password, Rollen.ROLE_ADMIN);
+	}
 
-    public void createUser(String email, String password) throws ApiRequestException {
-        createUserEntity(email, password, Roles.ROLE_USER);
-    }
+	private void createUserEntity(String email, String password, String role) throws ApiRequestException {
+		if (_userAuthenticationRepository.existsByEmailAddress(email)) {
+			throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
+		}
 
-    public void createAdmin(String email, String password) {
-        createUserEntity(email, password, Roles.ROLE_ADMIN);
-    }
+		User user = new User(email, password);
+		user.setRole(role);
 
-    private void createUserEntity(String email, String password, String role) throws ApiRequestException {
-        if (_userAuthenticationRepository.existsByEmailAddress(email)) {
-            throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
-        }
+		PasswordEncoderService encoder = new PasswordEncoderService();
+		user.setEncryptedPassword(encoder.encodePassword(password));
 
-        User user = new User(email, password);
-        user.setRole(role);
+		_userAuthenticationRepository.save(user);
+		_verifyDetailService.requestVerificationMail(user.getEmailAddress());
+	}
 
-        PasswordEncoderService encoder = new PasswordEncoderService();
-        user.setEncryptedPassword(encoder.encodePassword(password));
+	public void updateUser(User user, UpdateUserDetailsRequestModel userUpdate) throws ApiRequestException {
+		if (user.getIsLocked()) {
+			throw new ApiRequestException(ErrorCode.unauthorized, HttpStatus.UNAUTHORIZED);
+		}
 
-        _userAuthenticationRepository.save(user);
-        _verifyDetailService.requestVerificationMail(user.getEmailAddress());
-    }
+		user.setEmailAddress(userUpdate.getEmail());
+		user.setPrivacySetting(userUpdate.getPrivacySetting());
+		_userAuthenticationRepository.save(user);
+	}
 
-    public void updateUser(User user, UpdateUserDetailsRequestModel userUpdate) throws ApiRequestException {
-        if (user.getIsLocked()) {
-            throw new ApiRequestException(ErrorCode.unauthorized, HttpStatus.UNAUTHORIZED);
-        }
+	public void deleteUser(User user) {
+		Long userId = user.getId();
 
-        user.setEmailAddress(userUpdate.getEmail());
-        user.setPrivacySetting(userUpdate.getPrivacySetting());
-        _userAuthenticationRepository.save(user);
-    }
+		_authService.logoutAllSession(userId);
+		_verifyDetailService.deleteVerification(userId);
+		_passwordDetailService.deleteResetToken(userId);
 
-    public void deleteUser(User user) {
-        Long userId = user.getId();
+		_userAuthenticationRepository.delete(user);
+	}
 
-        _authService.logoutAllSession(userId);
-        _verifyDetailService.deleteVerification(userId);
-        _passwordDetailService.deleteResetToken(userId);
+	public void updatePassword(User user, String passwordOld, String passwordNew) throws ApiRequestException {
 
-        _userAuthenticationRepository.delete(user);
-    }
+		PasswordEncoderService encoder = new PasswordEncoderService();
+		if (!encoder.matches(passwordOld, user.getEncryptedPassword())) {
+			throw new ApiRequestException(ErrorCode.bad_credentials, HttpStatus.BAD_REQUEST);
+		}
+		user.setEncryptedPassword(encoder.encodePassword(passwordNew));
+		_userAuthenticationRepository.save(user);
+	}
 
-    public void updatePassword(User user, String passwordOld, String passwordNew) throws ApiRequestException {
+	public List<User> retrieveUsers() {
+		List<User> users = new ArrayList<>();
+		for (User user : _userAuthenticationRepository.findAll()) {
+			if (user.getRole().equals(Rollen.ROLE_USER)) {
+				user.setEncryptedPassword(null);
+				users.add(user);
+			}
+		}
 
-        PasswordEncoderService encoder = new PasswordEncoderService();
-        if (!encoder.matches(passwordOld, user.getEncryptedPassword())) {
-            throw new ApiRequestException(ErrorCode.bad_credentials, HttpStatus.BAD_REQUEST);
-        }
-        user.setEncryptedPassword(encoder.encodePassword(passwordNew));
-        _userAuthenticationRepository.save(user);
-    }
+		return users;
+	}
 
-    public List<User> retrieveUsers() {
-        List<User> users = new ArrayList<>();
-        for (User user : _userAuthenticationRepository.findAll()) {
-            if (user.getRole().equals(Roles.ROLE_USER)) {
-                user.setEncryptedPassword(null);
-                users.add(user);
-            }
-        }
+	public User getUserById(Long id) {
+		if (!_userAuthenticationRepository.existsById(id)) {
+			throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
+		}
 
-        return users;
-    }
+		User user = _userAuthenticationRepository.findById(id).orElse(null);
+		return user;
+	}
 
-    public User getUserById(Long id) {
-        if (!_userAuthenticationRepository.existsById(id)) {
-            throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
-        }
+	public void deleteUserById(Long id) {
+		if (!_userAuthenticationRepository.existsById(id)) {
+			throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
+		}
 
-        User user = _userAuthenticationRepository.findById(id).orElse(null);
-        return user;
-    }
+		_userAuthenticationRepository.deleteById(id);
+	}
 
-    public void deleteUserById(Long id) {
-        if (!_userAuthenticationRepository.existsById(id)) {
-            throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
-        }
+	public User updateUserById(Long id, UpdateUsersDetailsRequestModel userModel) {
+		if (!_userAuthenticationRepository.existsById(id)) {
+			throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
+		}
 
-        _userAuthenticationRepository.deleteById(id);
-    }
+		User user = _userAuthenticationRepository.findById(id).orElse(null);
+		if (user == null) {
+			throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
+		}
 
-    public User updateUserById(Long id, UpdateUsersDetailsRequestModel userModel) {
-        if (!_userAuthenticationRepository.existsById(id)) {
-            throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
-        }
+		user.setIsLocked(userModel.getIsLocked());
+		if (user.getIsLocked()) {
+			_authService.logoutAllSession(user.getId());
+			_verifyDetailService.deleteVerification(user.getId());
+			_passwordDetailService.deleteResetToken(user.getId());
+		}
 
-        User user = _userAuthenticationRepository.findById(id).orElse(null);
-        if (user == null) {
-            throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
-        }
-
-        user.setIsLocked(userModel.getIsLocked());
-        if (user.getIsLocked()) {
-            _authService.logoutAllSession(user.getId());
-            _verifyDetailService.deleteVerification(user.getId());
-            _passwordDetailService.deleteResetToken(user.getId());
-        }
-
-        return _userAuthenticationRepository.save(user);
-    }
+		return _userAuthenticationRepository.save(user);
+	}
 
 }

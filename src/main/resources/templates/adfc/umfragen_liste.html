@@ -30,7 +30,7 @@
            	<td th:text="${umfrage.titel}"></td>
            	<td th:text="${umfrage.kategorie.name}"></td>
            	<td th:text="${umfrage.erstelltAmDatum}"></td>
-           	<td th:text="${#lists.size(umfrage.bestaetigtVonBenutzern)}"></td>
+           	<td th:text="${#lists.size(umfrage.bestaetigtVonUsern)}"></td>
             <td>
               <!--<a class="btn btn-sm btn-primary" th:text="${umfrage.id} + ' anzeigen'" th:href="@{/umfrage(values=${umfrage.id})}" target="_self"></a>-->
               <a class="btn btn-sm btn-primary" th:href="@{/umfragen/{id}(id=${umfrage.id})}" target="_self">Anzeigen</a>

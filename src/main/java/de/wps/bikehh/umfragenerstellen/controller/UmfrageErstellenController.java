@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.google.gson.Gson;
 
-import de.wps.bikehh.benutzerverwaltung.material.Benutzer;
+import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.umfragen.material.Umfrage;
 import de.wps.bikehh.umfragen.service.UmfragenService;
 
@@ -34,7 +34,7 @@ public class UmfrageErstellenController {
 	 * @return html page
 	 */
 	@GetMapping
-	public String zeigeUmfragenErsteller(@ModelAttribute("bikehh_user") Benutzer benutzer,
+	public String zeigeUmfragenErsteller(@ModelAttribute("bikehh_user") User benutzer,
 			@RequestParam(required = false, name = "koordinaten") double[] koordinaten, Model model) {
 		if (koordinaten != null) {
 			model.addAttribute("laengengrad", koordinaten[0]);

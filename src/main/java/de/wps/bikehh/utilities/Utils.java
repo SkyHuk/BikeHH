@@ -60,7 +60,7 @@ public class Utils {
 								|| alleFragenOhneAntwortenErlaubenBenutzerDefinierteAntworten)
 						&& umfrage.getErstelltAmDatum() != null && !umfrage.getErstelltAmDatum().isEmpty()
 						&& umfrage.getBreitengrad() != 0 && umfrage.getLaengengrad() != 0
-						&& umfrage.getKategorie() != null && umfrage.getBestaetigtVonBenutzern() != null
+						&& umfrage.getKategorie() != null && umfrage.getBestaetigtVonUsern() != null
 						&& umfrage.getErsteller() != null && umfrage.getAdresse() != null) {
 
 					System.out.println("Validierung war erfolgreich.");
