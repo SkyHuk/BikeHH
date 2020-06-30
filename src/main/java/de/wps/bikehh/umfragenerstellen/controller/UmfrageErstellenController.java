@@ -34,7 +34,7 @@ public class UmfrageErstellenController {
 	 * @return html page
 	 */
 	@GetMapping
-	public String zeigeUmfragenErsteller(@ModelAttribute("bikehh_user") User benutzer,
+	public String zeigeUmfragenErsteller(@ModelAttribute("user") User benutzer,
 			@RequestParam(required = false, name = "koordinaten") double[] koordinaten, Model model) {
 		if (koordinaten != null) {
 			model.addAttribute("laengengrad", koordinaten[0]);

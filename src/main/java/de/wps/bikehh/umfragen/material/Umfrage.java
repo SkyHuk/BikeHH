@@ -79,6 +79,13 @@ public class Umfrage {
 		return umfrage;
 	}
 
+	@Override
+	public String toString() {
+
+		return "lat: " + getBreitengrad() + "lng: " + getLaengengrad() + "ersteller: "
+				+ getErsteller().getEmailAddress();
+	}
+
 	public int getId() {
 		return id;
 	}

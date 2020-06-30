@@ -608,7 +608,7 @@
 
           if (!this.editierModus) {
 
-            data.bestaetigtVonBenutzern = []
+            data.bestaetigtVonUsern = []
             data.ersteller = [(${benutzer}?${benutzer}:'null')]
             // get date
             // generate a zeitstempel
@@ -616,7 +616,7 @@
             var date = new Date(zeitstempel)
             data.erstelltAmDatum = date;
           } else {
-            data.bestaetigtVonBenutzern = this.umfrage.bestaetigtVonBenutzern
+            data.bestaetigtVonUsern = this.umfrage.bestaetigtVonUsern
             data.ersteller = this.umfrage.ersteller
             data.erstelltAmDatum = this.umfrage.erstelltAmDatum
           }

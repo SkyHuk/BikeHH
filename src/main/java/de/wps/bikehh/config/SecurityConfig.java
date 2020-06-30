@@ -40,8 +40,8 @@ public class SecurityConfig {
 
 		@Override
 		public void configure(WebSecurity web) throws Exception {
-			web.ignoring().antMatchers(HttpMethod.POST, "/api/user", "/api/auth").antMatchers("/api/password",
-					"api/verify", "/umfrage-erstellen");
+			web.ignoring().antMatchers(HttpMethod.POST, "/api/user", "/api/auth", "/umfrage-erstellen")
+					.antMatchers("/api/password", "api/verify");
 		}
 
 		@Override
