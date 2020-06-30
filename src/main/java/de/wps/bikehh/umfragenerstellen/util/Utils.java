@@ -1,4 +1,4 @@
-package de.wps.bikehh.utilities;
+package de.wps.bikehh.umfragenerstellen.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

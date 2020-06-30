@@ -648,8 +648,14 @@
               rtn.laengengrad = frage.marker.getLatLng().lat;
               rtn.breitengrad = frage.marker.getLatLng().lng;
             }
+            if (!frage.fahrtrichtung) {
+            	rtn.fahrtrichtung = 0
+            }
 
-            delete rtn.marker;
+            delete rtn.drehMarker
+            delete rtn.marker
+            delete rtn.pfeillinie
+            delete rtn.pfeilspitze
             return rtn;
           });
 

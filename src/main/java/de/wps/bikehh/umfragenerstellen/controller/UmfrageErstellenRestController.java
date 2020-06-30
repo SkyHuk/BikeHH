@@ -14,7 +14,7 @@ import com.google.gson.Gson;
 
 import de.wps.bikehh.umfragen.material.Umfrage;
 import de.wps.bikehh.umfragen.service.UmfragenService;
-import de.wps.bikehh.utilities.Utils;
+import de.wps.bikehh.umfragenerstellen.util.Utils;
 
 @Controller
 @RequestMapping("umfrage-erstellen")
@@ -35,7 +35,7 @@ public class UmfrageErstellenRestController {
 	 * @throws Exception
 	 */
 	@RequestMapping(method = RequestMethod.POST)
-	@PostMapping("/umfragen")
+	@PostMapping("/umfragen-erstellen")
 	@ResponseBody
 	public int speichereUmfrage(@RequestBody String jsonString) {
 

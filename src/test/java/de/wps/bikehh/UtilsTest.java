@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import com.google.gson.Gson;
 
 import de.wps.bikehh.umfragen.material.Umfrage;
-import de.wps.bikehh.utilities.Utils;
+import de.wps.bikehh.umfragenerstellen.util.Utils;
 
 public class UtilsTest {
 

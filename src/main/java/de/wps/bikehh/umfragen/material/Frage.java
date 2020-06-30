@@ -55,6 +55,8 @@ public class Frage {
 
 	private double laengengrad;
 
+	private double fahrtrichtung;
+
 	public int getId() {
 		return id;
 	}
@@ -69,14 +71,6 @@ public class Frage {
 
 	public void setTitel(String titel) {
 		this.titel = titel;
-	}
-
-	public List<AntwortMoeglichkeit> getAntwortMoeglichkeiten() {
-		return antwortMoeglichkeiten;
-	}
-
-	public void setAntwortenMoeglichkeiten(List<AntwortMoeglichkeit> antwortMoeglichkeiten) {
-		this.antwortMoeglichkeiten = antwortMoeglichkeiten;
 	}
 
 	public List<Bedingung> getBedingungen() {
@@ -109,6 +103,22 @@ public class Frage {
 
 	public void setLaengengrad(double laengengrad) {
 		this.laengengrad = laengengrad;
+	}
+
+	public double getFahrtrichtung() {
+		return fahrtrichtung;
+	}
+
+	public void setFahrtrichtung(double fahrtrichtung) {
+		this.fahrtrichtung = fahrtrichtung;
+	}
+
+	public void setAntwortMoeglichkeiten(List<AntwortMoeglichkeit> antwortMoeglichkeiten) {
+		this.antwortMoeglichkeiten = antwortMoeglichkeiten;
+	}
+
+	public List<AntwortMoeglichkeit> getAntwortMoeglichkeiten() {
+		return antwortMoeglichkeiten;
 	}
 
 }
