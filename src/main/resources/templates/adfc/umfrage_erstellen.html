@@ -607,7 +607,6 @@
         sammleDaten(data) {
 
           if (!this.editierModus) {
-
             data.bestaetigtVonUsern = []
             data.ersteller = [(${benutzer}?${benutzer}:'null')]
             // get date
@@ -625,6 +624,7 @@
           if (this.id) {
             data.id = this.id
           }
+          data.fahrtrichtung =  this.fahrtrichtung ? this.fahrtrichtung : 0
           data.bearbeitet = this.editierModus
           data.manuellErstellt = this.manuellErstellt
           data.titel = this.titel;

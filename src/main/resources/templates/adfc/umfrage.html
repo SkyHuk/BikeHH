@@ -10,6 +10,7 @@
   <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
   integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
   crossorigin="" type="text/javascript"></script>
+  <script src="http://bbecquet.github.io/Leaflet.PolylineDecorator/dist/leaflet.polylineDecorator.js" type="text/javascript"></script>
 
 </head>
 
@@ -211,14 +212,15 @@
 </div>
 <script>
 
-    // coordinates passed from controller
-    var breitengrad = [[${umfrage.laengengrad}]];
-    var laengengrad = [[${umfrage.breitengrad}]];
+  // coordinates passed from controller
+  var breitengrad = [[${umfrage.laengengrad}]];
+  var laengengrad = [[${umfrage.breitengrad}]];
 
   // init map
 
   var karte = L.map('mapid').setView([breitengrad, laengengrad], 13);
-  fügeMarkerZurKarteHinzu(breitengrad, laengengrad);
+  fuegeMarkerZurKarteHinzu(breitengrad, laengengrad);
+  fuegeFahrtrichtungHinzu(breitengrad, laengengrad, [[${ umfrage.fahrtrichtung }]]);
 
   L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
     maxZoom: 18,
@@ -230,7 +232,7 @@
     zoomOffset: -1
   }).addTo(karte);
 
-  function fügeFragenmarkerZurKarteHinzu(frage, index) {
+  function fuegeFragenmarkerZurKarteHinzu(frage, index) {
     if (frage.breitengrad && frage.laengengrad) {
       var greenIcon = new L.Icon({
         iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
@@ -246,12 +248,149 @@
     }
   }
 
-    // adds a marker to given coordinates,
-    // used to mark location of survey
-    function fügeMarkerZurKarteHinzu(breitengrad, laengengrad) {
-      var marker = L.marker([breitengrad, laengengrad]).addTo(karte)
-      .bindPopup("<b>Ort der Umfrage.<br/>");
-    };
+  // adds a marker to given coordinates,
+  // used to mark location of survey
+  function fuegeMarkerZurKarteHinzu(breitengrad, laengengrad) {
+    var marker = L.marker([breitengrad, laengengrad]).addTo(karte)
+    .bindPopup("<b>Ort der Umfrage.<br/>");
+  };
+
+  function fuegeFahrtrichtungHinzu(lat, lng, initialerWinkel) {
+          if (!initialerWinkel) {
+            initialerWinkel = Math.PI/4
+            if (frage) {
+              frage.fahrtrichtung = initialerWinkel - (Math.PI / 2)
+            } else {
+              this.fahrtrichtung = initialerWinkel - (Math.PI / 2)
+            }
+          }
+
+          const pfeilLaenge = 0.002
+          const halbePfeilLaenge = pfeilLaenge / 2
+          const drehMarkerOffset = 0.0005
+
+          let gedrehtesX = (Math.cos(initialerWinkel) * halbePfeilLaenge * 2) // - (Math.sin(initialerWinkel) * initialY)
+          const gedrehtesY = (Math.sin(initialerWinkel) * halbePfeilLaenge) // + (Math.cos(initialerWinkel) * initialY)
+
+          // skalieren auf der x Achse je nach Winkel um Länge des Pfeils angenähert zu erhalten
+          // gedrehtesX *= Math.abs(Math.cos(initialerWinkel) * 2)
+
+          let polyline = L.polyline([
+            [lat - gedrehtesY, lng - gedrehtesX],
+            [lat + gedrehtesY, lng + gedrehtesX],
+          ], {
+            weight: 2,
+          }).addTo(this.karte)
+
+          // this.markers.addLayer(polyline)
+
+          let decorator = L.polylineDecorator(polyline, {
+            patterns: [
+              { offset: '100%', repeat: 0, symbol: L.Symbol.arrowHead({ pixelSize: 20, polygon: false, pathOptions: { stroke: true } }) },
+            ]
+          }).addTo(this.karte)
+
+          // this.markers.addLayer(decorator)
+
+          const onRotate = (e) => {
+            const x = e.latlng.lat - lat
+            const y = e.latlng.lng - lng
+            const angle = Math.atan2(x, y)
+
+            // rotiere 90° nach links
+            if (frage) {
+              frage.fahrtrichtung = angle - (Math.PI / 2)
+            } else {
+              this.fahrtrichtung = angle - (Math.PI / 2)
+            }
+
+            // arrow pointing straight right
+            const initialX = halbePfeilLaenge
+            const initialY = 0.0
+
+            let gedrehtesX = (Math.cos(angle) * initialX * 2) // - (Math.sin(angle) * initialY)
+            const gedrehtesY = (Math.sin(angle) * initialX) // + (Math.cos(angle) * initialY)
+
+            // skalieren auf der x Achse je nach Winkel um Länge des Pfeils angenähert zu erhalten
+            // gedrehtesX *= Math.abs(Math.sin(angle) * 2)
+
+            // console.log('length after rotate', Math.sqrt(Math.pow(gedrehtesX, 2) + Math.pow(gedrehtesY, 2)))
+
+            const newStart = [
+              lat - gedrehtesY,
+              lng - gedrehtesX,
+            ]
+
+            const newEnd = [
+              lat + gedrehtesY,
+              lng + gedrehtesX,
+            ]
+
+            polyline.setLatLngs([newStart, newEnd])
+
+            decorator.remove()
+            decorator = L.polylineDecorator(polyline, {
+              patterns: [
+                { offset: '100%', repeat: 0, symbol: L.Symbol.arrowHead({ pixelSize: 20, polygon: false, pathOptions: { stroke: true } }) },
+              ]
+            }).addTo(this.karte)
+            if (frage) {
+              frage.pfeilspitze = decorator
+            } else {
+              this.decorator = decorator
+            }
+          }
+
+          let drehMarker
+
+          const fuegeDrehmarkerHinzu = (drehMarkerPos) => {
+            var gelbesIcon = new L.Icon({
+              iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-yellow.png',
+              shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+              iconSize: [25, 41],
+              iconAnchor: [12, 41],
+              popupAnchor: [1, -34],
+              shadowSize: [41, 41]
+            });
+
+            drehMarker = L.marker(drehMarkerPos, {
+              draggable: true,
+              autoPan: false,
+              icon: gelbesIcon
+            }).addTo(this.karte).on('drag', onRotate)
+            if (frage) {
+              frage.drehMarker = drehMarker
+            } else {
+              this.drehMarker = drehMarker
+            }
+          }
+
+          let drehMarkerPos = [
+            lat + ( (halbePfeilLaenge + drehMarkerOffset) * Math.sin(initialerWinkel) ),
+            lng + ( (halbePfeilLaenge + drehMarkerOffset) * Math.cos(initialerWinkel) ),
+
+          ]
+
+          /*if (frage && frage.drehMarker) {
+            frage.drehMarker.off('drag')
+            frage.drehMarker.on('drag', onRotate)
+            frage.drehMarker.setLatLng(drehMarkerPos)
+          } else if (!frage && this.drehMarker) {
+            this.drehMarker.off('drag')
+            this.drehMarker.on('drag', onRotate)
+            this.drehMarker.setLatLng(drehMarkerPos)
+          } else {
+            fuegeDrehmarkerHinzu(drehMarkerPos)
+          }
+
+          if (frage) {
+            frage.pfeillinie = polyline
+            frage.pfeilspitze = decorator
+          } else {
+            this.polyline = polyline
+            this.decorator = decorator
+          }*/
+  }
    // centers the map on the location of the survey while zooming in
    function zeigAufKarte() {
     karte.setView([breitengrad, laengengrad], 17);
@@ -268,7 +407,7 @@
 <!-- call js function -->
 <script th:inline="javascript">
   /*<![CDATA[*/
-  fügeFragenmarkerZurKarteHinzu([[${ frage }]], [[${status.index} + 1]]);
+  fuegeFragenmarkerZurKarteHinzu([[${ frage }]], [[${status.index} + 1]]);
   /*]]>*/
 </script>
 </th:block>

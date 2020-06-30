@@ -41,6 +41,7 @@ public class Umfrage {
 	private String erstelltAmDatum;
 	private boolean istBestaetigt;
 	private boolean bearbeitet;
+	private double fahrtrichtung;
 
 	@ManyToMany(cascade = CascadeType.ALL)
 	private List<User> bestaetigtVonUsern;
@@ -148,6 +149,14 @@ public class Umfrage {
 
 	public void setBestaetigtSchwellenwert(int bestaetigtSchwellenwert) {
 		this.bestaetigtSchwellenwert = bestaetigtSchwellenwert;
+	}
+
+	public double getFahrtrichtung() {
+		return fahrtrichtung;
+	}
+
+	public void setFahrtrichtung(double fahrtrichtung) {
+		this.fahrtrichtung = fahrtrichtung;
 	}
 
 	public boolean isBearbeitet() {
