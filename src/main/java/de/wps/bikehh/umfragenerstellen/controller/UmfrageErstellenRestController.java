@@ -41,6 +41,7 @@ public class UmfrageErstellenRestController {
 
 		Umfrage umfrage = new Gson().fromJson(jsonString, Umfrage.class);
 
+		// debug only
 		System.out.println(jsonString);
 
 		// validiere Umfrage

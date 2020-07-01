@@ -23,5 +23,4 @@ public class UebersichtControllerTest {
 	public void zeigeUebersichtTest() {
 		assertEquals("adfc/uebersicht", uebersichtController.zeigeUebersicht());
 	}
-
 }

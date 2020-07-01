@@ -30,13 +30,4 @@ public class KartenController {
 		model.addAttribute("umfragen", umfragen);
 		return "adfc/karte";
 	}
-
-	/*
-	 * @ModelAttribute("umfragen") public List<Umfrage> umfragen() {
-	 * 
-	 * List<Umfrage> umfragen = umfragenService.getAlleUmfragen();
-	 * 
-	 * return umfragen; }
-	 */
-
 }

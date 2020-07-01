@@ -38,6 +38,8 @@ public class UmfragenServiceTest {
 		umfragen.add(umfrage);
 
 		when(umfrageRepository.findAll()).thenReturn(umfragen);
+		umfragenService.getAlleUmfragen();
+		Mockito.verify(umfrageRepository, times(1)).findAll();
 
 		assertEquals(umfragen, umfragenService.getAlleUmfragen());
 	}
@@ -45,6 +47,9 @@ public class UmfragenServiceTest {
 	@Test
 	public void getUmfrageNachIdTest() {
 		when(umfrageRepository.findById((int) umfrage.getId())).thenReturn(Optional.of(umfrage));
+
+		umfragenService.getUmfrageNachId(umfrage.getId());
+		Mockito.verify(umfrageRepository, times(1)).findById(umfrage.getId());
 
 		assertEquals(umfrage, umfragenService.getUmfrageNachId(umfrage.getId()));
 	}

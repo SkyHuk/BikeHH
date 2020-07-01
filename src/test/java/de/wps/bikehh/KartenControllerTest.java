@@ -2,12 +2,14 @@ package de.wps.bikehh;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.ui.Model;
 
 import com.google.gson.Gson;
@@ -46,6 +48,9 @@ public class KartenControllerTest {
 		umfragen.add(umfrage);
 
 		when(umfragenRepository.findAll()).thenReturn(umfragen);
+
+		kartenController.zeigeKarte(model);
+		Mockito.verify(umfragenRepository, times(1)).findAll();
 
 		assertEquals("adfc/karte", this.kartenController.zeigeKarte(model));
 	}

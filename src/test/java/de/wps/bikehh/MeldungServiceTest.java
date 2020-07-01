@@ -39,12 +39,18 @@ public class MeldungServiceTest {
 
 		when(meldungRepository.findAll()).thenReturn(meldungen);
 
+		meldungService.getAlleMeldungen();
+		Mockito.verify(meldungRepository, times(1)).findAll();
+
 		assertEquals(meldungen, meldungService.getAlleMeldungen());
 	}
 
 	@Test
 	public void getMeldungNachIdTest() {
 		when(meldungRepository.findById((long) meldung.getId())).thenReturn(Optional.of(meldung));
+
+		meldungService.getMeldungNachId(meldung.getId());
+		Mockito.verify(meldungRepository, times(1)).findById((long) meldung.getId());
 
 		assertEquals(meldung, meldungService.getMeldungNachId(meldung.getId()));
 	}

@@ -2,6 +2,7 @@ package de.wps.bikehh;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.ui.Model;
 
 import com.google.gson.Gson;
@@ -24,6 +26,7 @@ public class UmfragenControllerTest {
 	private UmfragenService umfragenService;
 	private UmfragenController umfragenController;
 	private Model model;
+	private String jsonString;
 
 	public UmfragenControllerTest() {
 		// mocke Repository
@@ -37,11 +40,13 @@ public class UmfragenControllerTest {
 
 		// mock Model
 		model = mock(Model.class);
+
+		// test jsonString
+		jsonString = "{\"bestaetigtVonUsern\":[],\"ersteller\":{\"id\":1,\"emailAddress\":\"admin@chef.lol\",\"encryptedPassword\":\"sha: uwXzywW1mNUAWQZIaRA3cvRyyQQ=\",\"isVerified\":false,\"isLocked\":false,\"credibility\":0,\"privacySetting\":0,\"role\":\"administrator\",\"bestaetigteUmfragen\":[],\"updatedAt\":\"Jul 1, 2020 12:51:14 PM\",\"createdAt\":\"Jul 1, 2020 12:51:14 PM\"},\"erstelltAmDatum\":\"2020-07-01T10:53:21.825Z\",\"fahrtrichtung\":0,\"bearbeitet\":false,\"manuellErstellt\":true,\"titel\":\"wwwwwwwwwwwww\",\"startDatum\":\"2020-07-02\",\"endDatum\":\"2020-07-16\",\"bestaetigtSchwellenwert\":10,\"fragen\":[{\"titel\":\"eeeeeeeeeeeeeeeeeee\",\"antwortMoeglichkeiten\":[{\"text\":\"Ja\"},{\"text\":\"Nein\"}],\"bedingungen\":[],\"fahrtrichtung\":0,\"erlaubeBenutzerdefinierteAntwort\":false}],\"kategorie\":{\"name\":\"Verkehrsführung\"},\"laengengrad\":53.543232197085494,\"breitengrad\":9.81731414794922,\"adresse\":{\"stadt\":\"Hamburg\",\"postleitZahl\":\"21129\",\"strasse\":\"Franz-Josef-Strauß Straße\"}}";
 	}
 
 	@Test
 	public void zeigeUmfragenListeTest() {
-		String jsonString = "{\"bestaetigtVonBenutzern\":[],\"ersteller\":{\"id\":1,\"verschluesseltesPasswort\":\"sha: uwXzywW1mNUAWQZIaRA3cvRyyQQ=\",\"emailAdresse\":\"admin@chef.lol\",\"rolle\":\"administrator\",\"istGesperrt\":false,\"bestaetigteUmfragen\":[]},\"erstelltAmDatum\":\"2020-06-25T06:15:49.044Z\",\"manuellErstellt\":true,\"titel\":\"Titel der Umfrage\",\"startDatum\":\"2020-06-25\",\"endDatum\":\"2020-06-30\",\"bestaetigtSchwellenwert\":\"11\",\"fragen\":[{\"titel\":\"Titel der ersten  Frage\",\"antwortMoeglichkeiten\":[{\"text\":\"Ja\"},{\"text\":\"Nein\"},{\"text\":\"Vielleicht\"}],\"bedingungen\":[],\"pfeil\":null,\"erlaubeBenutzerdefinierteAntwort\":true},{\"titel\":\"Titel der zweiten Frage\",\"antwortMoeglichkeiten\":[{\"text\":\"Ja\"}],\"bedingungen\":[{\"frage\":\"Titel der ersten  Frage\",\"erwarteteAntwort\":\"Vielleicht\"}],\"pfeil\":null,\"erlaubeBenutzerdefinierteAntwort\":false}],\"kategorie\":{\"name\":\"Verkehrsführung\"},\"laengengrad\":53.53950793001356,\"breitengrad\":9.840488433837892,\"adresse\":{\"stadt\":\"Hamburg\",\"postleitZahl\":\"21129\",\"strasse\":\"Franz-Josef-Strauß Straße\"}}";
 		Umfrage umfrage1 = new Gson().fromJson(jsonString, Umfrage.class);
 		Umfrage umfrage2 = new Gson().fromJson(jsonString, Umfrage.class);
 
@@ -50,17 +55,38 @@ public class UmfragenControllerTest {
 		alleUmfragen.add(umfrage2);
 
 		when(umfrageRepository.findAll()).thenReturn(alleUmfragen);
+
+		umfragenController.zeigeUmfragenListe(model);
+		Mockito.verify(umfrageRepository, times(1)).findAll();
+
 		assertEquals("adfc/umfragen_liste", umfragenController.zeigeUmfragenListe(model));
 	}
 
 	@Test
 	public void zeigeEinzelUmfrageTest() {
-		String jsonString = "{\"bestaetigtVonBenutzern\":[],\"ersteller\":{\"id\":1,\"verschluesseltesPasswort\":\"sha: uwXzywW1mNUAWQZIaRA3cvRyyQQ=\",\"emailAdresse\":\"admin@chef.lol\",\"rolle\":\"administrator\",\"istGesperrt\":false,\"bestaetigteUmfragen\":[]},\"erstelltAmDatum\":\"2020-06-25T06:15:49.044Z\",\"manuellErstellt\":true,\"titel\":\"Titel der Umfrage\",\"startDatum\":\"2020-06-25\",\"endDatum\":\"2020-06-30\",\"bestaetigtSchwellenwert\":\"11\",\"fragen\":[{\"titel\":\"Titel der ersten  Frage\",\"antwortMoeglichkeiten\":[{\"text\":\"Ja\"},{\"text\":\"Nein\"},{\"text\":\"Vielleicht\"}],\"bedingungen\":[],\"pfeil\":null,\"erlaubeBenutzerdefinierteAntwort\":true},{\"titel\":\"Titel der zweiten Frage\",\"antwortMoeglichkeiten\":[{\"text\":\"Ja\"}],\"bedingungen\":[{\"frage\":\"Titel der ersten  Frage\",\"erwarteteAntwort\":\"Vielleicht\"}],\"pfeil\":null,\"erlaubeBenutzerdefinierteAntwort\":false}],\"kategorie\":{\"name\":\"Verkehrsführung\"},\"laengengrad\":53.53950793001356,\"breitengrad\":9.840488433837892,\"adresse\":{\"stadt\":\"Hamburg\",\"postleitZahl\":\"21129\",\"strasse\":\"Franz-Josef-Strauß Straße\"}}";
 		Umfrage umfrage1 = new Gson().fromJson(jsonString, Umfrage.class);
 
 		when(umfrageRepository.findById(umfrage1.getId())).thenReturn(Optional.of(umfrage1));
+		umfrageRepository.save(umfrage1);
+		Mockito.verify(umfrageRepository, times(1)).save(umfrage1);
+
+		umfragenController.zeigeEinzelUmfrage(model, umfrage1.getId());
+
+		when(umfrageRepository.findById(umfrage1.getId())).thenReturn(Optional.of(umfrage1));
+		Mockito.verify(umfrageRepository, times(1)).findById(umfrage1.getId());
 
 		assertEquals("adfc/umfrage", umfragenController.zeigeEinzelUmfrage(model, umfrage1.getId()));
+	}
+
+	@Test
+	public void loescheUmfrageTest() {
+		Umfrage umfrage1 = new Gson().fromJson(jsonString, Umfrage.class);
+
+		umfragenController.loescheUmfrage(model, umfrage1.getId());
+		Mockito.verify(umfrageRepository, times(1)).deleteById(umfrage1.getId());
+		Mockito.verify(umfrageRepository, times(1)).findAll();
+
+		assertEquals("adfc/umfragen_liste", umfragenController.loescheUmfrage(model, umfrage1.getId()));
 	}
 
 }

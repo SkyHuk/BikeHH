@@ -2,15 +2,18 @@ package de.wps.bikehh;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.ui.Model;
 
 import com.google.gson.Gson;
 
+import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.umfragen.material.Umfrage;
 import de.wps.bikehh.umfragen.repository.UmfrageRepository;
 import de.wps.bikehh.umfragen.service.UmfragenService;
@@ -37,24 +40,27 @@ public class UmfrageErstellenControllerTest {
 		model = mock(Model.class);
 	}
 
-	/*
-	 * @Test public void zeigeUmfragenErstellerTest() { User benutzer = new User(1l,
-	 * "hashedPw", "email@email.de", "testUser"); double[] koordinaten = { 50.0, 9.0
-	 * };
-	 * 
-	 * assertEquals("adfc/umfrage_erstellen",
-	 * this.umfragenErstellenController.zeigeUmfragenErsteller(benutzer,
-	 * koordinaten, model)); }
-	 */
+	@Test
+	public void zeigeUmfragenErstellerTest() {
+
+		User user = new User("email@email.de", "hashedPw", "testUser");
+		double[] koordinaten = { 50.0, 9.0 };
+
+		assertEquals("adfc/umfrage_erstellen",
+				umfragenErstellenController.zeigeUmfragenErsteller(user, koordinaten, model));
+	}
 
 	@Test
 	public void zeigeUmfragenBearbeiterTest() {
-		String jsonString = "{\"bestaetigtVonBenutzern\":[],\"ersteller\":{\"id\":1,\"verschluesseltesPasswort\":\"sha: uwXzywW1mNUAWQZIaRA3cvRyyQQ=\",\"emailAdresse\":\"admin@chef.lol\",\"rolle\":\"administrator\",\"istGesperrt\":false,\"bestaetigteUmfragen\":[]},\"erstelltAmDatum\":\"2020-06-25T06:15:49.044Z\",\"manuellErstellt\":true,\"titel\":\"Titel der Umfrage\",\"startDatum\":\"2020-06-25\",\"endDatum\":\"2020-06-30\",\"bestaetigtSchwellenwert\":\"11\",\"fragen\":[{\"titel\":\"Titel der ersten  Frage\",\"antwortMoeglichkeiten\":[{\"text\":\"Ja\"},{\"text\":\"Nein\"},{\"text\":\"Vielleicht\"}],\"bedingungen\":[],\"pfeil\":null,\"erlaubeBenutzerdefinierteAntwort\":true},{\"titel\":\"Titel der zweiten Frage\",\"antwortMoeglichkeiten\":[{\"text\":\"Ja\"}],\"bedingungen\":[{\"frage\":\"Titel der ersten  Frage\",\"erwarteteAntwort\":\"Vielleicht\"}],\"pfeil\":null,\"erlaubeBenutzerdefinierteAntwort\":false}],\"kategorie\":{\"name\":\"Verkehrsführung\"},\"laengengrad\":53.53950793001356,\"breitengrad\":9.840488433837892,\"adresse\":{\"stadt\":\"Hamburg\",\"postleitZahl\":\"21129\",\"strasse\":\"Franz-Josef-Strauß Straße\"}}";
-		Umfrage umfrage = new Gson().fromJson(jsonString, Umfrage.class);
+		String jsonString = "{\"bestaetigtVonUsern\":[],\"ersteller\":{\"id\":1,\"emailAddress\":\"admin@chef.lol\",\"encryptedPassword\":\"sha: uwXzywW1mNUAWQZIaRA3cvRyyQQ=\",\"isVerified\":false,\"isLocked\":false,\"credibility\":0,\"privacySetting\":0,\"role\":\"administrator\",\"bestaetigteUmfragen\":[],\"updatedAt\":\"Jul 1, 2020 12:51:14 PM\",\"createdAt\":\"Jul 1, 2020 12:51:14 PM\"},\"erstelltAmDatum\":\"2020-07-01T10:53:21.825Z\",\"fahrtrichtung\":0,\"bearbeitet\":false,\"manuellErstellt\":true,\"titel\":\"wwwwwwwwwwwww\",\"startDatum\":\"2020-07-02\",\"endDatum\":\"2020-07-16\",\"bestaetigtSchwellenwert\":10,\"fragen\":[{\"titel\":\"eeeeeeeeeeeeeeeeeee\",\"antwortMoeglichkeiten\":[{\"text\":\"Ja\"},{\"text\":\"Nein\"}],\"bedingungen\":[],\"fahrtrichtung\":0,\"erlaubeBenutzerdefinierteAntwort\":false}],\"kategorie\":{\"name\":\"Verkehrsführung\"},\"laengengrad\":53.543232197085494,\"breitengrad\":9.81731414794922,\"adresse\":{\"stadt\":\"Hamburg\",\"postleitZahl\":\"21129\",\"strasse\":\"Franz-Josef-Strauß Straße\"}}";
+		Umfrage umfrage1 = new Gson().fromJson(jsonString, Umfrage.class);
 
-		when(umfrageRepository.findById(umfrage.getId())).thenReturn(Optional.of(umfrage));
+		when(umfrageRepository.findById(umfrage1.getId())).thenReturn(Optional.of(umfrage1));
+
+		umfragenErstellenController.zeigeUmfragenBearbeiter(umfrage1.getId(), model);
+		Mockito.verify(umfrageRepository, times(1)).findById(umfrage1.getId());
 
 		assertEquals("adfc/umfrage_erstellen",
-				this.umfragenErstellenController.zeigeUmfragenBearbeiter(umfrage.getId(), model));
+				umfragenErstellenController.zeigeUmfragenBearbeiter(umfrage1.getId(), model));
 	}
 }

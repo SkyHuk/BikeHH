@@ -35,7 +35,7 @@ public class UmfragenController {
 
 	/**
 	 *
-	 * Öffnet eine html-Seite für eine bestimmte Umfrage
+	 * Zeigt eine Einzelansicht einer Umfrage
 	 *
 	 * @param model     spring model
 	 * @param umfrageId id der Umfrage, welche geöffnet werden soll
@@ -48,5 +48,22 @@ public class UmfragenController {
 		model.addAttribute("umfrage", umfrage);
 
 		return "adfc/umfrage";
+	}
+
+	/**
+	 * Löscht eine Umfrage und zeigt danach alle Umfragen
+	 * 
+	 * @param model
+	 * @param umfrageId
+	 * @return
+	 */
+	@GetMapping("/delete/{umfrageId}")
+	public String loescheUmfrage(Model model, @PathVariable Integer umfrageId) {
+		umfragenService.loesche(umfrageId);
+
+		List<Umfrage> umfragen = umfragenService.getAlleUmfragen();
+
+		model.addAttribute("umfragen", umfragen);
+		return "adfc/umfragen_liste";
 	}
 }

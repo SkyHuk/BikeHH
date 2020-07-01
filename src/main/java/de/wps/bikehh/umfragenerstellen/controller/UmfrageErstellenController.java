@@ -61,7 +61,10 @@ public class UmfrageErstellenController {
 		Umfrage umfrage = umfragenService.getUmfrageNachId(umfrageId);
 
 		String jsonUmfrage = new Gson().toJson(umfrage);
+
+		// debug only
 		System.out.println(jsonUmfrage);
+
 		model.addAttribute("umfrage", jsonUmfrage);
 		return "adfc/umfrage_erstellen";
 	}
