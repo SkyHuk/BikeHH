@@ -1,4 +1,4 @@
-package de.wps.bikehh;
+package de.wps.bikehh.umfragenerstellen.util;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

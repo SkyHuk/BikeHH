@@ -1,4 +1,4 @@
-package de.wps.bikehh;
+package de.wps.bikehh.meldungen;
 
 import org.junit.jupiter.api.Test;
 

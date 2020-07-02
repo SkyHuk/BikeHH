@@ -1,4 +1,4 @@
-package de.wps.bikehh;
+package de.wps.bikehh.umfragen;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
@@ -76,17 +76,6 @@ public class UmfragenControllerTest {
 		Mockito.verify(umfrageRepository, times(1)).findById(umfrage1.getId());
 
 		assertEquals("adfc/umfrage", umfragenController.zeigeEinzelUmfrage(model, umfrage1.getId()));
-	}
-
-	@Test
-	public void loescheUmfrageTest() {
-		Umfrage umfrage1 = new Gson().fromJson(jsonString, Umfrage.class);
-
-		umfragenController.loescheUmfrage(model, umfrage1.getId());
-		Mockito.verify(umfrageRepository, times(1)).deleteById(umfrage1.getId());
-		Mockito.verify(umfrageRepository, times(1)).findAll();
-
-		assertEquals("adfc/umfragen_liste", umfragenController.loescheUmfrage(model, umfrage1.getId()));
 	}
 
 }

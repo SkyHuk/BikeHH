@@ -1,4 +1,4 @@
-package de.wps.bikehh;
+package de.wps.bikehh.umfragen;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
