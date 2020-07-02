@@ -50,20 +50,4 @@ public class UmfragenController {
 		return "adfc/umfrage";
 	}
 
-	/**
-	 * Löscht eine Umfrage und zeigt danach alle Umfragen
-	 * 
-	 * @param model
-	 * @param umfrageId
-	 * @return
-	 */
-	@GetMapping("/delete/{umfrageId}")
-	public String loescheUmfrage(Model model, @PathVariable Integer umfrageId) {
-		umfragenService.loesche(umfrageId);
-
-		List<Umfrage> umfragen = umfragenService.getAlleUmfragen();
-
-		model.addAttribute("umfragen", umfragen);
-		return "adfc/umfragen_liste";
-	}
 }

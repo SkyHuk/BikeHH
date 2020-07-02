@@ -35,7 +35,8 @@
           <td th:text="${#lists.size(umfrage.bestaetigtVonUsern)}"></td>
             <td>
               <a class="btn btn-sm btn-primary" th:href="@{/umfragen/{id}(id=${umfrage.id})}" target="_self">Anzeigen</a>
-              <a class="btn text-danger ml-3" th:href="@{/umfragen/delete/{id}(id=${umfrage.id})}">
+              <a class="btn text-danger ml-3" th:onclick="'openDialog(\' ' + ${umfrage.id} + '\');'">
+              <!--<a class="btn text-danger ml-3" th:href="@{/umfragen/delete/{id}(id=${umfrage.id})}">-->
                 <span><i class="far fa-trash-alt"></i></span>
               </a>
             </td>
@@ -43,25 +44,23 @@
         </tbody>
       </table>
     </div>
+    <script type="text/javascript">
+      
+	  	// make delete request
+		function openDialog(id) {
+		  	if (confirm("Soll die Umfrage wirklich gelöscht werden?")) {
+        		const request = new XMLHttpRequest();
+          		request.open("DELETE", "/umfragen/delete/" + id);
+          		request.setRequestHeader("Content-Type", "application/json");
+          		request.send();
+          		console.log(request)
+          		request.onload = function (e) {
+            		if (request.status == 200) {
+              			location.reload()
+            		}
+        		}
+      		}
+      	}
+    </script>
   </body>
 </html>
-
-<!-- <div class="modal" tabindex="-1" role="dialog"> -->
-  <!-- <div class="modal-dialog" role="document"> -->
-    <!-- <div class="modal-content"> -->
-      <!-- <div class="modal-header"> -->
-        <!-- <h5 class="modal-title">Modal title</h5> -->
-        <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close"> -->
-          <!-- <span aria-hidden="true">&times;</span> -->
-        <!-- </button> -->
-      <!-- </div> -->
-      <!-- <div class="modal-body"> -->
-        <!-- <p>Modal body text goes here.</p> -->
-      <!-- </div> -->
-      <!-- <div class="modal-footer"> -->
-        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
-        <!-- <button type="button" class="btn btn-primary" th:href="@{/umfragen/delete/{id}(id=${umfrage.id})}">Save changes</button> -->
-      <!-- </div> -->
-    <!-- </div> -->
-  <!-- </div> -->
-<!-- </div> -->

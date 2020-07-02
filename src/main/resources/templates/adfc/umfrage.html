@@ -62,7 +62,7 @@
           <button class="btn btn-block btn-outline-primary" onClick="zeigAufKarte()">Zeige auf Karte</button>
           <button class="btn btn-block btn-outline-primary" th:data-creator="${umfrage.ersteller}" onclick="kontaktiereErsteller(this.dataset.creator)">Kontaktiere Ersteller</button>
           <button class="btn btn-block btn-outline-success">Bestätigen</button>
-          <a class="btn btn-block btn-outline-danger" th:href="@{/umfragen/delete/{id}(id=${umfrage.id})}" >Umfrage löschen</a>
+          <button class="btn btn-block btn-outline-danger" th:onclick="'openDialog(\' ' + ${umfrage.id} + '\');'" >Umfrage löschen</button>
         </div>
       </div>
 
@@ -259,7 +259,7 @@
       .bindPopup("<b>Ort der Umfrage.<br/>");
   };
 
-  function fuegeFahrtrichtungHinzu(lat, lng, initialerWinkel) {
+  function fuegeFahrtrichtungHinzu(lat, lng, initialerWinkel, frage) {
     if (!initialerWinkel) {
       initialerWinkel = Math.PI / 4
       if (frage) {
@@ -405,7 +405,22 @@
     var mailAdresse = ersteller
     var betreff = "BikeHH - Umfrage #" + [[${ umfrage.id }]];
     window.location.href = "mailto:" + mailAdresse + "?subject=" + betreff + "&body=";
-  };
+  }
+  //make delete request
+  function openDialog(id) {
+    if (confirm("Soll die Umfrage wirklich gelöscht werden?")) {
+      const request = new XMLHttpRequest();
+      request.open("DELETE", "/umfragen/delete/" + id);
+      request.setRequestHeader("Content-Type", "application/json");
+      request.send();
+      console.log(request)
+      request.onload = function (e) {
+        if (request.status == 200) {
+          location.href = "umfragen/"
+        }
+      }
+    }
+  }
 </script>
 <th:block th:each="frage,status : ${umfrage.fragen}">
 <!-- call js function -->
