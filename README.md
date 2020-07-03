@@ -22,7 +22,19 @@ npm: 6.13.1
 Node und Npm findet ihr [hier](https://nodejs.org/en/download/). Der Download beinhaltet Node und npm. Es wird empfohlen die LTS (Long Term Support) Version zu nehmen.
 
 ### Spring Boot
-Spring Boot ist in diesem Projekt bereits initialisiert. 
+Spring Boot ist in diesem Projekt bereits initialisiert.
+
+### Entwicklungstipps
+
+```
+mvn compile -P eclipse
+```
+kompiliert das Projekt minimal ohne css-Generierung und Tests
+
+```
+cd src/npm; node_modules/.bin/webpack --watch
+```
+beobachtet alle JavaScript-Dateien und kompiliert das Bundle bei Änderungen neu.
 
 ## Dokumentation
 ### Admin-Plattform
@@ -39,7 +51,7 @@ Passwort: ```admin_pw```
 
 Neue User können manuell in der Datei ```data.sql``` in der H2 Datenbank angelegt werden.
 
-Mit einem Klick auf ```Ausloggen``` in der Navigationsleiste kann sich ausgeloggt werden. 
+Mit einem Klick auf ```Ausloggen``` in der Navigationsleiste kann sich ausgeloggt werden.
 
 #### Übersicht
 In dieser Ansicht sollen einige statistische Auswertungen über die Umfragen und Meldungen erscheinen. Ergebnisse sollen geteilt und exportiert werden können.
@@ -55,7 +67,7 @@ Auf der Umfragen-Seite wird eine Gesamtansicht der Umfragen als Liste dargestell
 Für die Anzeige der Umfragenliste als auch der Einzelumfrage ist im Backend der ```UmfragenController``` zuständig, der die Umfragen über den ```UmfragenService``` aus der Datenbank bezieht. 
 
 ##### UmfragenRestController
-Der ```UmfragenRestController``` ist für die Löschung einer Umfrage zuständig und nutzt dafür den ```UmfragenService```. 
+Der ```UmfragenRestController``` ist für die Löschung einer Umfrage zuständig und nutzt dafür den ```UmfragenService```.
 
 Die Filterfunktion auf der Umfragen-Seite ist noch nicht ausgebaut.
 
@@ -85,12 +97,12 @@ TODO
 In der Kartenansicht werden alle Umfragen aus der Datenbank angezeigt. Bei Klick auf diese können die Daten angeschaut und in die Einzel-Umfrageansicht gewechselt werden. Es besteht die Möglichkeit durch einen beliebigen Klick auf der Karte direkt an diesem Ort eine Umfrage zu erstellen oder durch den +-Button in der unteren, rechten Ecke eine Umfrage zu erstellen.  
 
 #####KartenController
-Im ```KartenController``` können alle Umfragen aus der Datenbank abgefragt werden, die in der Kartenansicht angezeigt werden sollen. 
+Im ```KartenController``` können alle Umfragen aus der Datenbank abgefragt werden, die in der Kartenansicht angezeigt werden sollen.
 
 #### Umfrage erstellen
 Auf der Seite kann eine neue Umfrage erstellt werden. Dazu muss jedes Feld ausgefüllt werden und ein Standort auf der Karte ausgewählt werden. Wenn Einträge fehlen sollten oder bestimmte Bedingungen nicht erfüllt sind, wird vom Frontend eine Fehlermeldung ausgegeben und angezeigt, welches Feld noch fehlt. 
 
-Bestimmte Bedingungen, die zum Erstellen einer Umfrage gelten müssen: 
+Bestimmte Bedingungen, die zum Erstellen einer Umfrage gelten müssen:
 * Startdatum darf nicht in der Vergangenheit liegen
 * Enddatum darf nicht vor dem Startdatum liegen
 * Titel der Umfrage darf nicht leer sein
