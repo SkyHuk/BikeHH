@@ -6,8 +6,10 @@ Im Zuge des Praktikums "Fahrrad in Hamburg" der Universität Hamburg existiert d
 
 ### Admin-Plattform
 
+Im Folgenden wird die Platform vorgestellt und so gut es geht erleutert, als Hilfe für Devs, die dieses System weiterentwickeln wollen.
 
 
+Das Projekt ist ein Maven-Projekt, welches am einfachsten mit Eclipse gebaut und entwickelt wird
 
 
 
