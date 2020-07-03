@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.google.gson.Gson;
+
 import de.wps.bikehh.umfragen.material.Umfrage;
 import de.wps.bikehh.umfragen.service.UmfragenService;
 
@@ -64,7 +66,9 @@ public class UmfragenController {
 	public String zeigeEinzelUmfrage(Model model, @PathVariable Integer umfrageId) {
 
 		Umfrage umfrage = umfragenService.getUmfrageNachId(umfrageId);
+		String umfrageAlsJsonString = new Gson().toJson(umfrage);
 		model.addAttribute("umfrage", umfrage);
+		model.addAttribute("umfrageJSON", umfrageAlsJsonString);
 
 		return "umfragen/umfrage";
 	}
