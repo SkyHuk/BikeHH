@@ -1,7 +1,9 @@
 import Vue from 'vue/dist/vue'
 import * as L from 'leaflet'
+import 'leaflet/dist/leaflet.css';
+
 (function() {
-  debugger
+  // debugger
   if (window.laengengrad === undefined && window.breitengrad === undefined) {
     return
   }
