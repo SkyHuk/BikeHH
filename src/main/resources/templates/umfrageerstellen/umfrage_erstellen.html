@@ -6,23 +6,13 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
     integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
     crossorigin="" />
-  <!--<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
-    integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
-    crossorigin="" type="text/javascript"></script>
-
-  <script src="http://bbecquet.github.io/Leaflet.PolylineDecorator/dist/leaflet.polylineDecorator.js" type="text/javascript"></script>
-
-  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>-->
 
 </head>
-
 <body layout:fragment="content">
-
   <div id="erstelleUmfrageApp">
-
     <h2 id="headline" class="my-4">Umfrage erstellen</h2>
     <div class="mb-4" id="mapid" style="width: calc(90vw - 10rem); height: 30vh;"></div>
-
+    <!-- Alert für Erfolg beim Erstellen -->
     <div v-if="zeigeErfolgBenachrichtigung" class="alert alert-success" role="alert">
       <div class="d-flex align-items-center">
         <div>Umfrage erfolgreich erstellt!</div>
@@ -30,7 +20,7 @@
         <button class="btn ml-auto" @click="zeigeErfolgBenachrichtigung=false"><i class="fas fa-times"></i></button>
       </div>
     </div>
-
+    <!-- Alert bei Fehlern -->
     <div v-if="formatierungsFehler" class="alert alert-danger" role="alert">
       {{ formatierungsFehler }}
     </div>
@@ -45,13 +35,13 @@
                 <label>Titel</label>
                 <input class="form-control" v-model="titel" placeholder="Titel"></input>
               </div>
-
+              <!-- Zeitfenster -->      
               <div class="form-group">
                 <label>Zeitfenster</label>
                 <input type="date" class="form-control mb-2" placeholder="From" v-model="startDatum">
                 <input type="date" class="form-control mb-2" placeholder="To" v-model="endDatum">
               </div>
-
+              <!-- Anzahl an Bestätigungen -->
               <div class="form-group">
                 <label>Anzahl an Bestätigungen benötigt:</label>
                 <input type="number" class="form-control" :placeholder="bestaetigtSchwellenwert"
@@ -79,18 +69,16 @@
                     <option v-for="option in kategorie2.unteroptionen" :value="option">{{ option.text }}</option>
                   </select>
                 </div>
-
+                <!-- benutzerdefinierte Kategorie checkbox -->
                 <div class="form-check mb-2">
                   <input class="form-check-input" type="checkbox" v-model="benutzerdefinierteKategorie" id="benutzerdefinierteKategorieCheckbox">
                   <label class="form-check-label" for="benutzerdefinierteKategorieCheckbox">
                     Benutzerdefinierte Kategorie
                   </label>
                 </div>
-
                 <input class="form-control" v-if="benutzerdefinierteKategorie" v-model="benutzerdefinierteKategorieText" placeholder="Kategorie">
-
               </div>
-
+              <!-- Fahrtrichtung für die gesamte Umfrage checkbox -->
               <div class="form-check mb-2">
                   <input class="form-check-input" type="checkbox" v-model="fahrtrichtung" @click="setzeFahrtrichtung()" id="fahrtrichtungCheckbox">
                   <label class="form-check-label" for="fahrtrichtungCheckbox">
@@ -101,7 +89,7 @@
             </div>
 
             <div class="col">
-              <!-- frage -->
+              <!-- for Schleife über alle Fragen -->
               <div v-for="(frage, index) in fragen">
 
                 <!-- toogle <hr> after first frage -->
@@ -113,18 +101,17 @@
                   <label>Frage #{{ index + 1 }}</label>
                   <input class="form-control" v-model="frage.titel" placeholder="Frage"></input>
                 </div>
-
+                <!-- erlaube Freitext antwort checkbox -->
                 <div class="form-group">
                   <div class="form-check">
                     <input class="form-check-input" type="checkbox" v-model="frage.erlaubeBenutzerdefinierteAntwort"
                       id="erlaubeBenutzerdefinierteAntwortCheckbox">
-                    <!--<label class="form-check-label" for="erlaubeBenutzerdefinierteAntwortCheckbox">-->
                       <label class="form-check-label">
                       Erlaube Freitext-Antwort
                     </label>
                   </div>
                 </div>
-
+                <!-- division für den Antortmoeglichkeiten Abschnitt -->
                 <div class="form-group">
                   <label>Antwortmöglichkeiten</label>
                   <div v-for="antwortMoeglichkeit in frage.antwortMoeglichkeiten" class="d-flex justify-space-between mb-4">
@@ -134,14 +121,13 @@
                     </button>
                   </div>
                   <div class="button-group">
-                    <!-- add antwort -->
+                    <!-- fuege antwortmoeglichkeit hinzu knopf -->
                     <button type="button" class="btn btn-primary mb-3" @click="fuegeAntwortMoeglichkeitHinzu(frage)"><i
                         class="fas fa-plus"></i></button>
-                    <!-- delete antwort -->
                   </div>
 
                 </div>
-
+                <!-- division für eine bedingung -->
                 <div class="list-group mb-3">
                   <div class="list-group-item" v-for="(bedingung, index) in frage.bedingungen">
                     <div class="d-flex justify-space-between">
@@ -160,7 +146,7 @@
                         <label>beantwortet wurde.</label>
                       </div>
                       <div>
-                        <!-- delete bedingung -->
+                        <!-- bedingung löschen Knopf -->
                         <button type="button" class="btn text-danger ml-3"
                           @click="entferneBedingung(frage, bedingung)">
                           <span><i class="far fa-trash-alt"></i></span>
@@ -171,21 +157,21 @@
                 </div>
 
                 <div class="button-group">
-                  <!-- add bedingung -->
+                  <!-- bedingung hinzufuegen Knopf -->
                   <button type="button" class="btn btn-primary mb-3" @click="fuegeBedingungHinzu(frage)">Bedingung
                     hinzufügen</button>
-                  <!-- add location -->
+                  <!-- Ort hinzufuegen Knopf -->
                   <button type="button" class="btn btn-primary mb-3" @click="fuegeOrtHinzu(frage)"
                     v-if="!frage.marker">Ort
                     hinzufügen</button>
-                    <!-- delete location -->
+                    <!-- Ort löschen Knopf -->
                   <button type="button" class="btn btn-danger mb-3" @click="entferneOrt(frage)"
                     v-if="frage.marker">Ort löschen</button>
-                  <!-- delete frage -->
+                  <!-- Frage löschen Knopf -->
                   <button type="button" class="btn btn-danger mb-3" @click="entferneFrage(frage)">Frage
                     löschen</button>
                 </div>
-
+                <!-- Fahrtrichtung für spezielle Frage ja/nein checkbox -->
                 <div v-if="frage.marker"class="form-group">
                   <div class="form-check">
                     <input class="form-check-input" type="checkbox" @click="setzeFahrtrichtung(frage)">
@@ -200,14 +186,14 @@
               <hr>
 
               <div class="form-group">
-                <!-- add frage -->
+                <!-- Frage Hinzufügen Knopf -->
                 <button type="button" class="btn btn-primary mb-3" @click="fuegeFrageHinzu">Frage hinzufügen</button>
               </div>
 
             </div>
           </div>
 
-          <!-- create umfrage -->
+          <!-- umfrage erstellen Knopf -->
           <div class="form-group">
             <button type="submit" id="submitButton" class="btn btn-primary">Umfrage erstellen</button>
           </div>
