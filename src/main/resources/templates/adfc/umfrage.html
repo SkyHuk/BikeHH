@@ -20,7 +20,7 @@
   <div class="card mb-4">
     <div class="card-body">
       <div class="row">
-        <div class="col-9">
+        <div class="col-md-12 col-lg-9">
           <h4 class="card-title" th:text="${'Umfrage #' + umfrage.id}">
             <!-- <span class="badge badge-secondary">Nutzergeneriert</span> -->
           </h4>
@@ -56,7 +56,7 @@
 
           <p class="card-text mb-4" th:text="${umfrage.titel}"></p>
         </div>
-        <div class="col-3">
+        <div class="col-md-12 col-lg-3">
           <a class="btn btn-block btn-outline-primary" th:href="@{/umfrage-erstellen/bearbeiten?umfrageId={id}(id=${umfrage.id})}">Umfrage bearbeiten</a>
           <button class="btn btn-block btn-outline-primary" onClick="zeigAufKarte()">Zeige auf Karte</button>
           <button class="btn btn-block btn-outline-primary" th:data-creator="${umfrage.ersteller}" onclick="kontaktiereErsteller(this.dataset.creator)">Kontaktiere Ersteller</button>
@@ -68,10 +68,10 @@
       <hr class="my-4">
 
       <div class="row">
-        <div class="col">
-          <div id="mapid" style="width: calc(40vw - 2rem); height: 350px;"></div>
+        <div class="col-md-12 col-lg-6">
+          <div id="mapid" class="mb-4" style="height: 350px;"></div>
         </div>
-        <div class="col">
+        <div class="col-md-12 col-lg-6">
           <h6>Fragen</h6>
           <div th:each="frage : ${umfrage.fragen}">
            <div th:text="${frage.titel}"></div>
@@ -99,7 +99,9 @@
     </div>
   </div>
   <hr class="my-4">
-  <h5 class="card-title">Meldungen</h5>
+  <div class="px-4">
+    <h5 class="card-title">Meldungen</h5>
+  </div>
   <form class="p-2 d-flex align-items-center">
     <div class="px-2"><strong>Filter:</strong></div>
     <select class="form-control mx-2">
