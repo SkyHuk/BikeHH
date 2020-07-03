@@ -25,6 +25,13 @@ Node und Npm findet ihr [hier](https://nodejs.org/en/download/). Der Download be
 Spring Boot ist in diesem Projekt bereits initialisiert. 
 
 ## Dokumentation
+
+Für die Entwicklung an den Javascript Dateien der Admin-Platform kann folgender Trick den Workflow erhöhen:
+
+1. Terminal-Fenster öffnen und zu ```bikehh/src/npm``` navigieren
+2. den Befehl ```node_modules/.bin/webpack --watch``` laufen lassen
+3. dies führt dazu, dass das Projekt nicht jedes mal neu compiliert werden muss, nachdem Änderungen an einer JS-Datei vorgenommen wurden
+
 ### Admin-Plattform
 Im Folgenden wird die ADFC Admin-Platform vorgestellt und so gut es geht erläutert. Sie soll als Hilfe für das kommende Blockpraktikum, welches dieses System weiterentwickelt, dienen.
 
@@ -84,7 +91,7 @@ TODO
 #### Karte
 In der Kartenansicht werden alle Umfragen aus der Datenbank angezeigt. Bei Klick auf diese können die Daten angeschaut und in die Einzel-Umfrageansicht gewechselt werden. Es besteht die Möglichkeit durch einen beliebigen Klick auf der Karte direkt an diesem Ort eine Umfrage zu erstellen oder durch den +-Button in der unteren, rechten Ecke eine Umfrage zu erstellen.  
 
-#####KartenController
+##### KartenController
 Im ```KartenController``` können alle Umfragen aus der Datenbank abgefragt werden, die in der Kartenansicht angezeigt werden sollen. 
 
 #### Umfrage erstellen
