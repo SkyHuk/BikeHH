@@ -30,7 +30,7 @@ public class UmfragenController {
 		List<Umfrage> umfragen = umfragenService.getAlleUmfragen();
 
 		model.addAttribute("umfragen", umfragen);
-		return "adfc/umfragen_liste";
+		return "umfragen/umfragen_liste";
 	}
 
 	/**
@@ -47,7 +47,7 @@ public class UmfragenController {
 		Umfrage umfrage = umfragenService.getUmfrageNachId(umfrageId);
 		model.addAttribute("umfrage", umfrage);
 
-		return "adfc/umfrage";
+		return "umfragen/umfrage";
 	}
 
 }

@@ -59,7 +59,7 @@ public class UmfragenControllerTest {
 		umfragenController.zeigeUmfragenListe(model);
 		Mockito.verify(umfrageRepository, times(1)).findAll();
 
-		assertEquals("adfc/umfragen_liste", umfragenController.zeigeUmfragenListe(model));
+		assertEquals("umfragen/umfragen_liste", umfragenController.zeigeUmfragenListe(model));
 	}
 
 	@Test
@@ -75,7 +75,7 @@ public class UmfragenControllerTest {
 		when(umfrageRepository.findById(umfrage1.getId())).thenReturn(Optional.of(umfrage1));
 		Mockito.verify(umfrageRepository, times(1)).findById(umfrage1.getId());
 
-		assertEquals("adfc/umfrage", umfragenController.zeigeEinzelUmfrage(model, umfrage1.getId()));
+		assertEquals("umfragen/umfrage", umfragenController.zeigeEinzelUmfrage(model, umfrage1.getId()));
 	}
 
 }
