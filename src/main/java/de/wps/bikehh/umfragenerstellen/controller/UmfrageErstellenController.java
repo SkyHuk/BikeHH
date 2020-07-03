@@ -45,7 +45,7 @@ public class UmfrageErstellenController {
 		}
 		String jsonBenutzerString = new Gson().toJson(benutzer);
 		model.addAttribute("benutzer", jsonBenutzerString);
-		return "adfc/umfrage_erstellen";
+		return "umfrageerstellen/umfrage_erstellen";
 	}
 
 	/**
@@ -66,7 +66,7 @@ public class UmfrageErstellenController {
 		System.out.println(jsonUmfrage);
 
 		model.addAttribute("umfrage", jsonUmfrage);
-		return "adfc/umfrage_erstellen";
+		return "umfrageerstellen/umfrage_erstellen";
 	}
 
 }

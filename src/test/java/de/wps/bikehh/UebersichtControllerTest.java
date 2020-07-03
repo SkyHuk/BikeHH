@@ -21,6 +21,6 @@ public class UebersichtControllerTest {
 
 	@Test
 	public void zeigeUebersichtTest() {
-		assertEquals("adfc/uebersicht", uebersichtController.zeigeUebersicht());
+		assertEquals("uebersicht/uebersicht", uebersichtController.zeigeUebersicht());
 	}
 }

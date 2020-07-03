@@ -52,6 +52,6 @@ public class KartenControllerTest {
 		kartenController.zeigeKarte(model);
 		Mockito.verify(umfragenRepository, times(1)).findAll();
 
-		assertEquals("adfc/karte", this.kartenController.zeigeKarte(model));
+		assertEquals("karte/karte", this.kartenController.zeigeKarte(model));
 	}
 }

@@ -17,6 +17,6 @@ public class MeldungenListeControllerTest {
 	@Test
 	public void zeigeMeldungenListeTest() {
 		// TODO implement test
-		assertEquals("adfc/meldungen_liste", meldungenListeController.zeigeMeldungenListe());
+		assertEquals("meldungen/meldungen_liste", meldungenListeController.zeigeMeldungenListe());
 	}
 }

@@ -11,6 +11,6 @@ public class MeldungenListeController {
 	@GetMapping
 	public String zeigeMeldungenListe() {
 
-		return "adfc/meldungen_liste";
+		return "meldungen/meldungen_liste";
 	}
 }

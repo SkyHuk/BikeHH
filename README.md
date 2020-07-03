@@ -1,6 +1,40 @@
 # Bike HH - Fahrrad in Hamburg
 Im Zuge des Praktikums "Fahrrad in Hamburg" der Universität Hamburg existiert dieses Repository als Vorlage für die Studenten.
 
+
+## Dokumentation
+
+### Admin-Plattform
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Struktur
 ### Backend
 * [Spring Boot Framework](https://spring.io/projects/spring-boot)

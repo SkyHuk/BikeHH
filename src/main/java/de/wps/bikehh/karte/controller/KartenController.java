@@ -28,6 +28,6 @@ public class KartenController {
 		List<Umfrage> umfragen = umfragenService.getAlleUmfragen();
 
 		model.addAttribute("umfragen", umfragen);
-		return "adfc/karte";
+		return "karte/karte";
 	}
 }

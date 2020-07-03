@@ -46,7 +46,7 @@ public class UmfrageErstellenControllerTest {
 		User user = new User("email@email.de", "hashedPw", "testUser");
 		double[] koordinaten = { 50.0, 9.0 };
 
-		assertEquals("adfc/umfrage_erstellen",
+		assertEquals("umfrageerstellen/umfrage_erstellen",
 				umfragenErstellenController.zeigeUmfragenErsteller(user, koordinaten, model));
 	}
 
@@ -60,7 +60,7 @@ public class UmfrageErstellenControllerTest {
 		umfragenErstellenController.zeigeUmfragenBearbeiter(umfrage1.getId(), model);
 		Mockito.verify(umfrageRepository, times(1)).findById(umfrage1.getId());
 
-		assertEquals("adfc/umfrage_erstellen",
+		assertEquals("umfrageerstellen/umfrage_erstellen",
 				umfragenErstellenController.zeigeUmfragenBearbeiter(umfrage1.getId(), model));
 	}
 }

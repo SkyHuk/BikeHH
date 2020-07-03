@@ -15,6 +15,6 @@ public class UebersichtController {
 
 	@GetMapping("uebersicht")
 	public String zeigeUebersicht() {
-		return "adfc/uebersicht";
+		return "uebersicht/uebersicht";
 	}
 }
