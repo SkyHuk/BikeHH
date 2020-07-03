@@ -4,7 +4,7 @@ import 'leaflet/dist/leaflet.css';
 
 (function() {
   // debugger
-  if (window.laengengrad === undefined && window.breitengrad === undefined) {
+  if (window.laengengrad === undefined || window.breitengrad === undefined || window.umfrage === undefined) {
     return
   }
 
