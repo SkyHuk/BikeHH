@@ -13,12 +13,22 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import de.wps.bikehh.umfragen.material.Umfrage;
 import de.wps.bikehh.umfragen.service.UmfragenService;
 
+/**
+ * Rest Controller für Umfragen
+ *
+ */
+
 @Controller
 @RequestMapping("umfragen")
 public class UmfragenRestController {
 
 	private UmfragenService umfragenService;
 
+	/**
+	 * constructor für JUNIT tests
+	 * 
+	 * @param umfragenService db service
+	 */
 	@Autowired
 	public UmfragenRestController(UmfragenService umfragenService) {
 		this.umfragenService = umfragenService;
@@ -26,11 +36,15 @@ public class UmfragenRestController {
 	}
 
 	/**
-	 * Löscht eine Umfrage und zeigt danach alle Umfragen
+	 * Löscht die Umfrage, die zu der id in der URL gehört, gibt danach das Template
+	 * der Umfrage-List zurück
 	 * 
-	 * @param model
-	 * @param umfrageId
-	 * @return
+	 * Webseite muss trotzdem neu geladen werden, um Änderungen darzustellen, warum
+	 * auch immer. Reload im javascript
+	 * 
+	 * @param model     spring model
+	 * @param umfrageId id der zu löschenden Umfrage
+	 * @return Umfragen-Liste HTML-Template
 	 */
 	@RequestMapping(value = "/delete/{umfrageId}", method = RequestMethod.DELETE)
 	@ResponseBody
@@ -38,7 +52,6 @@ public class UmfragenRestController {
 		umfragenService.loesche(umfrageId);
 
 		List<Umfrage> umfragen = umfragenService.getAlleUmfragen();
-		System.out.println(umfragen.size());
 		model.addAttribute("umfragen", umfragen);
 		return "adfc/umfragen_liste";
 	}

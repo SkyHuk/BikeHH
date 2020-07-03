@@ -12,18 +12,34 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import de.wps.bikehh.umfragen.material.Umfrage;
 import de.wps.bikehh.umfragen.service.UmfragenService;
 
+/**
+ * Controller für alle Requests für "/umfragen/
+ */
 @Controller
 @RequestMapping("umfragen")
 public class UmfragenController {
 
 	private UmfragenService umfragenService;
 
+	/**
+	 * constructor für JUNIT tests
+	 * 
+	 * @param umfragenService db service
+	 */
 	@Autowired
 	public UmfragenController(UmfragenService umfragenService) {
 		this.umfragenService = umfragenService;
 
 	}
 
+	/**
+	 * gibt das Template für die Umfragen-Liste
+	 * 
+	 * füllt das model mit allen existierenden Umfragen
+	 * 
+	 * @param model spring model
+	 * @return HTML-Template
+	 */
 	@GetMapping
 	public String zeigeUmfragenListe(Model model) {
 
@@ -36,6 +52,9 @@ public class UmfragenController {
 	/**
 	 *
 	 * Zeigt eine Einzelansicht einer Umfrage
+	 * 
+	 * Über int in URL (/umfragen/<umfrageId>) wird die anzuzeigenden Umfrage
+	 * ermittelt
 	 *
 	 * @param model     spring model
 	 * @param umfrageId id der Umfrage, welche geöffnet werden soll

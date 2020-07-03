@@ -4,6 +4,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+/**
+ * Datenbank entity
+ * 
+ * Eine Antwortmöglichkeit ist eine eine mögliche Antwort auf eine Frage in
+ * einer Umfrage, die durch den Admin beim Erstellen einer Umfrage angegeben
+ * wird
+ *
+ */
 @Entity
 public class AntwortMoeglichkeit {
 

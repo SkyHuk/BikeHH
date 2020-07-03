@@ -13,11 +13,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
 /**
- * Entitiy Frage
+ * Datenbank Entitiy
  *
- * Wird in Umfrage Entity benutzt
- *
- * @author felixwolf
+ * Teil einer Umfrage
  *
  */
 
@@ -28,33 +26,28 @@ public class Frage {
 	@GeneratedValue
 	private int id;
 
+	// Titel beziehungsweise Fragestellung
 	private String titel;
 
-	// @ElementCollection
-	// private List<Antwort> antworten = new ArrayList<Antwort>();
+	// Liste an Antwortmoeglichkeiten
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, targetEntity = AntwortMoeglichkeit.class)
 	@JoinColumn(name = "frage", referencedColumnName = "Id", nullable = false)
 	private List<AntwortMoeglichkeit> antwortMoeglichkeiten;
 
-	/**
-	 * dictionary that links a question and a answer, to be used as
-	 * HashMap<Question, Answer>
-	 *
-	 * logic: the question this class is the instance of will only be asked when a
-	 * specific QUESTION is answered with a specific ANSWER
-	 */
-	// private HashMap<String, String> conditions = new HashMap<String, String>();
-
+	// Liste an Bedingungen, die gelten müssen, damit die Frage gestellt wird
+	// mehrere Umfragen sollten als logische und implementiert werden
 	@ElementCollection
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, targetEntity = Bedingung.class)
 	private List<Bedingung> bedingungen = new ArrayList<Bedingung>();
 
+	// ob diese Frage eine benutzerdefinierte-, also eine Freitextantwort erlaubt
 	private boolean erlaubeBenutzerdefinierteAntwort;
 
+	// koordinaten
 	private double breitengrad;
-
 	private double laengengrad;
 
+	// fahrtrichtung in radiant, siehe Meldung.java für mehr informationen
 	private double fahrtrichtung;
 
 	public int getId() {

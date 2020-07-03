@@ -11,6 +11,13 @@ import javax.persistence.OneToMany;
 
 import de.wps.bikehh.umfragen.material.Umfrage;
 
+/**
+ * Datenbank Entity dieses Model gibt die Struktur für die mobile apps vor, nach
+ * der die JSONs aufgebaut werden müssen
+ * 
+ * TODO: Überprüfen, ob vollständig. Alle Funktionalitäten abgedeckt?
+ *
+ */
 @Entity
 public class Meldung {
 
@@ -18,19 +25,33 @@ public class Meldung {
 	@GeneratedValue
 	private int id;
 
+	// koordinaten der Meldung
 	private double laengengrad;
 	private double breitengrad;
 
+	// die Umfrage, auf die die Meldung antwortet
+	// muss nicht gesetzt sein, wenn diese Meldung nicht auf eine Umfrage antwortet
+	// sondern neu von einem Radfahrer erzeugt wurde
+	// leer beim postRequest, danach wird Umfrage generiert und gesetzt
 	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Umfrage.class)
-	private Umfrage umfrage; // leer beim postRequest, danach wird Umfrage generiert und umfrageId gesetzt
+	private Umfrage umfrage;
+
+	// Liste an Antworten. Leer bei Neuerstellung
 	@OneToMany(fetch = FetchType.LAZY, targetEntity = Antwort.class)
 	private List<Antwort> antwortenAufFragen;
 
-	private double fahrtrichtung; // Winkel im Bogenmaß zu Norden
-	private String text; // leer wenn antwort auf Meldung? mit Georg besprechen
+	// Winkel im Bogenmaß nach Osten (Wertebereich 0 - 2pi, nach Osten weil das
+	// mathematischer Standard ist)
+	private double fahrtrichtung;
 
+	// nur gefüllt wenn Meldung neu generiert
+	private String text;
+
+	// TODO: Kategorie ordentlich einbauen (Liste an vorgegebenen Kategorien)
 	// @ManyToOne(fetch = FetchType.LAZY, targetEntity = Kategorie.class)
 	// private Kategorie kategorie;
+
+	// TODO: Meldung soll Foto beinhalten können
 
 	protected Meldung() {
 		// required by JPA

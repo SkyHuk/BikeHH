@@ -15,9 +15,13 @@ import javax.persistence.OneToMany;
 import de.wps.bikehh.benutzerverwaltung.material.User;
 
 /**
- * Test-Klasse für eine Umfrage (mit JSON-Dateien, non-Db-Version)
+ * Datenbank Entity
  *
- * @author amnesica
+ * Zentrale Umfrage-Klasse
+ * 
+ * eine Umfrage gilt als bestätigt, wenn sie die erforderlichen Bestätigungen
+ * erreicht hat (bestaetigtSchwellenwert) oder wenn sie durch einen Admin als
+ * bestaetigt markiert wurde, dies wird im istBestaetigt Feld gespeichert
  *
  */
 
@@ -27,39 +31,78 @@ public class Umfrage {
 	@Id
 	@GeneratedValue
 	private int id;
+
+	// Titel der Umfrage
+	private String titel;
+
+	// koordinaten
 	private double laengengrad;
 	private double breitengrad;
 
-	// @ManyToOne(fetch = FetchType.LAZY, targetEntity = Kategorie.class)
-	// @JoinColumn(name = "kategorie", referencedColumnName = "Id", nullable =
-	// false)
-	// private Kategorie kategorie;
+	// Kategorie der Umfrage
 	@ManyToOne(targetEntity = Kategorie.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Kategorie kategorie;
+
+	// Zeitraum, in der die Umfrage aktiv sein soll
 	private String startDatum;
 	private String endDatum;
+
+	// Erstellungsdatum
 	private String erstelltAmDatum;
+
+	/**
+	 * ob die Umfrage als bestätigt gilt. Siehe Klassenkommentar und istBestaetigt()
+	 * Methode.
+	 * 
+	 * TODO: Umfrage als bestaetigt markieren, wenn in umfrage.html auf den
+	 * bestätigen Knopf gedrückt wird
+	 */
 	private boolean istBestaetigt;
+
+	// ob die Umfrage schon mal bearbeitet wurde. Wichtig für Zeitraum und
+	// Validierungsfunktion in Utils Klasse
 	private boolean bearbeitet;
+
+	// fahrtrichtung in Radiant, siehe Meldung.java
 	private double fahrtrichtung;
 
+	// Liste an Usern, die diese Umfrage bestätigt haben
 	@ManyToMany(cascade = CascadeType.ALL)
 	private List<User> bestaetigtVonUsern;
+
+	// wie viele User diese Umfrage bestätigen müsssen, damit sie als bestätigt gilt
 	private int bestaetigtSchwellenwert;
-	private String titel;
 
 	@OneToMany(targetEntity = Frage.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "umfrage", referencedColumnName = "id", nullable = false)
 	private List<Frage> fragen;
 
+	/**
+	 * der Ersteller der Umfrage. Wenn die Umfrage automatisch generiert wurde (aus
+	 * einer Meldung), dann sollte dies der Benutzer (der Radfahrer) sein, der die
+	 * Meldung abgesetzt hat. //TODO: Dies Implementieren
+	 */
 	@ManyToOne(fetch = FetchType.EAGER, targetEntity = User.class)
 	private User ersteller;
 
+	// ob die Umfrage manuell durch einen Admin oder automatisch aus einer Meldung
+	// erstellt / generiert wurde
 	private boolean manuellErstellt;
 
+	/**
+	 * der Ort der Umfrage, bezieht sich nur auf den Hauptmarker (blau), nicht auf
+	 * die optionalen Orte der einzelnen Fragen
+	 */
 	@ManyToOne(fetch = FetchType.EAGER, targetEntity = Adresse.class, cascade = CascadeType.ALL)
 	private Adresse adresse;
 
+	/**
+	 * explizite Merge-Funktion, um eine existierende Umfrage nach dem bearbeiten zu
+	 * aktualiseren
+	 * 
+	 * @param umfrage die neue Umfrage
+	 * @return die aktualisierte Umfrage
+	 */
 	public Umfrage merge(Umfrage umfrage) {
 		setAdresse(umfrage.getAdresse());
 		setBestaetigtSchwellenwert(umfrage.getBestaetigtSchwellenwert());
@@ -78,13 +121,6 @@ public class Umfrage {
 		setTitel(umfrage.getTitel());
 
 		return umfrage;
-	}
-
-	@Override
-	public String toString() {
-
-		return "lat: " + getBreitengrad() + "lng: " + getLaengengrad() + "ersteller: "
-				+ getErsteller().getEmailAddress();
 	}
 
 	public int getId() {

@@ -9,6 +9,11 @@ import java.util.List;
 import de.wps.bikehh.umfragen.material.Frage;
 import de.wps.bikehh.umfragen.material.Umfrage;
 
+/**
+ * 
+ * Utilies Klasse, die Hilfsfunktionen im Umgang mit Umfragen anbietet
+ *
+ */
 public class Utils {
 
 	/**
@@ -49,27 +54,33 @@ public class Utils {
 						break;
 					}
 				}
-				// below print statements help to find the error when debugging
-				
-				/*
-				System.out.println(umfrage.getTitel() != null);
-				System.out.println(!umfrage.getTitel().isEmpty());
-				System.out.println(startDatum != null);
-				System.out.println(endDatum != null);
-				System.out.println(startDatum.after(getHeutigesDatum()) || startDatum.equals(getHeutigesDatum())
-						|| umfrage.isBearbeitet());
-				System.out.println(endDatum.after(startDatum) || endDatum.equals(startDatum));
-				System.out.println(umfrage.getFragen() != null);
-				System.out.println(umfrage.getFragen().size() > 0 && fragenHabenTitel(umfrage.getFragen()));
-				System.out.println(fragenHabenAntworten(umfrage.getFragen()));
-				System.out.println(alleFragenOhneAntwortenErlaubenBenutzerDefinierteAntworten);
-				System.out.println(umfrage.getErstelltAmDatum() != null && !umfrage.getErstelltAmDatum().isEmpty());
-				System.out.println(umfrage.getBreitengrad() != 0 && umfrage.getLaengengrad() != 0);
-				System.out.println(umfrage.getKategorie() != null);
-				System.out.println(umfrage.getBestaetigtVonUsern() != null);
-				System.out.println(umfrage.getErsteller() != null && umfrage.getAdresse() != null);
-				*/
 
+				// unten stehenden Print-Anweisungen helfen dabei, herauszufinden, was genau an
+				// der Umfrage nicht stimmt
+
+				// System.out.println(umfrage.getTitel() != null);
+				// System.out.println(!umfrage.getTitel().isEmpty());
+				// System.out.println(startDatum != null);
+				// System.out.println(endDatum != null);
+				// System.out.println(startDatum.after(getHeutigesDatum()) ||
+				// startDatum.equals(getHeutigesDatum()) || umfrage.isBearbeitet());
+				// System.out.println(endDatum.after(startDatum) ||
+				// endDatum.equals(startDatum));
+				// System.out.println(umfrage.getFragen() != null);
+				// System.out.println(umfrage.getFragen().size() > 0 &&
+				// fragenHabenTitel(umfrage.getFragen()));
+				// System.out.println(fragenHabenAntworten(umfrage.getFragen()));
+				// System.out.println(alleFragenOhneAntwortenErlaubenBenutzerDefinierteAntworten);
+				// System.out.println(umfrage.getErstelltAmDatum() != null &&
+				// !umfrage.getErstelltAmDatum().isEmpty());
+				// System.out.println(umfrage.getBreitengrad() != 0 && umfrage.getLaengengrad()
+				// != 0);
+				// System.out.println(umfrage.getKategorie() != null);
+				// System.out.println(umfrage.getBestaetigtVonUsern() != null);
+				// System.out.println(umfrage.getErsteller() != null && umfrage.getAdresse() !=
+				// null);
+
+				// eigentliche Validierung
 				if (umfrage.getTitel() != null && !umfrage.getTitel().isEmpty() && startDatum != null
 						&& endDatum != null
 						&& (startDatum.after(getHeutigesDatum()) || startDatum.equals(getHeutigesDatum())
@@ -143,7 +154,7 @@ public class Utils {
 	}
 
 	/**
-	 * Valisiert das FragenArray und prüft, ob alle Fragen eine Antwort haben
+	 * Validiert das FragenArray und prüft, ob alle Fragen eine Antwort haben
 	 * 
 	 * @param fragen
 	 * @return true, if questions is valid
@@ -158,6 +169,7 @@ public class Utils {
 				return false;
 			}
 		}
+		System.out.println("fragenHabenAntworten gibt zurueck: " + true);
 		return bFragenHabenAntwort;
 	}
 }

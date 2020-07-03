@@ -5,9 +5,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 /**
- * Entity Kategorien von Meldungen / Umfragen
+ * Datenbank entity
+ * 
+ * Kategorien von Meldungen / Umfragen
  *
- * @author amnesica
+ * TODO: Kategorien sind noch nicht so implementiert wie sie sollen. Momentan
+ * wird nur ein String gespeichert, es sollten aber vordefinierte, Baum-artige
+ * Strukturen von Kategorien geben, aus denen gewählt werden kann
+ * (oberKategorie, tree traverse up). Andererseits sollen auch
+ * benutzerdefinierte Kategorien möglich sein
  *
  */
 
@@ -17,7 +23,10 @@ public class Kategorie {
 	@Id
 	@GeneratedValue
 	private int id;
+
+	// temporary solution, saves the kategorie in a simple string
 	private String name;
+
 	// @OneToMany(mappedBy = "kategorie", fetch = FetchType.LAZY, cascade =
 	// CascadeType.ALL)
 	// private List<Umfrage> umfragenListe;
