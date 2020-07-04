@@ -4,7 +4,7 @@ import 'leaflet/dist/leaflet.css';
 
 (function() {
   // debugger
-  if (window.laengengrad === undefined || window.breitengrad === undefined || window.umfrage === undefined) {
+  if (location.href.indexOf('/umfrage-erstellen/') === -1) {
     return
   }
 
@@ -67,27 +67,25 @@ import 'leaflet/dist/leaflet.css';
       ],
     },
     mounted() {
-
       if (this.umfrage) {
-          this.id = this.umfrage.id
-        this.editierModus = true;
-        console.log(this.umfrage)
+        this.id = this.umfrage.id
+        this.editierModus = true
+
         this.umfrage.fragen.forEach((frage) => {
           frage.bedingungen.forEach((bedingung) => {
             bedingung.frage = this.umfrage.fragen.find(f => f.id === bedingung.frageId)
 
-            /*this.umfrage.fragen.forEach((frage1) => {
-              frage1.antwortMoeglichkeit
-            })*/
             bedingung.erwarteteAntwort = this.umfrage.fragen.find(f => f.antwortMoeglichkeiten.find(moeglichkeit => moeglichkeit.id === bedingung.antwortId))
+
           })
+
         })
       }
 
+      // needed inside leaflet callbacks where this is overwritten
       const self = this
 
       if (!this.editierModus) {
-
         this.setzeDatenZurueck()
 
         // init popup
@@ -106,8 +104,6 @@ import 'leaflet/dist/leaflet.css';
         this.initialisiereKarte()
 
       } else {
-        document.getElementById("headline").innerHTML = "Umfrage bearbeiten";
-        document.getElementById("submitButton").innerHTML = "Umfrage bearbeiten";
         //this.id = this.umfrage.id
         this.laengengrad = this.umfrage.laengengrad
         this.breitengrad = this.umfrage.breitengrad
@@ -115,9 +111,11 @@ import 'leaflet/dist/leaflet.css';
 
         this.initialisiereKarte()
 
-        var marker = L.marker([this.laengengrad, this.breitengrad]).addTo(this.karte)
-        .bindPopup("<b>Ort der Umfrage</b><br/>")
-        .on('drag', self.setzteHauptmarkerZurueck)
+        var marker = L.marker([this.laengengrad, this.breitengrad])
+          .addTo(this.karte)
+          .bindPopup("<b>Ort der Umfrage</b><br/>")
+          .on('drag', self.setzteHauptmarkerZurueck)
+
         this.hauptMarker = marker
         this.titel = this.umfrage.titel
         this.kategorie = this.umfrage.kategorie
@@ -136,11 +134,12 @@ import 'leaflet/dist/leaflet.css';
         var marker = L.marker([laengengrad, breitengrad], {
           draggable: true,
           autoPan: true
-        }).addTo(self.karte)
-        .bindPopup("<b>Hier wird die erstellte Umfrage sein.</b><br/>")
-        .on('drag', self.setzteHauptmarkerZurueck);
+        })
+          .addTo(self.karte)
+          .bindPopup("<b>Hier wird die erstellte Umfrage sein.</b><br/>")
+          .on('drag', self.setzteHauptmarkerZurueck);
 
-        if (self.hauptMarker) {self.hauptMarker.remove()}
+        if (self.hauptMarker) { self.hauptMarker.remove() }
         self.hauptMarker = marker
 
         if (self.fahrtrichtung) {
@@ -171,7 +170,6 @@ import 'leaflet/dist/leaflet.css';
       // deletes a frage
       entferneFrage(frage) {
         var index = this.fragen.indexOf(frage);
-        //console.log(index)
         this.fragen.splice(index, 1);
       },
       // add antwortMoeglichkeit
@@ -180,12 +178,11 @@ import 'leaflet/dist/leaflet.css';
       },
       // delete latest antwortMoeglichkeit in frage.antworten
       entferneAntwort(frage, antwortMoeglichkeit) {
-        frage.antwortMoeglichkeiten .splice(frage.antwortMoeglichkeiten.indexOf(antwortMoeglichkeit), 1)
+        frage.antwortMoeglichkeiten.splice(frage.antwortMoeglichkeiten.indexOf(antwortMoeglichkeit), 1)
       },
       // add location (green marker) to frage on map,
       // only if frage does not have location already
       fuegeOrtHinzu(frage) {
-
         var bestehenderMarker = frage.marker;
         if (!bestehenderMarker) {
           var gruenesIcon = new L.Icon({
@@ -324,7 +321,6 @@ import 'leaflet/dist/leaflet.css';
         const self = this;
         // make post with complete json to controller once address is fetched
         getRequest.onload = function (e) {
-          console.log(getRequest);
           if (getRequest.status == 200) {
             var adresse = new Object();
             data.adresse = new Object();
@@ -419,8 +415,6 @@ import 'leaflet/dist/leaflet.css';
         // TEMPORARY: only string
         //data.kategorie = data.kategorie.name
 
-        console.log('kategorie', data.kategorie)
-
         if (!this.hauptMarker) {
           this.behandelFehler('Ein Ort muss ausgewählt sein')
           return false
@@ -510,7 +504,7 @@ import 'leaflet/dist/leaflet.css';
         }
 
         // no error: contiue sending request
-        console.log('data', data)
+        // console.log('data', data)
         return data;
       },
       initialisiereKarte() {

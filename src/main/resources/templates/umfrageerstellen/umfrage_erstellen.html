@@ -10,7 +10,10 @@
 </head>
 <body layout:fragment="content">
   <div id="erstelleUmfrageApp">
-    <h2 id="headline" class="my-4">Umfrage erstellen</h2>
+    <h2 id="headline" class="my-4">
+      <span v-if="!editierModus">Umfrage erstellen</span>
+      <span v-else>Umfrage bearbeiten</span>
+    </h2>
     <div class="mb-4" id="mapid" style="width: calc(90vw - 10rem); height: 30vh;"></div>
     <!-- Alert für Erfolg beim Erstellen -->
     <div v-if="zeigeErfolgBenachrichtigung" class="alert alert-success" role="alert">
@@ -35,7 +38,7 @@
                 <label>Titel</label>
                 <input class="form-control" v-model="titel" placeholder="Titel"></input>
               </div>
-              <!-- Zeitfenster -->      
+              <!-- Zeitfenster -->
               <div class="form-group">
                 <label>Zeitfenster</label>
                 <input type="date" class="form-control mb-2" placeholder="From" v-model="startDatum">
@@ -91,9 +94,10 @@
             <div class="col">
               <!-- for Schleife über alle Fragen -->
               <div v-for="(frage, index) in fragen">
+                <pre>{{ frage }}</pre>
 
                 <!-- toogle <hr> after first frage -->
-                <div v-if="fragen.indexOf(frage) > 0">
+                <div v-if="index > 0">
                   <hr>
                 </div>
 
@@ -195,7 +199,10 @@
 
           <!-- umfrage erstellen Knopf -->
           <div class="form-group">
-            <button type="submit" id="submitButton" class="btn btn-primary">Umfrage erstellen</button>
+            <button type="submit" id="submitButton" class="btn btn-primary">
+              <span v-if="!editierModus">Umfrage erstellen</span>
+              <span v-else>Umfrage bearbeiten</span>
+            </button>
           </div>
 
         </form>

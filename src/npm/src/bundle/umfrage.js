@@ -2,6 +2,10 @@ import * as L from 'leaflet'
 import 'leaflet/dist/leaflet.css';
 
 (function() {
+  if (location.href.indexOf('/umfragen/') === -1) {
+    return
+  }
+
   // coordinates passed from controller
   var breitengrad = umfrage.laengengrad
   var laengengrad = umfrage.breitengrad
@@ -20,7 +24,7 @@ import 'leaflet/dist/leaflet.css';
     zoomOffset: -1
   }).addTo(karte);
 
- // init map
+  // init map
   umfrage.fragen.forEach((frage, index) => {
     fuegeFragenmarkerZurKarteHinzu(frage, index)
   })
