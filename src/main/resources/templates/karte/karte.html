@@ -68,6 +68,7 @@ crossorigin=""></script>
 		// coordinates for hamburg lat: 53.551086, long: 9.993682
 		var karte = L.map('mapid').setView([53.551086, 9.993682], 13);
 
+		// initialisiert die Karte
 		L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
 			maxZoom: 18,
 			attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
@@ -80,6 +81,11 @@ crossorigin=""></script>
 
 		var popup = L.popup();
 
+		/**
+		* listener fuer das Klicken auf die Karte
+		* baut poput, welches einen Verweis auf Umfrage erstellen beinhaltet
+		* durch klick auf Popup kann eine Umfrage an genau dieser Stelle erstelle werden
+		*/
 		function onMapClick(e) {
 			//create link to open "/umfrage-erstellen"
 			var a = document.createElement('a');
@@ -102,71 +108,72 @@ crossorigin=""></script>
 			.openOn(karte);
 		}
 
-		//add a umfrage from db to map with marker (from files ONLY at the moment)
-		function fügeUmfrageZurKarteHinzu(id, laengengrad, breitengrad, kategorie, erstelltAmDatum, bestaetigtVonBenutzern, bestaetigtSchwellenwert, titel, fragen, startDatum, endDatum, adresse) {
+		/**
+		* fuegt eine Umfrage der Karte hinzu
+		* Es wird ein Marker erstellt, der beim Klicken eine Reihe von Informationen zu der Umfrage anzeigt
+		* durch klicken auf Details oder id wird man auf die Detailansicht weitergeleitet
+		*/
+		function fuegeUmfrageZurKarteHinzu(umfrage) {
 
 			var bestaetigungen = "";
-			if (bestaetigtVonBenutzern.length > 0) {
-				bestaetigungen = "Bestätigt von: " + bestaetigtVonBenutzern + "<br/>";
+			if (umfrage.bestaetigtVonUsern.length > 0) {
+				bestaetigungen = "Bestätigt von: " + bestaetigtVonUsern + "<br/>";
 			} else {
 				bestaetigungen = "Keine Bestätigungen<br/>";
 			}
 
+			// fragenHTML aufbauen
 			var fragenHTML = "";
 			var antwortenHTML = "";
-			for (var i = 0; i < fragen.length; i++) {
-				for (var k = 0; k < fragen[i].antwortMoeglichkeiten.length; k++) {
+			for (var i = 0; i < umfrage.fragen.length; i++) {
+				for (var k = 0; k < umfrage.fragen[i].antwortMoeglichkeiten.length; k++) {
 					if (k > 0) {
 						antwortenHTML += ", ";
 					}
-					antwortenHTML += fragen[i].antwortMoeglichkeiten[k].text;
+					antwortenHTML += umfrage.fragen[i].antwortMoeglichkeiten[k].text;
 				}
 				var erlaubeBenutzerdefinierteAntwort = ""
-				if (fragen[i].erlaubeBenutzerdefinierteAntwort) {
+				if (umfrage.fragen[i].erlaubeBenutzerdefinierteAntwort) {
 					erlaubeBenutzerdefinierteAntwort = "ja" 
 				} else {
 					erlaubeBenutzerdefinierteAntwort = "nein"
 				}
-				fragenHTML += "<li>" + fragen[i].titel + " [" + antwortenHTML + "]" + " (Freitext-Antwort: " + erlaubeBenutzerdefinierteAntwort + ")" + "</li>";
+				fragenHTML += "<li>" + umfrage.fragen[i].titel + " [" + antwortenHTML + "]" + " (Freitext-Antwort: " + erlaubeBenutzerdefinierteAntwort + ")" + "</li>";
 				antwortenHTML = "";
 			}
 
+			// adressHTML aufbauen
 			var adresseHTML = "";
-			if (adresse.hausnummer != undefined) {
-				adresseHTML = "Adresse: " + adresse.strasse + " " + adresse.hausnummer + ", " + adresse.postleitZahl + ", " + adresse.stadt + "<br/>";
+			if (umfrage.adresse.hausnummer != undefined) {
+				adresseHTML = "Adresse: " + umfrage.adresse.strasse + " " + umfrage.adresse.hausnummer + ", " + umfrage.adresse.postleitZahl + ", " + umfrage.adresse.stadt + "<br/>";
 			} else {
-				adresseHTML = "Adresse: " + adresse.strasse + ", " + adresse.postleitZahl + ", " + adresse.stadt + "<br/>";
+				adresseHTML = "Adresse: " + umfrage.adresse.strasse + ", " + umfrage.adresse.postleitZahl + ", " + umfrage.adresse.stadt + "<br/>";
 			}
 
-			L.marker([laengengrad, breitengrad]).addTo(karte)
+			//popup configurieren
+			L.marker([umfrage.laengengrad, umfrage.breitengrad]).addTo(karte)
 			.bindPopup(
-				'<a href="umfragen/' + id +'"><b>Umfrage Id ' + id +'</b></a>' + 
-				": " + titel + "<br/>" +
+				'<a href="umfragen/' + umfrage.id +'"><b>Umfrage Id ' + umfrage.id +'</b></a>' + 
+				": " + umfrage.titel + "<br/>" +
 				adresseHTML +
-				"Kategorie: " + kategorie.name + "<br/>" +
-				"Erstellt am: " + erstelltAmDatum + "<br/>" +
-				"Dauer: " + startDatum + " bis " + endDatum + "<br/>" +
+				"Kategorie: " + umfrage.kategorie.name + "<br/>" +
+				"Erstellt am: " + umfrage.erstelltAmDatum + "<br/>" +
+				"Dauer: " + umfrage.startDatum + " bis " + umfrage.endDatum + "<br/>" +
 				bestaetigungen +
 				"Fragen: " + 
 				"<ul>" + fragenHTML + "</ul>" +
-				'<a href="umfragen/' + id +'">Details</b></a>'
+				'<a href="umfragen/' + umfrage.id +'">Details</b></a>'
 				);
 		}
-
 		karte.on('click', onMapClick);
 	</script>
 
-	<!-- add all umfrages from db to map with marker -->
+	<!-- fuege alle umfragen aus der DB zur Karte hinzu -->
 	<th:block th:each="umfrage : ${umfragen}">
 	<!-- call js function -->
 	<script th:inline="javascript">
-		/*<![CDATA[*/
-		fügeUmfrageZurKarteHinzu([[${ umfrage.id }]], [[${ umfrage.laengengrad }]],
-			[[${ umfrage.breitengrad }]], [[${ umfrage.kategorie }]], [[${ umfrage.erstelltAmDatum }]],
-			[[${ umfrage.bestaetigtVonUsern }]], [[${ umfrage.bestaetigtSchwellenwert }]], 
-			[[${ umfrage.titel }]], [[${ umfrage.fragen }]], [[${ umfrage.startDatum }]],
-			[[${ umfrage.endDatum }]], [[${ umfrage.adresse }]]);
-		/*]]>*/
+		var data = [[${umfrage}]]
+		fuegeUmfrageZurKarteHinzu(data);
 	</script>
 </th:block>
 
