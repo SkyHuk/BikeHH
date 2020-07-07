@@ -4,10 +4,9 @@ import 'leaflet/dist/leaflet.css';
 
 (function() {
   // debugger
-  if (location.href.indexOf('/umfrage-erstellen/') === -1) {
+  if (location.href.indexOf('/umfrage-erstellen') === -1) {
     return
   }
-
   const erstelleUmfrageApp = new Vue({
     el: '#erstelleUmfrageApp',
     data: {
