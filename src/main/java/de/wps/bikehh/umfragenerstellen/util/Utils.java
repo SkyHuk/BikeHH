@@ -25,7 +25,6 @@ public class Utils {
 	public static boolean umfrageIstValide(Umfrage umfrage) {
 		System.out.println("Starte Validierung der Umfrage ...");
 		if (umfrage != null) {
-			System.out.println(umfrage.toString());
 			Date startDatum = null;
 			Date endDatum = null;
 
@@ -58,27 +57,22 @@ public class Utils {
 				// unten stehenden Print-Anweisungen helfen dabei, herauszufinden, was genau an
 				// der Umfrage nicht stimmt
 
-				// System.out.println(umfrage.getTitel() != null);
-				// System.out.println(!umfrage.getTitel().isEmpty());
-				// System.out.println(startDatum != null);
-				// System.out.println(endDatum != null);
-				// System.out.println(startDatum.after(getHeutigesDatum()) ||
-				// startDatum.equals(getHeutigesDatum()) || umfrage.isBearbeitet());
-				// System.out.println(endDatum.after(startDatum) ||
-				// endDatum.equals(startDatum));
-				// System.out.println(umfrage.getFragen() != null);
-				// System.out.println(umfrage.getFragen().size() > 0 &&
-				// fragenHabenTitel(umfrage.getFragen()));
-				// System.out.println(fragenHabenAntworten(umfrage.getFragen()));
-				// System.out.println(alleFragenOhneAntwortenErlaubenBenutzerDefinierteAntworten);
-				// System.out.println(umfrage.getErstelltAmDatum() != null &&
-				// !umfrage.getErstelltAmDatum().isEmpty());
-				// System.out.println(umfrage.getBreitengrad() != 0 && umfrage.getLaengengrad()
-				// != 0);
-				// System.out.println(umfrage.getKategorie() != null);
-				// System.out.println(umfrage.getBestaetigtVonUsern() != null);
-				// System.out.println(umfrage.getErsteller() != null && umfrage.getAdresse() !=
-				// null);
+				System.out.println(umfrage.getTitel() != null);
+				System.out.println(!umfrage.getTitel().isEmpty());
+				System.out.println(startDatum != null);
+				System.out.println(endDatum != null);
+				System.out.println(startDatum.after(getHeutigesDatum()) || startDatum.equals(getHeutigesDatum())
+						|| umfrage.isBearbeitet());
+				System.out.println(endDatum.after(startDatum) || endDatum.equals(startDatum));
+				System.out.println(umfrage.getFragen() != null);
+				System.out.println(umfrage.getFragen().size() > 0 && fragenHabenTitel(umfrage.getFragen()));
+				System.out.println(fragenHabenAntworten(umfrage.getFragen()));
+				System.out.println(alleFragenOhneAntwortenErlaubenBenutzerDefinierteAntworten);
+				System.out.println(umfrage.getErstelltAmDatum() != null && !umfrage.getErstelltAmDatum().isEmpty());
+				System.out.println(umfrage.getBreitengrad() != 0 && umfrage.getLaengengrad() != 0);
+				System.out.println(umfrage.getKategorie() != null);
+				System.out.println(umfrage.getBestaetigtVonUsern() != null);
+				System.out.println(umfrage.getErsteller() != null && umfrage.getAdresse() != null);
 
 				// eigentliche Validierung
 				if (umfrage.getTitel() != null && !umfrage.getTitel().isEmpty() && startDatum != null
