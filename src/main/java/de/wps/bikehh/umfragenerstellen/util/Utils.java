@@ -57,6 +57,7 @@ public class Utils {
 				// unten stehenden Print-Anweisungen helfen dabei, herauszufinden, was genau an
 				// der Umfrage nicht stimmt
 
+				/*
 				System.out.println(umfrage.getTitel() != null);
 				System.out.println(!umfrage.getTitel().isEmpty());
 				System.out.println(startDatum != null);
@@ -73,6 +74,7 @@ public class Utils {
 				System.out.println(umfrage.getKategorie() != null);
 				System.out.println(umfrage.getBestaetigtVonUsern() != null);
 				System.out.println(umfrage.getErsteller() != null && umfrage.getAdresse() != null);
+				*/
 
 				// eigentliche Validierung
 				if (umfrage.getTitel() != null && !umfrage.getTitel().isEmpty() && startDatum != null
