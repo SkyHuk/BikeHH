@@ -7,3 +7,4 @@ import 'leaflet/dist/leaflet.css';
 
 import './umfrage-erstellen'
 import './umfrage'
+import './karte'
