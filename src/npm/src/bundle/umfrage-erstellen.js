@@ -340,7 +340,8 @@ import 'leaflet/dist/leaflet.css';
       postUmfrage(e) {
         e.preventDefault()
         // data object mit allen Information der Umfrage
-        var data = this.sammleDaten(data)
+        var data = {};
+        data = this.sammleDaten(data)
         if (data) {
           if (this.validiereDaten(data)) {
             this.post(data)
