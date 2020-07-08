@@ -96,6 +96,8 @@ public class Umfrage {
 	@ManyToOne(fetch = FetchType.EAGER, targetEntity = Adresse.class, cascade = CascadeType.ALL)
 	private Adresse adresse;
 
+	private boolean umfrageDisabled;
+
 	/**
 	 * explizite Merge-Funktion, um eine existierende Umfrage nach dem bearbeiten zu
 	 * aktualiseren
@@ -259,4 +261,11 @@ public class Umfrage {
 		this.ersteller = ersteller;
 	}
 
+	public boolean isUmfrageDisabled() {
+		return umfrageDisabled;
+	}
+
+	public void setUmfrageDisabled(boolean umfrageDisabled) {
+		this.umfrageDisabled = umfrageDisabled;
+	}
 }

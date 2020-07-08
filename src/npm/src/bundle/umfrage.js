@@ -1,7 +1,7 @@
 import * as L from 'leaflet'
 import 'leaflet/dist/leaflet.css';
 
-(function() {
+(function () {
   if (location.href.indexOf('/umfragen/') === -1) {
     return
   }
@@ -101,7 +101,7 @@ import 'leaflet/dist/leaflet.css';
     }).addTo(karte)
 
   }
-  
+
   // zentriert die Karte um die Umfrage, zoomt rein für bessere Sichtbarkeit
   function zeigAufKarte() {
     karte.setView([breitengrad, laengengrad], 17);
@@ -114,13 +114,6 @@ import 'leaflet/dist/leaflet.css';
     var betreff = "BikeHH - Umfrage #" + umfrage.id;
     window.location.href = "mailto:" + mailAdresse + "?subject=" + betreff + "&body=";
   }
-  
-  // öffnet einen Popup-Dialog, ob die Umfrage wirklich gelöscht werden soll.
-  function oeffneDialog(id) {
-    if (confirm("Soll die Umfrage wirklich gelöscht werden?")) {
-      loescheUmfrage(id)    
-    }
-  }
 
   // löscht die Umfrage über delete request an backend
   function loescheUmfrage(id) {
@@ -132,6 +125,51 @@ import 'leaflet/dist/leaflet.css';
     request.onload = function (e) {
       if (request.status == 200) {
         location.href = "umfragen/"
+      }
+    }
+  }
+
+  //window onload Funktionen
+  window.onload = function () {
+    var buttonZeigAufKarte = document.getElementById("buttonZeigAufKarte");
+    buttonZeigAufKarte.onclick = zeigAufKarte;
+
+    var buttonKontaktiereErsteller = document.getElementById("buttonKontaktiereErsteller");
+    buttonKontaktiereErsteller.onclick = kontaktiereErsteller;
+
+    var buttonLoescheUmfrage = document.getElementById("buttonLoescheUmfrage");
+    var functionOeffneDialogUndLoescheUmfrage = function oeffneDialog() {
+      if (confirm("Soll die Umfrage wirklich gelöscht werden?")) {
+        loescheUmfrage(umfrage.id)
+      }
+    }
+    buttonLoescheUmfrage.onclick = functionOeffneDialogUndLoescheUmfrage;
+
+    var buttonDisableEnableUmfrage = document.getElementById("buttonDisableEnableUmfrage");
+    var functionOeffneDialogUndDisableEnableUmfrage = function oeffneDialogDisablen() {
+      var aktiviertOderDeaktiviert = 'deaktiviert'
+      if (umfrage.umfrageDisabled) {
+        aktiviertOderDeaktiviert = 'aktiviert'
+      }
+
+      if (confirm("Soll die Umfrage wirklich " + aktiviertOderDeaktiviert + " werden?")) {
+        deaktiviereOderAktiviereUmfrage(umfrage.id)
+      }
+
+    }
+    buttonDisableEnableUmfrage.onclick = functionOeffneDialogUndDisableEnableUmfrage;
+  }
+
+  // deaktiviert die Umfrage über patch request an backend
+  function deaktiviereOderAktiviereUmfrage(id) {
+    const request = new XMLHttpRequest();
+    request.open("PATCH", "/umfragen/disable/" + id);
+    request.setRequestHeader("Content-Type", "application/json");
+    request.send();
+    console.log(request)
+    request.onload = function (e) {
+      if (request.status == 200) {
+        location.href = "umfragen/" + umfrage.id
       }
     }
   }

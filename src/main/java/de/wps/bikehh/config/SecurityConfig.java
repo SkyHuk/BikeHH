@@ -42,7 +42,8 @@ public class SecurityConfig {
 		public void configure(WebSecurity web) throws Exception {
 			web.ignoring()
 					.antMatchers(HttpMethod.POST, "/api/user", "/api/auth", "/umfrage-erstellen", "/meldung-erstellen")
-					.antMatchers("/api/password", "api/verify").antMatchers(HttpMethod.DELETE, "/umfragen/delete/*");
+					.antMatchers("/api/password", "api/verify").antMatchers(HttpMethod.DELETE, "/umfragen/delete/*")
+					.antMatchers(HttpMethod.PATCH, "/umfragen/disable/*");
 		}
 
 		@Override

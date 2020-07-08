@@ -55,4 +55,32 @@ public class UmfragenRestController {
 		model.addAttribute("umfragen", umfragen);
 		return "adfc/umfragen_liste";
 	}
+
+	/**
+	 * Deaktivert oder aktiviert eine Umfrage, die zu der id in der URL gehört, gibt
+	 * danach die Einzel-Umfrage zurück
+	 * 
+	 * Wenn eine Umfrage aktiviert ist, wird sie deaktiviert. Ansonsten andersherum
+	 * genauso.
+	 * 
+	 * @param model     spring model
+	 * @param umfrageId id der zu deaktivierende/aktivierende Umfrage
+	 * @return Einzelumfrage HTML-Template
+	 */
+	@RequestMapping(value = "/disable/{umfrageId}", method = RequestMethod.PATCH)
+	@ResponseBody
+	public String deaktiviereUmfrage(Model model, @PathVariable int umfrageId) {
+		Umfrage umfrage = umfragenService.getUmfrageNachId(umfrageId);
+
+		if (umfrage.isUmfrageDisabled()) {
+			umfrage.setUmfrageDisabled(false);
+		} else {
+			umfrage.setUmfrageDisabled(true);
+		}
+		umfragenService.speichereOderUpdateUmfrage(umfrage);
+
+		model.addAttribute("umfrage", umfrage);
+
+		return "umfragen/umfrage";
+	}
 }

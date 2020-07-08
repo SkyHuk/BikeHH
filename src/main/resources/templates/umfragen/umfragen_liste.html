@@ -19,6 +19,7 @@
           <th>Title</th>
           <th>Typ</th>
           <th>Erstellungsdatum</th>
+          <th>Status</th>
           <th>Bestätigungen</th>
           <th></th>
         </tr>
@@ -32,6 +33,7 @@
           <td th:text="${umfrage.titel}"></td>
           <td th:text="${umfrage.kategorie.name}"></td>
           <td th:text="${umfrage.erstelltAmDatum}"></td>
+          <td th:text="${umfrage.umfrageDisabled} ? 'deaktiviert' : 'aktiviert'" </td>
           <td th:text="${#lists.size(umfrage.bestaetigtVonUsern)}"></td>
             <td>
               <a class="btn btn-sm btn-primary" th:href="@{/umfragen/{id}(id=${umfrage.id})}" target="_self">Anzeigen</a>
@@ -45,22 +47,22 @@
       </table>
     </div>
     <script type="text/javascript">
-      
-	  	// make delete request
-		function openDialog(id) {
-		  	if (confirm("Soll die Umfrage wirklich gelöscht werden?")) {
-        		const request = new XMLHttpRequest();
-          		request.open("DELETE", "/umfragen/delete/" + id);
-          		request.setRequestHeader("Content-Type", "application/json");
-          		request.send();
-          		console.log(request)
-          		request.onload = function (e) {
-            		if (request.status == 200) {
-              			location.reload()
-            		}
-        		}
-      		}
-      	}
+
+      // make delete request
+      function openDialog(id) {
+        if (confirm("Soll die Umfrage wirklich gelöscht werden?")) {
+          const request = new XMLHttpRequest();
+          request.open("DELETE", "/umfragen/delete/" + id);
+          request.setRequestHeader("Content-Type", "application/json");
+          request.send();
+          console.log(request)
+          request.onload = function (e) {
+            if (request.status == 200) {
+              location.reload()
+            }
+          }
+        }
+      }
     </script>
   </body>
 </html>

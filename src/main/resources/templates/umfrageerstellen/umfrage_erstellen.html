@@ -8,6 +8,7 @@
     crossorigin="" />
 
 </head>
+
 <body layout:fragment="content">
   <div id="erstelleUmfrageApp">
     <h2 id="headline" class="my-4">
@@ -74,21 +75,33 @@
                 </div>
                 <!-- benutzerdefinierte Kategorie checkbox -->
                 <div class="form-check mb-2">
-                  <input class="form-check-input" type="checkbox" v-model="benutzerdefinierteKategorie" id="benutzerdefinierteKategorieCheckbox">
+                  <input class="form-check-input" type="checkbox" v-model="benutzerdefinierteKategorie"
+                    id="benutzerdefinierteKategorieCheckbox">
                   <label class="form-check-label" for="benutzerdefinierteKategorieCheckbox">
                     Benutzerdefinierte Kategorie
                   </label>
                 </div>
-                <input class="form-control" v-if="benutzerdefinierteKategorie" v-model="benutzerdefinierteKategorieText" placeholder="Kategorie">
+                <input class="form-control" v-if="benutzerdefinierteKategorie" v-model="benutzerdefinierteKategorieText"
+                  placeholder="Kategorie">
               </div>
               <!-- Fahrtrichtung für die gesamte Umfrage checkbox -->
-              <div class="form-check mb-2">
-                  <input class="form-check-input" type="checkbox" v-model="fahrtrichtung" @click="setzeFahrtrichtung()" id="fahrtrichtungCheckbox">
-                  <label class="form-check-label" for="fahrtrichtungCheckbox">
-                    Fahrtrichtung
+              <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" v-model="fahrtrichtung" @click="setzeFahrtrichtung()"
+                  id="fahrtrichtungCheckbox">
+                <label class="form-check-label" for="fahrtrichtungCheckbox">
+                  Fahrtrichtung
+                </label>
+              </div>
+              <!-- Checkbox zum Disablen der Umfrage (nur wenn Umfrage bearbeitet wird zeigen)-->
+              <span v-if="editierModus">
+                <div class="form-check mb-2">
+                  <input class="form-check-input" type="checkbox" v-model="umfrageDisabled"
+                    id="umfrageDisablenCheckbox">
+                  <label class="form-check-label" for="umfrageDisabledCheckbox">
+                    Umfrage vorzeitig beenden (deaktivieren)
                   </label>
                 </div>
-
+              </span>
             </div>
 
             <div class="col">
@@ -109,7 +122,7 @@
                   <div class="form-check">
                     <input class="form-check-input" type="checkbox" v-model="frage.erlaubeBenutzerdefinierteAntwort"
                       id="erlaubeBenutzerdefinierteAntwortCheckbox">
-                      <label class="form-check-label">
+                    <label class="form-check-label">
                       Erlaube Freitext-Antwort
                     </label>
                   </div>
@@ -117,9 +130,11 @@
                 <!-- division für den Antortmoeglichkeiten Abschnitt -->
                 <div class="form-group">
                   <label>Antwortmöglichkeiten</label>
-                  <div v-for="antwortMoeglichkeit in frage.antwortMoeglichkeiten" class="d-flex justify-space-between mb-4">
+                  <div v-for="antwortMoeglichkeit in frage.antwortMoeglichkeiten"
+                    class="d-flex justify-space-between mb-4">
                     <input class="form-control" v-model="antwortMoeglichkeit.text">
-                    <button type="button" class="btn text-danger ml-3" @click="entferneAntwort(frage, antwortMoeglichkeit)">
+                    <button type="button" class="btn text-danger ml-3"
+                      @click="entferneAntwort(frage, antwortMoeglichkeit)">
                       <span><i class="far fa-trash-alt"></i></span>
                     </button>
                   </div>
@@ -143,15 +158,15 @@
                         <label for="'bedingung-antwortMoeglichkeit' + index">mit:</label>
                         <select id="'bedingung-antwortMoeglichkeit' + index" v-if="bedingung.frage"
                           v-model="bedingung.erwarteteAntwort">
-                          <option v-for="antwortMoeglichkeit in bedingung.frage.antwortMoeglichkeiten" :value="antwortMoeglichkeit">{{ antwortMoeglichkeit.text }}
+                          <option v-for="antwortMoeglichkeit in bedingung.frage.antwortMoeglichkeiten"
+                            :value="antwortMoeglichkeit">{{ antwortMoeglichkeit.text }}
                           </option>
                         </select>
                         <label>beantwortet wurde.</label>
                       </div>
                       <div>
                         <!-- bedingung löschen Knopf -->
-                        <button type="button" class="btn text-danger ml-3"
-                          @click="entferneBedingung(frage, bedingung)">
+                        <button type="button" class="btn text-danger ml-3" @click="entferneBedingung(frage, bedingung)">
                           <span><i class="far fa-trash-alt"></i></span>
                         </button>
                       </div>
@@ -167,18 +182,18 @@
                   <button type="button" class="btn btn-primary mb-3" @click="fuegeOrtHinzu(frage)"
                     v-if="!frage.marker">Ort
                     hinzufügen</button>
-                    <!-- Ort löschen Knopf -->
-                  <button type="button" class="btn btn-danger mb-3" @click="entferneOrt(frage)"
-                    v-if="frage.marker">Ort löschen</button>
+                  <!-- Ort löschen Knopf -->
+                  <button type="button" class="btn btn-danger mb-3" @click="entferneOrt(frage)" v-if="frage.marker">Ort
+                    löschen</button>
                   <!-- Frage löschen Knopf -->
                   <button type="button" class="btn btn-danger mb-3" @click="entferneFrage(frage)">Frage
                     löschen</button>
                 </div>
                 <!-- Fahrtrichtung für spezielle Frage ja/nein checkbox -->
-                <div v-if="frage.marker"class="form-group">
+                <div v-if="frage.marker" class="form-group">
                   <div class="form-check">
                     <input class="form-check-input" type="checkbox" @click="setzeFahrtrichtung(frage)">
-                      <label class="form-check-label">
+                    <label class="form-check-label">
                       Fahrtrichtung
                     </label>
                   </div>
@@ -210,11 +225,11 @@
   </div>
 
   <script type="text/javascript">
-    var laengengrad = [[${ laengengrad }?${laengengrad}:0]]
-    var breitengrad = [[${ breitengrad }?${breitengrad}:0]]
+    var laengengrad = [[${ laengengrad } ? ${ laengengrad }: 0]]
+    var breitengrad = [[${ breitengrad } ? ${ breitengrad }: 0]]
 
-    var umfrage = [(${umfrage}?${umfrage}:'null')]
-    var ersteller = [(${benutzer}?${benutzer}:'null')]
+    var umfrage = [(${ umfrage } ? ${ umfrage }: 'null')]
+    var ersteller = [(${ benutzer } ? ${ benutzer }: 'null')]
   </script>
 
 </body>

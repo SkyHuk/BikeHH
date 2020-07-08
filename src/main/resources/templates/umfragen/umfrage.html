@@ -10,7 +10,8 @@
     integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
     crossorigin="" type="text/javascript"></script>
 
-  <script src="http://bbecquet.github.io/Leaflet.PolylineDecorator/dist/leaflet.polylineDecorator.js" type="text/javascript"></script>
+  <script src="http://bbecquet.github.io/Leaflet.PolylineDecorator/dist/leaflet.polylineDecorator.js"
+    type="text/javascript"></script>
 </head>
 
 <body layout:fragment="content">
@@ -54,16 +55,28 @@
           <!-- Bestätigungspunkte -->
           <h6 class="mb-2 text-muted">Bestätigungspunkte: <span class="badge badge-secondary" th:text="${#lists.size(umfrage.bestaetigtVonUsern) + '/' + umfrage.bestaetigtSchwellenwert}"></span></h6>
           </div>
+          <div>
+            <!-- Status der Umfrage -->
+            <h6 class="mb-2 text-muted">Status: <span class="badge badge-secondary" th:text="${umfrage.umfrageDisabled} ? 'deaktiviert' : 'aktiviert'"></span></h6>
+            </div>
 
           <p class="card-text mb-4" th:text="${umfrage.titel}"></p>
         </div>
         <div class="col-md-12 col-lg-3">
           <!-- Umfrage bearbeiten knopf, direkte weiterleitung zu /umfrageerstellen/bearbeiten?umfrageId=<ID_DER_UMFRAGE> -->
-          <a class="btn btn-block btn-outline-primary" th:href="@{/umfrage-erstellen/bearbeiten?umfrageId={id}(id=${umfrage.id})}">Umfrage bearbeiten</a>
-          <button class="btn btn-block btn-outline-primary" onClick="zeigAufKarte()">Zeige auf Karte</button>
-          <button class="btn btn-block btn-outline-primary" th:data-creator="${umfrage.ersteller}" onclick="kontaktiereErsteller(this.dataset.creator)">Kontaktiere Ersteller</button>
-          <button class="btn btn-block btn-outline-success">Bestätigen</button>
-          <button class="btn btn-block btn-outline-danger" th:onclick="'oeffneDialog(\' ' + ${umfrage.id} + '\');'" >Umfrage löschen</button>
+          <a class="btn btn-block btn-outline-primary mb-2" th:href="@{/umfrage-erstellen/bearbeiten?umfrageId={id}(id=${umfrage.id})}">Umfrage bearbeiten</a>
+          <button class="btn btn-block btn-outline-primary mb-2" onClick="zeigAufKarte()" id="buttonZeigAufKarte" >Zeige auf Karte</button>
+          <button class="btn btn-block btn-outline-primary mb-2" th:data-creator="${umfrage.ersteller}" onclick="kontaktiereErsteller(this.dataset.creator)" id="buttonKontaktiereErsteller">Kontaktiere Ersteller</button>
+          <button class="btn btn-block btn-outline-success mb-2">Bestätigen</button>
+          <button class="btn btn-block btn-outline-danger mb-2" th:onclick="'oeffneDialog(\' ' + ${umfrage.id} + '\');'" id="buttonLoescheUmfrage">Umfrage löschen</button>
+          
+          <!-- Button zum Aktivieren oder Deaktivieren der Umfrage anzeigen -->
+          <span th:if="${umfrage.umfrageDisabled}">
+            <button class="btn btn-block btn-outline-primary mb-2" th:onclick="'oeffneDialogDisablen(\' ' + ${umfrage.id} + '\');'" id="buttonDisableEnableUmfrage" th:text="${umfrage.umfrageDisabled} ? 'Umfrage aktivieren' : 'Umfrage deaktivieren'"/></button>  
+          </span>
+          <span th:unless="${umfrage.umfrageDisabled}">
+            <button class="btn btn-block btn-outline-danger mb-2" th:onclick="'oeffneDialogDisablen(\' ' + ${umfrage.id} + '\');'" id="buttonDisableEnableUmfrage" th:text="${umfrage.umfrageDisabled} ? 'Umfrage aktivieren' : 'Umfrage deaktivieren'"/></button>  
+          </span>
         </div>
       </div>
 
@@ -222,7 +235,9 @@
   </div>
 </div>
 <script type="text/javascript">
-  const umfrage = [(${umfrageJSON})]
+  const umfrage = [(${ umfrageJSON })]
 </script>
 </body>
+
+<script type="text/javascript" src="/src/bundle/umfrage.js"></script>
 </html>
