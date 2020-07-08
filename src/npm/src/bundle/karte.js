@@ -6,9 +6,7 @@ import 'leaflet/dist/leaflet.css';
 		return
 	}
 
-	
-
-	// coordinates for hamburg lat: 53.551086, long: 9.993682
+	// initialisiert die Ansicht der Karte mittig über Hamburg
 	var karte = L.map('mapid').setView([53.551086, 9.993682], 13);
 
 	// initialisiert die Karte
@@ -23,6 +21,7 @@ import 'leaflet/dist/leaflet.css';
 	}).addTo(karte);
 
 	var popup = L.popup();
+	fuegeUmfrageZurKarteHinzu(umfrage); //lädt initial eine Umfrage in die Karte
 
 	/**
 	* listener fuer das Klicken auf die Karte
@@ -50,8 +49,6 @@ import 'leaflet/dist/leaflet.css';
 		.setContent(document.body.appendChild(a))
 		.openOn(karte);
 	}
-
-	fuegeUmfrageZurKarteHinzu(umfrage);
 
 	/**
 	* fuegt eine Umfrage der Karte hinzu
@@ -95,7 +92,7 @@ import 'leaflet/dist/leaflet.css';
 			adresseHTML = "Adresse: " + umfrage.adresse.strasse + ", " + umfrage.adresse.postleitZahl + ", " + umfrage.adresse.stadt + "<br/>";
 		}
 
-		//popup configurieren
+		//popup aus HTML-Bausteinen zusammenbauen
 		L.marker([umfrage.laengengrad, umfrage.breitengrad]).addTo(karte)
 		.bindPopup(
 			'<a href="umfragen/' + umfrage.id +'"><b>Umfrage Id ' + umfrage.id +'</b></a>' + 

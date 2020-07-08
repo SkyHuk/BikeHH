@@ -10,10 +10,11 @@ import 'leaflet/dist/leaflet.css';
   const erstelleUmfrageApp = new Vue({
     el: '#erstelleUmfrageApp',
     data: {
-      id: null, // is injected as server response, used to open umfrage once created
+    	// id ist bei neuer Umfrage null und wird von der DB gesetzt, 
+    	// wenn eine Umfrage bearbeitet wird wird die id automatisch gesetzt
+      id: null, 
       umfrage: umfrage,
-      editierModus: false,
-      //id: Math.floor(Math.random() * (100000 - 0 + 1)) + 0,
+      editierModus: false, //zeigt an, ob man sich im editieren befindet, wichtig für einige Fallunterscheidungen
       titel: '',
       kategorie: '',
       startDatum: null,
@@ -66,6 +67,7 @@ import 'leaflet/dist/leaflet.css';
       ],
     },
     mounted() {
+    	// befüllt die vue.js Daten mit Informationen aus der Umfrage, wenn eine bearbeitet wird 
       if (this.umfrage) {
         this.id = this.umfrage.id
         this.editierModus = true
@@ -90,8 +92,8 @@ import 'leaflet/dist/leaflet.css';
         // init popup
         var popup = L.popup();
 
-        // set map depending on whether real koordinaten where given
-        // default is somewhat the center of hamburg
+        // initialisiert die Karte. Default ist Hamburg, wenn man von Karte.html kommt 
+        // sind koordinaten gesetzt, die stattdessen verwendet werden
         if (this.laengengrad == 0 && this.breitengrad == 0) {
           this.karte = L.map('mapid').setView([53.551086, 9.993682], 12);
         } else {
@@ -103,7 +105,6 @@ import 'leaflet/dist/leaflet.css';
         this.initialisiereKarte()
 
       } else {
-        //this.id = this.umfrage.id
         this.laengengrad = this.umfrage.laengengrad
         this.breitengrad = this.umfrage.breitengrad
         this.karte = L.map('mapid').setView([this.laengengrad, this.breitengrad], 16)
@@ -129,7 +130,7 @@ import 'leaflet/dist/leaflet.css';
         const laengengrad = e.latlng.lat
         const breitengrad = e.latlng.lng
 
-        // add marker to map, delete old one
+        // add marker to map
         var marker = L.marker([laengengrad, breitengrad], {
           draggable: true,
           autoPan: true
@@ -138,9 +139,11 @@ import 'leaflet/dist/leaflet.css';
           .bindPopup("<b>Hier wird die erstellte Umfrage sein.</b><br/>")
           .on('drag', self.setzteHauptmarkerZurueck);
 
+        // entferne alten Marker wenn vorhanden
         if (self.hauptMarker) { self.hauptMarker.remove() }
         self.hauptMarker = marker
 
+        // reset Fahrtrichtung
         if (self.fahrtrichtung) {
           self.setzteHauptmarkerZurueck()
         }
@@ -150,6 +153,9 @@ import 'leaflet/dist/leaflet.css';
     created() {
     },
     methods: {
+    	/**
+    	 * fügt eine Frage dem Formular hinzu mit Standardantwortmoeglichkeiten
+    	 */
       fuegeFrageHinzu() {
         this.fragen.push({
           titel: '',
@@ -166,21 +172,29 @@ import 'leaflet/dist/leaflet.css';
           erlaubeBenutzerdefinierteAntwort: this.erlaubeBenutzerdefinierteAntwort ? true : false
         })
       },
-      // deletes a frage
+      /**
+       * löscht eine Frage vom Formular
+       */
       entferneFrage(frage) {
         var index = this.fragen.indexOf(frage);
         this.fragen.splice(index, 1);
       },
-      // add antwortMoeglichkeit
+      /**
+       * fügt einer Frage eine Antwortmoeglichkeit hinzu
+       */
       fuegeAntwortMoeglichkeitHinzu(frage) {
         frage.antwortMoeglichkeiten.push({ text: '' });
       },
-      // delete latest antwortMoeglichkeit in frage.antworten
+      /**
+       * löscht eine Antwortmoeglichkeit an einer Frage
+       */
       entferneAntwort(frage, antwortMoeglichkeit) {
         frage.antwortMoeglichkeiten.splice(frage.antwortMoeglichkeiten.indexOf(antwortMoeglichkeit), 1)
       },
-      // add location (green marker) to frage on map,
-      // only if frage does not have location already
+      /**
+       * fügt einer Frage einen Ort hinzu (grüner Marker)
+       * bricht ab, wenn Frage bereits einen Ort hat
+       */
       fuegeOrtHinzu(frage) {
         var bestehenderMarker = frage.marker;
         if (!bestehenderMarker) {
@@ -205,25 +219,21 @@ import 'leaflet/dist/leaflet.css';
           });
           marker.on('drag', () => {
             if (frage.fahrtrichtung) {
-              // this.entferneFahrtrichtung()
               frage.pfeillinie.remove()
               frage.pfeilspitze.remove()
               const markerKoordinaten = marker.getLatLng()
               this.fuegeMarkerFahrtrichtungHinzu(markerKoordinaten.lat, markerKoordinaten.lng, frage.fahrtrichtung + (Math.PI / 2), frage)
             }
           })
-          //frage.pfeil = this.fuegeMarkerFahrtrichtungHinzu(koordinaten.lat, koordinaten.lng)
           frage.marker = marker;
-
-          /* if (koordinaten) {
-            frage.pfeil = this.fuegeMarkerFahrtrichtungHinzu(koordinaten.getLatLng().lat, koordinaten.getLatLng().lng)
-          } */
-
         } else {
           bestehenderMarker.openPopup();
         }
       },
-      // delete marker for frage
+      /**
+       * entfernt einen Ort einer Frage.
+       * Wenn der Ort eine Fahrtrichtung hat wird diese auch gelöscht
+       */
       entferneOrt(frage) {
         var marker = frage.marker;
         if (marker) {
@@ -234,20 +244,30 @@ import 'leaflet/dist/leaflet.css';
           }
         }
       },
-      // add bedingung
+      /**
+       * fügt einer Frage eine Bedingungen hinzu
+       */
       fuegeBedingungHinzu(frage) {
         frage.bedingungen.push({
           frage: null,
           erwarteteAntwort: null,
         })
       },
-      // delete bedingung
+      /**
+       * löscht eine Bedingung einer Frage
+       */
       entferneBedingung(frage, bedingung) {
         frage.bedingungen.splice(frage.bedingungen.indexOf(bedingung), 1)
 
       },
-      // check if all fragen have at least one antwortMoeglichkeit
-      habenAlleFragenAntworten(fragen) {
+      /**
+       * überprüft, ob alle Fragen gültig sind.
+       * Um als gültig zu gelten muss jede Frage mindestens eine AntwortMoeglichkeit haben
+       * oder Freitext erlauben
+       */ 
+      sindAlleFragenGueltig(fragen) {
+    	  
+    	// prüfen, ob alle Fragen mind. eine Antwortmoeglichkeit hat
         const habenAlleFragenAntwortMoeglichkeiten = fragen.filter(q => q.antwortMoeglichkeiten.length > 0).length === fragen.length
 
         //prüfen, ob Fragen ohne AntwortMoeglichkeit benutzerdefinierte Antworten erlauben
@@ -261,11 +281,16 @@ import 'leaflet/dist/leaflet.css';
         return habenAlleFragenAntwortMoeglichkeiten || erlaubenAlleFragenOhneAntwortMoeglichkeitenBenutzerdefinierteAntworten
 
       },
-      // check if all fragen have a title
+      /**
+       * überprüft, ob alle Fragen einen Titel haben
+       */
       habenAlleFragenTitel(fragen) {
         return fragen.filter(q => !!q.titel && q.titel.trim().length > 0).length === fragen.length
 
       },
+      /**
+       * setzt die Karte zurück: löscht alle Marker der Umfrage (Hauptmarker und Fragenmarker)
+       */
       setzeKarteZuruek() {
         if (this.hauptMarker) {this.hauptMarker.remove()}
         this.fragen.forEach((frage) => {
@@ -280,6 +305,9 @@ import 'leaflet/dist/leaflet.css';
           this.hauptMarker = marker
         }
       },
+      /**
+       * setzt alle vuejs Daten zurück
+       */
       setzeDatenZurueck() {
         this.titel = ''
         this.kategorie = ''
@@ -297,22 +325,25 @@ import 'leaflet/dist/leaflet.css';
         this.polyline = null
         this.decorator = null
 
-        // initially add first frage
+        // fügt initial eine Frage zur umfrage hinzu
         this.fuegeFrageHinzu()
       },
+      /**
+       * leitet den Vorgang des Umfrage-Abschickens ein
+       */
       postUmfrage(e) {
         e.preventDefault()
-        // make post to controller with json data of umfrage
-
-        // data object holding information
-        var data = {};
-        data = this.sammleDaten(data)
+        // data object mit allen Information der Umfrage
+        var data = this.sammleDaten(data)
         if (data) {
           if (this.validiereDaten(data)) {
             this.post(data)
           }
         }
       },
+      /**
+       * holt sich über OSM API Adresse zu gegebenen Koordinaten, ruft dann postJson() mit den Daten auf
+       */
       post(data) {
         const getRequest = new XMLHttpRequest();
         getRequest.open("GET", 'https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=' + data.laengengrad + '&lon=' + data.breitengrad);
@@ -341,23 +372,41 @@ import 'leaflet/dist/leaflet.css';
 
         getRequest.send();
       },
+      /**
+       * schickt die Umfrage ans Backend
+       */
+      postJson(data) {
+        const self = this;
+        const jsonString = JSON.stringify(data);
+        const request = new XMLHttpRequest();
+        request.open("POST", "/umfrage-erstellen");
+        request.setRequestHeader("Content-Type", "application/json");
+        request.send(jsonString);
+        request.onload = function (e) {
+          if (request.status == 200) {
+            self.behandelErfolg();
+            self.id = request.response
+          } else {
+            self.behandelFehler(null, "server");
+          }
+        }
+      },
+      /**
+       * sammelt alle Daten der Umfrage abhängig davon, ob es eine neue Umfrage ist oder nicht
+       */
       sammleDaten(data) {
 
         if (!this.editierModus) {
           data.bestaetigtVonUsern = []
           data.ersteller = ersteller
-          // get date
-          // generate a zeitstempel
-          var zeitstempel = Number(new Date())
-          var date = new Date(zeitstempel)
+          const zeitstempel = Number(new Date())
+          const date = new Date(zeitstempel)
           data.erstelltAmDatum = date;
         } else {
           data.bestaetigtVonUsern = this.umfrage.bestaetigtVonUsern
           data.ersteller = this.umfrage.ersteller
           data.erstelltAmDatum = this.umfrage.erstelltAmDatum
         }
-
-        // get data
         if (this.id) {
           data.id = this.id
         }
@@ -369,7 +418,7 @@ import 'leaflet/dist/leaflet.css';
         data.endDatum = this.endDatum;
         data.bestaetigtSchwellenwert = this.bestaetigtSchwellenwert;
 
-        // map fragen and expected antwortMoeglichkeit to their indices to avoid circular json
+        // schreibt alle Umfrage-relevanten Informationen aus den Fragen in das data Object
         data.fragen = this.fragen.map((frage) => {
           var rtn = {
             ...frage,
@@ -397,7 +446,7 @@ import 'leaflet/dist/leaflet.css';
         });
 
         if (this.benutzerdefinierteKategorie) {
-          // creates new kategorie serverside
+          // TODO: creates new kategorie serverside
           data.kategorie = { name: this.benutzerdefinierteKategorieText }
 
         } else {
@@ -410,20 +459,21 @@ import 'leaflet/dist/leaflet.css';
           data.kategorie = { name: this.kategorie3 ? this.kategorie3.text : this.kategorie2 ? this.kategorie2.text : this.kategorie1.text}
 
         }
-
-        // TEMPORARY: only string
-        //data.kategorie = data.kategorie.name
-
+        
+        // ohne Hauptmarker keine Koordinaten
         if (!this.hauptMarker) {
           this.behandelFehler('Ein Ort muss ausgewählt sein')
           return false
         }
 
-        // get koordinaten of main marker
+        // Hauptmarker ist gesetzt, hole Koordinaten
         data.laengengrad = this.hauptMarker.getLatLng().lat;
         data.breitengrad = this.hauptMarker.getLatLng().lng;
         return data;
       },
+      /**
+       * zeigt eine Erfolgsnachricht, versteckt alle Error-Nachrichten wenn vorhanden
+       */
       behandelErfolg() {
         this.zeigeErfolgBenachrichtigung = true
         //delete all error modals
@@ -443,6 +493,9 @@ import 'leaflet/dist/leaflet.css';
 
         }
       },
+      /**
+       * zeigt eine unterschiedliche Fehlermeldung abhängig von der Art des Fehlers
+       */
       behandelFehler(text, typ) {
         if (typ == "server") {
           this.formatierungsFehler = 'Es ist ein Fehler beim kommunizieren mit dem Server aufgetreten.';
@@ -453,24 +506,10 @@ import 'leaflet/dist/leaflet.css';
           this.zeigeErfolgBenachrichtigung = false
         }
       },
-      postJson(data) {
-        const self = this;
-        const jsonString = JSON.stringify(data);
-        const request = new XMLHttpRequest();
-        request.open("POST", "/umfrage-erstellen");
-        request.setRequestHeader("Content-Type", "application/json");
-        request.send(jsonString);
-        request.onload = function (e) {
-          if (request.status == 200) {
-            self.behandelErfolg();
-            self.id = request.response
-          } else {
-            self.behandelFehler(null, "server");
-          }
-        }
-      },
+      /**
+       * prüft, ob alle benötigten Daten verfügbar sind
+       */
       validiereDaten(data) {
-        //validate data
         //TODO kategorie1 test
         if (data.titel.trim().length === 0) {
           this.behandelFehler('Titel muss ausgefüllt sein')
@@ -496,16 +535,16 @@ import 'leaflet/dist/leaflet.css';
         if (!data.bestaetigtSchwellenwert ||
           !data.fragen ||
           !this.habenAlleFragenTitel(data.fragen) ||
-          !this.habenAlleFragenAntworten(data.fragen) ||
+          !this.sindAlleFragenGueltig(data.fragen) ||
           data.erstelltAmDatum === null) {
           this.behandelFehler()
           return
         }
-
-        // no error: contiue sending request
-        // console.log('data', data)
         return data;
       },
+      /**
+       * initialisiert Karte
+       */
       initialisiereKarte() {
         // init map
         L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
@@ -518,6 +557,11 @@ import 'leaflet/dist/leaflet.css';
           zoomOffset: -1
         }).addTo(this.karte);
       },
+      /**
+       * fügt eine Fahrtrichtung zu einem Marker hinzu
+       * Wenn Frage nicht gesetzt ist wird der Hauptmarker genommen,
+       * sonst der Marker der Frage
+       */
       fuegeMarkerFahrtrichtungHinzu(lat, lng, initialerWinkel, frage) {
         if (!initialerWinkel) {
           initialerWinkel = Math.PI/4
@@ -655,9 +699,15 @@ import 'leaflet/dist/leaflet.css';
         }
         return polyline
       },
+      /**
+       * versteckt die Fehlermeldung
+       */
       entferneFehlermeldung() {
         this.formatierungsFehler = null
       },
+      /**
+       * setzt den Hauptmarker zurück, mit ihm auch seine Fahrtrichtung (wenn gesetzt)
+       */
       setzteHauptmarkerZurueck(e) {
         if (this.fahrtrichtung) {
           // this.entferneFahrtrichtung()
@@ -667,6 +717,10 @@ import 'leaflet/dist/leaflet.css';
           this.fuegeMarkerFahrtrichtungHinzu(markerKoordinaten.lat, markerKoordinaten.lng, this.fahrtrichtung + (Math.PI / 2))
         }
       },
+      /**
+       * fügt hinzu oder löscht die Fahrtrichtung eines Markers. 
+       * Wenn Frage nicht gesetzt wird Hauptmarker genommen, sonst Marker der Frage
+       */
       setzeFahrtrichtung(frage) {
         if (!frage) { //soll wohl der hauptMarker sein
           if (this.hauptMarker) {
@@ -691,6 +745,9 @@ import 'leaflet/dist/leaflet.css';
         }
 
       },
+      /**
+       * entfernt die Fahrtrichtung einer Frage oder des Hauptmarkers.
+       */
       entferneFahrtrichtung(frage) {
         if (!frage) {
           this.polyline.remove()

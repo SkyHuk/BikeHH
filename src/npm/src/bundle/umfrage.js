@@ -5,15 +5,20 @@ import 'leaflet/dist/leaflet.css';
   if (location.href.indexOf('/umfragen/') === -1) {
     return
   }
-
-  // coordinates passed from controller
+  // Koordinaten speichern vom spring controller
   var breitengrad = umfrage.laengengrad
   var laengengrad = umfrage.breitengrad
 
+  //Karteansicht mit den Koordinaten konfigurieren  
   var karte = L.map('mapid').setView([breitengrad, laengengrad], 13);
+  
+  //Marker hinzufügen
   fuegeMarkerZurKarteHinzu(breitengrad, laengengrad);
+  
+  // Fahrtrichtungen hinzufügen
   fuegeFahrtrichtungHinzu(breitengrad, laengengrad, umfrage.fahrtrichtung + (Math.PI / 2));
 
+  // karte initialisieren
   L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
     maxZoom: 18,
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
@@ -24,11 +29,14 @@ import 'leaflet/dist/leaflet.css';
     zoomOffset: -1
   }).addTo(karte);
 
-  // init map
+  // alle Fragenmarker hinzufügen
   umfrage.fragen.forEach((frage, index) => {
     fuegeFragenmarkerZurKarteHinzu(frage, index)
   })
-  //fügt alle Marker der Fragen hinzu
+  
+  /**
+   * fügt alle Marker der Fragen hinzu
+   */
   function fuegeFragenmarkerZurKarteHinzu(frage, index) {
     console.log('fuegeFragenmarkerZurKarteHinzu', frage)
     if (frage.breitengrad && frage.laengengrad) {
@@ -51,14 +59,17 @@ import 'leaflet/dist/leaflet.css';
     }
   }
 
-  // adds a marker to given coordinates,
-  // used to mark location of survey
+  /**
+   * fügt zu gegebenen Koordinaten einen Marker hinzu
+   */
   function fuegeMarkerZurKarteHinzu(breitengrad, laengengrad) {
     var marker = L.marker([breitengrad, laengengrad]).addTo(karte)
       .bindPopup("<b>Ort der Umfrage.<br/>");
   };
 
-  // fuegt dem Hauptmarker der Umfrage eine Fahrtrichtung hinzu.
+  /**
+   * fügt eine Fahrtrichtung an gegebenen Koordinaten mit einem initialen Winkel hinzu
+   */
   function fuegeFahrtrichtungHinzu(lat, lng, initialerWinkel) {
     if (!initialerWinkel) {
       initialerWinkel = Math.PI / 4
