@@ -36,14 +36,13 @@ cd src/npm; node_modules/.bin/webpack --watch
 ```
 beobachtet alle JavaScript-Dateien und kompiliert das Bundle bei Änderungen neu.
 
-## Dokumentation
-
 Für die Entwicklung an den Javascript Dateien der Admin-Platform kann folgender Trick den Workflow erhöhen:
 
 1. Terminal-Fenster öffnen und zu ```bikehh/src/npm``` navigieren
 2. den Befehl ```node_modules/.bin/webpack --watch``` laufen lassen
 3. dies führt dazu, dass das Projekt nicht jedes mal neu compiliert werden muss, nachdem Änderungen an einer JS-Datei vorgenommen wurden
 
+## Dokumentation
 ### Admin-Plattform
 Im Folgenden wird die ADFC Admin-Platform vorgestellt und so gut es geht erläutert. Sie soll als Hilfe für das kommende Blockpraktikum, welches dieses System weiterentwickelt, dienen.
 
@@ -61,25 +60,24 @@ Neue User können manuell in der Datei ```data.sql``` in der H2 Datenbank angele
 Mit einem Klick auf ```Ausloggen``` in der Navigationsleiste kann sich ausgeloggt werden.
 
 #### Übersicht
-In dieser Ansicht sollen einige statistische Auswertungen über die Umfragen und Meldungen erscheinen. Ergebnisse sollen geteilt und exportiert werden können.
+In dieser Ansicht sollen einige statistische Auswertungen über die Umfragen und Meldungen erscheinen. Ergebnisse sollen geteilt und exportiert werden können. Diese Seite gilt es noch auszuarbeiten.
 
-Im Backend ist die Seite ```UebersichtController``` zu erreichen.
-
-Diese Seite gilt es noch auszuarbeiten.
+##### ÜbersichtController
+Dieser Controller ist der Controller für die Übersichtsseite und muss noch angepasst werden. Momentan ist es der Anlaufpunkt nach erfolgreichem Login. Er gibt bisher nur das HTML-Template für ```Uebersicht``` zurück. Ebenso müssen noch Tests erstellt werden.
 
 #### Umfragen
-Auf der Umfragen-Seite wird eine Gesamtansicht der Umfragen als Liste dargestellt. Hier gibt es die Möglichkeit eine Einzelnansicht einer Umfrage aufzurufen, als auch die Umfragen zu löschen (Achtung: Umfrage wird hier unwiderruflich gelöscht!). 
+Auf der Umfragen-Seite wird eine Gesamtansicht der Umfragen als Liste dargestellt. Hier gibt es die Möglichkeit eine Einzelnansicht einer Umfrage aufzurufen, als auch die Umfragen zu löschen (Achtung: Umfrage wird hier unwiderruflich gelöscht!). Daneben wird der Status der Umfrage (aktiviert/deaktiviert) angezeigt.
 
 ##### UmfragenController
 Für die Anzeige der Umfragenliste als auch der Einzelumfrage ist im Backend der ```UmfragenController``` zuständig, der die Umfragen über den ```UmfragenService``` aus der Datenbank bezieht. 
 
 ##### UmfragenRestController
-Der ```UmfragenRestController``` ist für die Löschung einer Umfrage zuständig und nutzt dafür den ```UmfragenService```.
+Der ```UmfragenRestController``` ist für die Löschung und Deaktivierung- bzw. Aktivierung einer Umfrage zuständig und nutzt dafür den ```UmfragenService```.
 
 Die Filterfunktion auf der Umfragen-Seite ist noch nicht ausgebaut.
 
 ##### Materialien
-* **Umfrage**: Eine Umfrage besteht aus mindestens einer Frage, ist einer Kategorie zugeordnet, findet an einem Standort statt (Längen- und Breitengrad) und hat somit auch eine Adresse. Eine Umfrage hat ein Start-, End- und Erstelldatum und einen Ersteller (Admin oder Fahrradfahrer). Sie kann vom Admin bearbeitet werden. Zusätzlich zu einem Standort kann sie eine Fahrtrichtung aufweisen. Sie kann von Benutzern bestätigt werden und weißt daher einen Schwellenwert auf, wieviele Bestätigungen sie braucht.  
+* **Umfrage**: Eine Umfrage besteht aus mindestens einer Frage, ist einer Kategorie zugeordnet, findet an einem Standort statt (Längen- und Breitengrad) und hat somit auch eine Adresse. Eine Umfrage hat ein Start-, End- und Erstelldatum und einen Ersteller (Admin oder Fahrradfahrer). Sie kann vom Admin bearbeitet und deaktiviert- bzw. aktiviert werden. Zusätzlich zu einem Standort kann sie eine Fahrtrichtung aufweisen. Sie kann von Benutzern bestätigt werden und weißt daher einen Schwellenwert auf, wieviele Bestätigungen sie braucht.  
 
 * **Frage**: Eine Frage gehört zu einer Umfrage, hat einen Standort, kann mehrere Antwortmöglichkeiten aufweisen und kann Bedingungen enthalten, nachdem sie nur angezeigt wird, wenn in einer vorherigen Frage eine bestimmte Antwort ausgewählt wurde. Ebenso kann sie eine benutzerdefinierte Antwort (Freitext) erlauben. Die eigentliche Frage wird als Titel der Frage spezifiziert. 
 
@@ -98,7 +96,24 @@ Das Repository für die Umfragen.
 Der Service stellt Methoden bereit, über die Umfragen aus dem Repository abgefragt und manipuliert werden können. So lassen sich hier alle oder einzelne Umfragen abfragen, als auch Umfragen aus dem Repository löschen.
 
 #### Meldungen
-TODO
+Das Backend für die Meldungen wurde bereits angefangen, muss aber noch weiter entwickelt werden. Die Controller und die Entität Meldung müssen noch implementiert und feingeschliffen werden, diese sind jedoch bereits vorhanden. Tests müssen ebenso noch erstellt werden. Das Frontend muss noch erstellt werden.
+
+##### MeldungenController
+Dieser Controller behandelt alle Anfragen auf ```\meldungen``` und enthält bereits eine Methode zum Anzeigen einer Liste aller Meldungen auf.
+
+##### MeldungenRestController
+Der ```MeldungenRestController``` ist die Schnittstelle von mobilen Anwendungen zum Backend, damit eine Meldung an das Backend gesendet werden kann. Dort wird diese gespeichert. Die Schnittstelle ist aus Sicherheitsgründen noch hinter ```\api\``` zu schieben (siehe ```config.SecurityConfig.java```).
+
+##### Materialien
+Bei den hier beschrieben Materialien ist noch auf Vollständigkeit zu prüfen. Diese müssen mit hoher Wahrscheinlichkeit weiter angepasst werden.
+* **Meldung**: Eine Meldung enthält bisher Koordinaten (Längen- und Breitengrad), eine Umfrage auf die die Meldung antwortet (diese muss jedoch nicht gesetzt werden, wenn die Meldung von einem Radfahrer neu erzeugt wurde), eine Liste an Antworten auf Fragen (leer bei Neuerstellung vom Radfahrer), eine Fahrtrichtung (hier wird der Winkel im Bogenmaß nach Osten (Wertebereich 0 - 2pi) angegeben; nach Osten, da mathematischer Standard) sowie einen Text als ```String``` (dieser ist nur bei einer Neuerstellung vom Radfahrer zu setzen)
+* **Antwort**: Eine Antwort ist eine Antwort auf eine Umfrage, die automatisch aus einer Meldung generiert wurde. Sie enthält die Meldung, auf die sie sich bezieht, eine Frage, und die tatsächliche Antwort als ```String```
+
+##### MeldungRepository
+Das Repository für die Meldungen.
+
+##### MeldungService
+Der Service stellt Methoden bereit, über die Meldungen aus dem Repository abgefragt und manipuliert werden können. So lassen sich hier alle oder einzelne Meldungen abfragen, als auch Meldungen aus dem Repository löschen.
 
 #### Karte
 In der Kartenansicht werden alle Umfragen aus der Datenbank angezeigt. Bei Klick auf diese können die Daten angeschaut und in die Einzel-Umfrageansicht gewechselt werden. Es besteht die Möglichkeit durch einen beliebigen Klick auf der Karte direkt an diesem Ort eine Umfrage zu erstellen oder durch den +-Button in der unteren, rechten Ecke eine Umfrage zu erstellen.  
