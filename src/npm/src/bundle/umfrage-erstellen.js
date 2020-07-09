@@ -386,7 +386,11 @@ import 'leaflet/dist/leaflet.css';
         const self = this;
         const jsonString = JSON.stringify(data);
         const request = new XMLHttpRequest();
-        request.open("POST", "/umfrage-erstellen");
+        if (!this.editierModus) { // was für ein Request soll es sein?
+          request.open("POST", "/umfrage-erstellen");  
+        } else {
+          request.open("PATCH", "/umfrage-erstellen");
+        }
         request.setRequestHeader("Content-Type", "application/json");
         request.send(jsonString);
         request.onload = function (e) {
