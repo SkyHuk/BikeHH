@@ -6,17 +6,19 @@ import 'leaflet/dist/leaflet.css';
     return
   }
   // Koordinaten speichern vom spring controller
-  var breitengrad = umfrage.laengengrad
-  var laengengrad = umfrage.breitengrad
+  var breitengrad = umfrage.breitengrad
+  var laengengrad = umfrage.laengengrad
 
-  //Karteansicht mit den Koordinaten konfigurieren  
+  //Karteansicht mit den Koordinaten konfigurieren
   var karte = L.map('mapid').setView([breitengrad, laengengrad], 13);
-  
+
   //Marker hinzufügen
   fuegeMarkerZurKarteHinzu(breitengrad, laengengrad);
-  
+
   // Fahrtrichtungen hinzufügen
-  fuegeFahrtrichtungHinzu(breitengrad, laengengrad, umfrage.fahrtrichtung + (Math.PI / 2));
+  if (umfrage.fahrtrichtung) {
+    fuegeFahrtrichtungHinzu(breitengrad, laengengrad, umfrage.fahrtrichtung + (Math.PI / 2));
+  }
 
   // karte initialisieren
   L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
@@ -31,14 +33,14 @@ import 'leaflet/dist/leaflet.css';
 
   // alle Fragenmarker hinzufügen
   umfrage.fragen.forEach((frage, index) => {
+    console.log('fuegeFragenmarkerZurKarteHinzu', frage)
     fuegeFragenmarkerZurKarteHinzu(frage, index)
   })
-  
+
   /**
    * fügt alle Marker der Fragen hinzu
    */
   function fuegeFragenmarkerZurKarteHinzu(frage, index) {
-    console.log('fuegeFragenmarkerZurKarteHinzu', frage)
     if (frage.breitengrad && frage.laengengrad) {
       var greenIcon = new L.Icon({
         iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
@@ -48,13 +50,14 @@ import 'leaflet/dist/leaflet.css';
         popupAnchor: [1, -34],
         shadowSize: [41, 41]
       });
+      console.log('wat', [frage.breitengrad, frage.laengengrad])
       var marker = L.marker([frage.breitengrad, frage.laengengrad], {
         icon: greenIcon
       }).addTo(karte).bindPopup('<b>Ort für Frage ' + index + ': ' + frage.titel + '</b>');
-      console.log('marker', marker)
+      console.log('marker', marker, karte)
 
       if (frage.fahrtrichtung) {
-        fuegeFahrtrichtungHinzu(frage.breitengrad, frage.laengengrad, frage.fahrtrichtung + (Math.PI * 2), frage)
+        fuegeFahrtrichtungHinzu(frage.breitengrad, frage.laengengrad, frage.fahrtrichtung + (Math.PI / 2), frage)
       }
     }
   }
@@ -70,8 +73,8 @@ import 'leaflet/dist/leaflet.css';
   /**
    * fügt eine Fahrtrichtung an gegebenen Koordinaten mit einem initialen Winkel hinzu
    */
-  function fuegeFahrtrichtungHinzu(lat, lng, initialerWinkel) {
-    if (!initialerWinkel) {
+  function fuegeFahrtrichtungHinzu(lat, lng, initialerWinkel, frage) {
+    if (initialerWinkel === null) {
       initialerWinkel = Math.PI / 4
     }
 

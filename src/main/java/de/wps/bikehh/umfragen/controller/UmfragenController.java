@@ -25,7 +25,7 @@ public class UmfragenController {
 
 	/**
 	 * constructor für JUNIT tests
-	 * 
+	 *
 	 * @param umfragenService db service
 	 */
 	@Autowired
@@ -36,9 +36,9 @@ public class UmfragenController {
 
 	/**
 	 * gibt das Template für die Umfragen-Liste
-	 * 
+	 *
 	 * füllt das model mit allen existierenden Umfragen
-	 * 
+	 *
 	 * @param model spring model
 	 * @return HTML-Template
 	 */
@@ -54,7 +54,7 @@ public class UmfragenController {
 	/**
 	 *
 	 * Zeigt eine Einzelansicht einer Umfrage
-	 * 
+	 *
 	 * Über int in URL (/umfragen/<umfrageId>) wird die anzuzeigenden Umfrage
 	 * ermittelt
 	 *

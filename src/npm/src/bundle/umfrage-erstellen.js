@@ -10,7 +10,7 @@ import 'leaflet/dist/leaflet.css';
   const erstelleUmfrageApp = new Vue({
     el: '#erstelleUmfrageApp',
     data: {
-      // id ist bei neuer Umfrage null und wird von der DB gesetzt, 
+      // id ist bei neuer Umfrage null und wird von der DB gesetzt,
       // wenn eine Umfrage bearbeitet wird wird die id automatisch gesetzt
       id: null,
       umfrage: umfrage,
@@ -22,7 +22,7 @@ import 'leaflet/dist/leaflet.css';
       bestaetigtSchwellenwert: 10,
       fragen: [],
       manuellErstellt: true,
-      fahrtrichtung: false,
+      fahrtrichtung: null,
 
       laengengrad: laengengrad,
       breitengrad: breitengrad,
@@ -69,12 +69,13 @@ import 'leaflet/dist/leaflet.css';
       ],
     },
     mounted() {
-      // befüllt die vue.js Daten mit Informationen aus der Umfrage, wenn eine bearbeitet wird 
+      // befüllt die vue.js Daten mit Informationen aus der Umfrage, wenn eine bearbeitet wird
       if (this.umfrage) {
         this.id = this.umfrage.id
         this.editierModus = true
 
         this.umfrage.fragen.forEach((frage) => {
+          console.log('frage', frage)
           frage.bedingungen.forEach((bedingung) => {
             bedingung.frage = this.umfrage.fragen.find(f => f.id === bedingung.frageId)
 
@@ -94,12 +95,12 @@ import 'leaflet/dist/leaflet.css';
         // init popup
         var popup = L.popup();
 
-        // initialisiert die Karte. Default ist Hamburg, wenn man von Karte.html kommt 
+        // initialisiert die Karte. Default ist Hamburg, wenn man von Karte.html kommt
         // sind koordinaten gesetzt, die stattdessen verwendet werden
         if (this.laengengrad == 0 && this.breitengrad == 0) {
           this.karte = L.map('mapid').setView([53.551086, 9.993682], 12);
         } else {
-          this.karte = L.map('mapid').setView([this.laengengrad, this.breitengrad], 16);
+          this.karte = L.map('mapid').setView([this.breitengrad, this.laengengrad], 16);
         }
 
         this.setzeKarteZuruek()
@@ -109,11 +110,11 @@ import 'leaflet/dist/leaflet.css';
       } else {
         this.laengengrad = this.umfrage.laengengrad
         this.breitengrad = this.umfrage.breitengrad
-        this.karte = L.map('mapid').setView([this.laengengrad, this.breitengrad], 16)
+        this.karte = L.map('mapid').setView([this.breitengrad, this.laengengrad], 16)
 
         this.initialisiereKarte()
 
-        var marker = L.marker([this.laengengrad, this.breitengrad])
+        var marker = L.marker([this.breitengrad, this.laengengrad])
           .addTo(this.karte)
           .bindPopup("<b>Ort der Umfrage</b><br/>")
           .on('drag', self.setzteHauptmarkerZurueck)
@@ -122,38 +123,60 @@ import 'leaflet/dist/leaflet.css';
         //console.log('titel:', this.umfrage.titel)
         this.titel = this.umfrage.titel
         this.kategorie = this.umfrage.kategorie
-        this.fragen = this.umfrage.fragen
         this.startDatum = this.umfrage.startDatum
         this.endDatum = this.umfrage.endDatum
         this.bestaetigtSchwellenwert = this.umfrage.bestaetigtSchwellenwert
         this.manuellErstellt = this.umfrage.manuellErstellt
         //console.log('umfrageDisablend:', this.umfrage.umfrageDisabled)
         this.umfrageDisabled = this.umfrage.umfrageDisabled
-      }
-
-      this.karte.on('click', function (e) {
-        const laengengrad = e.latlng.lat
-        const breitengrad = e.latlng.lng
-
-        // add marker to map
-        var marker = L.marker([laengengrad, breitengrad], {
-          draggable: true,
-          autoPan: true
-        })
-          .addTo(self.karte)
-          .bindPopup("<b>Hier wird die erstellte Umfrage sein.</b><br/>")
-          .on('drag', self.setzteHauptmarkerZurueck);
-
-        // entferne alten Marker wenn vorhanden
-        if (self.hauptMarker) { self.hauptMarker.remove() }
-        self.hauptMarker = marker
-
-        // reset Fahrtrichtung
-        if (self.fahrtrichtung) {
-          self.setzteHauptmarkerZurueck()
+        this.fahrtrichtung = this.umfrage.fahrtrichtung
+        if (this.fahrtrichtung) {
+          const markerKoordinaten = marker.getLatLng()
+          this.fuegeMarkerFahrtrichtungHinzu(markerKoordinaten.lat, markerKoordinaten.lng, this.fahrtrichtung + (Math.PI / 2))
         }
 
-      })
+        this.umfrage.fragen.forEach((frage) => {
+          if (frage.laengengrad && frage.breitengrad) {
+            this.fuegeOrtHinzu(frage)
+
+            if (frage.fahrtrichtung !== null) {
+              this.fuegeMarkerFahrtrichtungHinzu(frage.breitengrad, frage.laengengrad, frage.fahrtrichtung + (Math.PI / 2), frage)
+            }
+
+          }
+
+        })
+
+        this.fragen = this.umfrage.fragen
+      }
+
+      if (!this.hauptMarker) {
+        this.karte.on('click', function (e) {
+          const breitengrad = e.latlng.lat
+          const laengengrad = e.latlng.lng
+
+          // add marker to map
+          var marker = L.marker([breitengrad, laengengrad], {
+            draggable: true,
+            autoPan: true
+          })
+            .addTo(self.karte)
+            .bindPopup("<b>Hier wird die erstellte Umfrage sein.</b><br/>")
+            .on('drag', self.setzteHauptmarkerZurueck);
+
+          // entferne alten Marker wenn vorhanden
+          if (self.hauptMarker) { self.hauptMarker.remove() }
+          self.hauptMarker = marker
+
+          self.karte.off('click')
+
+          // reset Fahrtrichtung
+          if (self.fahrtrichtung) {
+            self.setzteHauptmarkerZurueck()
+          }
+
+        })
+      }
     },
     created() {
     },
@@ -170,7 +193,8 @@ import 'leaflet/dist/leaflet.css';
           ],
           bedingungen: [],
           marker: null,
-          fahrtrichtung: false,
+          fahrtrichtung: null,
+          fahrtrichtungGesetzt: false,
           pfeillinie: null,
           pfeilspitze: null,
           drehMarker: null,
@@ -198,7 +222,7 @@ import 'leaflet/dist/leaflet.css';
       },
       /**
        * fügt einer Frage einen Ort hinzu (grüner Marker)
-       * bricht ab, wenn Frage bereits einen Ort hat
+       * bricht ab, wenn Frage bereits einen Marker hat
        */
       fuegeOrtHinzu(frage) {
         var bestehenderMarker = frage.marker;
@@ -212,16 +236,32 @@ import 'leaflet/dist/leaflet.css';
             shadowSize: [41, 41]
           });
           const index = this.fragen.indexOf(frage) + 1;
-          const grenzen = this.karte.getBounds();
-          const koordinaten = grenzen.getCenter();
+
+          let koordinaten
+          if (frage.laengengrad && frage.breitengrad) {
+            koordinaten = [frage.breitengrad, frage.laengengrad]
+
+          } else {
+            const grenzen = this.karte.getBounds();
+            koordinaten = grenzen.getCenter();
+
+          }
+
           var marker = L.marker(koordinaten, {
             draggable: true,
             autoPan: true,
             icon: gruenesIcon
-          }).addTo(this.karte).bindPopup('<b>Verschieb mich!</b>').openPopup();
+          }).addTo(this.karte)
+
+          // only show popup when adding new location
+          if (!frage.laengengrad && !frage.laengengrad) {
+            marker.bindPopup('<b>Verschieb mich!</b>').openPopup();
+          }
+
           marker.on('dragend', function (event) {
             marker.bindPopup('<b>Ort für Frage ' + index + ' </b>');
           });
+
           marker.on('drag', () => {
             if (frage.fahrtrichtung) {
               frage.pfeillinie.remove()
@@ -231,8 +271,10 @@ import 'leaflet/dist/leaflet.css';
             }
           })
           frage.marker = marker;
+
         } else {
           bestehenderMarker.openPopup();
+
         }
       },
       /**
@@ -305,7 +347,7 @@ import 'leaflet/dist/leaflet.css';
         });
 
         if (this.laengengrad && this.breitengrad) {
-          var marker = L.marker([this.laengengrad, this.breitengrad]).addTo(this.karte)
+          var marker = L.marker([this.breitengrad, this.laengengrad]).addTo(this.karte)
             .bindPopup("<b>Hier wird die erstellte Umfrage sein.</b><br/>");
           this.hauptMarker = marker
         }
@@ -409,18 +451,22 @@ import 'leaflet/dist/leaflet.css';
           const zeitstempel = Number(new Date())
           const date = new Date(zeitstempel)
           data.erstelltAmDatum = date;
-          //umfrage ist immer enabled, wenn sie erstellt wird
+          // umfrage ist immer enabled, wenn sie erstellt wird
           data.umfrageDisabled = false;
+
         } else {
           data.bestaetigtVonUsern = this.umfrage.bestaetigtVonUsern
           data.ersteller = this.umfrage.ersteller
           data.erstelltAmDatum = this.umfrage.erstelltAmDatum
           data.umfrageDisabled = this.umfrageDisabled
+
         }
+
         if (this.id) {
           data.id = this.id
+
         }
-        data.fahrtrichtung = this.fahrtrichtung ? this.fahrtrichtung : 0
+        data.fahrtrichtung = this.fahrtrichtung ? this.fahrtrichtung : null
         data.bearbeitet = this.editierModus
         data.manuellErstellt = this.manuellErstellt
         data.titel = this.titel;
@@ -441,11 +487,11 @@ import 'leaflet/dist/leaflet.css';
           }
 
           if (frage.marker) {
-            rtn.laengengrad = frage.marker.getLatLng().lat;
-            rtn.breitengrad = frage.marker.getLatLng().lng;
+            rtn.breitengrad = frage.marker.getLatLng().lat;
+            rtn.laengengrad = frage.marker.getLatLng().lng;
           }
           if (!frage.fahrtrichtung) {
-            rtn.fahrtrichtung = 0
+            rtn.fahrtrichtung = null
           }
 
           delete rtn.drehMarker
@@ -477,8 +523,8 @@ import 'leaflet/dist/leaflet.css';
         }
 
         // Hauptmarker ist gesetzt, hole Koordinaten
-        data.laengengrad = this.hauptMarker.getLatLng().lat;
-        data.breitengrad = this.hauptMarker.getLatLng().lng;
+        data.breitengrad = this.hauptMarker.getLatLng().lat;
+        data.laengengrad = this.hauptMarker.getLatLng().lng;
         return data;
       },
       /**
@@ -573,13 +619,19 @@ import 'leaflet/dist/leaflet.css';
        * sonst der Marker der Frage
        */
       fuegeMarkerFahrtrichtungHinzu(lat, lng, initialerWinkel, frage) {
-        if (!initialerWinkel) {
+        if (initialerWinkel === null || initialerWinkel === undefined) {
           initialerWinkel = Math.PI / 4
           if (frage) {
             frage.fahrtrichtung = initialerWinkel - (Math.PI / 2)
+
           } else {
             this.fahrtrichtung = initialerWinkel - (Math.PI / 2)
+
           }
+        }
+
+        if (frage) {
+          frage.fahrtrichtungGesetzt = true
         }
 
         const pfeilLaenge = 0.002
@@ -728,13 +780,13 @@ import 'leaflet/dist/leaflet.css';
         }
       },
       /**
-       * fügt hinzu oder löscht die Fahrtrichtung eines Markers. 
+       * fügt hinzu oder löscht die Fahrtrichtung eines Markers.
        * Wenn Frage nicht gesetzt wird Hauptmarker genommen, sonst Marker der Frage
        */
       setzeFahrtrichtung(frage) {
         if (!frage) { //soll wohl der hauptMarker sein
           if (this.hauptMarker) {
-            if (!this.fahrtrichtung) {
+            if (this.fahrtrichtung === null) {
               const markerKoordinaten = this.hauptMarker.getLatLng()
               this.fuegeMarkerFahrtrichtungHinzu(markerKoordinaten.lat, markerKoordinaten.lng)
             } else {
@@ -760,6 +812,8 @@ import 'leaflet/dist/leaflet.css';
        */
       entferneFahrtrichtung(frage) {
         if (!frage) {
+          this.fahrtrichtung = null
+
           this.polyline.remove()
           this.polyline = null
           this.decorator.remove()
@@ -767,6 +821,8 @@ import 'leaflet/dist/leaflet.css';
           this.drehMarker.remove()
           this.drehMarker = null
         } else {
+          frage.fahrtrichtung = null
+
           frage.pfeillinie.remove()
           frage.pfeillinie = null
           frage.pfeilspitze.remove()

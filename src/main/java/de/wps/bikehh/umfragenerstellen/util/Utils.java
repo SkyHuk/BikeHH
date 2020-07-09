@@ -10,7 +10,7 @@ import de.wps.bikehh.umfragen.material.Frage;
 import de.wps.bikehh.umfragen.material.Umfrage;
 
 /**
- * 
+ *
  * Utilies Klasse, die Hilfsfunktionen im Umgang mit Umfragen anbietet
  *
  */
@@ -18,7 +18,7 @@ public class Utils {
 
 	/**
 	 * Validiert eine Umfrage
-	 * 
+	 *
 	 * @param umfrage Umfrage, die zu testen ist
 	 * @return true, wenn Umfrage valide ist
 	 */
@@ -109,7 +109,7 @@ public class Utils {
 
 	/**
 	 * Gibt das heutige Datum mit yyyy-MM-dd als Date zurueck
-	 * 
+	 *
 	 * @return Date
 	 * @throws ParseException
 	 */
@@ -121,7 +121,7 @@ public class Utils {
 
 	/**
 	 * Konvertiert einen String zu einem Datum (Date)
-	 * 
+	 *
 	 * @param stringDatum String
 	 * @return Date
 	 * @throws ParseException
@@ -132,7 +132,7 @@ public class Utils {
 
 	/**
 	 * Validiert das FragenArray und prüft, ob alle Fragen einen Titel haben
-	 * 
+	 *
 	 * @param fragen
 	 * @return true, if questions is valid
 	 */
@@ -151,7 +151,7 @@ public class Utils {
 
 	/**
 	 * Validiert das FragenArray und prüft, ob alle Fragen eine Antwort haben
-	 * 
+	 *
 	 * @param fragen
 	 * @return true, if questions is valid
 	 */

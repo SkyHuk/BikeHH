@@ -26,7 +26,7 @@ public class UmfragenRestController {
 
 	/**
 	 * constructor für JUNIT tests
-	 * 
+	 *
 	 * @param umfragenService db service
 	 */
 	@Autowired
@@ -38,10 +38,10 @@ public class UmfragenRestController {
 	/**
 	 * Löscht die Umfrage, die zu der id in der URL gehört, gibt danach das Template
 	 * der Umfrage-List zurück
-	 * 
+	 *
 	 * Webseite muss trotzdem neu geladen werden, um Änderungen darzustellen, warum
 	 * auch immer. Reload im javascript
-	 * 
+	 *
 	 * @param model     spring model
 	 * @param umfrageId id der zu löschenden Umfrage
 	 * @return Umfragen-Liste HTML-Template
@@ -59,10 +59,10 @@ public class UmfragenRestController {
 	/**
 	 * Deaktivert oder aktiviert eine Umfrage, die zu der id in der URL gehört, gibt
 	 * danach die Einzel-Umfrage zurück
-	 * 
+	 *
 	 * Wenn eine Umfrage aktiviert ist, wird sie deaktiviert. Ansonsten andersherum
 	 * genauso.
-	 * 
+	 *
 	 * @param model     spring model
 	 * @param umfrageId id der zu deaktivierende/aktivierende Umfrage
 	 * @return Einzelumfrage HTML-Template

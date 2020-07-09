@@ -16,7 +16,7 @@ import de.wps.bikehh.umfragen.service.UmfragenService;
 
 /**
  * spring controller für alle requests auf "/umfrage-erstllen"
- * 
+ *
  *
  */
 @Controller
@@ -27,7 +27,7 @@ public class UmfrageErstellenController {
 
 	/**
 	 * Constructor für JUNIT Tests
-	 * 
+	 *
 	 * @param umfragenService
 	 */
 	@Autowired
@@ -67,11 +67,11 @@ public class UmfrageErstellenController {
 	}
 
 	/**
-	 * 
+	 *
 	 * öffnet die gleiche seite / liefert das gleiche HTML-Template wie
 	 * zeigeUmfrageErsteller(..), hat aber andere Parameter, die darauf ausgelegt
 	 * sind, eine bestehende Umfrage zu bearbeiten
-	 * 
+	 *
 	 * @param umfrageId die id der umfrage, die bearbeitet werden soll
 	 * @param model     spring model
 	 * @return HTML-Template

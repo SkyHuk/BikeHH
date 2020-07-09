@@ -189,10 +189,11 @@
                   <button type="button" class="btn btn-danger mb-3" @click="entferneFrage(frage)">Frage
                     löschen</button>
                 </div>
+
                 <!-- Fahrtrichtung für spezielle Frage ja/nein checkbox -->
                 <div v-if="frage.marker" class="form-group">
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" @click="setzeFahrtrichtung(frage)">
+                    <input v-model="frage.fahrtrichtungGesetzt" class="form-check-input" type="checkbox" @click="setzeFahrtrichtung(frage)">
                     <label class="form-check-label">
                       Fahrtrichtung
                     </label>

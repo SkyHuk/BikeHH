@@ -18,7 +18,7 @@ import de.wps.bikehh.umfragenerstellen.util.Utils;
 
 /**
  * Rest Controller für das erstellen
- * 
+ *
  * @author felixwolf
  *
  */
@@ -39,9 +39,9 @@ public class UmfrageErstellenRestController {
 	 * SCHLECHT: korrekt implementiert sollte es so sein, dass ein POST nur eine
 	 * neue Umfrage erstellt. Um eine bestehende Umfrage zu bearbeiten sollte ein
 	 * PATCH (oder wenn es nicht anders geht auch ein PUT) -Request gemacht werden
-	 * 
+	 *
 	 * TODO: PATCH/PUT request für umfrage bearbeiten verwenden
-	 * 
+	 *
 	 * @param body der post body, in dem sich die Umfrage in JSON Format befindet
 	 * @return die id der erstellten / bearbeiteten Umfrage
 	 * @throws Exception wenn die Umfrage nicht dem geforderten Format entspricht

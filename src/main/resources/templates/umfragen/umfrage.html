@@ -69,13 +69,13 @@
           <button class="btn btn-block btn-outline-primary mb-2" th:data-creator="${umfrage.ersteller}" onclick="kontaktiereErsteller(this.dataset.creator)" id="buttonKontaktiereErsteller">Kontaktiere Ersteller</button>
           <button class="btn btn-block btn-outline-success mb-2">Bestätigen</button>
           <button class="btn btn-block btn-outline-danger mb-2" th:onclick="'oeffneDialog(\' ' + ${umfrage.id} + '\');'" id="buttonLoescheUmfrage">Umfrage löschen</button>
-          
+
           <!-- Button zum Aktivieren oder Deaktivieren der Umfrage anzeigen -->
           <span th:if="${umfrage.umfrageDisabled}">
-            <button class="btn btn-block btn-outline-primary mb-2" th:onclick="'oeffneDialogDisablen(\' ' + ${umfrage.id} + '\');'" id="buttonDisableEnableUmfrage" th:text="${umfrage.umfrageDisabled} ? 'Umfrage aktivieren' : 'Umfrage deaktivieren'"/></button>  
+            <button class="btn btn-block btn-outline-primary mb-2" th:onclick="'oeffneDialogDisablen(\' ' + ${umfrage.id} + '\');'" id="buttonDisableEnableUmfrage" th:text="${umfrage.umfrageDisabled} ? 'Umfrage aktivieren' : 'Umfrage deaktivieren'"/></button>
           </span>
           <span th:unless="${umfrage.umfrageDisabled}">
-            <button class="btn btn-block btn-outline-danger mb-2" th:onclick="'oeffneDialogDisablen(\' ' + ${umfrage.id} + '\');'" id="buttonDisableEnableUmfrage" th:text="${umfrage.umfrageDisabled} ? 'Umfrage aktivieren' : 'Umfrage deaktivieren'"/></button>  
+            <button class="btn btn-block btn-outline-danger mb-2" th:onclick="'oeffneDialogDisablen(\' ' + ${umfrage.id} + '\');'" id="buttonDisableEnableUmfrage" th:text="${umfrage.umfrageDisabled} ? 'Umfrage aktivieren' : 'Umfrage deaktivieren'"/></button>
           </span>
         </div>
       </div>
@@ -98,7 +98,7 @@
            </div>
          </ul>
        </div>
-       <!-- kommender Abschnitt zeigt die Meldung, aus der die Umfrage generiert wurde. 
+       <!-- kommender Abschnitt zeigt die Meldung, aus der die Umfrage generiert wurde.
         Gibt es nur, wenn Umfrage automatisch generiert wurde -->
        <span th:if="${!umfrage.manuellErstellt}">
          <h6>Umfrage wurde automatisch aus folgender Meldung generiert</h6>
