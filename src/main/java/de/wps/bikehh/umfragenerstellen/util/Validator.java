@@ -14,7 +14,7 @@ import de.wps.bikehh.umfragen.material.Umfrage;
  * Utilies Klasse, die Hilfsfunktionen im Umgang mit Umfragen anbietet
  *
  */
-public class Utils {
+public class Validator {
 
 	/**
 	 * Validiert eine Umfrage

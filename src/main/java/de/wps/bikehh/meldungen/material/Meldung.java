@@ -42,6 +42,8 @@ public class Meldung {
 
 	// Winkel im Bogenmaß nach Osten (Wertebereich 0 - 2pi, nach Osten weil das
 	// mathematischer Standard ist)
+	// eine fahrtrichtung von 0.0 ist ungültig und steht symbolisierend für "keine
+	// Fahrtrichtung gesetzt"
 	private double fahrtrichtung;
 
 	// nur gefüllt wenn Meldung neu generiert

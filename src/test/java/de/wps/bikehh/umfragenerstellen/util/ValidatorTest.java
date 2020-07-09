@@ -11,7 +11,7 @@ import com.google.gson.Gson;
 
 import de.wps.bikehh.umfragen.material.Umfrage;
 
-public class UtilsTest {
+public class ValidatorTest {
 
 	@Test
 	public void umfrageIstValideTest() {
@@ -22,6 +22,6 @@ public class UtilsTest {
 		System.out.println(validDate);
 		umfrage.setStartDatum(validDate);
 		umfrage.setEndDatum(validDate);
-		assertTrue(Utils.umfrageIstValide(umfrage));
+		assertTrue(Validator.umfrageIstValide(umfrage));
 	}
 }

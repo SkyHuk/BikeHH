@@ -14,11 +14,16 @@ import com.google.gson.Gson;
 
 import de.wps.bikehh.umfragen.material.Umfrage;
 import de.wps.bikehh.umfragen.service.UmfragenService;
-import de.wps.bikehh.umfragenerstellen.util.Utils;
+import de.wps.bikehh.umfragenerstellen.util.Validator;
 
 /**
+<<<<<<< HEAD
  * Rest Controller für das erstellen
  *
+=======
+ * Rest Controller für das erstellen und bearbeiten von Umfragen
+ * 
+>>>>>>> f4643ea1480580fdc1c0206a396cb89a08686f0d
  * @author felixwolf
  *
  */
@@ -34,16 +39,10 @@ public class UmfrageErstellenRestController {
 	}
 
 	/**
-	 * Speichert die Umfrage in der Datenbank. Kann auch eine bereits existierende
-	 * sein, die bearbeitet wurde und nun aktualisiert werden soll (ACHTUNG
-	 * SCHLECHT: korrekt implementiert sollte es so sein, dass ein POST nur eine
-	 * neue Umfrage erstellt. Um eine bestehende Umfrage zu bearbeiten sollte ein
-	 * PATCH (oder wenn es nicht anders geht auch ein PUT) -Request gemacht werden
-	 *
-	 * TODO: PATCH/PUT request für umfrage bearbeiten verwenden
+	 * Speichert die Umfrage in der Datenbank.
 	 *
 	 * @param body der post body, in dem sich die Umfrage in JSON Format befindet
-	 * @return die id der erstellten / bearbeiteten Umfrage
+	 * @return die id der erstellten Umfrage
 	 * @throws Exception wenn die Umfrage nicht dem geforderten Format entspricht
 	 *                   (wird in Utils überprüft), wird eine Exception geworfen
 	 */
@@ -58,15 +57,34 @@ public class UmfrageErstellenRestController {
 		System.out.println(body);
 
 		// validiere Umfrage
-		if (Utils.umfrageIstValide(umfrage)) {
+		if (Validator.umfrageIstValide(umfrage)) {
+			return umfragenService.speichereOderUpdateUmfrage(umfrage);
 
-			// logik: eine neu erstellt Umfrage kriegt ihre id von der Datenbank, hat also
-			// zu diesem Punkt keine. Ist id jedoch gesetzt muss es sich um eine schon
-			// bestehende handeln, die bearbeitet wurde
-			if (umfrage.getId() == 0) {
-				// die umfrage ist neu erstellt worden und nicht eine alte bearbeitete
-				return umfragenService.speichereOderUpdateUmfrage(umfrage);
-			}
+		} else {
+			throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE,
+					"Umfrage ist nicht valide und wird nicht gespeichert");
+		}
+	}
+
+	/**
+	 * updatet eine bereits bestehende Umfrage
+	 * 
+	 * @param body der Patch body, in dem sich die Umfrage in JSON Format befindet
+	 * @return die Id der geupdateten Umfrage
+	 */
+	@RequestMapping(method = RequestMethod.PATCH)
+	@PostMapping("/umfragen-erstellen")
+	@ResponseBody
+	public int updateUmfrage(@RequestBody String body) {
+
+		Umfrage umfrage = new Gson().fromJson(body, Umfrage.class);
+
+		// debug only
+		System.out.println(body);
+
+		// validiere Umfrage
+		if (Validator.umfrageIstValide(umfrage)) {
+
 			int neueUmfrage = umfragenService.speichereOderUpdateUmfrage(umfrage);
 			// eine alte Umfrage wurde bearbeitet, muss geupdated werden
 			Umfrage oldUmfrage = umfragenService.getUmfrageNachId(neueUmfrage);
