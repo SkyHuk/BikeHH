@@ -18,6 +18,7 @@ Im Zuge des Praktikums "Fahrrad in Hamburg" der Universität Hamburg wurde ein P
 		- [Umfragen](#umfragen)
 		- [Meldungen](#meldungen)
 		- [Karte](#karte)
+		- [Fahrtrichtungen](#fahrtrichtungen)
 		- [Umfrage erstellen](#umfrage-erstellen)
 		- [Tests](#tests)
 	- [Nutzerverwaltung](#nutzerverwaltung)
@@ -156,6 +157,9 @@ Der Service stellt Methoden bereit, über die Meldungen aus dem Repository abgef
 
 #### Karte
 In der Kartenansicht werden alle Umfragen aus der Datenbank angezeigt. Bei Klick auf diese können die Daten angeschaut und in die Einzel-Umfrageansicht gewechselt werden. Es besteht die Möglichkeit durch einen beliebigen Klick auf der Karte direkt an diesem Ort eine Umfrage zu erstellen oder durch den +-Button in der unteren, rechten Ecke eine Umfrage zu erstellen.  
+
+#### Fahrtrichtungen
+Jede Umfrage und jede Frage können optional eine Fahrtrichtung besitzen. Diese wird über einen Pfeil symbolisiert und kann mit einem separaten Marker, der die Richtung vorgibt, verändert werden. Fahrtrichtungen werden im Bogenmaß gespeichert, wobei Norden dem Wert 0 entspricht. Folglich wäre Westen PI/2, Süden wäre PI und Osten PI3/2. Diese Funktionalität ist in erster Linie dafür gedacht, um auf eine bestimmte Fahrtrichtung hinzuweisen, aber kann bei Bedarf natürlich für beliebiges verwendet werden (z.B. Frage, bei der es um eine Abzweigung in eine möglichst genaue Richtung geht).
 
 ##### KartenController
 Im ```KartenController``` können alle Umfragen aus der Datenbank abgefragt werden, die in der Kartenansicht angezeigt werden sollen.
