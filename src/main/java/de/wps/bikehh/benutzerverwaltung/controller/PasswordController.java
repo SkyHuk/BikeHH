@@ -24,7 +24,7 @@ public class PasswordController {
         this._passwordDetailService = passwordDetailService;
     }
 
-    @GetMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
     public void requestPasswordResetMail(@Valid @RequestBody RequestMailModel requestModel) throws ApiRequestException {
         String email = requestModel.getEmail();
 

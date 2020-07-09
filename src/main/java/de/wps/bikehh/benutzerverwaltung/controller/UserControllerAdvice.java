@@ -16,7 +16,11 @@ public class UserControllerAdvice {
 			return null;
 		}
 
-		BikehhUserDetails userDetails = (BikehhUserDetails) authentication.getPrincipal();
-		return userDetails.getBikehhUser();
+		if (authentication.getPrincipal() instanceof BikehhUserDetails) {
+			BikehhUserDetails user = (BikehhUserDetails) authentication.getPrincipal();
+			return user.getBikehhUser();
+		} else {
+			return (User) authentication.getPrincipal();
+		}
 	}
 }
