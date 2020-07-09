@@ -17,13 +17,8 @@ import de.wps.bikehh.umfragen.service.UmfragenService;
 import de.wps.bikehh.umfragenerstellen.util.Validator;
 
 /**
-<<<<<<< HEAD
- * Rest Controller für das erstellen
- *
-=======
  * Rest Controller für das erstellen und bearbeiten von Umfragen
- * 
->>>>>>> f4643ea1480580fdc1c0206a396cb89a08686f0d
+ *
  * @author felixwolf
  *
  */
@@ -68,7 +63,7 @@ public class UmfrageErstellenRestController {
 
 	/**
 	 * updatet eine bereits bestehende Umfrage
-	 * 
+	 *
 	 * @param body der Patch body, in dem sich die Umfrage in JSON Format befindet
 	 * @return die Id der geupdateten Umfrage
 	 */
