@@ -74,8 +74,15 @@ import 'leaflet/dist/leaflet.css';
         this.id = this.umfrage.id
         this.editierModus = true
 
+        if (this.umfrage.fahrtrichtung === 0.0) {
+          this.umfrage.fahrtrichtung = null
+        }
+
         this.umfrage.fragen.forEach((frage) => {
-          console.log('frage', frage)
+          if (frage.fahrtrichtung === 0.0) {
+            frage.fahrtrichtung = null
+          }
+
           frage.bedingungen.forEach((bedingung) => {
             bedingung.frage = this.umfrage.fragen.find(f => f.id === bedingung.frageId)
 
@@ -132,7 +139,7 @@ import 'leaflet/dist/leaflet.css';
         this.fahrtrichtung = this.umfrage.fahrtrichtung
         if (this.fahrtrichtung) {
           const markerKoordinaten = marker.getLatLng()
-          this.fuegeMarkerFahrtrichtungHinzu(markerKoordinaten.lat, markerKoordinaten.lng, this.fahrtrichtung + (Math.PI / 2))
+          this.fuegeMarkerFahrtrichtungHinzu(markerKoordinaten.lat, markerKoordinaten.lng, this.fahrtrichtung)
         }
 
         this.umfrage.fragen.forEach((frage) => {
@@ -140,7 +147,7 @@ import 'leaflet/dist/leaflet.css';
             this.fuegeOrtHinzu(frage)
 
             if (frage.fahrtrichtung !== null) {
-              this.fuegeMarkerFahrtrichtungHinzu(frage.breitengrad, frage.laengengrad, frage.fahrtrichtung + (Math.PI / 2), frage)
+              this.fuegeMarkerFahrtrichtungHinzu(frage.breitengrad, frage.laengengrad, frage.fahrtrichtung, frage)
             }
 
           }
@@ -267,7 +274,7 @@ import 'leaflet/dist/leaflet.css';
               frage.pfeillinie.remove()
               frage.pfeilspitze.remove()
               const markerKoordinaten = marker.getLatLng()
-              this.fuegeMarkerFahrtrichtungHinzu(markerKoordinaten.lat, markerKoordinaten.lng, frage.fahrtrichtung + (Math.PI / 2), frage)
+              this.fuegeMarkerFahrtrichtungHinzu(markerKoordinaten.lat, markerKoordinaten.lng, frage.fahrtrichtung, frage)
             }
           })
           frage.marker = marker;
@@ -429,7 +436,7 @@ import 'leaflet/dist/leaflet.css';
         const jsonString = JSON.stringify(data);
         const request = new XMLHttpRequest();
         if (!this.editierModus) { // was für ein Request soll es sein?
-          request.open("POST", "/umfrage-erstellen");  
+          request.open("POST", "/umfrage-erstellen");
         } else {
           request.open("PATCH", "/umfrage-erstellen");
         }
@@ -626,10 +633,10 @@ import 'leaflet/dist/leaflet.css';
         if (initialerWinkel === null || initialerWinkel === undefined) {
           initialerWinkel = Math.PI / 4
           if (frage) {
-            frage.fahrtrichtung = initialerWinkel - (Math.PI / 2)
+            frage.fahrtrichtung = initialerWinkel
 
           } else {
-            this.fahrtrichtung = initialerWinkel - (Math.PI / 2)
+            this.fahrtrichtung = initialerWinkel
 
           }
         }
@@ -670,11 +677,15 @@ import 'leaflet/dist/leaflet.css';
           const y = e.latlng.lng - lng
           const angle = Math.atan2(x, y)
 
+          if (angle === 0.0) {
+            angle = Math.PI*2
+          }
+
           // rotiere 90° nach links
           if (frage) {
-            frage.fahrtrichtung = angle - (Math.PI / 2)
+            frage.fahrtrichtung = angle
           } else {
-            this.fahrtrichtung = angle - (Math.PI / 2)
+            this.fahrtrichtung = angle
           }
 
           // arrow pointing straight right
@@ -780,7 +791,7 @@ import 'leaflet/dist/leaflet.css';
           this.polyline.remove()
           this.decorator.remove()
           const markerKoordinaten = this.hauptMarker.getLatLng()
-          this.fuegeMarkerFahrtrichtungHinzu(markerKoordinaten.lat, markerKoordinaten.lng, this.fahrtrichtung + (Math.PI / 2))
+          this.fuegeMarkerFahrtrichtungHinzu(markerKoordinaten.lat, markerKoordinaten.lng, this.fahrtrichtung)
         }
       },
       /**

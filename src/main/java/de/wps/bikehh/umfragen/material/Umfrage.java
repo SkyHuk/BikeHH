@@ -18,7 +18,7 @@ import de.wps.bikehh.benutzerverwaltung.material.User;
  * Datenbank Entity
  *
  * Zentrale Umfrage-Klasse
- * 
+ *
  * eine Umfrage gilt als bestätigt, wenn sie die erforderlichen Bestätigungen
  * erreicht hat (bestaetigtSchwellenwert) oder wenn sie durch einen Admin als
  * bestaetigt markiert wurde, dies wird im istBestaetigt Feld gespeichert
@@ -53,7 +53,7 @@ public class Umfrage {
 	/**
 	 * ob die Umfrage als bestätigt gilt. Siehe Klassenkommentar und istBestaetigt()
 	 * Methode.
-	 * 
+	 *
 	 * TODO: Umfrage als bestaetigt markieren, wenn in umfrage.html auf den
 	 * bestätigen Knopf gedrückt wird
 	 */
@@ -101,7 +101,7 @@ public class Umfrage {
 	/**
 	 * explizite Merge-Funktion, um eine existierende Umfrage nach dem bearbeiten zu
 	 * aktualiseren
-	 * 
+	 *
 	 * @param umfrage die neue Umfrage
 	 * @return die aktualisierte Umfrage
 	 */

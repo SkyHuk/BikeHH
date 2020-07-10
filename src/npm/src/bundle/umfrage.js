@@ -9,6 +9,10 @@ import 'leaflet/dist/leaflet.css';
   var breitengrad = umfrage.breitengrad
   var laengengrad = umfrage.laengengrad
 
+  if (umfrage.fahrtrichtung === 0.0) {
+    umfrage.fahrtrichtung = null
+  }
+
   //Karteansicht mit den Koordinaten konfigurieren
   var karte = L.map('mapid').setView([breitengrad, laengengrad], 13);
 
@@ -17,7 +21,7 @@ import 'leaflet/dist/leaflet.css';
 
   // Fahrtrichtungen hinzufügen
   if (umfrage.fahrtrichtung) {
-    fuegeFahrtrichtungHinzu(breitengrad, laengengrad, umfrage.fahrtrichtung + (Math.PI / 2));
+    fuegeFahrtrichtungHinzu(breitengrad, laengengrad, umfrage.fahrtrichtung);
   }
 
   // karte initialisieren
@@ -33,7 +37,9 @@ import 'leaflet/dist/leaflet.css';
 
   // alle Fragenmarker hinzufügen
   umfrage.fragen.forEach((frage, index) => {
-    console.log('fuegeFragenmarkerZurKarteHinzu', frage)
+    if (frage.fahrtrichtung === 0.0) {
+      frage.fahrtrichtung = null
+    }
     fuegeFragenmarkerZurKarteHinzu(frage, index)
   })
 
@@ -50,14 +56,12 @@ import 'leaflet/dist/leaflet.css';
         popupAnchor: [1, -34],
         shadowSize: [41, 41]
       });
-      console.log('wat', [frage.breitengrad, frage.laengengrad])
       var marker = L.marker([frage.breitengrad, frage.laengengrad], {
         icon: greenIcon
       }).addTo(karte).bindPopup('<b>Ort für Frage ' + index + ': ' + frage.titel + '</b>');
-      console.log('marker', marker, karte)
 
       if (frage.fahrtrichtung) {
-        fuegeFahrtrichtungHinzu(frage.breitengrad, frage.laengengrad, frage.fahrtrichtung + (Math.PI / 2), frage)
+        fuegeFahrtrichtungHinzu(frage.breitengrad, frage.laengengrad, frage.fahrtrichtung, frage)
       }
     }
   }

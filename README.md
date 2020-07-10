@@ -145,8 +145,7 @@ Der ```MeldungenRestController``` ist die Schnittstelle von mobilen Anwendungen 
 
 ##### Materialien
 Bei den hier beschrieben Materialien ist noch auf Vollständigkeit zu prüfen. Diese müssen mit hoher Wahrscheinlichkeit weiter angepasst werden.
-* **Meldung**: Eine Meldung enthält bisher Koordinaten (Längen- und Breitengrad), eine Umfrage auf die die Meldung antwortet (diese muss jedoch nicht gesetzt werden, wenn die Meldung von einem Radfahrer neu erzeugt wurde), eine Liste an Antworten auf Fragen (leer bei Neuerstellung vom Radfahrer), eine Fahrtrichtung (hier wird der Winkel im Bogenmaß nach Osten (Wertebereich 0 - 2pi) angegeben; nach Osten, da mathematischer Standard) sowie einen Text als ```String``` (dieser ist nur bei einer Neuerstellung vom Radfahrer zu setzen).
-Eine Fahrtrichtung von 0.0 ist ungültig und steht als Platzhalter für *keine Fahrtrichtung gesetzt*.
+* **Meldung**: Eine Meldung enthält bisher Koordinaten (Längen- und Breitengrad), eine Umfrage auf die die Meldung antwortet (diese muss jedoch nicht gesetzt werden, wenn die Meldung von einem Radfahrer neu erzeugt wurde), eine Liste an Antworten auf Fragen (leer bei Neuerstellung vom Radfahrer), eine Fahrtrichtung (hier wird der Winkel im Bogenmaß nach Osten (siehe unten) sowie einen Text als ```String``` (dieser ist nur bei einer Neuerstellung vom Radfahrer zu setzen).
 * **Antwort**: Eine Antwort ist eine Antwort auf eine Umfrage, die automatisch aus einer Meldung generiert wurde. Sie enthält die Meldung, auf die sie sich bezieht, eine Frage, und die tatsächliche Antwort als ```String```
 
 ##### MeldungRepository
@@ -156,10 +155,11 @@ Das Repository für die Meldungen.
 Der Service stellt Methoden bereit, über die Meldungen aus dem Repository abgefragt und manipuliert werden können. So lassen sich hier alle oder einzelne Meldungen abfragen, als auch Meldungen aus dem Repository löschen.
 
 #### Karte
-In der Kartenansicht werden alle Umfragen aus der Datenbank angezeigt. Bei Klick auf diese können die Daten angeschaut und in die Einzel-Umfrageansicht gewechselt werden. Es besteht die Möglichkeit durch einen beliebigen Klick auf der Karte direkt an diesem Ort eine Umfrage zu erstellen oder durch den +-Button in der unteren, rechten Ecke eine Umfrage (ohne vorherige Ortsangabe) zu erstellen.  
+In der Kartenansicht werden alle Umfragen aus der Datenbank angezeigt. Bei Klick auf diese können die Daten angeschaut und in die Einzel-Umfrageansicht gewechselt werden. Es besteht die Möglichkeit durch einen beliebigen Klick auf der Karte direkt an diesem Ort eine Umfrage zu erstellen oder durch den +-Button in der unteren, rechten Ecke eine Umfrage (ohne vorherige Ortsangabe) zu erstellen.
 
 #### Fahrtrichtungen
-Jede Umfrage und jede Frage können optional eine Fahrtrichtung besitzen. Diese wird über einen Pfeil symbolisiert und kann mit einem separaten Marker, der die Richtung vorgibt, verändert werden. Fahrtrichtungen werden im Bogenmaß gespeichert, wobei Norden dem Wert 0 entspricht. Folglich wäre Westen PI/2, Süden wäre PI und Osten PI3/2. Diese Funktionalität ist in erster Linie dafür gedacht, um auf eine bestimmte Fahrtrichtung hinzuweisen, aber kann bei Bedarf natürlich für beliebiges verwendet werden (z.B. Frage, bei der es um eine Abzweigung in eine möglichst genaue Richtung geht).
+Jede Umfrage und jede Frage können optional eine Fahrtrichtung besitzen. Diese wird über einen Pfeil symbolisiert und kann mit einem separaten Marker, der die Richtung vorgibt, verändert werden. Fahrtrichtungen werden im Bogenmaß gespeichert, wobei Osten dem Wert 0=2\*PI entspricht. Folglich wäre Norden PI/2, Westen wäre PI und Süden PI\*3/2. Eine Fahrtrichtung von 0.0 ist ungültig und steht als Platzhalter für *keine Fahrtrichtung gesetzt*. Entsprechend ist der Wertebereich *0 < Fahrtrichtung <= PI\*2*.
+Diese Funktionalität ist in erster Linie dafür gedacht, um auf eine bestimmte Fahrtrichtung hinzuweisen, aber kann bei Bedarf natürlich für beliebiges verwendet werden (z.B. Frage, bei der es um eine Abzweigung in eine möglichst genaue Richtung geht).
 
 ##### KartenController
 Im ```KartenController``` können alle Umfragen aus der Datenbank abgefragt werden, die in der Kartenansicht angezeigt werden sollen.
