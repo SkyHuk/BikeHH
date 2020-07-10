@@ -1,0 +1,8 @@
+{
+  "properties": {
+    "isLocked": {
+      "type": "boolean",
+      "required": true
+    }
+  }
+}

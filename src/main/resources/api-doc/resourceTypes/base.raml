@@ -1,0 +1,85 @@
+#%RAML 1.0 ResourceType
+# base.raml
+# user-documentaion
+# Created by Emre A.
+
+get?:
+  is: [authorization]
+  responses:
+    200:
+      description: Succesfully retrieved
+    400:
+      description: |
+       Bad Request. Error codes:
+       - bad_request
+    500:
+      description: |
+       Internal Server Error. Error codes:
+       - internal_server_error
+    401:
+      description: |
+       Unauthorized. Error codes:
+       - unauthorized
+
+post?:
+  is: [authorization]
+  responses:
+    200:
+      description: Succesfully created new resource
+    400:
+      description: |
+       Bad Request. Error codes:
+       - bad_request
+    500:
+      description: |
+       Internal Server Error. Error codes:
+       - internal_server_error
+    401:
+      description: |
+       Unauthorized. Error codes:
+       - unauthorized
+
+put?:
+  is: [authorization]
+  responses:
+    200:
+      description: Succesfully updated resource
+    400:
+      description: |
+       Bad Request. Error codes:
+       - bad_request
+    500:
+      description: |
+       Internal Server Error. Error codes:
+       - internal_server_error
+    401:
+      description: |
+       Unauthorized. Error codes:
+       - unauthorized
+    404:
+      description: |
+       Not found or access token is invalid. Error code:
+       - invalid_token
+
+
+delete?:
+  is: [authorization]
+  responses:
+    204:
+      description: Succesfully deleted resource
+    400:
+      description: |
+       Bad Request. Error codes:
+       - bad_request
+    500:
+      description: |
+       Internal Server Error. Error codes:
+       - internal_server_error
+    401:
+      description: |
+       Unauthorized. Error codes:
+       - unauthorized
+    404:
+      description: |
+       Not found or access token is invalid. Error code:
+       - invalid_token

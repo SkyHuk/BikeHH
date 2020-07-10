@@ -1,0 +1,26 @@
+[
+    {
+        "id": 2,
+        "emailAddress": "test@mail.com",
+        "encryptedPassword": "sha: 2YbXcpo8qT6PuNnA8ZYlZK7Z+Ck=",
+        "isVerified": false,
+        "isLocked": false,
+        "credibility": 0,
+        "privacySetting": 0,
+        "role": "user",
+        "updatedAt": "2020-06-19T01:33:11.026+0000",
+        "createdAt": "2020-06-19T01:33:11.026+0000"
+    },
+    {
+        "id": 3,
+        "emailAddress": "test2@mail.com",
+        "encryptedPassword": "sha: 2YbXcpo8qT6PuNnA8ZYlZK7Z+Ck=",
+        "isVerified": false,
+        "isLocked": false,
+        "credibility": 0,
+        "privacySetting": 0,
+        "role": "user",
+        "updatedAt": "2020-06-19T01:33:11.026+0000",
+        "createdAt": "2020-06-19T01:33:11.026+0000"
+    }
+]

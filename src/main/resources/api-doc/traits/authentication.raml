@@ -1,0 +1,7 @@
+#%RAML 1.0 Trait
+usage: Apply this to any method where a user want to access a secured resource.
+description: AccessToken is required for authentication
+headers:
+  Authorization:
+    type: string
+    required: true

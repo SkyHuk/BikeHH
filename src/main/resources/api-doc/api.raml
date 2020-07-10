@@ -1,0 +1,357 @@
+#%RAML 1.0
+# api.raml
+# user-documentaion
+# Created by Emre A.
+
+# use ' raml2html api.raml > index.html' to export it to html
+title: byclistics
+version: v1
+protocols: [HTTP, HTTPS]
+baseUri: https://{host}/api
+baseUriParameters:
+  host:
+    description: The host according to the environment. [dev=byclistics.dev, prod=byclistics.de,local=localhost:8080]
+mediaType:  application/json
+
+documentation:
+  - title: Error handling
+    content: !include ./docs/response.md
+
+resourceTypes:
+  base: !include ./resourceTypes/base.raml
+
+types:
+  register: !include schemas/register.schema
+  userSchema: !include schemas/user.schema
+  usersSchema: !include schemas/users.schema
+  loginSchema: !include schemas/login.schema
+  ticketSchema: !include schemas/ticket.schema
+  verificationSchema: !include schemas/verification.schema
+  userStruct: !include response/user.schema
+  usersStruct: !include response/users.schema
+  allUsersStruct: !include response/allUsers.schema
+  ticketStruct: !include response/ticket.schema
+
+traits:
+  authorization: !include ./traits/authorization.raml
+  authentication: !include ./traits/authentication.raml
+
+/user:
+  type: base
+  description: User
+  get:
+    is: [authentication]
+    description: Retrieve user based on auth token
+
+    responses:
+      200:
+        description: Succesfully retrieved user
+        body:
+          type: userStruct
+      404:
+        description: |
+         Not found or access token is invalid. Error code:
+         - invalid_token
+  post:
+    description: Create new user
+    body:
+      type: register
+      example:
+        {
+          "email": "max.mustermann@mail.com",
+          "password": Password123
+        }
+
+    responses:
+      400:
+        description: |
+         Bad Request. Error Codes:
+         - bad_request
+         - bad_credentials
+
+  put:
+    is: [authentication]
+    description: Update an existing user
+    body:
+      type: userSchema
+      example:
+        {
+          "email": "max.mustermann@mail.com",
+          "privacySetting": 2
+        }
+
+  delete:
+    description: Delete an existing user
+    is: [authentication]
+
+  /password:
+    type: base
+    is: [authentication]
+    put:
+      description: Set new password for current user
+      body:
+        type: |
+         {
+           "properties": {
+             "oldPassword": {
+                 "type": "string",
+                 "required": true,
+                 "minLength": 6,
+                 "maxLength": 255,
+                 "regex": "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,64}$"
+               },
+               "newPassword": {
+                   "type": "string",
+                   "required": true,
+                   "minLength": 6,
+                   "maxLength": 255,
+                   "regex": "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,64}$"
+                }
+             }
+         }
+        example:
+          {
+            "oldPassword": "Password123",
+            "newPassword": "newPassword123"
+          }
+
+/verify:
+  type: base
+  post:
+    description: Request verification mail
+    body:
+      type: |
+        {
+          "properties": {
+            "email": {
+                "type": "string",
+                "required": true,
+                "minLength": 3,
+                "maxLength": 255,
+                "regex": "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$"
+              }
+            }
+        }
+      example:
+        {
+          "email": "max.mustermann@gmail.com"
+        }
+  put:
+    description: Verify a user
+    type: base
+    queryParameters:
+      token:
+        description: Verification token
+        type: string
+        required: true
+
+/password:
+  type: base
+  post:
+    description: Request new password for user
+    body:
+      type: |
+        {
+          "properties": {
+            "email": {
+                "type": "string",
+                "required": true,
+                "minLength": 6,
+                "maxLength": 255,
+                "regex": "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$"
+              }
+            }
+        }
+      example:
+        {
+          "email": "max.mustermann@gmail.com"
+        }
+  put:
+    description: Set new password for existing user
+    queryParameters:
+      token:
+        description: Verification token
+        type: string
+        required: true
+    body:
+      type: |
+        {
+          "properties": {
+            "password": {
+                "type": "string",
+                "required": true,
+                "minLength": 8,
+                "maxLength": 255
+              }
+            }
+        }
+      example:
+        {
+          "password": "newPassword"
+        }
+
+/admin:
+  type: base
+  is: [authentication]
+  description: User management
+  post:
+    description: Create new admin
+    body:
+      type: register
+      example:
+        {
+          "email": "max.mustermann@mail.com",
+          "password": "Password123",
+        }
+    responses:
+      400:
+        description: |
+         Bad Request. Error Codes:
+         - bad_request
+         - bad_credentials
+      404:
+        description: |
+         Not found or access token is invalid. Error code:
+         - invalid_token
+      403:
+        description: |
+         Forbidden. Error Codes:
+         - forbidden
+  /users:
+    type: base
+    is: [authentication]
+    get:
+      description: Get all users
+      responses:
+        200:
+          description: Succesfully retrieved user
+          body:
+            type: allUsersStruct
+        404:
+          description: |
+           Not found or access token is invalid. Error code:
+           - invalid_token
+        403:
+          description: |
+           Forbidden. Error Codes:
+           - forbidden
+
+  /users/{id}:
+    type: base
+    is: [authentication]
+    uriParameters:
+      id:
+        description: ID of a specific user
+        required: true
+        type: int
+    get:
+      description: Retrieve particular user
+      responses:
+        200:
+          description: Succesfully retrieved user
+          body:
+            type: usersStruct
+        404:
+          description: |
+           Not found or access token is invalid. Error code:
+           - invalid_token
+        403:
+          description: |
+           Forbidden. Error Codes:
+           - forbidden
+    put:
+      description: Update particular user
+      body:
+        type: usersSchema
+        example:
+          {
+            "isLocked": true
+          }
+      responses:
+        404:
+          description: |
+           Not found or access token is invalid. Error code:
+           - invalid_token
+        403:
+          description: |
+           Forbidden. Error Codes:
+           - forbidden
+    delete:
+      description: Delete particular user
+      responses:
+        404:
+          description: |
+           Not found or access token is invalid. Error code:
+           - invalid_token
+        403:
+          description: |
+           Forbidden. Error Codes:
+           - forbidden
+
+/auth:
+  type: base
+  description: User authentication
+  post:
+    description: Create a session token
+    body:
+      type: login
+      example:
+        {
+          "email": "max.mustermann@mail.com",
+          "password": "password123"
+        }
+    responses:
+      200:
+        description: Succesfully created new session
+        body:
+          type: object
+          example:
+            {
+              "authorization": "pvvaAdhZUkImXv3HgE6NfHqhkROtLhC_K_GmnfsCw5o=",
+            }
+      400:
+        description: |
+         Bad Request: Error code:
+         - bad_request
+         - bad_credentials
+
+  delete:
+    is: [authentication]
+    description: Revoke session token
+
+/ticket(deprecated):
+  type: base
+  description: Ticket Service
+  get:
+    description: Retrieve all tickets
+
+  post:
+    description: Create new ticket
+    body:
+      type: ticketSchema
+      example:
+        {
+          "location": "53°3358.4N 95903.1E",
+          "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam",
+        }
+
+  /{id}:
+    type: base
+    uriParameters:
+      id:
+        description: ID of a specific user
+        required: true
+        type: int
+    get:
+      description: Retrieve particular ticket
+      responses:
+        200:
+          description: Succesfully retrieved ticket
+          body:
+            type: ticketStruct
+    put:
+      description: Update particular ticket
+      type: ticketStruct
+
+    delete:
+      description: Delete particular ticket

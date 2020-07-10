@@ -1,0 +1,16 @@
+{
+  "properties": {
+    "location": {
+      "type": "point",
+      "required": true,
+      "minLength": 3,
+      "maxLength": 255
+    },
+    "description": {
+      "type": "string",
+      "required": false,
+      "minLength": 8,
+      "maxLength": 64
+    }
+  }
+}
