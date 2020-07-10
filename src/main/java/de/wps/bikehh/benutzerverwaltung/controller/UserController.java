@@ -28,7 +28,13 @@ public class UserController {
         this._UserDetailService = userDetailService;
     }
 
-
+    /**
+     *
+     * gebt den aktuellen User zurück
+     *
+     * @param auth der aktuelle authentifizierte User
+     * @return User
+     */
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public UserDetailsResponseModel getCurrentUser(Authentication auth) throws ApiRequestException {
@@ -36,6 +42,12 @@ public class UserController {
         return new UserDetailsResponseModel(user);
     }
 
+    /**
+     *
+     * registriert einen neuen User
+     *
+     * @param requestUserDetails User credentials
+     */
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public void createUser(@Valid @RequestBody UserDetailsRequestModel requestUserDetails) throws ApiRequestException {
         String email = requestUserDetails.getEmail();
@@ -48,6 +60,12 @@ public class UserController {
         _UserDetailService.createUser(email, password);
     }
 
+    /**
+     *
+     * updated einen existierenden User
+     *
+     * @param requestUserDetails die veränderten Userdaten
+     */
     @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public void updateUser(Authentication auth, @Valid @RequestBody UpdateUserDetailsRequestModel requestUserDetails) {
         User user = (User) auth.getPrincipal();
@@ -55,6 +73,12 @@ public class UserController {
         _UserDetailService.updateUser(user, requestUserDetails);
     }
 
+    /**
+     *
+     * löscht einen User Account
+     *
+     * @param auth der aktuelle authentifizierte User
+     */
     @DeleteMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(Authentication auth) {
@@ -63,6 +87,13 @@ public class UserController {
         _UserDetailService.deleteUser(user);
     }
 
+    /**
+     *
+     * setzt ein neues Passwort für ein schon eingeloggter User
+     *
+     * @param auth der aktuelle authentifizierte User
+     * @param passwordRequestModel das neue Passwort
+     */
     @RequestMapping(value = "/password", method = RequestMethod.PUT)
     public void updatePassword(Authentication auth, @Valid @RequestBody PasswordRequestModel passwordRequestModel) {
         User user = (User) auth.getPrincipal();

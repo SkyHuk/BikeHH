@@ -35,6 +35,11 @@ public class VerifyDetailService {
 		this._smtpService = smtpService;
 	}
 
+	/**
+	 * verschickt eine account-verifizieren Mail raus
+	 *
+	 * @param email email
+	 */
 	public void requestVerificationMail(String email) throws ApiRequestException {
 		if (!_userAuthenticationRepository.existsByEmailAddress(email)) {
 			return;
@@ -71,6 +76,11 @@ public class VerifyDetailService {
 
 	}
 
+	/**
+	 * verifiziert den Account eines Users
+	 *
+	 * @param token token, der in der db hinterlegt worden ist
+	 */
 	public void verifyUser(String token) throws ApiRequestException {
 		Verification verification = _verificationRepository.findByToken(token).orElse(null);
 		if (verification == null) {
@@ -90,6 +100,11 @@ public class VerifyDetailService {
 		_userAuthenticationRepository.save(user);
 	}
 
+	/**
+	 * löscht einen verify-token anhand der User-id
+	 *
+	 * @param id id des Users
+	 */
 	public void deleteVerification(Long userId) {
 		Verification verification = _verificationRepository.findByUserId(userId).orElse(null);
 		if (verification != null) {
@@ -97,6 +112,9 @@ public class VerifyDetailService {
 		}
 	}
 
+	/**
+	 * scheduler, welcher abgelaufene verify tokens löscht
+	 */
 	@Scheduled(fixedRate = 10000)
 	public void deleteExpiredTokens() {
 		List<Verification> list = new ArrayList<>();

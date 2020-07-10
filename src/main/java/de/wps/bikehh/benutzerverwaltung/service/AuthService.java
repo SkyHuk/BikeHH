@@ -28,7 +28,15 @@ public class AuthService {
 		this._userAuthenticationRepository = _userAuthenticationRepository;
 	}
 
-	// @Todo hash access token ?
+	/**
+	 * loggt einen User ein
+	 *
+	 * erstellt eine Session in der Datenbank
+	 *
+	 * @param email email des Users
+	 * @param password passwort des Users
+	 * @return eine gültige Session
+	 */
 	public Session loginUser(String email, String password) throws BadCredentialsException {
 		if (!_userAuthenticationRepository.existsByEmailAddress(email)) {
 			throw new ApiRequestException(ErrorCode.bad_credentials, HttpStatus.BAD_REQUEST);
@@ -52,6 +60,13 @@ public class AuthService {
 		return session;
 	}
 
+	/**
+	 * loggt einen User aus
+	 *
+	 * löscht die Session in der Datenbank
+	 *
+	 * @param session die aktuelle session des User
+	 */
 	public void logoutUser(Session session) {
 		_sessionRepository.delete(session);
 	}
@@ -63,6 +78,13 @@ public class AuthService {
 		}
 	}
 
+	/**
+	 * gibt eine Session anhand ihres Tokens zurück
+	 *
+	 *
+	 * @param token session-token
+	 * @return Session
+	 */
 	public Session getSessionByToken(String token) {
 		return _sessionRepository.findByToken(token).orElse(null);
 	}

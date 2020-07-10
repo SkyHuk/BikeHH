@@ -24,7 +24,12 @@ public class AuthController {
         this._authService = authService;
     }
 
-    //@TODO restriction for how many devices to log in ?
+    /**
+     * loggt einen existierenden User ein
+     *
+     * @param loginrequest user credentials
+     * @return Eine gültige Session
+     */
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
     public SessionResponseModel login(@Valid @RequestBody LoginRequest loginrequest) {
         String email = loginrequest.getEmail();
@@ -34,6 +39,11 @@ public class AuthController {
         return new SessionResponseModel(session.getToken());
     }
 
+    /**
+     * loggt einen existierenden User aus
+     *
+     * @param auth der aktuelle authentifizierte User
+     */
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void logout(Authentication auth) {
