@@ -675,10 +675,14 @@ import 'leaflet/dist/leaflet.css';
         const onRotate = (e) => {
           const x = e.latlng.lat - lat
           const y = e.latlng.lng - lng
-          const angle = Math.atan2(x, y)
+          let angle = Math.atan2(x, y)
+
+          if (angle < 0) {
+            angle += Math.PI * 2
+          }
 
           if (angle === 0.0) {
-            angle = Math.PI*2
+            angle = Math.PI * 2
           }
 
           // rotiere 90° nach links

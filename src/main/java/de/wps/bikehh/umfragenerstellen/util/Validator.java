@@ -42,6 +42,13 @@ public class Validator {
 
 				List<Frage> fragenOhneAntworten = new ArrayList<Frage>();
 				for (Frage frage : umfrage.getFragen()) {
+					if (!(frage.getFahrtrichtung() == 0.0 ||
+						(frage.getFahrtrichtung() > 0 && frage.getFahrtrichtung() <= 2 * Math.PI)
+					   )) {
+					   	System.out.println("Fahrtrichtung einer Frage hat ein falsches Format")
+						return false;
+					}
+
 					if (frage.getAntwortMoeglichkeiten().size() < 1) {
 						fragenOhneAntworten.add(frage);
 					}
@@ -91,8 +98,10 @@ public class Validator {
 						&& umfrage.getBreitengrad() != 0 && umfrage.getLaengengrad() != 0
 						&& umfrage.getKategorie() != null && umfrage.getBestaetigtVonUsern() != null
 						&& umfrage.getErsteller() != null && umfrage.getAdresse() != null
-						&& (((umfrage.getFahrtrichtung() >= -(2 * Math.PI))
-								&& (umfrage.getFahrtrichtung() <= (2 * Math.PI))))) {
+						&& (umfrage.getFahrtrichtung() == 0.0 ||
+							(umfrage.getFahrtrichtung() > 0 && umfrage.getFahrtrichtung() <= 2 * Math.PI)
+						   )
+					) {
 
 					System.out.println("Validierung war erfolgreich.");
 					return true;
