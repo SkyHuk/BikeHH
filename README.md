@@ -105,7 +105,7 @@ In dieser Ansicht sollen einige statistische Auswertungen über die Umfragen und
 Dieser Controller ist der Controller für die Übersichtsseite und muss noch angepasst werden. Momentan ist es der Anlaufpunkt nach erfolgreichem Login. Er gibt bisher nur das HTML-Template für ```Uebersicht``` zurück. Ebenso müssen noch Tests erstellt werden.
 
 #### Umfragen
-Auf der Umfragen-Seite wird eine Gesamtansicht der Umfragen als Liste dargestellt. Hier gibt es die Möglichkeit eine Einzelnansicht einer Umfrage aufzurufen, als auch die Umfragen zu löschen (Achtung: Umfrage wird hier unwiderruflich gelöscht!). Daneben wird der Status der Umfrage (aktiviert/deaktiviert) angezeigt.
+Auf der Umfragen-Seite wird eine Gesamtansicht der Umfragen als Liste dargestellt. Hier gibt es die Möglichkeit eine Einzelansicht einer Umfrage aufzurufen, als auch die Umfragen zu löschen (Achtung: Umfrage wird hier unwiderruflich gelöscht!). Daneben wird der Status der Umfrage (aktiviert/deaktiviert) angezeigt.
 
 ##### UmfragenController
 Für die Anzeige der Umfragenliste als auch der Einzelumfrage ist im Backend der ```UmfragenController``` zuständig, der die Umfragen über den ```UmfragenService``` aus der Datenbank bezieht. 
@@ -138,7 +138,7 @@ Der Service stellt Methoden bereit, über die Umfragen aus dem Repository abgefr
 Das Backend für die Meldungen wurde bereits angefangen, muss aber noch weiter entwickelt werden. Die Controller und die Entität Meldung müssen noch implementiert und feingeschliffen werden, diese sind jedoch bereits vorhanden. Tests müssen ebenso noch erstellt werden. Das Frontend muss noch erstellt werden.
 
 ##### MeldungenController
-Dieser Controller behandelt alle Anfragen auf ```\meldungen``` und enthält bereits eine Methode zum Anzeigen einer Liste aller Meldungen auf.
+Dieser Controller behandelt alle Anfragen auf ```\meldungen``` und enthält bereits eine Methode zum Anzeigen einer Liste aller Meldungen.
 
 ##### MeldungenRestController
 Der ```MeldungenRestController``` ist die Schnittstelle von mobilen Anwendungen zum Backend, damit eine Meldung an das Backend gesendet werden kann. Dort wird diese gespeichert. Die Schnittstelle ist aus Sicherheitsgründen noch hinter ```\api\``` zu schieben (siehe ```config.SecurityConfig.java```).
@@ -156,7 +156,7 @@ Das Repository für die Meldungen.
 Der Service stellt Methoden bereit, über die Meldungen aus dem Repository abgefragt und manipuliert werden können. So lassen sich hier alle oder einzelne Meldungen abfragen, als auch Meldungen aus dem Repository löschen.
 
 #### Karte
-In der Kartenansicht werden alle Umfragen aus der Datenbank angezeigt. Bei Klick auf diese können die Daten angeschaut und in die Einzel-Umfrageansicht gewechselt werden. Es besteht die Möglichkeit durch einen beliebigen Klick auf der Karte direkt an diesem Ort eine Umfrage zu erstellen oder durch den +-Button in der unteren, rechten Ecke eine Umfrage zu erstellen.  
+In der Kartenansicht werden alle Umfragen aus der Datenbank angezeigt. Bei Klick auf diese können die Daten angeschaut und in die Einzel-Umfrageansicht gewechselt werden. Es besteht die Möglichkeit durch einen beliebigen Klick auf der Karte direkt an diesem Ort eine Umfrage zu erstellen oder durch den +-Button in der unteren, rechten Ecke eine Umfrage (ohne vorherige Ortsangabe) zu erstellen.  
 
 #### Fahrtrichtungen
 Jede Umfrage und jede Frage können optional eine Fahrtrichtung besitzen. Diese wird über einen Pfeil symbolisiert und kann mit einem separaten Marker, der die Richtung vorgibt, verändert werden. Fahrtrichtungen werden im Bogenmaß gespeichert, wobei Norden dem Wert 0 entspricht. Folglich wäre Westen PI/2, Süden wäre PI und Osten PI3/2. Diese Funktionalität ist in erster Linie dafür gedacht, um auf eine bestimmte Fahrtrichtung hinzuweisen, aber kann bei Bedarf natürlich für beliebiges verwendet werden (z.B. Frage, bei der es um eine Abzweigung in eine möglichst genaue Richtung geht).
@@ -180,12 +180,11 @@ Wenn alle Felder ausgefüllt sind wird die Umfrage an das Backend geschickt. Dor
 
 ##### Wie funktioniert der Code der Seite mit Vue.js?
 
-Für ein dynamisches Formular und das schnelle parsen der Textfelder nach Informationen der Umfrage verwendet ```/umfrage-erstellen``` das JS-Framework ```Vue.js```. Dabei können einzelne HTML-Elemente über ```v-model``` mit einer in ```data``` deklarierten Variable verknüpft werden und gewinnt dadurch Funktionalität. Weitere praktische Funktionen von Vue.js sind ```v-if``` und ```v-for```, mit denen sich if-Bedingungen und for-Schleifen auf HTML-Ebene (Um z.B. für jeden Eintrag eines Arrays eine Überschrift zu erzeugen) umsetzten
-lassen. Für weitere Informationen siehe [Vue.js-Docs](https://vuejs.org/).
+Für ein dynamisches Formular und das schnelle parsen der Textfelder nach Informationen der Umfrage verwendet ```/umfrage-erstellen``` das JS-Framework ```Vue.js```. Dabei können einzelne HTML-Elemente über ```v-model``` mit einer in ```data``` deklarierten Variable verknüpft werden und gewinnt dadurch Funktionalität. Weitere praktische Funktionen von Vue.js sind ```v-if``` und ```v-for```, mit denen sich if-Bedingungen und for-Schleifen auf HTML-Ebene (Um z.B. für jeden Eintrag eines Arrays eine Überschrift zu erzeugen) umsetzen lassen. Für weitere Informationen siehe [Vue.js-Docs](https://vuejs.org/).
 
 ##### Erstellen und Bearbeiten in einem
 
-Weil diese Seite mit Abstand am meisten Funktionalität aufweist und zusätzlich zum Umfragen erstellen auch zum Bearbeiten von Umfragen verwendet wird ist sie die komplexeste. Dabei wird versucht, möglichst viele Methoden der Umfrageerstellung für die Bearbeitung wiederzuverwenden. Die Variable ```editiermodus``` gibt jeweils an, in welchem Modus man sich befindet. Abhängig davon geschehen dann allerlei Fallunterscheidungen. Beispiel: Bei einer neue Umfrage wird keine Id ans Backend geschickt, diese wird von der Datenbank gesetzt. So wird garantiert, dass es keine weitere Umfrage mit der gleichen id gibt. Wird jedoch eine Umfrage bearbeitet, existiert die Id schon, sie muss also an das Backend zurückgeschickt werden. Sie wird schließlich benötigt, um den alten Datenbankeintrag zu aktualisieren.
+Weil diese Seite mit Abstand am meisten Funktionalität aufweist und zusätzlich zum Umfragen erstellen auch zum Bearbeiten von Umfragen verwendet wird ist sie die komplexeste. Dabei wird versucht, möglichst viele Methoden der Umfrageerstellung für die Bearbeitung wiederzuverwenden. Die Variable ```editiermodus``` gibt jeweils an, in welchem Modus man sich befindet. Abhängig davon geschehen dann allerlei Fallunterscheidungen. Beispiel: Bei einer neuen Umfrage wird keine Id ans Backend geschickt, diese wird von der Datenbank gesetzt. So wird garantiert, dass es keine weitere Umfrage mit der gleichen Id gibt. Wird jedoch eine Umfrage bearbeitet, existiert die Id schon, sie muss also an das Backend zurückgeschickt werden. Sie wird schließlich benötigt, um den alten Datenbankeintrag zu aktualisieren.
 
 Wird eine Umfrage bearbeitet ist auch die Validierung eine leicht andere. So darf nun zum Beispiel das Startdatum in der Vergangenheit liegen.
 
@@ -196,7 +195,7 @@ In diesem Controller kann der Ersteller einer Umfrage abgefragt werden, als auch
 
 ##### UmfragenErstellenRestController
 Hier wird eine Umfrage gespeichert oder eine bestehende in der Datenbank aktualisiert. Dazu wird sie vorher noch einmal durch den Aufruf von ```Validator.umfrageIstValide(umfrage)``` validiert und anschließend gespeichert.
-Wenn die Validierung schief läuft, wird eine ```ResponseStatusException``` mit dem HTTP Status ```NOT_ACCEPTABLE``` geworfen und die Umfrage nicht gespeichert. Das Frontend wird in dem Fall eine Fehlermeldung anzeigen. 
+Wenn die Validierung schief läuft, wird eine ```ResponseStatusException``` mit dem HTTP Status ```NOT_ACCEPTABLE``` geworfen und die Umfrage nicht gespeichert. Das Frontend wird in diesem Fall eine Fehlermeldung anzeigen. 
 
 ##### Validator
 Die Hilfklasse ```Validator``` validiert eine Umfrage. Hierzu werden als erstes die Daten in Formate gebracht, mit denen sie verglichen werden können. Dann werden die Bedingungen, die auch im Frontend getestet werden, erneut durchgeführt. 
@@ -205,7 +204,7 @@ Die Hilfklasse ```Validator``` validiert eine Umfrage. Hierzu werden als erstes 
 
 Tests der Admin-Plattform sind wie alle anderen Tests der Nutzerverwaltung unter ```src/test/java/de/wps/bikehh/...``` zu finden und lassen sich bequem mit Eclipse ausführen.
 
-Für die Tests werden mit ```Mockito``` die Datenbank, deren Inhalte und Anweisungen auf diesen simuliert. Dies beschleunigt die Ausführung der Tests und garantiert, dass die Tests nicht von momentanen Zustand der Datenbank beeinflusst werden.
+Für die Tests werden mit ```Mockito``` die Datenbank, deren Inhalte und Anweisungen auf diesen simuliert. Dies beschleunigt die Ausführung der Tests und garantiert, dass die Tests nicht vom momentanen Zustand der Datenbank beeinflusst werden.
 
 ### Nutzerverwaltung
 Diese muss noch erstellt werden.
