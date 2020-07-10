@@ -25,7 +25,7 @@ public class VerifyController {
     }
 
 
-    @GetMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
     public void requestVerificationMail(@Valid @RequestBody RequestMailModel requestModel) throws ApiRequestException {
         String email = requestModel.getEmail();
 
