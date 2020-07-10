@@ -45,7 +45,7 @@ public class Validator {
 					if (!(frage.getFahrtrichtung() == 0.0 ||
 						(frage.getFahrtrichtung() > 0 && frage.getFahrtrichtung() <= 2 * Math.PI)
 					   )) {
-					   	System.out.println("Fahrtrichtung einer Frage hat ein falsches Format")
+						System.out.println("Fahrtrichtung einer Frage hat ein falsches Format");
 						return false;
 					}
 
