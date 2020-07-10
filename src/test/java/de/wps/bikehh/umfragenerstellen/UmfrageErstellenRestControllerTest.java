@@ -44,10 +44,8 @@ public class UmfrageErstellenRestControllerTest {
 		jsonString = new Gson().toJson(umfrage1);
 
 		umfragenErstellenRestController.speichereUmfrage(jsonString);
-
-		// TODO implement below methods
-		// Mockito.verify(umfragenRepository, times(1)).save(umfrage1);
-		// Mockito.verify(umfragenRepository, times(1)).findById(umfrage1.getId());
+		// mockito verfiy nicht möglich, da Objekt erst in der Methode erstellt wird aus
+		// jsonString
 
 		assertEquals(0, umfragenErstellenRestController.speichereUmfrage(jsonString));
 	}
