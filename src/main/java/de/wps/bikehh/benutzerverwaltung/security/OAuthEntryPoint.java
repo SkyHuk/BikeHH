@@ -12,6 +12,9 @@ import java.io.IOException;
 
 public class OAuthEntryPoint implements AuthenticationEntryPoint {
 
+    /**
+     * wird aufgerufen, falls die Authentication fehlschlägt
+     */
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         ApiException e = new ApiException(ErrorCode.unauthorized);

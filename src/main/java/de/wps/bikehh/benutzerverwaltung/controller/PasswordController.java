@@ -24,6 +24,11 @@ public class PasswordController {
         this._passwordDetailService = passwordDetailService;
     }
 
+    /**
+     * schickt eine email raus, um sein Passwort zurückzusetzen
+     *
+     * @param requestModel email
+     */
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
     public void requestPasswordResetMail(@Valid @RequestBody RequestMailModel requestModel) throws ApiRequestException {
         String email = requestModel.getEmail();
@@ -35,6 +40,12 @@ public class PasswordController {
         _passwordDetailService.requestResetMail(email);
     }
 
+    /**
+     * setzt ein neues Passwort
+     *
+     * @param requestModel neues Passwort
+     * @param token eindeutiger Token, um User zu identifizieren
+     */
     @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
     public void resetPassword(@Valid @RequestBody ResetPasswordModel requestModel, @RequestParam String token) {
         String password = requestModel.getNewPassword();

@@ -24,7 +24,12 @@ public class VerifyController {
         this._verifyDetailService = verifyDetailService;
     }
 
-
+    /**
+     *
+     * schickt eine account-verifizeren Email raus
+     *
+     * @param requestModel email
+     */
     @GetMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
     public void requestVerificationMail(@Valid @RequestBody RequestMailModel requestModel) throws ApiRequestException {
         String email = requestModel.getEmail();
@@ -36,6 +41,12 @@ public class VerifyController {
         _verifyDetailService.requestVerificationMail(email);
     }
 
+    /**
+     *
+     * verifiziert einen User
+     *
+     * @param token der token, welcher den User identifiziert
+     */
     @PutMapping
     public void verifyUser(@RequestParam String token) {
         _verifyDetailService.verifyUser(token);

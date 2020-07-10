@@ -20,6 +20,9 @@ public class OAuthFilter extends OncePerRequestFilter {
     String apiKeyHeader = "X-API-Key";
     private String apiKeyValue = "bd8dc5a6-53dc-47a9-ab63-6799ea0d59c3";
 
+    /**
+     * Filter, welcher sich den api-key und den accessToken aus dem request zieht
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String accessToken = request.getHeader(authorizationHeader);

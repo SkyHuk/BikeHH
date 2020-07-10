@@ -22,6 +22,12 @@ Im Zuge des Praktikums "Fahrrad in Hamburg" der Universität Hamburg wurde ein P
 		- [Umfrage erstellen](#umfrage-erstellen)
 		- [Tests](#tests)
 	- [Nutzerverwaltung](#nutzerverwaltung)
+	    - [Allgemeines](#allgemeines)
+	    - [API-Referenz](#api-referenz)
+	    - [Authentifizierung & Autorisierung](#authentifizierung&autorisierung)
+	    - [Übersicht](#bersicht)
+	    
+	    
 
 
 ## Struktur des Projekts
@@ -207,4 +213,82 @@ Tests der Admin-Plattform sind wie alle anderen Tests der Nutzerverwaltung unter
 Für die Tests werden mit ```Mockito``` die Datenbank, deren Inhalte und Anweisungen auf diesen simuliert. Dies beschleunigt die Ausführung der Tests und garantiert, dass die Tests nicht vom momentanen Zustand der Datenbank beeinflusst werden.
 
 ### Nutzerverwaltung
-Diese muss noch erstellt werden.
+
+#### Allgemeines
+Die Benutzerverwaltung stellt eine REST-API mit OAuth(vereinfacht) Authentication für die Mobile-Clients zur Verfügung, sowie Services für das ADFC-Frontend. Damit lassen sich User abfragen, erstellen, updaten sowie löschen. Zudem enthält es grundlegende Funktionen wie Account verifizieren oder Passwort zurücksetzen.
+
+#### API-Referenz
+Eine API-Referenz findet sich im Repository unter dem Dateinamen ```benutzerverwaltung_api_documentation.htm```
+
+#### Authentifizierung & Autorisierung
+##### Mobile-Clients
+Die REST-API ist abgesichert mit einem API-Key, welcher bei jeder Anfrage im Header mitgeschickt werden soll. Der Header trägt den Namen ```X-API-Key``` und der Token ist in der ```application.properties``` unter ``bikehh.api.key`` vermerkt.
+Ein eingeloggter User sendet im ```Authorization``` Header seinen OAuth AccessToken mit, um ihn zu authentizifieren.
+
+##### Web-Frontend
+Spring-Boot erstellt einen Cookie für eine neue Session und dieser wird automatisch übermittelt, sowie serverseitig authentifiziert.
+
+#### Übersicht
+
+##### AuthController
+Dieser Controller ist dafür da, um Anfragen entgegenzunehmen, um einen User einzuloggen bzw. auszuloggen. Zudem validiert er die Anfragen.
+
+##### AuthService
+Dieser Service kümmert sich darum, die Sessions zu verwalten.
+
+##### SessionRepository
+Das Repository für die Sessions.
+
+##### UserController
+Dieser Controller nimmt Anfragen entgegen, um einen User zu registrieren, updaten oder zu löschen.
+
+##### UserDetailsService
+Dieser Service kümmert sich darum, einen User zu verwalten.
+
+##### UserAuthenticationRepository
+Das Repository für die User.
+
+##### UserAdviceController
+Dieser Controller ist dafür zuständig, damit Spring-Boot automatisch einen User aus dem Web-Cookie authentifziert.
+
+##### PasswordController
+Dieser Controller nimmt Anfragen entgegen, um sein Password zurückzusetzen, wenn man es vergessen hat.
+
+##### PasswordDetailsService
+Dieser Service kümmert sich darum, Passwort-Reset Tokens zu verwalten. Das ```Reset``` Model wird hierfür verwendet.
+
+##### PasswordAuthenticationRepository
+Das Repository für die Passwort-Reset Tokens.
+
+##### PasswordController
+Dieser Controller nimmt Anfragen entgegen, um sein Password zurückzusetzen, wenn man es vergessen hat.
+
+##### VerifyDetailsService
+Dieser Service kümmert sich darum, Verifizierung Tokens zu verwalten. Das ```Verify``` Model wird hierfür verwendet.
+
+##### VerificationAuthenticationRepository
+Das Repository für die Verifizierung Tokens.
+
+##### SmtpService
+Service, um Emails zu verschicken. Funktioniert im local Environment jedoch nicht. Fürs dev und prod Environment muss ein entsprechender Email-Server in der `application.properties` hinterlegt werden.
+
+##### Materialien
+* **BikehhUserDetails**: Spring-Boot User Model, wrappt ein ``User`` Objekt. Wird hauptsächlich verwendet, damit Spring-Boot einen User automatisch durch einen Cookie authenfiziert.
+* **User**: Stellt einen User im System dar
+* **Rollen**: Rollen eines Users
+* **Session**: Eine Session wird erstellt, wenn sich ein User einloggt. Dieser enthält eine Referenz auf einen User, sowie einen AccessToken
+* **Mail**: Repräsentiert eine Email mit Empfänger, Betreff, sowie Body
+* **Reset**: Ein Token, welcher verwendet wird, um sein Passwort zurückzusetzen
+* **Verification**: Ein Token, welcher verwendet wird, um seinen Account zu verifizieren
+
+##### Exception
+Globales Exception handling des Benutzerverwaltung Pakets. Fehler in Services und Controller werden hier behandelt.
+
+##### Security
+OAuth Authentication Filter. Wichtig hierfür ist die Klasse `SecurityConfig` im Config Paket. Dort wird der Filter auf die einzelnen Endpunkte gesetzt bzw. auch andere Regeln definiert.
+
+##### Dto
+Hier sind die Data-Transfer Objekte drin, welche fürs deserialisieren/serialisieren der json Objekte zuständig sind. Dies wird von Spring-Boot automatisch gemacht.
+
+##### Util
+Dort sind Klassen bzw. Hilfsfunktionen drin.

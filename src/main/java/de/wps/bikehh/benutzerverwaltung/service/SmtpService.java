@@ -47,6 +47,13 @@ public class SmtpService {
         this.emailSender = javaMailSender;
     }
 
+    /**
+     * verschickt eine Email
+     *
+     *
+     * @param mail empfänger
+     * @param template das email-template
+     */
     public void sendMail(Mail mail, Templates template) {
         if (enviroment.equals("local")) {
             return;

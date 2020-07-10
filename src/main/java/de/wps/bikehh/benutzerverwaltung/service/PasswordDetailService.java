@@ -35,6 +35,12 @@ public class PasswordDetailService {
 		this._smtpService = smtpService;
 	}
 
+	/**
+	 * verschickt eine passwort-reset mail
+	 *
+	 *
+	 * @param email email des Users
+	 */
 	public void requestResetMail(String email) throws ApiRequestException {
 		if (!_userAuthenticationRepository.existsByEmailAddress(email)) {
 			return;
@@ -68,6 +74,12 @@ public class PasswordDetailService {
 
 	}
 
+	/**
+	 * setzt ein neues Passwort
+	 *
+	 * @param token token, welcher den User identifiziert
+	 * @param password passwort des Users
+	 */
 	public void resetPassword(String password, String token) throws ApiRequestException {
 		Reset reset = _passwordAuthenticationRepository.findByToken(token).orElse(null);
 		if (reset == null) {
@@ -88,6 +100,11 @@ public class PasswordDetailService {
 		_userAuthenticationRepository.save(user);
 	}
 
+	/**
+	 * löscht einen reset-token
+	 *
+	 * @param userId id des Users
+	 */
 	public void deleteResetToken(Long userId) {
 		Reset reset = _passwordAuthenticationRepository.findByUserId(userId).orElse(null);
 		if (reset != null) {
@@ -95,6 +112,9 @@ public class PasswordDetailService {
 		}
 	}
 
+	/**
+	 * scheduler, welcher abgelaufene password-reset tokens löscht
+	 */
 	@Scheduled(fixedRate = 10000)
 	public void deleteExpiredTokens() {
 		List<Reset> list = new ArrayList<>();
