@@ -73,6 +73,7 @@ public class SmtpService {
             String html = templateEngine.process(template.getPath(), context);
 
             //@TODO set name of sender to "byclistics" or what ever the name of the app is gonna be
+            //helper.setFrom("...");
             helper.setTo(mail.getTo());
             helper.setText(html, true);
             helper.setSubject(mail.getSubject());

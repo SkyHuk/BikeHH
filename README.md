@@ -214,11 +214,14 @@ Für die Tests werden mit ```Mockito``` die Datenbank, deren Inhalte und Anweisu
 
 ### Nutzerverwaltung
 
+#### TODOs
+Es fehlt hier noch das Frontend für api/verify und api/password um den User auf diese Seite weiterzuleiten. Siehe TODOs unter ```VerifyDetailService.java``` und ```PasswordDetailService.java```
+
 #### Allgemeines
 Die Benutzerverwaltung stellt eine REST-API mit OAuth(vereinfacht) Authentication für die Mobile-Clients zur Verfügung, sowie Services für das ADFC-Frontend. Damit lassen sich User abfragen, erstellen, updaten sowie löschen. Zudem enthält es grundlegende Funktionen wie Account verifizieren oder Passwort zurücksetzen.
 
 #### API-Referenz
-Eine API-Referenz findet sich im Repository unter dem Dateinamen ```benutzerverwaltung_api_documentation.htm```
+Eine API-Referenz findet sich im Repository unter ```/resources/api-doc/index.html``` oder ```www.byclistics.ddns.net```
 
 #### Authentifizierung & Autorisierung
 ##### Mobile-Clients
