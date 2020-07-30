@@ -12,11 +12,10 @@ import javax.persistence.OneToMany;
 import de.wps.bikehh.umfragen.material.Umfrage;
 
 /**
- * Datenbank Entity dieses Model gibt die Struktur für die mobile apps vor, nach
- * der die JSONs aufgebaut werden müssen
+ * Dieses Model gibt die Struktur für die mobile apps vor, nach welcher die DTOs
+ * aufgebaut werden müssen
  * 
- * TODO: Überprüfen, ob vollständig. Alle Funktionalitäten abgedeckt?
- *
+ * TODO: Auf Vollständigkeit prüfen. Alle Funktionalitäten abgedeckt?
  */
 @Entity
 public class Meldung {
@@ -25,28 +24,34 @@ public class Meldung {
 	@GeneratedValue
 	private int id;
 
-	// koordinaten der Meldung
 	private double laengengrad;
 	private double breitengrad;
 
-	// die Umfrage, auf die die Meldung antwortet
-	// muss nicht gesetzt sein, wenn diese Meldung nicht auf eine Umfrage antwortet
-	// sondern neu von einem Radfahrer erzeugt wurde
-	// leer beim postRequest, danach wird Umfrage generiert und gesetzt
+	/**
+	 * Die Umfrage, auf die die Meldung antwortet muss nicht gesetzt sein wenn
+	 * diese Meldung nicht auf eine Umfrage antwortet sondern neu von einem
+	 * Radfahrer erzeugt wurde. Dann ist sie leer beim postRequest und wird
+	 * danach generiert und gesetzt
+	 */
 	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Umfrage.class)
 	private Umfrage umfrage;
 
-	// Liste an Antworten. Leer bei Neuerstellung
+	/**
+	 * Liste an Antworten. Leer bei Neuerstellung
+	 */
 	@OneToMany(fetch = FetchType.LAZY, targetEntity = Antwort.class)
 	private List<Antwort> antwortenAufFragen;
 
-	// Winkel im Bogenmaß nach Osten (Wertebereich 0 - 2pi, nach Osten weil das
-	// mathematischer Standard ist)
-	// eine fahrtrichtung von 0.0 ist ungültig und steht symbolisierend für "keine
-	// Fahrtrichtung gesetzt"
+	/**
+	 * Winkel im Bogenmaß nach Osten (Wertebereich 0 - 2pi, nach Osten weil das
+	 * mathematischer Standard ist) eine fahrtrichtung von 0.0 ist ungültig und
+	 * steht symbolisierend für "keine Fahrtrichtung gesetzt"
+	 */
 	private double fahrtrichtung;
 
-	// nur gefüllt wenn Meldung neu generiert
+	/**
+	 * Nur gefüllt wenn Meldung neu generiert wird
+	 */
 	private String text;
 
 	// TODO: Kategorie ordentlich einbauen (Liste an vorgegebenen Kategorien)
@@ -56,7 +61,6 @@ public class Meldung {
 	// TODO: Meldung soll Foto beinhalten können
 
 	protected Meldung() {
-		// required by JPA
 	}
 
 	public Meldung(int id, double laengengrad, double breitengrad, Umfrage umfrage, List<Antwort> antwortenAufFragen,
@@ -125,11 +129,5 @@ public class Meldung {
 	public void setText(String text) {
 		this.text = text;
 	}
-
-	/*
-	 * public Kategorie getKategorie() { return kategorie; }
-	 * 
-	 * public void setKategorie(Kategorie kategorie) { this.kategorie = kategorie; }
-	 */
 
 }

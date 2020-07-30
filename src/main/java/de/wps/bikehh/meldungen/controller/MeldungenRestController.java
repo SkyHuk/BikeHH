@@ -6,32 +6,31 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
- * der MeldungenRestController ist die API Schnittstelle von mobile Anwendungen
- * zum Backend, um Meldungen zu senden
+ * Der MeldungenRestController ist die API Schnittstelle von mobile Anwendungen
+ * zum Backend, um Meldungen zu senden.
  * 
  * TODO: Hinter "/api/"-authentifizierung schieben, um sicher zu machen (siehe
  * config.SecurityConfig.java)
  * 
  * @author felixwolf
- *
  */
 @Controller
 @RequestMapping("/meldung-erstellen")
-public class MeldungRestController {
+public class MeldungenRestController {
 
 	/**
-	 * Die Meldungen, die hier ankommen, sollen in die Datenbank gespeichert werden.
+	 * Die Meldungen, die hier ankommen sollen in der Datenbank gespeichert
+	 * werden.
 	 * 
-	 * Des Weiteren soll aus dieser Meldung eine Umfrage generiert werden, die auch
-	 * in der Datenbank gespeichert wird
+	 * Des Weiteren soll aus dieser Meldung eine Umfrage generiert werden, die
+	 * auch in der Datenbank gespeichert wird
 	 * 
-	 * @param body der body in JSON format, in dem sich die Meldung befindet
+	 * @param body
+	 *            der body in JSON format, in dem sich die Meldung befindet
 	 */
 	@RequestMapping(method = RequestMethod.POST)
-	public void speichereMeldung(@RequestBody String body) {
-		// TODO: speicher die Meldung in DB, als Beispiel siehe
-		// UmfrageErstellenRestController
-
+	public void postMeldung(@RequestBody String body) {
+		// TODO: speicher die Meldung in DB
 		// TODO: generiere Umfrage aus Meldung
 	}
 }

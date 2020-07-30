@@ -12,28 +12,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("meldungen")
 public class MeldungenController {
 
-	// TODO: Klasse erstellen
 	// private MeldungenService meldungenService;
 
-	/*
-	 * Constructor für JUNIT tests TODO: implementieren, Test schreiben
-	 */
 	// @Autowired
 	// public MeldungenController(MeldungenService meldungenService) {
 	// this.meldungenService = meldungenService
 	// }
 
 	/**
-	 * zeigt eine Liste mit allen Meldungen
+	 * Zeigt eine Liste mit allen Meldungen
 	 * 
-	 * TODO: meldungen in das model laden
 	 * 
 	 * @return das HTML template für die Meldungen Liste
 	 */
 	@GetMapping
 	public String zeigeMeldungenListe(Model model) {
 
-		// TODO: funktion implementieren
+		// TODO: meldungen in das model laden
 		// List<Meldung> meldungenListeList = umfrageService.getAlleMeldungen()
 		// model.addAttribute("meldungen", meldungen)
 

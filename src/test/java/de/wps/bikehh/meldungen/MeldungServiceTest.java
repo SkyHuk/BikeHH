@@ -13,20 +13,20 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import de.wps.bikehh.meldungen.material.Meldung;
-import de.wps.bikehh.meldungen.repository.MeldungRepository;
-import de.wps.bikehh.meldungen.service.MeldungService;
+import de.wps.bikehh.meldungen.repository.MeldungenRepository;
+import de.wps.bikehh.meldungen.service.MeldungenService;
 
 public class MeldungServiceTest {
-	private MeldungRepository meldungRepository;
-	private MeldungService meldungService;
+	private MeldungenRepository meldungRepository;
+	private MeldungenService meldungService;
 	private Meldung meldung;
 
 	public MeldungServiceTest() {
 		// mocke Repository
-		this.meldungRepository = mock(MeldungRepository.class);
+		this.meldungRepository = mock(MeldungenRepository.class);
 
 		// mocke Service
-		this.meldungService = new MeldungService(meldungRepository);
+		this.meldungService = new MeldungenService(meldungRepository);
 
 		// mocke Meldung
 		meldung = mock(Meldung.class);
