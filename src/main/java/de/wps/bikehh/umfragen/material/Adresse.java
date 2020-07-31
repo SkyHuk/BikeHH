@@ -5,10 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 /**
- * Datenbank Entity
- * 
  * Teil einer Umfrage
- *
  */
 @Entity
 public class Adresse {
@@ -19,8 +16,11 @@ public class Adresse {
 	private String stadt;
 	private String postleitZahl;
 	private String strasse;
-	// hausnummer sind nicht immer gesetzt, weil die openstreetmap API nicht zu
-	// jeden Koordinaten eine Hausnummer findet, sollte auf null gecheckt werden
+
+	/**
+	 * hausnummer ist nicht immer gesetzt, weil die openstreetmap API nicht zu
+	 * jeden Koordinaten eine Hausnummer findet, sollte auf null gecheckt werden
+	 */
 	private String hausnummer;
 
 	public int getId() {

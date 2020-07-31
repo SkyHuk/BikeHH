@@ -1,6 +1,6 @@
 package de.wps.bikehh.umfragen;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.mockito.Mockito;
 
 import de.wps.bikehh.umfragen.material.Umfrage;
@@ -46,7 +46,7 @@ public class UmfragenServiceTest {
 
 	@Test
 	public void getUmfrageNachIdTest() {
-		when(umfrageRepository.findById((int) umfrage.getId())).thenReturn(Optional.of(umfrage));
+		when(umfrageRepository.findById(umfrage.getId())).thenReturn(Optional.of(umfrage));
 
 		umfragenService.getUmfrageNachId(umfrage.getId());
 		Mockito.verify(umfrageRepository, times(1)).findById(umfrage.getId());

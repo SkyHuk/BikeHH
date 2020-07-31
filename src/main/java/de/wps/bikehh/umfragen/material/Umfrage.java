@@ -15,16 +15,13 @@ import javax.persistence.OneToMany;
 import de.wps.bikehh.benutzerverwaltung.material.User;
 
 /**
- * Datenbank Entity
- *
- * Zentrale Umfrage-Klasse
- *
- * eine Umfrage gilt als bestätigt, wenn sie die erforderlichen Bestätigungen
- * erreicht hat (bestaetigtSchwellenwert) oder wenn sie durch einen Admin als
- * bestaetigt markiert wurde, dies wird im istBestaetigt Feld gespeichert
- *
+ * Eine Umfrage stellt eine positionsbedingte Ansammlung von Fragen an einen
+ * Benutzer dar.
+ * 
+ * Eine Umfrage gilt als bestätigt, wenn sie die erforderlichen Bestätigungen
+ * erreicht hat, dargestellt durch einen Schwellenwert, oder wenn sie durch
+ * einen Admin als bestaetigt markiert wurde.
  */
-
 @Entity
 public class Umfrage {
 
@@ -32,77 +29,106 @@ public class Umfrage {
 	@GeneratedValue
 	private int id;
 
-	// Titel der Umfrage
+	/**
+	 * Titel der Umfrage
+	 */
 	private String titel;
 
-	// koordinaten
 	private double laengengrad;
 	private double breitengrad;
 
-	// Kategorie der Umfrage
+	/**
+	 * Kategorie der Umfrage
+	 */
 	@ManyToOne(targetEntity = Kategorie.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Kategorie kategorie;
 
-	// Zeitraum, in der die Umfrage aktiv sein soll
+	/**
+	 * Startdatum des Zeitraumes, in welchem die Umfrage aktiv sein soll.
+	 */
 	private String startDatum;
+
+	/**
+	 * Enddatum des Zeitraumes, in welchem die Umfrage aktiv sein soll.
+	 */
 	private String endDatum;
 
-	// Erstellungsdatum
+	/**
+	 * Erstellungsdatum der Umfrage
+	 */
 	private String erstelltAmDatum;
 
 	/**
-	 * ob die Umfrage als bestätigt gilt. Siehe Klassenkommentar und istBestaetigt()
-	 * Methode.
-	 *
-	 * TODO: Umfrage als bestaetigt markieren, wenn in umfrage.html auf den
-	 * bestätigen Knopf gedrückt wird
+	 * Ob die Umfrage als bestätigt gilt.
 	 */
 	private boolean istBestaetigt;
 
-	// ob die Umfrage schon mal bearbeitet wurde. Wichtig für Zeitraum und
-	// Validierungsfunktion in Utils Klasse
+	/**
+	 * Ob die Umfrage schon mal bearbeitet wurde. Wichtig für Zeitraum und
+	 * Validierungsfunktion in Utils Klasse.
+	 * 
+	 * TODO jg: überarbeiten
+	 */
 	private boolean bearbeitet;
 
-	// fahrtrichtung in Radiant, siehe Meldung.java
+	/**
+	 * Winkel im Bogenmaß nach Osten (Wertebereich 0 - 2pi, nach Osten weil das
+	 * mathematischer Standard ist) eine fahrtrichtung von 0.0 ist ungültig und
+	 * steht symbolisierend für "keine Fahrtrichtung gesetzt"
+	 */
 	private double fahrtrichtung;
 
-	// Liste an Usern, die diese Umfrage bestätigt haben
+	/**
+	 * Liste an Usern, die diese Umfrage bestätigt haben
+	 */
 	@ManyToMany(cascade = CascadeType.ALL)
 	private List<User> bestaetigtVonUsern;
 
-	// wie viele User diese Umfrage bestätigen müsssen, damit sie als bestätigt gilt
+	/**
+	 * Wie viele User diese Umfrage bestätigen müsssen damit sie als bestätigt
+	 * gilt
+	 */
 	private int bestaetigtSchwellenwert;
 
+	/**
+	 * Die Ansammlung von Fragen für diese Umfrage.
+	 */
 	@OneToMany(targetEntity = Frage.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "umfrage", referencedColumnName = "id", nullable = false)
 	private List<Frage> fragen;
 
 	/**
-	 * der Ersteller der Umfrage. Wenn die Umfrage automatisch generiert wurde (aus
-	 * einer Meldung), dann sollte dies der Benutzer (der Radfahrer) sein, der die
-	 * Meldung abgesetzt hat. //TODO: Dies Implementieren
+	 * Der Ersteller der Umfrage. Wenn die Umfrage automatisch generiert wurde
+	 * (aus einer Meldung), dann sollte dies der Benutzer bzw. Radfahrer sein,
+	 * der die Meldung abgesetzt hat.
 	 */
 	@ManyToOne(fetch = FetchType.EAGER, targetEntity = User.class)
 	private User ersteller;
 
-	// ob die Umfrage manuell durch einen Admin oder automatisch aus einer Meldung
-	// erstellt / generiert wurde
+	/**
+	 * Ob die Umfrage manuell durch einen Admin oder automatisch aus einer
+	 * Meldung erstellt / generiert wurde.
+	 */
 	private boolean manuellErstellt;
 
 	/**
-	 * der Ort der Umfrage, bezieht sich nur auf den Hauptmarker (blau), nicht auf
-	 * die optionalen Orte der einzelnen Fragen
+	 * Der Ort der Umfrage, bezieht sich nur auf den Hauptmarker (blau), nicht
+	 * auf die optionalen Orte der einzelnen Fragen.
 	 */
 	@ManyToOne(fetch = FetchType.EAGER, targetEntity = Adresse.class, cascade = CascadeType.ALL)
 	private Adresse adresse;
 
+	/**
+	 * Ob die Umfrage deaktiviert ist oder nicht.
+	 */
 	private boolean umfrageDisabled;
 
 	/**
-	 * explizite Merge-Funktion, um eine existierende Umfrage nach dem bearbeiten zu
-	 * aktualiseren
+	 * Explizite Merge-Funktion, um eine existierende Umfrage nach dem
+	 * bearbeiten zu aktualisieren.
 	 *
-	 * @param umfrage die neue Umfrage
+	 * @param umfrage
+	 *            die neue Umfrage
 	 * @return die aktualisierte Umfrage
 	 */
 	public Umfrage merge(Umfrage umfrage) {
@@ -121,7 +147,6 @@ public class Umfrage {
 		setKategorie(umfrage.getKategorie());
 		setManuellErstellt(umfrage.getManuellErstellt());
 		setTitel(umfrage.getTitel());
-
 		return umfrage;
 	}
 

@@ -5,8 +5,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 /**
- * Datenbank entity
- * 
  * Kategorien von Meldungen / Umfragen
  *
  * TODO: Kategorien sind noch nicht so implementiert wie sie sollen. Momentan
@@ -14,9 +12,7 @@ import javax.persistence.Id;
  * Strukturen von Kategorien geben, aus denen gewählt werden kann
  * (oberKategorie, tree traverse up). Andererseits sollen auch
  * benutzerdefinierte Kategorien möglich sein
- *
  */
-
 @Entity
 public class Kategorie {
 
@@ -31,7 +27,8 @@ public class Kategorie {
 	// CascadeType.ALL)
 	// private List<Umfrage> umfragenListe;
 	// @ManyToOne(fetch = FetchType.LAZY, targetEntity = Kategorie.class)
-	// @JoinColumn(name = "parentCategory", referencedColumnName = "Id", nullable =
+	// @JoinColumn(name = "parentCategory", referencedColumnName = "Id",
+	// nullable =
 	// true)
 	// @Column(nullable = true)
 	// private Kategorie oberKategorie;

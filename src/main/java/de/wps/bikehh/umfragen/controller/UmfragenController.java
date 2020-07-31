@@ -1,11 +1,10 @@
 package de.wps.bikehh.umfragen.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -15,7 +14,7 @@ import de.wps.bikehh.umfragen.material.Umfrage;
 import de.wps.bikehh.umfragen.service.UmfragenService;
 
 /**
- * Controller für alle Requests für "/umfragen/
+ * Controller für alle Requests für "/umfragen
  */
 @Controller
 @RequestMapping("umfragen")
@@ -23,54 +22,68 @@ public class UmfragenController {
 
 	private UmfragenService umfragenService;
 
-	/**
-	 * constructor für JUNIT tests
-	 *
-	 * @param umfragenService db service
-	 */
 	@Autowired
 	public UmfragenController(UmfragenService umfragenService) {
 		this.umfragenService = umfragenService;
-
 	}
 
 	/**
-	 * gibt das Template für die Umfragen-Liste
+	 * Gibt das Template für die Umfragen-Liste und füllt das model mit allen
+	 * existierenden Umfragen.
 	 *
-	 * füllt das model mit allen existierenden Umfragen
-	 *
-	 * @param model spring model
-	 * @return HTML-Template
+	 * @param model
+	 *            spring model
 	 */
 	@GetMapping
 	public String zeigeUmfragenListe(Model model) {
-
-		List<Umfrage> umfragen = umfragenService.getAlleUmfragen();
-
-		model.addAttribute("umfragen", umfragen);
+		model.addAttribute("umfragen", umfragenService.getAlleUmfragen());
 		return "umfragen/umfragen_liste";
 	}
 
 	/**
+	 * Zeigt eine Einzelansicht einer Umfrage.
 	 *
-	 * Zeigt eine Einzelansicht einer Umfrage
-	 *
-	 * Über int in URL (/umfragen/<umfrageId>) wird die anzuzeigenden Umfrage
+	 * Über URL-Parameter (/umfragen/<umfrageId>) wird die anzuzeigende Umfrage
 	 * ermittelt
 	 *
-	 * @param model     spring model
-	 * @param umfrageId id der Umfrage, welche geöffnet werden soll
-	 * @return html Seite
+	 * @param model
+	 *            spring model
+	 * @param umfrageId
+	 *            id der Umfrage, welche geöffnet werden soll
 	 */
 	@GetMapping("/{umfrageId}")
 	public String zeigeEinzelUmfrage(Model model, @PathVariable Integer umfrageId) {
-
 		Umfrage umfrage = umfragenService.getUmfrageNachId(umfrageId);
-		String umfrageAlsJsonString = new Gson().toJson(umfrage);
 		model.addAttribute("umfrage", umfrage);
-		model.addAttribute("umfrageJSON", umfrageAlsJsonString);
 
+		// TODO jg: Inspektion was das soll
+		String umfrageAlsJsonString = new Gson().toJson(umfrage);
+		model.addAttribute("umfrageJSON", umfrageAlsJsonString);
 		return "umfragen/umfrage";
+	}
+
+	/**
+	 * Deaktiviert eine Umfrage zur gegebenen UmfrageId im URL-Parameter.
+	 */
+	@PatchMapping("/disable/{umfrageId}")
+	public String deaktiviereUmfrage(@PathVariable int umfrageId) {
+		Umfrage umfrage = umfragenService.getUmfrageNachId(umfrageId);
+		umfrage.setUmfrageDisabled(true);
+		umfragenService.speichereOderUpdateUmfrage(umfrage);
+
+		return "redirect:/umfrage/" + umfrage.getId();
+	}
+
+	/**
+	 * Aktiviert eine Umfrage zur gegebenen UmfrageId im URL-Parameter.
+	 */
+	@PatchMapping("/enable/{umfrageId}")
+	public String aktiviereUmfrage(@PathVariable int umfrageId) {
+		Umfrage umfrage = umfragenService.getUmfrageNachId(umfrageId);
+		umfrage.setUmfrageDisabled(false);
+		umfragenService.speichereOderUpdateUmfrage(umfrage);
+
+		return "redirect:/umfrage/" + umfrage.getId();
 	}
 
 }

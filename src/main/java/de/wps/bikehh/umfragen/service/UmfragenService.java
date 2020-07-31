@@ -6,11 +6,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import de.wps.bikehh.framework.Contract;
 import de.wps.bikehh.umfragen.material.Umfrage;
 import de.wps.bikehh.umfragen.repository.UmfrageRepository;
 
 /**
- * Service für Datenbank-Funktionen
+ * Service, der Operationen auf Umfragen behandelt.
  */
 @Service
 public class UmfragenService {
@@ -23,42 +24,56 @@ public class UmfragenService {
 	}
 
 	/**
-	 * liefert alle in der Datenbank gespeicherten Umfragen
-	 * 
-	 * @return alle Umfragen
+	 * Liefert alle in der Datenbank gespeicherten Umfragen.
 	 */
 	public List<Umfrage> getAlleUmfragen() {
-		List<Umfrage> umfragen = new ArrayList<Umfrage>();
-		umfrageRepository.findAll().forEach(umfrage -> umfragen.add(umfrage));
+		List<Umfrage> umfragen = new ArrayList<>();
+		umfrageRepository.findAll().forEach(umfragen::add);
 		return umfragen;
 	}
 
 	/**
-	 * liefert die zu einer Id passenden Umfrage
+	 * Liefert die Umfrage zu einer gegebenen Id.
 	 * 
-	 * @param id die id der Umfrage
-	 * @return die Umfrage zur Id
+	 * @param id
+	 *            die id der Umfrage
+	 * 
+	 * @require umfrage exists
+	 * 
+	 * @return die Umfrage zur gegebenen Id
 	 */
 	public Umfrage getUmfrageNachId(int id) {
-		return umfrageRepository.findById((int) id).get();
+		Contract.check(umfrageRepository.existsById(id), "umfrage exists");
+
+		return umfrageRepository.findById(id).get();
 	}
 
 	/**
-	 * speichert oder updatet (wenn schon in DB vorhanden) eine Umfrage
+	 * Speichert oder aktualisiert eine Umfrage.
 	 * 
-	 * @param umfrage die zu speichernde / verändernde Umfrage
+	 * @param umfrage
+	 *            die zu speichernde / verändernde Umfrage
+	 * 
+	 * @require umfrage not null
 	 */
 	public int speichereOderUpdateUmfrage(Umfrage umfrage) {
+		Contract.notNull(umfrage, "umfrage");
+
 		umfrageRepository.save(umfrage);
 		return umfrage.getId();
 	}
 
 	/**
-	 * löscht eine Umfrage aus der Datenbank
+	 * Löscht eine Umfrage aus der Datenbank.
 	 * 
-	 * @param id id der zu löschenden Umfrage
+	 * @param id
+	 *            id der zu löschenden Umfrage
+	 * 
+	 * @require umfrage exists
 	 */
 	public void loesche(int id) {
-		umfrageRepository.deleteById((int) id);
+		Contract.check(umfrageRepository.existsById(id), "umfrage exists");
+
+		umfrageRepository.deleteById(id);
 	}
 }

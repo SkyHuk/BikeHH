@@ -1,86 +1,55 @@
 package de.wps.bikehh.umfragen.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import de.wps.bikehh.umfragen.material.Umfrage;
 import de.wps.bikehh.umfragen.service.UmfragenService;
 
 /**
- * Rest Controller für Umfragen
- *
+ * API Schnittstelle für Umfragen
  */
-
-@Controller
-@RequestMapping("umfragen")
+@RestController
+@RequestMapping("api/umfragen")
 public class UmfragenRestController {
 
 	private UmfragenService umfragenService;
 
-	/**
-	 * constructor für JUNIT tests
-	 *
-	 * @param umfragenService db service
-	 */
 	@Autowired
 	public UmfragenRestController(UmfragenService umfragenService) {
 		this.umfragenService = umfragenService;
-
 	}
 
 	/**
-	 * Löscht die Umfrage, die zu der id in der URL gehört, gibt danach das Template
-	 * der Umfrage-List zurück
-	 *
-	 * Webseite muss trotzdem neu geladen werden, um Änderungen darzustellen, warum
-	 * auch immer. Reload im javascript
-	 *
-	 * @param model     spring model
-	 * @param umfrageId id der zu löschenden Umfrage
-	 * @return Umfragen-Liste HTML-Template
+	 * Löscht die Umfrage, die zu der übergebenen id im URL-Parameter gehört.
 	 */
-	@RequestMapping(value = "/delete/{umfrageId}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public String loescheUmfrage(Model model, @PathVariable int umfrageId) {
+	@DeleteMapping(value = "/delete/{umfrageId}")
+	public void loescheUmfrage(@PathVariable int umfrageId) {
 		umfragenService.loesche(umfrageId);
-
-		List<Umfrage> umfragen = umfragenService.getAlleUmfragen();
-		model.addAttribute("umfragen", umfragen);
-		return "adfc/umfragen_liste";
 	}
 
 	/**
-	 * Deaktivert oder aktiviert eine Umfrage, die zu der id in der URL gehört, gibt
-	 * danach die Einzel-Umfrage zurück
-	 *
-	 * Wenn eine Umfrage aktiviert ist, wird sie deaktiviert. Ansonsten andersherum
-	 * genauso.
-	 *
-	 * @param model     spring model
-	 * @param umfrageId id der zu deaktivierende/aktivierende Umfrage
-	 * @return Einzelumfrage HTML-Template
+	 * Deaktiviert eine Umfrage zur gegebenen UmfrageId im URL-Parameter.
 	 */
-	@RequestMapping(value = "/disable/{umfrageId}", method = RequestMethod.PATCH)
-	@ResponseBody
-	public String deaktiviereUmfrage(Model model, @PathVariable int umfrageId) {
+	@PatchMapping("/disable/{umfrageId}")
+	public void deaktiviereUmfrage(@PathVariable int umfrageId) {
 		Umfrage umfrage = umfragenService.getUmfrageNachId(umfrageId);
-
-		if (umfrage.isUmfrageDisabled()) {
-			umfrage.setUmfrageDisabled(false);
-		} else {
-			umfrage.setUmfrageDisabled(true);
-		}
+		umfrage.setUmfrageDisabled(true);
 		umfragenService.speichereOderUpdateUmfrage(umfrage);
-
-		model.addAttribute("umfrage", umfrage);
-
-		return "umfragen/umfrage";
 	}
+
+	/**
+	 * Aktiviert eine Umfrage zur gegebenen UmfrageId im URL-Parameter.
+	 */
+	@PatchMapping("/enable/{umfrageId}")
+	public void aktiviereUmfrage(@PathVariable int umfrageId) {
+		Umfrage umfrage = umfragenService.getUmfrageNachId(umfrageId);
+		umfrage.setUmfrageDisabled(false);
+		umfragenService.speichereOderUpdateUmfrage(umfrage);
+	}
+
 }

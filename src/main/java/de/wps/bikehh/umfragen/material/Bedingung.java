@@ -5,15 +5,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 /**
- * Datenbank Entity
- * 
  * Eine Bedingung gehört zu einer Frage. Diese Frage soll dann nur entsprechend
  * der Bedingung gestellt werden.
  * 
  * Konkret: Stelle die Frage, zu der diese Bedingung gehört, nur, wenn andere
  * Frage mit <FRAGEID> mit der Antwort <ANTWORTID> beantwortet wurde. Diese
  * Logik muss von den mobile Anwendungen implementiert werden
- *
  */
 @Entity
 public class Bedingung {
@@ -22,10 +19,14 @@ public class Bedingung {
 	@GeneratedValue
 	private int id;
 
-	// andere Frage
+	/**
+	 * Die andere Frage, die als Bedingung einbezogen wird
+	 */
 	private int frageId;
 
-	// antwort auf diese andere Frage
+	/**
+	 * Antwort auf diese andere Frage, die als Bedingung gilt
+	 */
 	private int antwortId;
 
 	public int getId() {
