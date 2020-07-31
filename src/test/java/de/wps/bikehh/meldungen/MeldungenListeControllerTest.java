@@ -1,9 +1,9 @@
 package de.wps.bikehh.meldungen;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.springframework.ui.Model;
 
 import de.wps.bikehh.meldungen.controller.MeldungenController;

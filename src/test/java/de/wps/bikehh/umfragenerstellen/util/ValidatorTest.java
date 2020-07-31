@@ -1,11 +1,11 @@
 package de.wps.bikehh.umfragenerstellen.util;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.Assert.assertTrue;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import com.google.gson.Gson;
 

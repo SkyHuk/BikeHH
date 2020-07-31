@@ -1,12 +1,12 @@
 package de.wps.bikehh.umfragenerstellen;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import com.google.gson.Gson;
 
@@ -44,7 +44,8 @@ public class UmfrageErstellenRestControllerTest {
 		jsonString = new Gson().toJson(umfrage1);
 
 		umfragenErstellenRestController.speichereUmfrage(jsonString);
-		// mockito verfiy nicht möglich, da Objekt erst in der Methode erstellt wird aus
+		// mockito verfiy nicht möglich, da Objekt erst in der Methode erstellt
+		// wird aus
 		// jsonString
 
 		assertEquals(0, umfragenErstellenRestController.speichereUmfrage(jsonString));

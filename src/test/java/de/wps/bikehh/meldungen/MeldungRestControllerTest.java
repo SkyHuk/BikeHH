@@ -1,6 +1,6 @@
 package de.wps.bikehh.meldungen;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import de.wps.bikehh.meldungen.controller.MeldungenRestController;
 
