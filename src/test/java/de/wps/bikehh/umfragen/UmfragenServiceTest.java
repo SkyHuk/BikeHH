@@ -1,68 +1,85 @@
 package de.wps.bikehh.umfragen;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import de.wps.bikehh.umfragen.material.Umfrage;
 import de.wps.bikehh.umfragen.repository.UmfrageRepository;
 import de.wps.bikehh.umfragen.service.UmfragenService;
 
 public class UmfragenServiceTest {
+
 	private UmfrageRepository umfrageRepository;
 	private UmfragenService umfragenService;
-	private Umfrage umfrage;
+	private Umfrage testUmfrage;
+	private List<Umfrage> umfragen;
 
-	public UmfragenServiceTest() {
-		// mocke Repository
-		this.umfrageRepository = mock(UmfrageRepository.class);
+	@Before
+	public void init() {
+		umfrageRepository = mock(UmfrageRepository.class);
+		umfragenService = new UmfragenService(umfrageRepository);
 
-		// mocke Service
-		this.umfragenService = new UmfragenService(umfrageRepository);
+		testUmfrage = new Umfrage();
+		testUmfrage.setId(1);
 
-		// mocke Umfrage
-		umfrage = mock(Umfrage.class);
+		Umfrage testUmfrage2 = new Umfrage();
+		testUmfrage2.setId(2);
+
+		umfragen = new ArrayList<>();
+		umfragen.add(testUmfrage);
+		umfragen.add(testUmfrage2);
+
+		when(umfrageRepository.findById(testUmfrage.getId())).thenReturn(Optional.of(testUmfrage));
+		when(umfrageRepository.findAll()).thenReturn(umfragen);
+		when(umfrageRepository.existsById(anyInt())).thenReturn(true);
 	}
 
 	@Test
 	public void getAlleUmfragenTest() {
-		List<Umfrage> umfragen = new ArrayList<Umfrage>();
-		umfragen.add(umfrage);
-
-		when(umfrageRepository.findAll()).thenReturn(umfragen);
+		// act
 		umfragenService.getAlleUmfragen();
-		Mockito.verify(umfrageRepository, times(1)).findAll();
 
-		assertEquals(umfragen, umfragenService.getAlleUmfragen());
+		// assert
+		verify(umfrageRepository, times(1)).findAll();
+		assertEquals(2, umfragenService.getAlleUmfragen().size());
 	}
 
 	@Test
 	public void getUmfrageNachIdTest() {
-		when(umfrageRepository.findById(umfrage.getId())).thenReturn(Optional.of(umfrage));
+		// act
+		umfragenService.getUmfrageNachId(testUmfrage.getId());
 
-		umfragenService.getUmfrageNachId(umfrage.getId());
-		Mockito.verify(umfrageRepository, times(1)).findById(umfrage.getId());
-
-		assertEquals(umfrage, umfragenService.getUmfrageNachId(umfrage.getId()));
+		// assert
+		verify(umfrageRepository, times(1)).findById(testUmfrage.getId());
+		assertEquals(testUmfrage, umfragenService.getUmfrageNachId(testUmfrage.getId()));
 	}
 
 	@Test
 	public void speichereOderUpdateUmfrage() {
-		umfragenService.speichereOderUpdateUmfrage(umfrage);
-		Mockito.verify(umfrageRepository, times(1)).save(umfrage);
+		// act
+		umfragenService.speichereOderUpdateUmfrage(testUmfrage);
+
+		// assert
+		verify(umfrageRepository, times(1)).save(testUmfrage);
 	}
 
 	@Test
 	public void loescheTest() {
-		umfragenService.loesche(umfrage.getId());
-		Mockito.verify(umfrageRepository, times(1)).deleteById(umfrage.getId());
+		// act
+		umfragenService.loesche(testUmfrage.getId());
+
+		// assert
+		verify(umfrageRepository, times(1)).deleteById(testUmfrage.getId());
 	}
 }
