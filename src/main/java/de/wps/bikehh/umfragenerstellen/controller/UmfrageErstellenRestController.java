@@ -2,28 +2,23 @@ package de.wps.bikehh.umfragenerstellen.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-
-import com.google.gson.Gson;
 
 import de.wps.bikehh.umfragen.material.Umfrage;
 import de.wps.bikehh.umfragen.service.UmfragenService;
 import de.wps.bikehh.umfragenerstellen.util.Validator;
 
 /**
- * Rest Controller für das erstellen und bearbeiten von Umfragen
- *
- * @author felixwolf
- *
+ * RestController für das Erstellen und Bearbeiten von Umfragen.
  */
-@Controller
-@RequestMapping("umfrage-erstellen")
+@RestController
+@RequestMapping("api/umfrage-erstellen")
 public class UmfrageErstellenRestController {
 
 	private UmfragenService umfragenService;
@@ -36,20 +31,16 @@ public class UmfrageErstellenRestController {
 	/**
 	 * Speichert die Umfrage in der Datenbank.
 	 *
-	 * @param body der post body, in dem sich die Umfrage in JSON Format befindet
+	 * @param body
+	 *            der post body, in dem sich die Umfrage in JSON Format befindet
 	 * @return die id der erstellten Umfrage
-	 * @throws Exception wenn die Umfrage nicht dem geforderten Format entspricht
-	 *                   (wird in Utils überprüft), wird eine Exception geworfen
+	 * @throws Exception
+	 *             wenn die Umfrage nicht dem geforderten Format entspricht
+	 *             (wird in Utils überprüft), wird eine Exception geworfen
 	 */
-	@RequestMapping(method = RequestMethod.POST)
 	@PostMapping("/umfragen-erstellen")
 	@ResponseBody
-	public int speichereUmfrage(@RequestBody String body) {
-
-		Umfrage umfrage = new Gson().fromJson(body, Umfrage.class);
-
-		// debug only
-		System.out.println(body);
+	public int postUmfrage(@RequestBody Umfrage umfrage) {
 
 		// validiere Umfrage
 		if (Validator.umfrageIstValide(umfrage)) {
@@ -64,18 +55,15 @@ public class UmfrageErstellenRestController {
 	/**
 	 * updatet eine bereits bestehende Umfrage
 	 *
-	 * @param body der Patch body, in dem sich die Umfrage in JSON Format befindet
+	 * @param body
+	 *            der Patch body, in dem sich die Umfrage in JSON Format
+	 *            befindet
 	 * @return die Id der geupdateten Umfrage
 	 */
 	@RequestMapping(method = RequestMethod.PATCH)
 	@PostMapping("/umfragen-erstellen")
 	@ResponseBody
-	public int updateUmfrage(@RequestBody String body) {
-
-		Umfrage umfrage = new Gson().fromJson(body, Umfrage.class);
-
-		// debug only
-		System.out.println(body);
+	public int updateUmfrage(@RequestBody Umfrage umfrage) {
 
 		// validiere Umfrage
 		if (Validator.umfrageIstValide(umfrage)) {

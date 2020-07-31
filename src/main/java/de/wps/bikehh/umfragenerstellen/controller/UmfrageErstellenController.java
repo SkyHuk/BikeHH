@@ -15,9 +15,7 @@ import de.wps.bikehh.umfragen.material.Umfrage;
 import de.wps.bikehh.umfragen.service.UmfragenService;
 
 /**
- * spring controller für alle requests auf "/umfrage-erstllen"
- *
- *
+ * Controller für das Erstellen von Umfragen.
  */
 @Controller
 @RequestMapping("umfrage-erstellen")
@@ -25,30 +23,28 @@ public class UmfrageErstellenController {
 
 	private UmfragenService umfragenService;
 
-	/**
-	 * Constructor für JUNIT Tests
-	 *
-	 * @param umfragenService
-	 */
 	@Autowired
 	public UmfrageErstellenController(UmfragenService umfragenService) {
 		this.umfragenService = umfragenService;
 	}
 
 	/**
-	 * Öffnet umfrage_erstellen.html mit optional Koordinaten um eine Umfrage neu zu
-	 * erstellen. Koordinaten werden auf 0 gesetzt, wenn sie nicht vorhanden sind.
+	 * Öffnet umfrage_erstellen.html mit optional Koordinaten um eine Umfrage
+	 * neu zu erstellen. Koordinaten werden auf 0 gesetzt, wenn sie nicht
+	 * vorhanden sind.
 	 *
-	 * @param koordinaten koordinaten für die zu erstellende Umfrage. sind dann
-	 *                    gesetzt, wenn über die Kartenfunktion eine umfrage
-	 *                    erstellt wird
-	 * @param user        der momentan eingeloggte User (Admin), kommt aus der
-	 *                    Datenbank. TODO: statt vollständigem User (security leak,
-	 *                    passwort-hash in klartext sichtbar) dto mit benötigten
-	 *                    inhalten (Email) weitergeben. Anschließend anhand DTO User
-	 *                    aus Datenbank ziehen und vollständig in Umfrage schreiben,
-	 *                    damit diese vollständig gespeichert werden kann
-	 * @param model       spring model
+	 * @param koordinaten
+	 *            koordinaten für die zu erstellende Umfrage. sind dann gesetzt,
+	 *            wenn über die Kartenfunktion eine umfrage erstellt wird
+	 * @param user
+	 *            der momentan eingeloggte User (Admin), kommt aus der
+	 *            Datenbank. TODO: statt vollständigem User (security leak,
+	 *            passwort-hash in klartext sichtbar) dto mit benötigten
+	 *            inhalten (Email) weitergeben. Anschließend anhand DTO User aus
+	 *            Datenbank ziehen und vollständig in Umfrage schreiben, damit
+	 *            diese vollständig gespeichert werden kann
+	 * @param model
+	 *            spring model
 	 * @return HTML-TEMPLATE für umfrage-erstellen
 	 */
 	@GetMapping
@@ -69,11 +65,13 @@ public class UmfrageErstellenController {
 	/**
 	 *
 	 * öffnet die gleiche seite / liefert das gleiche HTML-Template wie
-	 * zeigeUmfrageErsteller(..), hat aber andere Parameter, die darauf ausgelegt
-	 * sind, eine bestehende Umfrage zu bearbeiten
+	 * zeigeUmfrageErsteller(..), hat aber andere Parameter, die darauf
+	 * ausgelegt sind, eine bestehende Umfrage zu bearbeiten
 	 *
-	 * @param umfrageId die id der umfrage, die bearbeitet werden soll
-	 * @param model     spring model
+	 * @param umfrageId
+	 *            die id der umfrage, die bearbeitet werden soll
+	 * @param model
+	 *            spring model
 	 * @return HTML-Template
 	 */
 	@GetMapping("/bearbeiten")

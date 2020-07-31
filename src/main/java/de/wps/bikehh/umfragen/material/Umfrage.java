@@ -1,5 +1,6 @@
 package de.wps.bikehh.umfragen.material;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -27,7 +28,7 @@ public class Umfrage {
 
 	@Id
 	@GeneratedValue
-	private int id;
+	private long id;
 
 	/**
 	 * Titel der Umfrage
@@ -46,30 +47,24 @@ public class Umfrage {
 	/**
 	 * Startdatum des Zeitraumes, in welchem die Umfrage aktiv sein soll.
 	 */
-	private String startDatum;
+	private LocalDate startDatum;
 
 	/**
 	 * Enddatum des Zeitraumes, in welchem die Umfrage aktiv sein soll.
 	 */
-	private String endDatum;
+	private LocalDate endDatum;
 
 	/**
 	 * Erstellungsdatum der Umfrage
 	 */
-	private String erstelltAmDatum;
+	private LocalDate erstelltAmDatum;
+
+	private LocalDate bearbeitetAmDatum;
 
 	/**
 	 * Ob die Umfrage als bestätigt gilt.
 	 */
 	private boolean istBestaetigt;
-
-	/**
-	 * Ob die Umfrage schon mal bearbeitet wurde. Wichtig für Zeitraum und
-	 * Validierungsfunktion in Utils Klasse.
-	 * 
-	 * TODO jg: überarbeiten
-	 */
-	private boolean bearbeitet;
 
 	/**
 	 * Winkel im Bogenmaß nach Osten (Wertebereich 0 - 2pi, nach Osten weil das
@@ -143,18 +138,18 @@ public class Umfrage {
 		setErstelltAmDatum(umfrage.getErstelltAmDatum());
 		setFragen(umfrage.getFragen());
 		setId(umfrage.getId());
-		setIstBestaetigt(umfrage.istBestaetigt());
+		setIstBestaetigt(umfrage.getIstBestaetigt());
 		setKategorie(umfrage.getKategorie());
 		setManuellErstellt(umfrage.getManuellErstellt());
 		setTitel(umfrage.getTitel());
 		return umfrage;
 	}
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -174,35 +169,44 @@ public class Umfrage {
 		this.breitengrad = breitengrad;
 	}
 
-	public String getStartDatum() {
+	public LocalDate getStartDatum() {
 		return startDatum;
 	}
 
-	public void setStartDatum(String startDatum) {
+	public void setStartDatum(LocalDate startDatum) {
 		this.startDatum = startDatum;
 	}
 
-	public String getEndDatum() {
+	public LocalDate getEndDatum() {
 		return endDatum;
 	}
 
-	public void setEndDatum(String endDatum) {
+	public void setEndDatum(LocalDate endDatum) {
 		this.endDatum = endDatum;
 	}
 
-	public boolean istBestaetigt() {
-		return istBestaetigt || getBestaetigtVonUsern().size() <= getBestaetigtSchwellenwert();
+	public LocalDate getBearbeitetAmDatum() {
+		return bearbeitetAmDatum;
+	}
+
+	public void setBearbeitetAmDatum(LocalDate bearbeitetAmDatum) {
+		this.bearbeitetAmDatum = bearbeitetAmDatum;
+	}
+
+	public boolean getIstBestaetigt() {
+		istBestaetigt = istBestaetigt || getBestaetigtVonUsern().size() <= getBestaetigtSchwellenwert();
+		return istBestaetigt;
 	}
 
 	public void setIstBestaetigt(boolean istBestaetigt) {
 		this.istBestaetigt = istBestaetigt;
 	}
 
-	public String getErstelltAmDatum() {
+	public LocalDate getErstelltAmDatum() {
 		return erstelltAmDatum;
 	}
 
-	public void setErstelltAmDatum(String erstelltAmDatum) {
+	public void setErstelltAmDatum(LocalDate erstelltAmDatum) {
 		this.erstelltAmDatum = erstelltAmDatum;
 	}
 
@@ -220,14 +224,6 @@ public class Umfrage {
 
 	public void setFahrtrichtung(double fahrtrichtung) {
 		this.fahrtrichtung = fahrtrichtung;
-	}
-
-	public boolean isBearbeitet() {
-		return bearbeitet;
-	}
-
-	public void setBearbeitet(boolean bearbeitet) {
-		this.bearbeitet = bearbeitet;
 	}
 
 	public String getTitel() {

@@ -42,7 +42,7 @@ public class UmfragenService {
 	 * 
 	 * @return die Umfrage zur gegebenen Id
 	 */
-	public Umfrage getUmfrageNachId(int id) {
+	public Umfrage getUmfrageNachId(long id) {
 		Contract.check(umfrageRepository.existsById(id), "umfrage exists");
 
 		return umfrageRepository.findById(id).get();
@@ -71,7 +71,7 @@ public class UmfragenService {
 	 * 
 	 * @require umfrage exists
 	 */
-	public void loesche(int id) {
+	public void loesche(long id) {
 		Contract.check(umfrageRepository.existsById(id), "umfrage exists");
 
 		umfrageRepository.deleteById(id);
