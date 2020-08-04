@@ -63,7 +63,7 @@ public class UmfrageDto {
 		dto.setErstellerName(umfrage.getErsteller().getEmailAddress());
 		dto.setAdresse(umfrage.getAdresse());
 		dto.setAutomatischErstellt(!umfrage.getManuellErstellt());
-		dto.setDisabled(umfrage.isUmfrageDisabled());
+		dto.setDisabled(umfrage.getIsDisabled());
 		return dto;
 	}
 

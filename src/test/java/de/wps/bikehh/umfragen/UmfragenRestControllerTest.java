@@ -43,27 +43,27 @@ public class UmfragenRestControllerTest {
 	@Test
 	public void testdeaktiviereUmfrage_deaktiviertUmfrage() {
 		// arrange
-		testUmfrage.setUmfrageDisabled(false);
+		testUmfrage.setIsDisabled(false);
 
 		// act
 		umfragenRestController.deaktiviereUmfrage(testUmfrage.getId());
 
 		// assert
 		verify(umfragenService, times(1)).save(testUmfrage);
-		assertTrue(testUmfrage.isUmfrageDisabled());
+		assertTrue(testUmfrage.getIsDisabled());
 	}
 
 	@Test
 	public void testaktiviereUmfrage_aktiviertUmfrage() {
 		// arrange
-		testUmfrage.setUmfrageDisabled(true);
+		testUmfrage.setIsDisabled(true);
 
 		// act
 		umfragenRestController.aktiviereUmfrage(testUmfrage.getId());
 
 		// assert
 		verify(umfragenService, times(1)).save(testUmfrage);
-		assertFalse(testUmfrage.isUmfrageDisabled());
+		assertFalse(testUmfrage.getIsDisabled());
 	}
 
 }

@@ -9,17 +9,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.wps.bikehh.umfragen.api.applicationservice.UmfragenApplicationService;
+import de.wps.bikehh.umfragen.api.applicationservice.UmfragenRestApplicationService;
 import de.wps.bikehh.umfragen.api.dto.UmfrageAntwortRestDto;
 
 @RestController
 @RequestMapping("api/umfragen")
 public class UmfragenRestController {
 
-	private UmfragenApplicationService umfragenAppService;
+	private UmfragenRestApplicationService umfragenAppService;
 
 	@Autowired
-	public UmfragenRestController(UmfragenApplicationService umfragenAppService) {
+	public UmfragenRestController(UmfragenRestApplicationService umfragenAppService) {
 		this.umfragenAppService = umfragenAppService;
 	}
 

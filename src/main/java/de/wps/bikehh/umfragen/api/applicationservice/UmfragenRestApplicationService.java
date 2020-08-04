@@ -11,12 +11,12 @@ import de.wps.bikehh.umfragen.api.dto.UmfrageRestDto;
 import de.wps.bikehh.umfragen.service.UmfragenService;
 
 @Service
-public class UmfragenApplicationService {
+public class UmfragenRestApplicationService {
 
 	private UmfragenService umfragenService;
 
 	@Autowired
-	public UmfragenApplicationService(UmfragenService umfragenService) {
+	public UmfragenRestApplicationService(UmfragenService umfragenService) {
 		this.umfragenService = umfragenService;
 	}
 
@@ -31,6 +31,7 @@ public class UmfragenApplicationService {
 	}
 
 	public void beantworteUmfrage(UmfrageAntwortRestDto umfrageAntwort) {
-
+		// TODO: Umfragen beantworten
+		umfragenService.beantworteUmfrage();
 	}
 }

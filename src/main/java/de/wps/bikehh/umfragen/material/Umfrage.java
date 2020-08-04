@@ -117,7 +117,7 @@ public class Umfrage {
 	/**
 	 * Ob die Umfrage deaktiviert ist oder nicht.
 	 */
-	private boolean umfrageDisabled;
+	private boolean isDisabled;
 
 	/**
 	 * Explizite Merge-Funktion, um eine existierende Umfrage nach dem
@@ -292,11 +292,11 @@ public class Umfrage {
 		this.ersteller = ersteller;
 	}
 
-	public boolean isUmfrageDisabled() {
-		return umfrageDisabled;
+	public boolean getIsDisabled() {
+		return isDisabled;
 	}
 
-	public void setUmfrageDisabled(boolean umfrageDisabled) {
-		this.umfrageDisabled = umfrageDisabled;
+	public void setIsDisabled(boolean isDisabled) {
+		this.isDisabled = isDisabled;
 	}
 }

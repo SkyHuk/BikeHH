@@ -97,7 +97,19 @@ public class UmfragenService {
 	}
 
 	public void beantworteUmfrage() {
+		// TODO: Umfragen beantworten
+	}
 
+	public void enableUmfrage(long id) {
+		Umfrage umfrage = getById(id);
+		umfrage.setIsDisabled(false);
+		save(umfrage);
+	}
+
+	public void disableUmfrage(long id) {
+		Umfrage umfrage = getById(id);
+		umfrage.setIsDisabled(true);
+		save(umfrage);
 	}
 
 }
