@@ -15,19 +15,19 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.wps.bikehh.umfragen.material.Umfrage;
-import de.wps.bikehh.umfragen.repository.UmfrageRepository;
+import de.wps.bikehh.umfragen.repository.UmfragenRepository;
 import de.wps.bikehh.umfragen.service.UmfragenService;
 
 public class UmfragenServiceTest {
 
-	private UmfrageRepository umfrageRepository;
+	private UmfragenRepository umfrageRepository;
 	private UmfragenService umfragenService;
 	private Umfrage testUmfrage;
 	private List<Umfrage> umfragen;
 
 	@Before
 	public void init() {
-		umfrageRepository = mock(UmfrageRepository.class);
+		umfrageRepository = mock(UmfragenRepository.class);
 		umfragenService = new UmfragenService(umfrageRepository);
 
 		testUmfrage = new Umfrage();

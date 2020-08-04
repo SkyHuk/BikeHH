@@ -7,5 +7,5 @@ import de.wps.bikehh.umfragen.material.Umfrage;
 /**
  * Repository-Interface für Datenbank-Einbindung.
  */
-public interface UmfrageRepository extends CrudRepository<Umfrage, Long> {
+public interface UmfragenRepository extends CrudRepository<Umfrage, Long> {
 }

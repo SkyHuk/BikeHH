@@ -15,20 +15,20 @@ import com.google.gson.Gson;
 
 import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.umfragen.material.Umfrage;
-import de.wps.bikehh.umfragen.repository.UmfrageRepository;
+import de.wps.bikehh.umfragen.repository.UmfragenRepository;
 import de.wps.bikehh.umfragen.service.UmfragenService;
 import de.wps.bikehh.umfragenerstellen.controller.UmfrageErstellenController;
 
 public class UmfrageErstellenControllerTest {
 
-	private UmfrageRepository umfrageRepository;
+	private UmfragenRepository umfrageRepository;
 	private UmfragenService umfragenService;
 	private UmfrageErstellenController umfragenErstellenController;
 	private Model model;
 
 	public UmfrageErstellenControllerTest() {
 		// mocke Repository
-		this.umfrageRepository = mock(UmfrageRepository.class);
+		this.umfrageRepository = mock(UmfragenRepository.class);
 
 		// mocke Service
 		this.umfragenService = new UmfragenService(this.umfrageRepository);

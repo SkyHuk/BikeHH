@@ -16,19 +16,19 @@ import com.google.gson.Gson;
 
 import de.wps.bikehh.karte.controller.KartenController;
 import de.wps.bikehh.umfragen.material.Umfrage;
-import de.wps.bikehh.umfragen.repository.UmfrageRepository;
+import de.wps.bikehh.umfragen.repository.UmfragenRepository;
 import de.wps.bikehh.umfragen.service.UmfragenService;
 
 public class KartenControllerTest {
 
-	private UmfrageRepository umfragenRepository;
+	private UmfragenRepository umfragenRepository;
 	private UmfragenService umfragenService;
 	private KartenController kartenController;
 	private Model model;
 
 	public KartenControllerTest() {
 		// mocke Repository
-		this.umfragenRepository = mock(UmfrageRepository.class);
+		this.umfragenRepository = mock(UmfragenRepository.class);
 
 		// mocke Service
 		this.umfragenService = new UmfragenService(this.umfragenRepository);

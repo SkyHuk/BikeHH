@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import de.wps.bikehh.framework.Contract;
 import de.wps.bikehh.umfragen.material.Umfrage;
-import de.wps.bikehh.umfragen.repository.UmfrageRepository;
+import de.wps.bikehh.umfragen.repository.UmfragenRepository;
 
 /**
  * Service, der Operationen auf Umfragen behandelt.
@@ -16,10 +16,10 @@ import de.wps.bikehh.umfragen.repository.UmfrageRepository;
 @Service
 public class UmfragenService {
 
-	private UmfrageRepository umfrageRepository;
+	private UmfragenRepository umfrageRepository;
 
 	@Autowired
-	public UmfragenService(UmfrageRepository umfrageRepository) {
+	public UmfragenService(UmfragenRepository umfrageRepository) {
 		this.umfrageRepository = umfrageRepository;
 	}
 
