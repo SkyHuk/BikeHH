@@ -53,7 +53,7 @@ public class UmfragenController {
 	 */
 	@GetMapping("/{umfrageId}")
 	public String zeigeEinzelUmfrage(Model model, @PathVariable Integer umfrageId) {
-		Umfrage umfrage = umfragenService.getUmfrageNachId(umfrageId);
+		Umfrage umfrage = umfragenService.getById(umfrageId);
 		model.addAttribute("umfrage", umfrage);
 
 		// TODO jg: Inspektion was das soll
@@ -67,9 +67,9 @@ public class UmfragenController {
 	 */
 	@PatchMapping("/disable/{umfrageId}")
 	public String deaktiviereUmfrage(@PathVariable int umfrageId) {
-		Umfrage umfrage = umfragenService.getUmfrageNachId(umfrageId);
+		Umfrage umfrage = umfragenService.getById(umfrageId);
 		umfrage.setUmfrageDisabled(true);
-		umfragenService.speichereOderUpdateUmfrage(umfrage);
+		umfragenService.save(umfrage);
 
 		return "redirect:/umfrage/" + umfrage.getId();
 	}
@@ -79,9 +79,9 @@ public class UmfragenController {
 	 */
 	@PatchMapping("/enable/{umfrageId}")
 	public String aktiviereUmfrage(@PathVariable int umfrageId) {
-		Umfrage umfrage = umfragenService.getUmfrageNachId(umfrageId);
+		Umfrage umfrage = umfragenService.getById(umfrageId);
 		umfrage.setUmfrageDisabled(false);
-		umfragenService.speichereOderUpdateUmfrage(umfrage);
+		umfragenService.save(umfrage);
 
 		return "redirect:/umfrage/" + umfrage.getId();
 	}

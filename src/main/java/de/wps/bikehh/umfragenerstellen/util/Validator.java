@@ -94,7 +94,7 @@ public class Validator {
 						&& umfrage.getFragen().size() > 0 && fragenHabenTitel(umfrage.getFragen())
 						&& (fragenHabenAntworten(umfrage.getFragen())
 								|| alleFragenOhneAntwortenErlaubenBenutzerDefinierteAntworten)
-						&& umfrage.getErstelltAmDatum() != null && !umfrage.getErstelltAmDatum().isEmpty()
+						&& umfrage.getCreatedAt() != null && !umfrage.getCreatedAt().isEmpty()
 						&& umfrage.getBreitengrad() != 0 && umfrage.getLaengengrad() != 0
 						&& umfrage.getKategorie() != null && umfrage.getBestaetigtVonUsern() != null
 						&& umfrage.getErsteller() != null && umfrage.getAdresse() != null

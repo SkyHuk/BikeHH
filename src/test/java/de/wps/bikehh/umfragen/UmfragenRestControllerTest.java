@@ -10,7 +10,7 @@ import static org.mockito.Mockito.when;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.wps.bikehh.umfragen.controller.UmfragenRestController;
+import de.wps.bikehh.umfragen.api.controller.UmfragenRestController;
 import de.wps.bikehh.umfragen.material.Umfrage;
 import de.wps.bikehh.umfragen.service.UmfragenService;
 
@@ -28,7 +28,7 @@ public class UmfragenRestControllerTest {
 		testUmfrage = new Umfrage();
 		testUmfrage.setId(1);
 
-		when(umfragenService.getUmfrageNachId(testUmfrage.getId())).thenReturn(testUmfrage);
+		when(umfragenService.getById(testUmfrage.getId())).thenReturn(testUmfrage);
 	}
 
 	@Test
@@ -37,7 +37,7 @@ public class UmfragenRestControllerTest {
 		umfragenRestController.loescheUmfrage(testUmfrage.getId());
 
 		// assert
-		verify(umfragenService, times(1)).loesche(testUmfrage.getId());
+		verify(umfragenService, times(1)).delete(testUmfrage.getId());
 	}
 
 	@Test
@@ -49,7 +49,7 @@ public class UmfragenRestControllerTest {
 		umfragenRestController.deaktiviereUmfrage(testUmfrage.getId());
 
 		// assert
-		verify(umfragenService, times(1)).speichereOderUpdateUmfrage(testUmfrage);
+		verify(umfragenService, times(1)).save(testUmfrage);
 		assertTrue(testUmfrage.isUmfrageDisabled());
 	}
 
@@ -62,7 +62,7 @@ public class UmfragenRestControllerTest {
 		umfragenRestController.aktiviereUmfrage(testUmfrage.getId());
 
 		// assert
-		verify(umfragenService, times(1)).speichereOderUpdateUmfrage(testUmfrage);
+		verify(umfragenService, times(1)).save(testUmfrage);
 		assertFalse(testUmfrage.isUmfrageDisabled());
 	}
 

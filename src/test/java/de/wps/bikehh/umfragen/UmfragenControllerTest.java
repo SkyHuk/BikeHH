@@ -38,7 +38,7 @@ public class UmfragenControllerTest {
 		List<Umfrage> alleUmfragen = new ArrayList<>();
 		alleUmfragen.add(testUmfrage);
 
-		when(umfragenService.getUmfrageNachId(testUmfrage.getId())).thenReturn(testUmfrage);
+		when(umfragenService.getById(testUmfrage.getId())).thenReturn(testUmfrage);
 		when(umfragenService.getAlleUmfragen()).thenReturn(alleUmfragen);
 	}
 
@@ -59,7 +59,7 @@ public class UmfragenControllerTest {
 		String redirectStr = umfragenController.zeigeEinzelUmfrage(model, testUmfrage.getId());
 
 		// assert
-		verify(umfragenService, times(1)).getUmfrageNachId(testUmfrage.getId());
+		verify(umfragenService, times(1)).getById(testUmfrage.getId());
 		assertTrue(model.containsAttribute("umfrage"));
 		Umfrage displayedUmfrage = (Umfrage) model.getAttribute("umfrage");
 		assertEquals(testUmfrage.getId(), displayedUmfrage.getId());

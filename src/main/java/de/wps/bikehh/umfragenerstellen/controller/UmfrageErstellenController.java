@@ -78,7 +78,7 @@ public class UmfrageErstellenController {
 	public String zeigeUmfragenBearbeiter(@RequestParam(required = true, name = "umfrageId") int umfrageId,
 			Model model) {
 
-		Umfrage umfrage = umfragenService.getUmfrageNachId(umfrageId);
+		Umfrage umfrage = umfragenService.getById(umfrageId);
 		String jsonUmfrage = new Gson().toJson(umfrage);
 
 		model.addAttribute("umfrage", jsonUmfrage);

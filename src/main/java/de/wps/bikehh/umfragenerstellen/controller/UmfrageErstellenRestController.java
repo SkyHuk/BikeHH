@@ -40,11 +40,11 @@ public class UmfrageErstellenRestController {
 	 */
 	@PostMapping("/umfragen-erstellen")
 	@ResponseBody
-	public int postUmfrage(@RequestBody Umfrage umfrage) {
+	public long postUmfrage(@RequestBody Umfrage umfrage) {
 
 		// validiere Umfrage
 		if (Validator.umfrageIstValide(umfrage)) {
-			return umfragenService.speichereOderUpdateUmfrage(umfrage);
+			return umfragenService.save(umfrage);
 
 		} else {
 			throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE,
@@ -63,14 +63,14 @@ public class UmfrageErstellenRestController {
 	@RequestMapping(method = RequestMethod.PATCH)
 	@PostMapping("/umfragen-erstellen")
 	@ResponseBody
-	public int updateUmfrage(@RequestBody Umfrage umfrage) {
+	public long updateUmfrage(@RequestBody Umfrage umfrage) {
 
 		// validiere Umfrage
 		if (Validator.umfrageIstValide(umfrage)) {
 
-			int neueUmfrage = umfragenService.speichereOderUpdateUmfrage(umfrage);
+			long neueUmfrage = umfragenService.save(umfrage);
 			// eine alte Umfrage wurde bearbeitet, muss geupdated werden
-			Umfrage oldUmfrage = umfragenService.getUmfrageNachId(neueUmfrage);
+			Umfrage oldUmfrage = umfragenService.getById(neueUmfrage);
 			oldUmfrage.merge(umfrage);
 
 			return oldUmfrage.getId();

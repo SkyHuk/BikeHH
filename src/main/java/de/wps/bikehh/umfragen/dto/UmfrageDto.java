@@ -7,9 +7,9 @@ import java.util.stream.Collectors;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import de.wps.bikehh.umfragen.fachwert.Kategorie;
 import de.wps.bikehh.umfragen.material.Adresse;
 import de.wps.bikehh.umfragen.material.Frage;
-import de.wps.bikehh.umfragen.material.Kategorie;
 import de.wps.bikehh.umfragen.material.Umfrage;
 
 public class UmfrageDto {
@@ -52,7 +52,7 @@ public class UmfrageDto {
 		dto.setBreitengrad(umfrage.getBreitengrad());
 		dto.setKategorie(umfrage.getKategorie());
 		dto.setStartDatum(umfrage.getStartDatum());
-		dto.setCreatedAt(umfrage.getErstelltAmDatum());
+		dto.setCreatedAt(umfrage.getCreatedAt());
 		dto.setUpdatedAt(umfrage.getBearbeitetAmDatum());
 		dto.setVerified(umfrage.getIstBestaetigt());
 		dto.setFahrtrichtung(umfrage.getFahrtrichtung());

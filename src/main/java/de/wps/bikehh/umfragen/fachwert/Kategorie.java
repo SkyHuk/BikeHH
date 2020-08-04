@@ -1,4 +1,4 @@
-package de.wps.bikehh.umfragen.material;
+package de.wps.bikehh.umfragen.fachwert;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,9 +18,8 @@ public class Kategorie {
 
 	@Id
 	@GeneratedValue
-	private int id;
+	private long id;
 
-	// temporary solution, saves the kategorie in a simple string
 	private String name;
 
 	// @OneToMany(mappedBy = "kategorie", fetch = FetchType.LAZY, cascade =
@@ -33,11 +32,11 @@ public class Kategorie {
 	// @Column(nullable = true)
 	// private Kategorie oberKategorie;
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 

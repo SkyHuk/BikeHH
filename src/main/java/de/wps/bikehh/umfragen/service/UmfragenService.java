@@ -24,12 +24,32 @@ public class UmfragenService {
 	}
 
 	/**
-	 * Liefert alle in der Datenbank gespeicherten Umfragen.
+	 * Speichert oder aktualisiert eine Umfrage.
+	 * 
+	 * @param umfrage
+	 *            die zu speichernde / verändernde Umfrage
+	 * 
+	 * @require umfrage not null
 	 */
-	public List<Umfrage> getAlleUmfragen() {
-		List<Umfrage> umfragen = new ArrayList<>();
-		umfrageRepository.findAll().forEach(umfragen::add);
-		return umfragen;
+	public long save(Umfrage umfrage) {
+		Contract.notNull(umfrage, "umfrage");
+
+		Umfrage savedEntity = umfrageRepository.save(umfrage);
+		return savedEntity.getId();
+	}
+
+	/**
+	 * Löscht eine Umfrage aus der Datenbank.
+	 * 
+	 * @param id
+	 *            id der zu löschenden Umfrage
+	 * 
+	 * @require umfrage exists
+	 */
+	public void delete(long id) {
+		Contract.check(umfrageRepository.existsById(id), "umfrage exists");
+
+		umfrageRepository.deleteById(id);
 	}
 
 	/**
@@ -42,38 +62,42 @@ public class UmfragenService {
 	 * 
 	 * @return die Umfrage zur gegebenen Id
 	 */
-	public Umfrage getUmfrageNachId(long id) {
+	public Umfrage getById(long id) {
 		Contract.check(umfrageRepository.existsById(id), "umfrage exists");
 
 		return umfrageRepository.findById(id).get();
 	}
 
-	/**
-	 * Speichert oder aktualisiert eine Umfrage.
-	 * 
-	 * @param umfrage
-	 *            die zu speichernde / verändernde Umfrage
-	 * 
-	 * @require umfrage not null
-	 */
-	public int speichereOderUpdateUmfrage(Umfrage umfrage) {
-		Contract.notNull(umfrage, "umfrage");
-
-		umfrageRepository.save(umfrage);
-		return umfrage.getId();
-	}
-
-	/**
-	 * Löscht eine Umfrage aus der Datenbank.
+	/***
+	 * Überprüft, ob das Repository eine Umfrage mit gegebener ID enthält.
 	 * 
 	 * @param id
-	 *            id der zu löschenden Umfrage
-	 * 
-	 * @require umfrage exists
+	 *            die id der Umfrage
+	 * @return ob die Umfrage im Repository persistiert wird
 	 */
-	public void loesche(long id) {
-		Contract.check(umfrageRepository.existsById(id), "umfrage exists");
-
-		umfrageRepository.deleteById(id);
+	public boolean hasUmfrage(long id) {
+		return umfrageRepository.existsById(id);
 	}
+
+	/**
+	 * Liefert alle in der Datenbank gespeicherten Umfragen.
+	 */
+	public List<Umfrage> getAlleUmfragen() {
+		List<Umfrage> umfragen = new ArrayList<>();
+		umfrageRepository.findAll().forEach(umfragen::add);
+		return umfragen;
+	}
+
+	public List<Umfrage> getUmfragenImUmkreis(double laengengrad, double breitengrad) {
+		List<Umfrage> umfragen = new ArrayList<>();
+		// TODO: Umfragen in einem bestimmten Radius um gegebener Position
+		// raussuchen und bereitstellen.
+
+		return umfragen;
+	}
+
+	public void beantworteUmfrage() {
+
+	}
+
 }

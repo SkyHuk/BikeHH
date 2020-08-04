@@ -58,17 +58,17 @@ public class UmfragenServiceTest {
 	@Test
 	public void getUmfrageNachIdTest() {
 		// act
-		umfragenService.getUmfrageNachId(testUmfrage.getId());
+		umfragenService.getById(testUmfrage.getId());
 
 		// assert
 		verify(umfrageRepository, times(1)).findById(testUmfrage.getId());
-		assertEquals(testUmfrage, umfragenService.getUmfrageNachId(testUmfrage.getId()));
+		assertEquals(testUmfrage, umfragenService.getById(testUmfrage.getId()));
 	}
 
 	@Test
 	public void speichereOderUpdateUmfrage() {
 		// act
-		umfragenService.speichereOderUpdateUmfrage(testUmfrage);
+		umfragenService.save(testUmfrage);
 
 		// assert
 		verify(umfrageRepository, times(1)).save(testUmfrage);
@@ -77,7 +77,7 @@ public class UmfragenServiceTest {
 	@Test
 	public void loescheTest() {
 		// act
-		umfragenService.loesche(testUmfrage.getId());
+		umfragenService.delete(testUmfrage.getId());
 
 		// assert
 		verify(umfrageRepository, times(1)).deleteById(testUmfrage.getId());

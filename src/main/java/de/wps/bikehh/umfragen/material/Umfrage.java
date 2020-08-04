@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import de.wps.bikehh.benutzerverwaltung.material.User;
+import de.wps.bikehh.umfragen.fachwert.Kategorie;
 
 /**
  * Eine Umfrage stellt eine positionsbedingte Ansammlung von Fragen an einen
@@ -57,9 +58,9 @@ public class Umfrage {
 	/**
 	 * Erstellungsdatum der Umfrage
 	 */
-	private LocalDate erstelltAmDatum;
+	private LocalDate createdAt;
 
-	private LocalDate bearbeitetAmDatum;
+	private LocalDate updatedAt;
 
 	/**
 	 * Ob die Umfrage als bestätigt gilt.
@@ -135,7 +136,8 @@ public class Umfrage {
 		setEndDatum(umfrage.getEndDatum());
 		setStartDatum(umfrage.getStartDatum());
 		setErsteller(umfrage.getErsteller());
-		setErstelltAmDatum(umfrage.getErstelltAmDatum());
+		setCreatedAt(umfrage.getCreatedAt());
+		setUpdatedAt(umfrage.getUpdatedAt());
 		setFragen(umfrage.getFragen());
 		setId(umfrage.getId());
 		setIstBestaetigt(umfrage.getIstBestaetigt());
@@ -186,11 +188,11 @@ public class Umfrage {
 	}
 
 	public LocalDate getBearbeitetAmDatum() {
-		return bearbeitetAmDatum;
+		return updatedAt;
 	}
 
 	public void setBearbeitetAmDatum(LocalDate bearbeitetAmDatum) {
-		this.bearbeitetAmDatum = bearbeitetAmDatum;
+		this.updatedAt = bearbeitetAmDatum;
 	}
 
 	public boolean getIstBestaetigt() {
@@ -202,12 +204,20 @@ public class Umfrage {
 		this.istBestaetigt = istBestaetigt;
 	}
 
-	public LocalDate getErstelltAmDatum() {
-		return erstelltAmDatum;
+	public LocalDate getCreatedAt() {
+		return createdAt;
 	}
 
-	public void setErstelltAmDatum(LocalDate erstelltAmDatum) {
-		this.erstelltAmDatum = erstelltAmDatum;
+	public void setCreatedAt(LocalDate createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public LocalDate getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(LocalDate updatedAt) {
+		this.updatedAt = updatedAt;
 	}
 
 	public int getBestaetigtSchwellenwert() {
