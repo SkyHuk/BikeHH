@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import de.wps.bikehh.umfragen.dto.UmfrageDto;
+import de.wps.bikehh.umfragen.dto.UmfragenListeDto;
 import de.wps.bikehh.umfragen.service.UmfragenService;
 
 @Service
@@ -26,6 +27,12 @@ public class UmfragenApplicationService {
 	public List<UmfrageDto> getAlleUmfragen() {
 		return umfragenService.getAlleUmfragen().stream()
 				.map(UmfrageDto::from)
+				.collect(Collectors.toList());
+	}
+
+	public List<UmfragenListeDto> getUmfragenUebersichtsListe() {
+		return umfragenService.getAlleUmfragen().stream()
+				.map(UmfragenListeDto::from)
 				.collect(Collectors.toList());
 	}
 

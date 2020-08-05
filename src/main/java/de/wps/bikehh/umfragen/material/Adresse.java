@@ -4,9 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-/**
- * Teil einer Umfrage
- */
+// TODO: Embeddable
 @Entity
 public class Adresse {
 
@@ -63,8 +61,8 @@ public class Adresse {
 		this.hausnummer = hausnummer;
 	}
 
-	public boolean hatHausnummer(Adresse addresse) {
-		return addresse.getHausnummer() != null;
+	public boolean hatHausnummer() {
+		return hausnummer != null;
 	}
 
 }

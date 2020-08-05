@@ -1,68 +1,41 @@
 <html layout:decorate="~{layout/layout}">
 
 <head>
-  <title>ADFC - Umfragen</title>
+<title>Umfragen</title>
 </head>
 
 <body layout:fragment="content">
-
-  <div class="d-flex align-items-center justify-space-between">
-    <h2 class="my-4 mr-4">Umfragen</h2>
-    <input class="form-control" placeholder="Suche">
-  </div>
-  <div class="table-responsive mb-4">
-    <table class="table table-hover">
-      <thead>
-        <tr>
-          <th>Stadt</th>
-          <th>Straße</th>
-          <th>Title</th>
-          <th>Typ</th>
-          <th>Erstellungsdatum</th>
-          <th>Status</th>
-          <th>Bestätigungen</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr th:each="umfrage: ${umfragen}">
-          <td th:text="${umfrage.adresse.stadt + ', ' + umfrage.adresse.postleitZahl}"></td>
-          <td
-            th:text="${umfrage.adresse.hausnummer!=null}?${umfrage.adresse.strasse + ' ' + umfrage.adresse.hausnummer}:${umfrage.adresse.strasse}">
-          </td>
-          <td th:text="${umfrage.titel}"></td>
-          <td th:text="${umfrage.kategorie.name}"></td>
-          <td th:text="${umfrage.erstelltAmDatum}"></td>
-          <td th:text="${umfrage.umfrageDisabled} ? 'deaktiviert' : 'aktiviert'" </td>
-          <td th:text="${#lists.size(umfrage.bestaetigtVonUsern)}"></td>
-            <td>
-              <a class="btn btn-sm btn-primary" th:href="@{/umfragen/{id}(id=${umfrage.id})}" target="_self">Anzeigen</a>
-              <a class="btn text-danger ml-3" th:onclick="'openDialog(\' ' + ${umfrage.id} + '\');'">
-              <!--<a class="btn text-danger ml-3" th:href="@{/umfragen/delete/{id}(id=${umfrage.id})}">-->
-                <span><i class="far fa-trash-alt"></i></span>
-              </a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <script type="text/javascript">
-
-      // make delete request
-      function openDialog(id) {
-        if (confirm("Soll die Umfrage wirklich gelöscht werden?")) {
-          const request = new XMLHttpRequest();
-          request.open("DELETE", "/umfragen/delete/" + id);
-          request.setRequestHeader("Content-Type", "application/json");
-          request.send();
-          console.log(request)
-          request.onload = function (e) {
-            if (request.status == 200) {
-              location.reload()
-            }
-          }
-        }
-      }
-    </script>
-  </body>
+	<h2 class="my-4 mr-4">Umfragen</h2>
+	<div class="table-responsive mb-4">
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th>Stadt</th>
+					<th>Straße</th>
+					<th>Titel</th>
+					<th>Kategorie</th>
+					<th>Erstellungsdatum</th>
+					<th>Status</th>
+					<th>Bestätigungen</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="umfrage: ${umfragen}">
+					<td
+						th:text="${umfrage.adresse.stadt + ', ' + umfrage.adresse.postleitzahl}"></td>
+					<td th:text="${umfrage.adresse.strasse}"></td>
+					<td th:text="${umfrage.titel}"></td>
+					<td th:text="${umfrage.kategorie}"></td>
+					<td th:text="${umfrage.createdAt}"></td>
+					<td
+						th:text="${umfrage.umfrageDisabled} ? 'deaktiviert' : 'aktiviert'"></td>
+					<td th:text="${umfrage.anzahlBestaetigungen}"></td>
+					<td><a class="btn btn-sm btn-primary"
+						th:href="@{/umfragen/${umfrage.id}}">Anzeigen</a></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</body>
 </html>

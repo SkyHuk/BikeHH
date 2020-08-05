@@ -32,7 +32,7 @@ public class UmfragenController {
 	@GetMapping
 	public String zeigeUmfragenListe(Model model) {
 		// TODO: Pagination
-		model.addAttribute("umfragen", umfragenAppService.getAlleUmfragen());
+		model.addAttribute("umfragen", umfragenAppService.getUmfragenUebersichtsListe());
 		return "umfragen/umfragen_liste";
 	}
 
