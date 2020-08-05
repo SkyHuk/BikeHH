@@ -14,32 +14,39 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.ui.ConcurrentModel;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 
+import de.wps.bikehh.umfragen.applicationservice.UmfragenApplicationService;
 import de.wps.bikehh.umfragen.controller.UmfragenController;
+import de.wps.bikehh.umfragen.dto.UmfrageDto;
 import de.wps.bikehh.umfragen.material.Umfrage;
-import de.wps.bikehh.umfragen.service.UmfragenService;
 
 public class UmfragenControllerTest {
 
-	private UmfragenService umfragenService;
+	private UmfragenApplicationService umfragenAppService;
 	private UmfragenController umfragenController;
-	private Umfrage testUmfrage;
+	private UmfrageDto testUmfrage;
 	private Model model;
+	private BindingResult bindingResult;
 
 	@Before
 	public void init() {
 		model = new ConcurrentModel();
-		umfragenService = mock(UmfragenService.class);
-		umfragenController = new UmfragenController(umfragenService);
+		umfragenAppService = mock(UmfragenApplicationService.class);
+		umfragenController = new UmfragenController(umfragenAppService);
 
-		testUmfrage = new Umfrage();
+		testUmfrage = new UmfrageDto();
 		testUmfrage.setId(1);
 
-		List<Umfrage> alleUmfragen = new ArrayList<>();
+		List<UmfrageDto> alleUmfragen = new ArrayList<>();
 		alleUmfragen.add(testUmfrage);
 
-		when(umfragenService.getById(testUmfrage.getId())).thenReturn(testUmfrage);
-		when(umfragenService.getAlleUmfragen()).thenReturn(alleUmfragen);
+		bindingResult = mock(BindingResult.class);
+		when(bindingResult.hasErrors()).thenReturn(false);
+
+		when(umfragenAppService.hasUmfrage(testUmfrage.getId())).thenReturn(true);
+		when(umfragenAppService.getUmfrageById(testUmfrage.getId())).thenReturn(testUmfrage);
+		when(umfragenAppService.getAlleUmfragen()).thenReturn(alleUmfragen);
 	}
 
 	@Test
@@ -48,7 +55,7 @@ public class UmfragenControllerTest {
 		String redirectStr = umfragenController.zeigeUmfragenListe(model);
 
 		// assert
-		verify(umfragenService, times(1)).getAlleUmfragen();
+		verify(umfragenAppService, times(1)).getAlleUmfragen();
 		assertTrue(model.containsAttribute("umfragen"));
 		assertEquals("umfragen/umfragen_liste", redirectStr);
 	}
@@ -59,11 +66,29 @@ public class UmfragenControllerTest {
 		String redirectStr = umfragenController.zeigeEinzelUmfrage(model, testUmfrage.getId());
 
 		// assert
-		verify(umfragenService, times(1)).getById(testUmfrage.getId());
+		verify(umfragenAppService, times(1)).getUmfrageById(testUmfrage.getId());
 		assertTrue(model.containsAttribute("umfrage"));
 		Umfrage displayedUmfrage = (Umfrage) model.getAttribute("umfrage");
 		assertEquals(testUmfrage.getId(), displayedUmfrage.getId());
 		assertEquals("umfragen/umfrage", redirectStr);
+	}
+
+	@Test
+	public void testdeaktiviereUmfrage_deaktiviertUmfrage() {
+		// act
+		umfragenController.deaktiviereUmfrage(bindingResult, testUmfrage.getId());
+
+		// assert
+		verify(umfragenAppService, times(1)).disableUmfrage(testUmfrage.getId());
+	}
+
+	@Test
+	public void testaktiviereUmfrage_aktiviertUmfrage() {
+		// act
+		umfragenController.aktiviereUmfrage(bindingResult, testUmfrage.getId());
+
+		// assert
+		verify(umfragenAppService, times(1)).enableUmfrage(testUmfrage.getId());
 	}
 
 }

@@ -1,7 +1,7 @@
 package de.wps.bikehh.umfragen;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -42,7 +42,7 @@ public class UmfragenServiceTest {
 
 		when(umfrageRepository.findById(testUmfrage.getId())).thenReturn(Optional.of(testUmfrage));
 		when(umfrageRepository.findAll()).thenReturn(umfragen);
-		when(umfrageRepository.existsById(anyInt())).thenReturn(true);
+		when(umfrageRepository.existsById(anyLong())).thenReturn(true);
 	}
 
 	@Test
