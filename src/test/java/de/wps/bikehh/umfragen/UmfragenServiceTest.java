@@ -1,18 +1,16 @@
 package de.wps.bikehh.umfragen;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 
 import de.wps.bikehh.umfragen.material.Umfrage;
 import de.wps.bikehh.umfragen.repository.UmfragenRepository;
@@ -23,7 +21,6 @@ public class UmfragenServiceTest {
 	private UmfragenRepository umfrageRepository;
 	private UmfragenService umfragenService;
 	private Umfrage testUmfrage;
-	private List<Umfrage> umfragen;
 
 	@Before
 	public void init() {
@@ -33,53 +30,39 @@ public class UmfragenServiceTest {
 		testUmfrage = new Umfrage();
 		testUmfrage.setId(1);
 
-		Umfrage testUmfrage2 = new Umfrage();
-		testUmfrage2.setId(2);
-
-		umfragen = new ArrayList<>();
-		umfragen.add(testUmfrage);
-		umfragen.add(testUmfrage2);
-
 		when(umfrageRepository.findById(testUmfrage.getId())).thenReturn(Optional.of(testUmfrage));
-		when(umfrageRepository.findAll()).thenReturn(umfragen);
-		when(umfrageRepository.existsById(anyLong())).thenReturn(true);
+		when(umfrageRepository.existsById(testUmfrage.getId())).thenReturn(true);
 	}
 
 	@Test
-	public void getAlleUmfragenTest() {
-		// act
-		umfragenService.getAlleUmfragen();
+	public void testgetUmfragenImUmkreis_gibtUmfragenIn50MeterUmkreis() {
 
-		// assert
-		verify(umfrageRepository, times(1)).findAll();
-		assertEquals(2, umfragenService.getAlleUmfragen().size());
 	}
 
 	@Test
-	public void getUmfrageNachIdTest() {
-		// act
-		umfragenService.getById(testUmfrage.getId());
+	public void testbeantworteUmfrage_speichertAntwortZuUmfrage() {
 
-		// assert
-		verify(umfrageRepository, times(1)).findById(testUmfrage.getId());
-		assertEquals(testUmfrage, umfragenService.getById(testUmfrage.getId()));
 	}
 
 	@Test
-	public void speichereOderUpdateUmfrage() {
+	public void testenableUmfrage_aktiviertUmfrage() {
 		// act
-		umfragenService.save(testUmfrage);
+		umfragenService.enableUmfrage(testUmfrage.getId());
 
 		// assert
-		verify(umfrageRepository, times(1)).save(testUmfrage);
+		ArgumentCaptor<Umfrage> argument = ArgumentCaptor.forClass(Umfrage.class);
+		verify(umfrageRepository).save(argument.capture());
+		assertFalse(argument.getValue().getIsDisabled());
 	}
 
 	@Test
-	public void loescheTest() {
+	public void testdisableUmfrage_deaktiviertUmfrage() {
 		// act
-		umfragenService.delete(testUmfrage.getId());
+		umfragenService.disableUmfrage(testUmfrage.getId());
 
 		// assert
-		verify(umfrageRepository, times(1)).deleteById(testUmfrage.getId());
+		ArgumentCaptor<Umfrage> argument = ArgumentCaptor.forClass(Umfrage.class);
+		verify(umfrageRepository).save(argument.capture());
+		assertTrue(argument.getValue().getIsDisabled());
 	}
 }

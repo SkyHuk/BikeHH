@@ -19,7 +19,6 @@ import org.springframework.validation.BindingResult;
 import de.wps.bikehh.umfragen.applicationservice.UmfragenApplicationService;
 import de.wps.bikehh.umfragen.controller.UmfragenController;
 import de.wps.bikehh.umfragen.dto.UmfrageDto;
-import de.wps.bikehh.umfragen.material.Umfrage;
 
 public class UmfragenControllerTest {
 
@@ -68,7 +67,7 @@ public class UmfragenControllerTest {
 		// assert
 		verify(umfragenAppService, times(1)).getUmfrageById(testUmfrage.getId());
 		assertTrue(model.containsAttribute("umfrage"));
-		Umfrage displayedUmfrage = (Umfrage) model.getAttribute("umfrage");
+		UmfrageDto displayedUmfrage = (UmfrageDto) model.getAttribute("umfrage");
 		assertEquals(testUmfrage.getId(), displayedUmfrage.getId());
 		assertEquals("umfragen/umfrage", redirectStr);
 	}

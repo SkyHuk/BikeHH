@@ -24,18 +24,31 @@ public class UmfragenService {
 	}
 
 	/**
-	 * Speichert oder aktualisiert eine Umfrage.
+	 * Speichert eine Umfrage und gibt die gespeicherte Umfrage zurück.
 	 * 
 	 * @param umfrage
-	 *            die zu speichernde / verändernde Umfrage
+	 *            die zu speichernde Umfrage
 	 * 
 	 * @require umfrage not null
 	 */
-	public long save(Umfrage umfrage) {
+	public Umfrage add(Umfrage umfrage) {
 		Contract.notNull(umfrage, "umfrage");
 
-		Umfrage savedEntity = umfrageRepository.save(umfrage);
-		return savedEntity.getId();
+		return umfrageRepository.save(umfrage);
+	}
+
+	/**
+	 * Aktualisiert eine Umfrage.
+	 * 
+	 * @param umfrage
+	 *            die zu aktualisierende Umfrage
+	 * 
+	 * @require umfrage not null
+	 */
+	public void update(Umfrage umfrage) {
+		Contract.notNull(umfrage, "umfrage");
+
+		umfrageRepository.save(umfrage);
 	}
 
 	/**
@@ -103,13 +116,13 @@ public class UmfragenService {
 	public void enableUmfrage(long id) {
 		Umfrage umfrage = getById(id);
 		umfrage.setIsDisabled(false);
-		save(umfrage);
+		update(umfrage);
 	}
 
 	public void disableUmfrage(long id) {
 		Umfrage umfrage = getById(id);
 		umfrage.setIsDisabled(true);
-		save(umfrage);
+		update(umfrage);
 	}
 
 }
