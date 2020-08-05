@@ -1,18 +1,15 @@
 package de.wps.bikehh.umfragenerstellen.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import de.wps.bikehh.umfragen.material.Umfrage;
 import de.wps.bikehh.umfragen.service.UmfragenService;
-import de.wps.bikehh.umfragenerstellen.util.Validator;
 
 /**
  * RestController für das Erstellen und Bearbeiten von Umfragen.
@@ -41,15 +38,7 @@ public class UmfrageErstellenRestController {
 	@PostMapping("/umfragen-erstellen")
 	@ResponseBody
 	public long postUmfrage(@RequestBody Umfrage umfrage) {
-
-		// validiere Umfrage
-		if (Validator.umfrageIstValide(umfrage)) {
-			return umfragenService.save(umfrage);
-
-		} else {
-			throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE,
-					"Umfrage ist nicht valide und wird nicht gespeichert");
-		}
+		return umfragenService.save(umfrage);
 	}
 
 	/**
@@ -64,19 +53,11 @@ public class UmfrageErstellenRestController {
 	@PostMapping("/umfragen-erstellen")
 	@ResponseBody
 	public long updateUmfrage(@RequestBody Umfrage umfrage) {
+		long neueUmfrage = umfragenService.save(umfrage);
+		// eine alte Umfrage wurde bearbeitet, muss geupdated werden
+		Umfrage oldUmfrage = umfragenService.getById(neueUmfrage);
+		oldUmfrage.merge(umfrage);
 
-		// validiere Umfrage
-		if (Validator.umfrageIstValide(umfrage)) {
-
-			long neueUmfrage = umfragenService.save(umfrage);
-			// eine alte Umfrage wurde bearbeitet, muss geupdated werden
-			Umfrage oldUmfrage = umfragenService.getById(neueUmfrage);
-			oldUmfrage.merge(umfrage);
-
-			return oldUmfrage.getId();
-		} else {
-			throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE,
-					"Umfrage ist nicht valide und wird nicht gespeichert");
-		}
+		return oldUmfrage.getId();
 	}
 }
