@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import de.wps.bikehh.umfragen.dto.UmfrageDto;
+import de.wps.bikehh.umfragen.dto.ViewUmfrageDto;
 import de.wps.bikehh.umfragen.dto.UmfragenListeDto;
 import de.wps.bikehh.umfragen.service.UmfragenService;
 
@@ -20,13 +20,13 @@ public class UmfragenApplicationService {
 		this.umfragenService = umfragenService;
 	}
 
-	public UmfrageDto getUmfrageById(long umfragenId) {
-		return UmfrageDto.from(umfragenService.getById(umfragenId));
+	public ViewUmfrageDto getUmfrageById(long umfragenId) {
+		return ViewUmfrageDto.from(umfragenService.getById(umfragenId));
 	}
 
-	public List<UmfrageDto> getAlleUmfragen() {
+	public List<ViewUmfrageDto> getAlleUmfragen() {
 		return umfragenService.getAlleUmfragen().stream()
-				.map(UmfrageDto::from)
+				.map(ViewUmfrageDto::from)
 				.collect(Collectors.toList());
 	}
 

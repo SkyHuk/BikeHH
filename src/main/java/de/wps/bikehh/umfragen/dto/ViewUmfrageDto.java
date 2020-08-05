@@ -12,7 +12,7 @@ import de.wps.bikehh.umfragen.material.Adresse;
 import de.wps.bikehh.umfragen.material.Frage;
 import de.wps.bikehh.umfragen.material.Umfrage;
 
-public class UmfrageDto {
+public class ViewUmfrageDto {
 
 	private long id;
 
@@ -44,8 +44,8 @@ public class UmfrageDto {
 	private boolean isAutomatischErstellt;
 	private boolean isDisabled;
 
-	public static UmfrageDto from(Umfrage umfrage) {
-		UmfrageDto dto = new UmfrageDto();
+	public static ViewUmfrageDto from(Umfrage umfrage) {
+		ViewUmfrageDto dto = new ViewUmfrageDto();
 		dto.setId(umfrage.getId());
 		dto.setTitel(umfrage.getTitel());
 		dto.setLaengengrad(umfrage.getLaengengrad());

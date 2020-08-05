@@ -17,7 +17,7 @@ import org.springframework.ui.Model;
 
 import de.wps.bikehh.karte.controller.KartenController;
 import de.wps.bikehh.umfragen.applicationservice.UmfragenApplicationService;
-import de.wps.bikehh.umfragen.dto.UmfrageDto;
+import de.wps.bikehh.umfragen.dto.ViewUmfrageDto;
 
 public class KartenControllerTest {
 
@@ -31,10 +31,10 @@ public class KartenControllerTest {
 		umfragenAppService = mock(UmfragenApplicationService.class);
 		kartenController = new KartenController(umfragenAppService);
 
-		UmfrageDto testUmfrage = new UmfrageDto();
+		ViewUmfrageDto testUmfrage = new ViewUmfrageDto();
 		testUmfrage.setId(1);
 
-		List<UmfrageDto> alleUmfragen = new ArrayList<>();
+		List<ViewUmfrageDto> alleUmfragen = new ArrayList<>();
 		alleUmfragen.add(testUmfrage);
 
 		when(umfragenAppService.getAlleUmfragen()).thenReturn(alleUmfragen);

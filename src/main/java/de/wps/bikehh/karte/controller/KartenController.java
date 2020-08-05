@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import de.wps.bikehh.umfragen.applicationservice.UmfragenApplicationService;
-import de.wps.bikehh.umfragen.dto.UmfrageDto;
+import de.wps.bikehh.umfragen.dto.ViewUmfrageDto;
 
 @Controller
 @RequestMapping("map")
@@ -24,7 +24,7 @@ public class KartenController {
 
 	@GetMapping
 	public String getMap(Model model) {
-		List<UmfrageDto> umfragen = umfragenAppService.getAlleUmfragen();
+		List<ViewUmfrageDto> umfragen = umfragenAppService.getAlleUmfragen();
 		model.addAttribute("umfragen", umfragen);
 		return "map/map";
 	}
