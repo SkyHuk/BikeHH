@@ -6,6 +6,8 @@ import java.util.List;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import de.wps.bikehh.umfragen.fachwert.Kategorie;
 import de.wps.bikehh.umfragen.material.Frage;
 import de.wps.bikehh.umfragen.material.Umfrage;
@@ -21,12 +23,14 @@ public class NewUmfrageDto {
 
 	private double fahrtrichtung;
 
-	@NotNull
 	private Kategorie kategorie;
 
 	@NotNull(message = "StartDatum darf nicht leer sein.")
+	@DateTimeFormat(pattern = "dd.MM.yyyy")
 	private LocalDate startDatum;
+
 	@NotNull(message = "EndDatum darf nicht leer sein.")
+	@DateTimeFormat(pattern = "dd.MM.yyyy")
 	private LocalDate endDatum;
 
 	private int bestaetigungsSchwellenwert;

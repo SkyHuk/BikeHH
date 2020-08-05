@@ -1,0 +1,136 @@
+<html layout:decorate="~{layout/layout}">
+
+<head>
+<title>Umfrage Bearbeiten</title>
+</head>
+
+<body layout:fragment="content">
+	<form th:fragment="form" method="POST" th:action="@{${formPostUrl}}"
+		th:object="${umfrage}">
+		<input type="hidden" th:if="${umfrageId}" name="id"
+			th:value="${umfrageId}">
+
+		<div class="card w-80">
+			<div class="card-body">
+				<h3 class="card-title">Umfrage Bearbeiten</h3>
+
+				<div class="row">
+					<div class="col border-right">
+						<!-- Editierbarer Bereich -->
+						<label for="titel" class="col col-form-label">Titel</label>
+						<div class="col-12 py-1">
+							<input type="text" class="form-control" id="titel"
+								th:field="*{titel}" th:errorclass="is-invalid"
+								placeholder="Titel" maxlength="255">
+							<div class="invalid-feedback" th:errors="*{titel}"></div>
+						</div>
+
+						<!-- Erstellt am -->
+						<div th:if="${umfrageId}">
+							<label for="createdAt" class="col-3 col-form-label">Erstellt
+								am</label> <span class="form-control" id="createdAt"
+								th:text="${umfrage.createdAt}"></span>
+						</div>
+						<!-- Bearbeitet am -->
+						<div th:if="${umfrageId != null && umfrage.updatedAt != null}">
+							<label for="updatedAt" class="col-3 col-form-label">Bearbeitet
+								am</label> <span class="form-control" id="updatedAt"
+								th:text="${umfrage.updatedAt}"></span>
+						</div>
+
+						<label for="kategorie" class="col col-form-label">Kategorie</label>
+						<div class="col-12 py-1">
+							<input type="text" class="form-control" id="kategorie"
+								th:field="*{kategorie}" th:errorclass="is-invalid"
+								placeholder="Kategorie" maxlength="255">
+							<div class="invalid-feedback" th:errors="*{kategorie}"></div>
+						</div>
+
+						<label for="startDatum" class="col col-form-label">Startdatum</label>
+						<div class="col-12 py-1">
+							<input type="text" class="form-control" id="startDatum"
+								th:field="*{startDatum}" th:errorclass="is-invalid"
+								placeholder="Startdatum" maxlength="255">
+							<div class="invalid-feedback" th:errors="*{startDatum}"></div>
+						</div>
+
+						<label for="endDatum" class="col col-form-label">Enddatum</label>
+						<div class="col-12 py-1">
+							<input type="text" class="form-control" id="endDatum"
+								th:field="*{endDatum}" th:errorclass="is-invalid"
+								placeholder="Enddatum" maxlength="255">
+							<div class="invalid-feedback" th:errors="*{endDatum}"></div>
+						</div>
+
+						<label for="bestaetigungsSchwellenwert" class="col col-form-label">Bestätigungs-Schwellenwert</label>
+						<div class="col-12 py-1">
+							<input type="number" class="form-control"
+								id="bestaetigungsSchwellenwert"
+								th:field="*{bestaetigungsSchwellenwert}"
+								th:errorclass="is-invalid" placeholder="EndDatum"
+								maxlength="255">
+							<div class="invalid-feedback"
+								th:errors="*{bestaetigungsSchwellenwert}"></div>
+						</div>
+					</div>
+					<div class="col">
+						<!-- Eine einzelne Frage -->
+						<div class="border rounded py-2">
+							<!-- Die Frage selbst -->
+							<label for="frage" class="col col-form-label">Frage</label>
+							<div class="col-12 py-1">
+								<input type="text" class="form-control" id="frage"
+									placeholder="Frage" maxlength="255">
+							</div>
+							<!-- Die Antworten -->
+							<label for="ersteAntwort" class="col col-form-label">Antwortmöglichkeiten</label>
+							<div class="col-12 py-1 d-flex">
+								<input type="text" class="form-control" id="ersteAntwort"
+									placeholder="Ja" maxlength="255">
+								<button type="button" class="btn text-danger ml-3">
+									<i class="far fa-trash-alt"></i>
+								</button>
+							</div>
+							<div class="col-12 py-1 d-flex">
+								<input type="text" class="form-control" placeholder="Nein"
+									maxlength="255">
+								<button type="button" class="btn text-danger ml-3">
+									<i class="far fa-trash-alt"></i>
+								</button>
+							</div>
+
+							<!-- Weitere Antworten hinzufügen -->
+							<div class="col-12 py-1">
+								<button type="button" class="btn btn-primary w-100">Antwort
+									hinzufügen</button>
+							</div>
+
+							<!-- Bedingungen -->
+
+							<!-- Fragen Actions -->
+							<div class="col-12 py-1 d-flex justify-content-between">
+								<button type="button" class="d-flex btn btn-primary">Bedingung hinzufügen</button>
+								<button type="button" class="d-flex btn btn-primary">Ort hinzufügen</button>
+								<button type="button" class="d-flex btn btn-danger">Frage löschen</button>
+							</div>
+						</div>
+						
+						<!-- Eine Frage hinzufügen -->
+						<div class="py-2">
+							<button type="button" class="btn btn-primary w-100">Frage hinzufügen</button>
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+			<div class="card-body">
+				<button type="submit" class="btn btn-primary w-100">
+					<i class="fas fa-save"></i> <span class="ml-1">Speichern</span>
+				</button>
+			</div>
+		</div>
+	</form>
+</body>
+
+</html>

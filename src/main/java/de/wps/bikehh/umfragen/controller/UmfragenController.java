@@ -59,6 +59,7 @@ public class UmfragenController {
 	@GetMapping("/new")
 	public String getNewUmfrageForEdit(Model model) {
 		model.addAttribute("umfrage", new NewUmfrageDto());
+		model.addAttribute("formPostUrl", "/umfragen/new");
 		return "umfragen/umfrage-form";
 	}
 
@@ -84,6 +85,8 @@ public class UmfragenController {
 			// TODO: Hat Umfrage nicht. Fehler anzeigen.
 		}
 		model.addAttribute("umfrage", umfragenAppService.getUmfrageForEdit(umfrageId));
+		model.addAttribute("formPostUrl", "/umfragen/" + umfrageId);
+		model.addAttribute("umfrageId", umfrageId);
 		return "umfragen/umfrage-form";
 	}
 
