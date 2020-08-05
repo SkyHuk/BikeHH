@@ -27,8 +27,8 @@
 						th:classappend="${#request.getServletPath().startsWith('/meldungen') ? 'active' : ''}">
 							<span><i class="fas fa-map-marker-alt"></i></span> Meldungen
 					</a></li>
-					<li class="nav-item"><a class="nav-link" href="/karte"
-						th:classappend="${#request.getServletPath().startsWith('/karte') ? 'active' : ''}">
+					<li class="nav-item"><a class="nav-link" href="/map"
+						th:classappend="${#request.getServletPath().startsWith('/map') ? 'active' : ''}">
 							<span><i class="fas fa-map-marked-alt"></i></span> Karte
 					</a></li>
 					<li class="nav-item"><a class="nav-link"
@@ -42,10 +42,11 @@
 			<div sec:authorize="isAuthenticated()">
 				<hr class="my-4">
 				<ul class="nav flex-column mb-2">
-					<li class="nav-item"><a class="nav-link" href="/"> <span><i
-								class="fas fa-user-circle"></i></span> <span
-							th:text="${user.emailAddress}"></span>
-					</a></li>
+					<li class="nav-item">
+						<span class="py-2 px-3"><i
+								class="fas fa-user-circle"></i> <span
+							th:text="${user.emailAddress}"></span></span>
+					</li>
 					<li class="nav-item">
 						<form>
 							<a class="nav-link" href="/logout"> <span><i
