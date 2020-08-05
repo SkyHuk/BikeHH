@@ -60,7 +60,7 @@ public class Meldung {
 
 	// TODO: Meldung soll Foto beinhalten können
 
-	protected Meldung() {
+	public Meldung() {
 	}
 
 	public Meldung(int id, double laengengrad, double breitengrad, Umfrage umfrage, List<Antwort> antwortenAufFragen,
