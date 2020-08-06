@@ -1,5 +1,6 @@
 package de.wps.bikehh.umfragen.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import de.wps.bikehh.umfragen.applicationservice.UmfragenApplicationService;
 import de.wps.bikehh.umfragen.dto.EditUmfrageDto;
+import de.wps.bikehh.umfragen.dto.FrageDto;
 import de.wps.bikehh.umfragen.dto.NewUmfrageDto;
 
 /**
@@ -60,6 +62,21 @@ public class UmfragenController {
 	public String getNewUmfrageForEdit(Model model) {
 		model.addAttribute("umfrage", new NewUmfrageDto());
 		model.addAttribute("formPostUrl", "/umfragen/new");
+		return "umfragen/umfrage-form";
+	}
+
+	@RequestMapping(value = "/new", params = { "addFrage" })
+	public String addFrage(@ModelAttribute("umfrage") final NewUmfrageDto umfrage, final BindingResult bindingResult) {
+		umfrage.getFragen().add(new FrageDto());
+		return "umfragen/umfrage-form";
+	}
+
+	@RequestMapping(value = "/new", params = { "removeFrage" })
+	public String removeFrage(
+			@ModelAttribute("umfrage") final NewUmfrageDto umfrage, final BindingResult bindingResult,
+			final HttpServletRequest req) {
+		final Integer fragenIndex = Integer.valueOf(req.getParameter("removeFrage"));
+		umfrage.getFragen().remove(fragenIndex.intValue());
 		return "umfragen/umfrage-form";
 	}
 

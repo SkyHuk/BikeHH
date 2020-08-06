@@ -75,11 +75,14 @@
 					</div>
 					<div class="col">
 						<!-- Eine einzelne Frage -->
-						<div class="border rounded py-2">
+						<div class="border rounded py-2 mb-2" th:each="frage, fStat : *{fragen}">
 							<!-- Die Frage selbst -->
-							<label for="frage" class="col col-form-label">Frage</label>
+							<label for="frage" class="col col-form-label">
+							<span>Frage </span><span th:text="${fStat.count}"></span>
+							</label>
 							<div class="col-12 py-1">
 								<input type="text" class="form-control" id="frage"
+									th:field="*{fragen[__${fStat.index}__].titel}"
 									placeholder="Frage" maxlength="255">
 							</div>
 							<!-- Die Antworten -->
@@ -111,13 +114,13 @@
 							<div class="col-12 py-1 d-flex justify-content-between">
 								<button type="button" class="d-flex btn btn-primary">Bedingung hinzufügen</button>
 								<button type="button" class="d-flex btn btn-primary">Ort hinzufügen</button>
-								<button type="button" class="d-flex btn btn-danger">Frage löschen</button>
+								<button type="submit" name="removeFrage" th:value="${fStat.index}" class="d-flex btn btn-danger">Frage löschen</button>
 							</div>
 						</div>
 						
 						<!-- Eine Frage hinzufügen -->
 						<div class="py-2">
-							<button type="button" class="btn btn-primary w-100">Frage hinzufügen</button>
+							<button type="submit" name="addFrage" class="btn btn-primary w-100">Frage hinzufügen</button>
 						</div>
 
 					</div>
