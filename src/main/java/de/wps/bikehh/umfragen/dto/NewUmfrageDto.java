@@ -1,7 +1,9 @@
 package de.wps.bikehh.umfragen.dto;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -9,7 +11,6 @@ import javax.validation.constraints.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import de.wps.bikehh.umfragen.fachwert.Kategorie;
-import de.wps.bikehh.umfragen.material.Frage;
 import de.wps.bikehh.umfragen.material.Umfrage;
 
 public class NewUmfrageDto {
@@ -25,18 +26,22 @@ public class NewUmfrageDto {
 
 	private Kategorie kategorie;
 
-	@NotNull(message = "StartDatum darf nicht leer sein.")
+	@NotNull
 	@DateTimeFormat(pattern = "dd.MM.yyyy")
 	private LocalDate startDatum;
 
-	@NotNull(message = "EndDatum darf nicht leer sein.")
+	@NotNull
 	@DateTimeFormat(pattern = "dd.MM.yyyy")
 	private LocalDate endDatum;
 
 	private int bestaetigungsSchwellenwert;
 
-	// TODO: FrageDto
-	private List<Frage> fragen;
+	private List<FrageDto> fragen;
+
+	public NewUmfrageDto() {
+		fragen = new ArrayList<>();
+		fragen.add(new FrageDto());
+	}
 
 	public static NewUmfrageDto from(Umfrage umfrage) {
 		NewUmfrageDto dto = new NewUmfrageDto();
@@ -48,7 +53,10 @@ public class NewUmfrageDto {
 		dto.setStartDatum(umfrage.getStartDatum());
 		dto.setEndDatum(umfrage.getEndDatum());
 		dto.setBestaetigungsSchwellenwert(umfrage.getBestaetigtSchwellenwert());
-		dto.setFragen(umfrage.getFragen());
+		List<FrageDto> fragen = umfrage.getFragen().stream()
+				.map(FrageDto::from)
+				.collect(Collectors.toList());
+		dto.setFragen(fragen);
 		return dto;
 	}
 
@@ -116,11 +124,11 @@ public class NewUmfrageDto {
 		this.bestaetigungsSchwellenwert = bestaetigungsSchwellenwert;
 	}
 
-	public List<Frage> getFragen() {
+	public List<FrageDto> getFragen() {
 		return fragen;
 	}
 
-	public void setFragen(List<Frage> fragen) {
+	public void setFragen(List<FrageDto> fragen) {
 		this.fragen = fragen;
 	}
 
