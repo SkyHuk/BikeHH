@@ -1,120 +1,70 @@
 <html layout:decorate="~{layout/layout}">
 
 <head>
-<title th:text="${'Umfrage #' + umfrage.id}"></title>
+<title>Umfrage ansehen</title>
 </head>
 
 <body layout:fragment="content">
 	<a href="/umfragen" class="btn btn-link"> <i
 		class="fas fa-arrow-left mr-1"></i>Umfragen
 	</a>
-	<div class="card mb-4">
+
+	<div class="card w-80">
 		<div class="card-body">
+			<h4 class="card-title" th:text="${umfrage.titel}"></h4>
+
 			<div class="row">
-				<div class="col-md-12 col-lg-9">
-					<h4 class="card-title" th:text="${'Umfrage #' + umfrage.id}"></h4>
-					<h6 class="card-subtitle mb-2 text-muted"
-						th:text="${'Erstellt am: ' + umfrage.erstelltAmDatum}"></h6>
-					<div>
-						<h6 class="mb-2 text-muted">
-							Ersteller: <span class="badge badge-secondary"
-								th:text="${umfrage.ersteller.emailAddress}"></span>
-						</h6>
+				<div class="col border-right">
+					<!-- Erstellt am -->
+					<div class="row py-1">
+						<span class="col-4 text-right">Erstellt am: </span> <span
+							class="col-8" th:text="${umfrage.createdAt}"></span>
 					</div>
-					<div>
-						<h6 class="mb-2 text-muted">
-							<span>Bestätigt von:</span> <span
-								th:if="${#lists.size(umfrage.bestaetigtVonUsern) > 0}"
-								class="badge badge-primary mr-2"
-								th:each="benutzer : ${umfrage.bestaetigtVonUsern}"> <span
-								th:text="${benutzer.emailAddress}"></span>
-							</span> <span th:if="${#lists.size(umfrage.bestaetigtVonUsern) == 0}"
-								class="badge badge-primary mr-2">keine Bestätigungen</span>
-						</h6>
-					</div>
-					<div>
-						<h6 class="mb-2 text-muted">
-							Bestätigungspunkte: <span class="badge badge-secondary"
-								th:text="${#lists.size(umfrage.bestaetigtVonUsern) + '/' + umfrage.bestaetigtSchwellenwert}"></span>
-						</h6>
-					</div>
-					<div>
-						<h6 class="mb-2 text-muted">
-							Status: <span class="badge badge-secondary"
-								th:text="${umfrage.umfrageDisabled} ? 'deaktiviert' : 'aktiviert'"></span>
-						</h6>
+					<!-- Bearbeitet am -->
+					<div class="row py-1" th:if="${umfrage.updatedAt != null}">
+						<span class="col-4 text-right">Bearbeitet am: </span> <span
+							class="col-8" th:text="${umfrage.updatedAt}"></span>
 					</div>
 
-					<p class="card-text mb-4" th:text="${umfrage.titel}"></p>
+					<div class="row py-1">
+						<span class="col-4 text-right">Kategorie: </span> <span
+							class="col-8" th:text="${umfrage.kategorie}"></span>
+					</div>
+
+					<div class="row py-1">
+						<span class="col-4 text-right">Startdatum: </span> <span
+							class="col-8" th:text="${umfrage.startDatum}"></span>
+					</div>
+
+					<div class="row py-1">
+						<span class="col-4 text-right">Enddatum: </span> <span
+							class="col-8" th:text="${umfrage.endDatum}"></span>
+					</div>
+
+					<div class="row py-1">
+						<span class="col-4 text-right">Bestätigungs-Schwellenwert:
+						</span> <span class="col-8"
+							th:text="${umfrage.bestaetigungsSchwellenwert}"></span>
+					</div>
 				</div>
-				<div class="col-md-12 col-lg-3">
-					<!-- Umfrage bearbeiten knopf, direkte weiterleitung zu /umfrageerstellen/bearbeiten?umfrageId=<ID_DER_UMFRAGE> -->
-					<a class="btn btn-block btn-outline-primary mb-2"
-						th:href="@{/umfrage-erstellen/bearbeiten?umfrageId={id}(id=${umfrage.id})}">Umfrage
-						bearbeiten</a>
-					<button class="btn btn-block btn-outline-primary mb-2"
-						onClick="zeigAufKarte()" id="buttonZeigAufKarte">Zeige
-						auf Karte</button>
-					<button class="btn btn-block btn-outline-primary mb-2"
-						th:data-creator="${umfrage.ersteller}"
-						onclick="kontaktiereErsteller(this.dataset.creator)"
-						id="buttonKontaktiereErsteller">Kontaktiere Ersteller</button>
-					<button class="btn btn-block btn-outline-success mb-2">Bestätigen</button>
-					<button class="btn btn-block btn-outline-danger mb-2"
-						th:onclick="'oeffneDialog(\' ' + ${umfrage.id} + '\');'"
-						id="buttonLoescheUmfrage">Umfrage löschen</button>
-
-					<!-- Button zum Aktivieren oder Deaktivieren der Umfrage anzeigen -->
-					<span th:if="${umfrage.umfrageDisabled}">
-						<button class="btn btn-block btn-outline-primary mb-2"
-							th:onclick="'oeffneDialogDisablen(\' ' + ${umfrage.id} + '\');'"
-							id="buttonDisableEnableUmfrage"
-							th:text="${umfrage.umfrageDisabled} ? 'Umfrage aktivieren' : 'Umfrage deaktivieren'" /></button>
-					</span> <span th:unless="${umfrage.umfrageDisabled}">
-						<button class="btn btn-block btn-outline-danger mb-2"
-							th:onclick="'oeffneDialogDisablen(\' ' + ${umfrage.id} + '\');'"
-							id="buttonDisableEnableUmfrage"
-							th:text="${umfrage.umfrageDisabled} ? 'Umfrage aktivieren' : 'Umfrage deaktivieren'" /></button>
-					</span>
+				<div class="col">
+					<div class="border rounded p-2 mb-2"
+						th:each="frage : ${umfrage.fragen}">
+						<div class="py-1">
+							<h5 th:text="${frage.titel}"></h5>
+						</div>
+						<!-- Die Antworten -->
+						<div class="py-1" th:each="antwort : ${frage.antworten}">
+							<span th:text="${antwort}"></span>
+						</div>
+					</div>
 				</div>
 			</div>
+		</div>
 
-			<hr class="my-4">
-			<!-- rechter Teil neben Karte in Tabelle, zeigt Fragen, Antwortmoeglichkeiten und Meldungsergebnisse (TODO) -->
-			<div class="row">
-				<div class="col-md-12 col-lg-6">
-					<div id="mapid" class="mb-4" style="height: 350px;"></div>
-				</div>
-				<div class="col-md-12 col-lg-6">
-					<h6>Fragen</h6>
-					<div th:each="frage : ${umfrage.fragen}">
-						<div th:text="${frage.titel}"></div>
-						<ul>
-
-							<li th:if="${frage.erlaubeBenutzerdefinierteAntwort}">[Freitextantwort]</li>
-							<div
-								th:each="antwortMoeglichkeit : ${frage.antwortMoeglichkeiten}">
-								<li th:text="${antwortMoeglichkeit.text}"></li>
-							</div>
-						</ul>
-					</div>
-					<!-- kommender Abschnitt zeigt die Meldung, aus der die Umfrage generiert wurde.
-        Gibt es nur, wenn Umfrage automatisch generiert wurde -->
-					<span th:if="${!umfrage.manuellErstellt}">
-						<h6>Umfrage wurde automatisch aus folgender Meldung generiert</h6>
-						<div class="border p-4">
-							<div class="row">
-								<div class="col-9">
-									<a href="#"><strong>User #1234</strong></a>
-									<p>Die Autos rasen über den Radfahrstreifen. Ein
-										wahnsinnger Rader hat mich eben fast umgenietet!!! Bitte
-										sofort anzeigen Kenzeichen KI-LL 666"Hintergrund: Veloroute 3,
-										die Fahrradstrasse "Uferstrasse"</p>
-								</div>
-							</div>
-					</span>
-				</div>
-			</div>
+		<div class="card-body">
+			<a class="btn btn-primary w-100"
+				th:href="@{'/umfragen/' + ${umfrage.id} + '/edit'}">Bearbeiten</a>
 		</div>
 	</div>
 </body>

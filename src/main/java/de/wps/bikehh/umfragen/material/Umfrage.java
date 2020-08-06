@@ -187,14 +187,6 @@ public class Umfrage {
 		this.endDatum = endDatum;
 	}
 
-	public LocalDate getBearbeitetAmDatum() {
-		return updatedAt;
-	}
-
-	public void setBearbeitetAmDatum(LocalDate bearbeitetAmDatum) {
-		this.updatedAt = bearbeitetAmDatum;
-	}
-
 	public boolean getIstBestaetigt() {
 		istBestaetigt = istBestaetigt || getBestaetigtVonUsern().size() <= getBestaetigtSchwellenwert();
 		return istBestaetigt;

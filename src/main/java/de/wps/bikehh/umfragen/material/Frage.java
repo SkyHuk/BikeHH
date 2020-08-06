@@ -26,6 +26,7 @@ public class Frage {
 	 */
 	private String titel;
 
+	@ElementCollection
 	private List<String> antworten;
 
 	/**

@@ -1,7 +1,7 @@
 <html layout:decorate="~{layout/layout}">
 
 <head>
-<title>Umfrage Bearbeiten</title>
+<title>Umfrage bearbeiten</title>
 </head>
 
 <body layout:fragment="content">
@@ -75,52 +75,56 @@
 					</div>
 					<div class="col">
 						<!-- Eine einzelne Frage -->
-						<div class="border rounded py-2 mb-2" th:each="frage, fStat : *{fragen}">
+						<div class="border rounded p-2 mb-2"
+							th:each="frage, fStat : *{fragen}">
 							<!-- Die Frage selbst -->
-							<label for="frage" class="col col-form-label">
-							<span>Frage </span><span th:text="${fStat.count}"></span>
-							</label>
-							<div class="col-12 py-1">
+							<div class="py-1">
+								<span>Frage </span><span th:text="${fStat.count}"></span>
+							</div>
+							<div class="py-1">
 								<input type="text" class="form-control" id="frage"
 									th:field="*{fragen[__${fStat.index}__].titel}"
 									placeholder="Frage" maxlength="255">
 							</div>
 							<!-- Die Antworten -->
-							<label for="ersteAntwort" class="col col-form-label">Antwortmöglichkeiten</label>
-							<div class="col-12 py-1 d-flex">
-								<input type="text" class="form-control" id="ersteAntwort"
-									placeholder="Ja" maxlength="255">
-								<button type="button" class="btn text-danger ml-3">
-									<i class="far fa-trash-alt"></i>
-								</button>
+							<div>
+								<span>Antwortmöglichkeiten</span>
 							</div>
-							<div class="col-12 py-1 d-flex">
-								<input type="text" class="form-control" placeholder="Nein"
-									maxlength="255">
-								<button type="button" class="btn text-danger ml-3">
+							<div class="py-1 d-flex"
+								th:each="antwort, aStat : *{fragen[__${fStat.index}__].antworten}">
+								<input type="text" class="form-control"
+									th:field="*{fragen[__${fStat.index}__].antworten[__${aStat.index}__]}"
+									placeholder="Antwort..." maxlength="255">
+								<button type="button" class="btn btn-danger ml-2">
 									<i class="far fa-trash-alt"></i>
 								</button>
 							</div>
 
 							<!-- Weitere Antworten hinzufügen -->
-							<div class="col-12 py-1">
-								<button type="button" class="btn btn-primary w-100">Antwort
+							<div class="py-1">
+								<button type="submit" name="addAntwort"
+									th:value="${fStat.index}" class="btn btn-primary w-100">Antwort
 									hinzufügen</button>
 							</div>
 
-							<!-- Bedingungen -->
+							<!-- Bedingungen? -->
 
 							<!-- Fragen Actions -->
-							<div class="col-12 py-1 d-flex justify-content-between">
-								<button type="button" class="d-flex btn btn-primary">Bedingung hinzufügen</button>
-								<button type="button" class="d-flex btn btn-primary">Ort hinzufügen</button>
-								<button type="submit" name="removeFrage" th:value="${fStat.index}" class="d-flex btn btn-danger">Frage löschen</button>
+							<div class="py-1 d-flex justify-content-between">
+								<button type="button" class="d-flex btn btn-primary">Bedingung
+									hinzufügen</button>
+								<button type="button" class="d-flex btn btn-primary">Ort
+									hinzufügen</button>
+								<button type="submit" name="removeFrage"
+									th:value="${fStat.index}" class="d-flex btn btn-danger">Frage
+									löschen</button>
 							</div>
 						</div>
-						
+
 						<!-- Eine Frage hinzufügen -->
 						<div class="py-2">
-							<button type="submit" name="addFrage" class="btn btn-primary w-100">Frage hinzufügen</button>
+							<button type="submit" name="addFrage"
+								class="btn btn-primary w-100">Frage hinzufügen</button>
 						</div>
 
 					</div>

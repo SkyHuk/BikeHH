@@ -6,15 +6,16 @@
 
 <body layout:fragment="content">
 	<h2 class="my-4 mr-4">Umfragen</h2>
-	
-	<a class="btn btn-primary" th:href="@{/umfragen/new}">Neue Umfrage erstellen</a>
-	
+
+	<div class="py-2">
+		<a class="btn btn-primary w-100" th:href="@{/umfragen/new}">Neue
+			Umfrage erstellen</a>
+	</div>
+
 	<div class="table-responsive mb-4">
 		<table class="table table-hover">
 			<thead>
 				<tr>
-					<th>Stadt</th>
-					<th>Straße</th>
 					<th>Titel</th>
 					<th>Kategorie</th>
 					<th>Erstellungsdatum</th>
@@ -25,17 +26,13 @@
 			</thead>
 			<tbody>
 				<tr th:each="umfrage: ${umfragen}">
-					<td
-						th:text="${umfrage.adresse.stadt + ', ' + umfrage.adresse.postleitzahl}"></td>
-					<td th:text="${umfrage.adresse.strasse}"></td>
 					<td th:text="${umfrage.titel}"></td>
 					<td th:text="${umfrage.kategorie}"></td>
 					<td th:text="${umfrage.createdAt}"></td>
-					<td
-						th:text="${umfrage.umfrageDisabled} ? 'deaktiviert' : 'aktiviert'"></td>
+					<td th:text="${umfrage.isDisabled} ? 'deaktiviert' : 'aktiviert'"></td>
 					<td th:text="${umfrage.anzahlBestaetigungen}"></td>
 					<td><a class="btn btn-sm btn-primary"
-						th:href="@{/umfragen/${umfrage.id}}">Anzeigen</a></td>
+						th:href="@{'/umfragen/' + ${umfrage.id}}">Anzeigen</a></td>
 				</tr>
 			</tbody>
 		</table>

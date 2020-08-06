@@ -15,12 +15,12 @@ public class UmfragenListeDto {
 	public static UmfragenListeDto from(Umfrage umfrage) {
 		UmfragenListeDto dto = new UmfragenListeDto();
 		dto.setId(umfrage.getId());
-		dto.setAdresse(AdresseDto.from(umfrage.getAdresse()));
+		// dto.setAdresse(AdresseDto.from(umfrage.getAdresse()));
 		dto.setTitel(umfrage.getTitel());
 		dto.setKategorie(umfrage.getKategorie().getName());
 		dto.setCreatedAt(umfrage.getCreatedAt().toString());
 		dto.setAnzahlBestaetigungen(umfrage.getBestaetigtVonUsern().size());
-		dto.setDisabled(umfrage.getIsDisabled());
+		dto.setIsDisabled(umfrage.getIsDisabled());
 		return dto;
 	}
 
@@ -72,11 +72,11 @@ public class UmfragenListeDto {
 		this.anzahlBestaetigungen = anzahlBestaetigungen;
 	}
 
-	public boolean isDisabled() {
+	public boolean getIsDisabled() {
 		return isDisabled;
 	}
 
-	public void setDisabled(boolean isDisabled) {
+	public void setIsDisabled(boolean isDisabled) {
 		this.isDisabled = isDisabled;
 	}
 

@@ -4,30 +4,21 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-
-import de.wps.bikehh.umfragen.fachwert.Kategorie;
 import de.wps.bikehh.umfragen.material.Adresse;
-import de.wps.bikehh.umfragen.material.Frage;
 import de.wps.bikehh.umfragen.material.Umfrage;
 
 public class ViewUmfrageDto {
 
 	private long id;
 
-	@NotEmpty(message = "Es muss ein Titel angegeben werden.")
 	private String titel;
 
 	private double laengengrad;
 	private double breitengrad;
 
-	@NotNull
-	private Kategorie kategorie;
+	private String kategorie;
 
-	@NotNull(message = "StartDatum darf nicht leer sein.")
 	private LocalDate startDatum;
-	@NotNull(message = "EndDatum darf nicht leer sein.")
 	private LocalDate endDatum;
 
 	private LocalDate createdAt;
@@ -37,8 +28,8 @@ public class ViewUmfrageDto {
 
 	private double fahrtrichtung;
 	private List<String> bestaetigtVonUsernames;
-	private int bestaetigtSchwellenwert;
-	private List<Frage> fragen;
+	private int bestaetigungsSchwellenwert;
+	private List<FrageDto> fragen;
 	private String erstellerName;
 	private Adresse adresse;
 	private boolean isAutomatischErstellt;
@@ -50,16 +41,20 @@ public class ViewUmfrageDto {
 		dto.setTitel(umfrage.getTitel());
 		dto.setLaengengrad(umfrage.getLaengengrad());
 		dto.setBreitengrad(umfrage.getBreitengrad());
-		dto.setKategorie(umfrage.getKategorie());
+		dto.setKategorie(umfrage.getKategorie().getName());
 		dto.setStartDatum(umfrage.getStartDatum());
+		dto.setEndDatum(umfrage.getEndDatum());
 		dto.setCreatedAt(umfrage.getCreatedAt());
-		dto.setUpdatedAt(umfrage.getBearbeitetAmDatum());
+		dto.setUpdatedAt(umfrage.getUpdatedAt());
 		dto.setVerified(umfrage.getIstBestaetigt());
 		dto.setFahrtrichtung(umfrage.getFahrtrichtung());
 		dto.setBestaetigtVonUsernames(umfrage.getBestaetigtVonUsern().stream().map(user -> user.getEmailAddress())
 				.collect(Collectors.toList()));
-		dto.setBestaetigtSchwellenwert(umfrage.getBestaetigtSchwellenwert());
-		dto.setFragen(umfrage.getFragen());
+		dto.setBestaetigungsSchwellenwert(umfrage.getBestaetigtSchwellenwert());
+		List<FrageDto> fragen = umfrage.getFragen().stream()
+				.map(FrageDto::from)
+				.collect(Collectors.toList());
+		dto.setFragen(fragen);
 		dto.setErstellerName(umfrage.getErsteller().getEmailAddress());
 		dto.setAdresse(umfrage.getAdresse());
 		dto.setAutomatischErstellt(!umfrage.getManuellErstellt());
@@ -99,11 +94,11 @@ public class ViewUmfrageDto {
 		this.breitengrad = breitengrad;
 	}
 
-	public Kategorie getKategorie() {
+	public String getKategorie() {
 		return kategorie;
 	}
 
-	public void setKategorie(Kategorie kategorie) {
+	public void setKategorie(String kategorie) {
 		this.kategorie = kategorie;
 	}
 
@@ -163,19 +158,19 @@ public class ViewUmfrageDto {
 		this.bestaetigtVonUsernames = bestaetigtVonUsernames;
 	}
 
-	public int getBestaetigtSchwellenwert() {
-		return bestaetigtSchwellenwert;
+	public int getBestaetigungsSchwellenwert() {
+		return bestaetigungsSchwellenwert;
 	}
 
-	public void setBestaetigtSchwellenwert(int bestaetigtSchwellenwert) {
-		this.bestaetigtSchwellenwert = bestaetigtSchwellenwert;
+	public void setBestaetigungsSchwellenwert(int bestaetigungsSchwellenwert) {
+		this.bestaetigungsSchwellenwert = bestaetigungsSchwellenwert;
 	}
 
-	public List<Frage> getFragen() {
+	public List<FrageDto> getFragen() {
 		return fragen;
 	}
 
-	public void setFragen(List<Frage> fragen) {
+	public void setFragen(List<FrageDto> fragen) {
 		this.fragen = fragen;
 	}
 

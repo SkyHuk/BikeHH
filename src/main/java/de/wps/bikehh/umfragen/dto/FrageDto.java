@@ -15,6 +15,8 @@ public class FrageDto {
 
 	public FrageDto() {
 		antworten = new ArrayList<>();
+		antworten.add("Ja");
+		antworten.add("Nein");
 	}
 
 	public static FrageDto from(Frage frage) {

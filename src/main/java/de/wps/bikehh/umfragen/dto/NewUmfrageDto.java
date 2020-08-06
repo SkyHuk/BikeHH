@@ -10,7 +10,6 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import de.wps.bikehh.umfragen.fachwert.Kategorie;
 import de.wps.bikehh.umfragen.material.Umfrage;
 
 public class NewUmfrageDto {
@@ -24,7 +23,8 @@ public class NewUmfrageDto {
 
 	private double fahrtrichtung;
 
-	private Kategorie kategorie;
+	// TODO: Kategorie machen
+	private String kategorie;
 
 	@NotNull
 	@DateTimeFormat(pattern = "dd.MM.yyyy")
@@ -49,7 +49,7 @@ public class NewUmfrageDto {
 		dto.setLaengengrad(umfrage.getLaengengrad());
 		dto.setBreitengrad(umfrage.getBreitengrad());
 		dto.setFahrtrichtung(umfrage.getFahrtrichtung());
-		dto.setKategorie(umfrage.getKategorie());
+		dto.setKategorie(umfrage.getKategorie().getName());
 		dto.setStartDatum(umfrage.getStartDatum());
 		dto.setEndDatum(umfrage.getEndDatum());
 		dto.setBestaetigungsSchwellenwert(umfrage.getBestaetigtSchwellenwert());
@@ -92,11 +92,11 @@ public class NewUmfrageDto {
 		this.fahrtrichtung = fahrtrichtung;
 	}
 
-	public Kategorie getKategorie() {
+	public String getKategorie() {
 		return kategorie;
 	}
 
-	public void setKategorie(Kategorie kategorie) {
+	public void setKategorie(String kategorie) {
 		this.kategorie = kategorie;
 	}
 

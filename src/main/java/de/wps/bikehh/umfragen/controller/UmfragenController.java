@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.umfragen.applicationservice.UmfragenApplicationService;
 import de.wps.bikehh.umfragen.dto.EditUmfrageDto;
 import de.wps.bikehh.umfragen.dto.FrageDto;
@@ -80,9 +81,18 @@ public class UmfragenController {
 		return "umfragen/umfrage-form";
 	}
 
+	@RequestMapping(value = "/new", params = { "addAntwort" })
+	public String addAntwort(@ModelAttribute("umfrage") final NewUmfrageDto umfrage, final BindingResult bindingResult,
+			final HttpServletRequest req) {
+		final Integer fragenIndex = Integer.valueOf(req.getParameter("addAntwort"));
+		umfrage.getFragen().get(fragenIndex.intValue()).getAntworten().add("");
+		return "umfragen/umfrage-form";
+	}
+
 	@PostMapping("/new")
 	public String postNewUmfrage(
 			@ModelAttribute("umfrage") @Valid NewUmfrageDto umfrageDto,
+			@ModelAttribute("user") User user,
 			BindingResult bindingResult,
 			Model model) {
 
@@ -92,7 +102,7 @@ public class UmfragenController {
 		}
 		// TODO: fachliche Fehler prüfen.
 
-		long umfrageId = umfragenAppService.addNewUmfrage(umfrageDto);
+		long umfrageId = umfragenAppService.addNewUmfrage(user, umfrageDto, true);
 		return "redirect:/umfragen/" + umfrageId + "?saved";
 	}
 
