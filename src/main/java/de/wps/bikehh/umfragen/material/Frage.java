@@ -9,7 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
 /**
@@ -27,12 +26,7 @@ public class Frage {
 	 */
 	private String titel;
 
-	/**
-	 * Liste an Antwortmoeglichkeiten
-	 */
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, targetEntity = AntwortMoeglichkeit.class)
-	@JoinColumn(name = "frage", referencedColumnName = "Id", nullable = false)
-	private List<AntwortMoeglichkeit> antwortMoeglichkeiten;
+	private List<String> antworten;
 
 	/**
 	 * Liste an Bedingungen, die gelten müssen, damit die Frage gestellt wird.
@@ -113,12 +107,12 @@ public class Frage {
 		this.fahrtrichtung = fahrtrichtung;
 	}
 
-	public void setAntwortMoeglichkeiten(List<AntwortMoeglichkeit> antwortMoeglichkeiten) {
-		this.antwortMoeglichkeiten = antwortMoeglichkeiten;
+	public void setAntworten(List<String> antworten) {
+		this.antworten = antworten;
 	}
 
-	public List<AntwortMoeglichkeit> getAntwortMoeglichkeiten() {
-		return antwortMoeglichkeiten;
+	public List<String> getAntworten() {
+		return antworten;
 	}
 
 }

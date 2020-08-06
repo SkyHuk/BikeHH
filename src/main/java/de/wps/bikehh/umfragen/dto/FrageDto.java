@@ -2,7 +2,6 @@ package de.wps.bikehh.umfragen.dto;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotNull;
 
@@ -21,10 +20,7 @@ public class FrageDto {
 	public static FrageDto from(Frage frage) {
 		FrageDto dto = new FrageDto();
 		dto.setTitel(frage.getTitel());
-		List<String> antworten = frage.getAntwortMoeglichkeiten().stream()
-				.map(antwort -> antwort.getText())
-				.collect(Collectors.toList());
-		dto.setAntworten(antworten);
+		dto.setAntworten(frage.getAntworten());
 		return dto;
 	}
 
