@@ -1,11 +1,11 @@
 import 'jquery';
 import 'bootstrap';
 import '@fortawesome/fontawesome-free';
-import 'ol';
 import 'leaflet';
 import 'leaflet-polylinedecorator';
 import 'leaflet/dist/leaflet.css';
 
-import './umfrage-erstellen'
-import './umfrage'
-import './karte'
+import './map';
+import './umfrage-erstellen';
+import './umfrage';
+import './karte';
