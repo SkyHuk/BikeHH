@@ -58,6 +58,21 @@ public class NewUmfrageErstellenController {
 		return "umfragen/umfrage-form";
 	}
 
+	@RequestMapping(params = { "removeAntwort" })
+	public String removeAntwort(@ModelAttribute("umfrage") NewUmfrageDto umfrage,
+			BindingResult bindingresult,
+			HttpServletRequest req) {
+		// Da wir einen doppelten Parameter übergeben müssen um einmal die Frage
+		// zu bestimmen und einmal die Antwort muss es gepaired als ein Wert
+		// übergeben werden
+		// TODO: Die letzte Antwort wird immer nicht entfernt. Warum auch immer.
+		String frageAntwortPair = req.getParameter("removeAntwort");
+		Integer fragenIndex = Integer.valueOf(frageAntwortPair.split(";")[0]);
+		Integer antwortIndex = Integer.valueOf(frageAntwortPair.split(";")[1]);
+		umfrage.getFragen().get(fragenIndex.intValue()).getAntworten().remove(antwortIndex.intValue());
+		return "umfragen/umfrage-form";
+	}
+
 	@PostMapping
 	public String postNewUmfrage(
 			@ModelAttribute("user") User user,

@@ -95,7 +95,9 @@
 								<input type="text" class="form-control"
 									th:field="*{fragen[__${fStat.index}__].antworten[__${aStat.index}__]}"
 									placeholder="Antwort..." maxlength="255">
-								<button type="button" class="btn btn-danger ml-2">
+								<button type="submit" name="removeAntwort"
+									th:value="${fStat.index} + ';' + ${aStat.index}"
+									class="btn btn-danger ml-2">
 									<i class="far fa-trash-alt"></i>
 								</button>
 							</div>
