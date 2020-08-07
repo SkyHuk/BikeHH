@@ -1,6 +1,7 @@
 import 'jquery';
 import 'bootstrap';
 import '@fortawesome/fontawesome-free';
+import 'ol';
 import 'leaflet';
 import 'leaflet-polylinedecorator';
 import 'leaflet/dist/leaflet.css';
