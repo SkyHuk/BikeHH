@@ -54,7 +54,7 @@ public class UmfragenControllerTest {
 		String redirectStr = umfragenController.zeigeUmfragenListe(model);
 
 		// assert
-		verify(umfragenAppService, times(1)).getAlleUmfragen();
+		verify(umfragenAppService, times(1)).getUmfragenUebersichtsListe();
 		assertTrue(model.containsAttribute("umfragen"));
 		assertEquals("umfragen/umfragen_liste", redirectStr);
 	}
