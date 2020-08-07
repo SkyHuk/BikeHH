@@ -226,6 +226,24 @@
 							</resources>
 						</configuration>
 					</execution>
+					<execution>
+						<id>copy-ol-css</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.basedir}/src/main/resources/static/generated/css</outputDirectory>
+							<resources>
+								<resource>
+									<directory>
+										${project.basedir}/src/npm/node_modules/ol
+									</directory>
+									<include>ol.css</include>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
 				</executions>
 			</plugin>
 		</plugins>
