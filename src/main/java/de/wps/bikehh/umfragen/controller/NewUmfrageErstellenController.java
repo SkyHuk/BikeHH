@@ -60,11 +60,10 @@ public class NewUmfrageErstellenController {
 
 	@PostMapping
 	public String postNewUmfrage(
-			@ModelAttribute("umfrage") @Valid NewUmfrageDto umfrageDto,
 			@ModelAttribute("user") User user,
+			@ModelAttribute("umfrage") @Valid NewUmfrageDto umfrageDto,
 			BindingResult bindingResult,
 			Model model) {
-
 		if (bindingResult.hasErrors()) {
 			// Fehler beim Validieren durch Annotations im Dto
 			return "umfragen/umfrage-form";
