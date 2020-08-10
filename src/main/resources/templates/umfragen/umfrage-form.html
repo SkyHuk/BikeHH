@@ -18,12 +18,22 @@
 
 				<div class="py-2 border-bottom">
 					<div id="map" class="w-100" style="height: 400px;"></div>
+					<input type="hidden" id="longitude" th:field="*{laengengrad}">
+					<input type="hidden" id="latitude" th:field="*{breitengrad}">
 
 					<script th:inline="javascript">
 						window.document.showMap = true;
-						window.document.longitude = [[*{laengengrad}]];
-						window.document.latitude = [[*{breitengrad}]];
 					</script>
+				</div>
+
+				<div class="py-2 border-bottom">
+					<button type="button" id="mapAddOrtBtn" class="btn btn-primary">
+						<i class="fas fa-map-marker-alt"></i><span class="ml-1">Ort
+							hinzufügen</span>
+					</button>
+					<button type="button" id="resetOrtBtn" class="btn btn-danger">
+						<i class="fas fa-trash-alt"></i><span class="ml-1">Ort entfernen</span>
+					</button>
 				</div>
 
 				<div class="row py-2">

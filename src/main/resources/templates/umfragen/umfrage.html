@@ -5,11 +5,22 @@
 </head>
 
 <body layout:fragment="content">
-	<a href="/umfragen" class="btn btn-link"> <i
-		class="fas fa-arrow-left mr-1"></i>Umfragen
-	</a>
+	<div class="pb-2">
+		<a href="/umfragen" class="btn btn-link"> <i
+			class="fas fa-arrow-left mr-1"></i>Umfragen
+		</a>
+	</div>
 
 	<div class="card w-80">
+		<div class="card-img-top">
+			<div id="map" class="w-100" style="height: 400px;"></div>
+			<input type="hidden" id="longitude" th:value="${umfrage.laengengrad}">
+			<input type="hidden" id="latitude" th:value="${umfrage.breitengrad}">
+
+			<script th:inline="javascript">
+				window.document.showMap = true;
+			</script>
+		</div>
 		<div class="card-body">
 			<h4 class="card-title" th:text="${umfrage.titel}"></h4>
 

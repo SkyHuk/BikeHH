@@ -23,7 +23,6 @@ public class NewUmfrageDto {
 
 	private double fahrtrichtung;
 
-	// TODO: Kategorie machen
 	private String kategorie;
 
 	@NotNull

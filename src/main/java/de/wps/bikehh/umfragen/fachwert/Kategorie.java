@@ -22,9 +22,6 @@ public class Kategorie {
 
 	private String name;
 
-	// @OneToMany(mappedBy = "kategorie", fetch = FetchType.LAZY, cascade =
-	// CascadeType.ALL)
-	// private List<Umfrage> umfragenListe;
 	// @ManyToOne(fetch = FetchType.LAZY, targetEntity = Kategorie.class)
 	// @JoinColumn(name = "parentCategory", referencedColumnName = "Id",
 	// nullable =

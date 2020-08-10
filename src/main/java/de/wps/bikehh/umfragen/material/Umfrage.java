@@ -36,7 +36,14 @@ public class Umfrage {
 	 */
 	private String titel;
 
+	/**
+	 * longitude in EPSG:3857
+	 */
 	private double laengengrad;
+
+	/**
+	 * latitude in EPSG:3857
+	 */
 	private double breitengrad;
 
 	/**
