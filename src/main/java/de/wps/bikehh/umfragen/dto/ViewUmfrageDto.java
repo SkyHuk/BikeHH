@@ -58,7 +58,7 @@ public class ViewUmfrageDto {
 		dto.setErstellerName(umfrage.getErsteller().getEmailAddress());
 		dto.setAdresse(umfrage.getAdresse());
 		dto.setAutomatischErstellt(!umfrage.getManuellErstellt());
-		dto.setDisabled(umfrage.getIsDisabled());
+		dto.setIsDisabled(umfrage.getIsDisabled());
 		return dto;
 	}
 
@@ -198,11 +198,11 @@ public class ViewUmfrageDto {
 		this.isAutomatischErstellt = isAutomatischErstellt;
 	}
 
-	public boolean isDisabled() {
+	public boolean getIsDisabled() {
 		return isDisabled;
 	}
 
-	public void setDisabled(boolean isDisabled) {
+	public void setIsDisabled(boolean isDisabled) {
 		this.isDisabled = isDisabled;
 	}
 

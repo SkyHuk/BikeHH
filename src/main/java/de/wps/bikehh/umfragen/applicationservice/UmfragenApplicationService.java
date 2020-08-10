@@ -49,16 +49,26 @@ public class UmfragenApplicationService {
 				.collect(Collectors.toList());
 	}
 
-	public long addNewUmfrage(User ersteller, NewUmfrageDto umfrageDto, boolean isManuellErstellt) {
-		Umfrage umfrage = createUmfrageFromDto(umfrageDto);
+	public long addNewUmfrage(User ersteller, NewUmfrageDto dto, boolean isManuellErstellt) {
+		Umfrage umfrage = new Umfrage();
+		fillUmfrageFromDto(umfrage, dto);
+
 		umfrage.setErsteller(ersteller);
 		umfrage.setManuellErstellt(isManuellErstellt);
-		Umfrage savedUmfrage = umfragenService.add(umfrage);
+		umfrage.setCreatedAt(LocalDate.now());
+
+		Umfrage savedUmfrage = umfragenService.save(umfrage);
 		return savedUmfrage.getId();
 	}
 
-	public void saveEditedUmfrage(EditUmfrageDto umfrageDto) {
-		// TODO: Material aus Dto generieren und Umfrage speichern
+	public long saveEditedUmfrage(EditUmfrageDto dto) {
+		Umfrage umfrage = umfragenService.getById(dto.getId());
+		fillUmfrageFromDto(umfrage, dto);
+
+		umfrage.setUpdatedAt(LocalDate.now());
+
+		Umfrage savedUmfrage = umfragenService.save(umfrage);
+		return savedUmfrage.getId();
 	}
 
 	public void enableUmfrage(long umfragenId) {
@@ -73,11 +83,8 @@ public class UmfragenApplicationService {
 		return umfragenService.hasUmfrage(id);
 	}
 
-	private Umfrage createUmfrageFromDto(NewUmfrageDto dto) {
-		Umfrage umfrage = new Umfrage();
+	private void fillUmfrageFromDto(Umfrage umfrage, NewUmfrageDto dto) {
 		umfrage.setTitel(dto.getTitel());
-		umfrage.setCreatedAt(LocalDate.now());
-		umfrage.setUpdatedAt(LocalDate.now());
 		umfrage.setBestaetigtSchwellenwert(dto.getBestaetigungsSchwellenwert());
 		umfrage.setLaengengrad(dto.getLaengengrad());
 		umfrage.setBreitengrad(dto.getBreitengrad());
@@ -98,8 +105,6 @@ public class UmfragenApplicationService {
 			fragen.add(frageMat);
 		}
 		umfrage.setFragen(fragen);
-
-		return umfrage;
 	}
 
 }

@@ -5,13 +5,13 @@
 </head>
 
 <body layout:fragment="content">
-	<div class="pb-2">
+	<div>
 		<a href="/umfragen" class="btn btn-link"> <i
 			class="fas fa-arrow-left mr-1"></i>Umfragen
 		</a>
 	</div>
 
-	<div class="card w-80">
+	<div class="card w-80 my-2">
 		<div class="card-img-top">
 			<div id="map" class="w-100" style="height: 400px;"></div>
 			<input type="hidden" id="longitude" th:value="${umfrage.laengengrad}">
@@ -74,8 +74,16 @@
 		</div>
 
 		<div class="card-body">
-			<a class="btn btn-primary w-100"
-				th:href="@{'/umfragen/' + ${umfrage.id} + '/edit'}">Bearbeiten</a>
+			<div class="py-1">
+				<a class="btn btn-primary w-100"
+					th:href="@{'/umfragen/' + ${umfrage.id} + '/edit'}">Bearbeiten</a>
+			</div>
+			<div class="py-1">
+				<a th:unless="${umfrage.isDisabled}" class="btn btn-danger w-100"
+					th:href="@{'/umfragen/' + ${umfrage.id} + '/disable'}">Deaktivieren</a>
+				<a th:if="${umfrage.isDisabled}" class="btn btn-success w-100"
+					th:href="@{'/umfragen/' + ${umfrage.id} + '/enable'}">Aktivieren</a>
+			</div>
 		</div>
 	</div>
 </body>

@@ -75,7 +75,7 @@ public class UmfragenControllerTest {
 	@Test
 	public void testdeaktiviereUmfrage_deaktiviertUmfrage() {
 		// act
-		umfragenController.deaktiviereUmfrage(bindingResult, testUmfrage.getId());
+		umfragenController.deaktiviereUmfrage(testUmfrage.getId());
 
 		// assert
 		verify(umfragenAppService, times(1)).disableUmfrage(testUmfrage.getId());
@@ -84,7 +84,7 @@ public class UmfragenControllerTest {
 	@Test
 	public void testaktiviereUmfrage_aktiviertUmfrage() {
 		// act
-		umfragenController.aktiviereUmfrage(bindingResult, testUmfrage.getId());
+		umfragenController.aktiviereUmfrage(testUmfrage.getId());
 
 		// assert
 		verify(umfragenAppService, times(1)).enableUmfrage(testUmfrage.getId());

@@ -31,24 +31,10 @@ public class UmfragenService {
 	 * 
 	 * @require umfrage not null
 	 */
-	public Umfrage add(Umfrage umfrage) {
+	public Umfrage save(Umfrage umfrage) {
 		Contract.notNull(umfrage, "umfrage");
 
 		return umfrageRepository.save(umfrage);
-	}
-
-	/**
-	 * Aktualisiert eine Umfrage.
-	 * 
-	 * @param umfrage
-	 *            die zu aktualisierende Umfrage
-	 * 
-	 * @require umfrage not null
-	 */
-	public void update(Umfrage umfrage) {
-		Contract.notNull(umfrage, "umfrage");
-
-		umfrageRepository.save(umfrage);
 	}
 
 	/**
@@ -116,13 +102,13 @@ public class UmfragenService {
 	public void enableUmfrage(long id) {
 		Umfrage umfrage = getById(id);
 		umfrage.setIsDisabled(false);
-		update(umfrage);
+		save(umfrage);
 	}
 
 	public void disableUmfrage(long id) {
 		Umfrage umfrage = getById(id);
 		umfrage.setIsDisabled(true);
-		update(umfrage);
+		save(umfrage);
 	}
 
 }

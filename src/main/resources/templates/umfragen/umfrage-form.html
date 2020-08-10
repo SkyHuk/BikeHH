@@ -7,8 +7,7 @@
 <body layout:fragment="content">
 	<form method="POST" th:action="@{${formPostUrl}}"
 		th:object="${umfrage}">
-		<input type="hidden" th:if="${umfrageId}" name="id"
-			th:value="${umfrageId}">
+		<input type="hidden" th:if="${umfrageId}" th:field="*{id}">
 
 		<div class="card w-80">
 			<div class="card-body">
@@ -32,7 +31,8 @@
 							hinzufügen</span>
 					</button>
 					<button type="button" id="resetOrtBtn" class="btn btn-danger">
-						<i class="fas fa-trash-alt"></i><span class="ml-1">Ort entfernen</span>
+						<i class="fas fa-trash-alt"></i><span class="ml-1">Ort
+							entfernen</span>
 					</button>
 				</div>
 
@@ -48,16 +48,13 @@
 						</div>
 
 						<!-- Erstellt am -->
-						<div th:if="${umfrageId}">
-							<label for="createdAt" class="col-3 col-form-label">Erstellt
-								am</label> <span class="form-control" id="createdAt"
-								th:text="${umfrage.createdAt}"></span>
+						<div th:if="${umfrageId}" class="col-12">
+							<span>Erstellt am: </span> <span th:text="${umfrage.createdAt}"></span>
 						</div>
 						<!-- Bearbeitet am -->
-						<div th:if="${umfrageId != null && umfrage.updatedAt != null}">
-							<label for="updatedAt" class="col-3 col-form-label">Bearbeitet
-								am</label> <span class="form-control" id="updatedAt"
-								th:text="${umfrage.updatedAt}"></span>
+						<div th:if="${umfrageId != null && umfrage.updatedAt != null}"
+							class="col-12">
+							<span>Bearbeitet am: </span> <span th:text="${umfrage.updatedAt}"></span>
 						</div>
 
 						<label for="kategorie" class="col col-form-label">Kategorie</label>
@@ -113,7 +110,7 @@
 								<span>Antwortmöglichkeiten</span>
 							</div>
 							<div class="py-1 d-flex"
-								th:each="antwort, aStat : *{fragen[__${fStat.index}__].antworten}">
+								th:each="antwort, aStat : ${frage.antworten}">
 								<input type="text" class="form-control"
 									th:field="*{fragen[__${fStat.index}__].antworten[__${aStat.index}__]}"
 									placeholder="Antwort..." maxlength="255">

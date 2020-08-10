@@ -1,6 +1,8 @@
 package de.wps.bikehh.umfragen.dto;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import de.wps.bikehh.umfragen.material.Umfrage;
 
@@ -12,7 +14,23 @@ public class EditUmfrageDto extends NewUmfrageDto {
 	private LocalDate updatedAt;
 
 	public static EditUmfrageDto from(Umfrage umfrage) {
-		EditUmfrageDto dto = (EditUmfrageDto) NewUmfrageDto.from(umfrage);
+		EditUmfrageDto dto = new EditUmfrageDto();
+
+		// Gleiches Setup wie NewUmfrageDto
+		dto.setTitel(umfrage.getTitel());
+		dto.setLaengengrad(umfrage.getLaengengrad());
+		dto.setBreitengrad(umfrage.getBreitengrad());
+		dto.setFahrtrichtung(umfrage.getFahrtrichtung());
+		dto.setKategorie(umfrage.getKategorie().getName());
+		dto.setStartDatum(umfrage.getStartDatum());
+		dto.setEndDatum(umfrage.getEndDatum());
+		dto.setBestaetigungsSchwellenwert(umfrage.getBestaetigtSchwellenwert());
+		List<FrageDto> fragen = umfrage.getFragen().stream()
+				.map(FrageDto::from)
+				.collect(Collectors.toList());
+		dto.setFragen(fragen);
+
+		// Neue Felder
 		dto.setId(umfrage.getId());
 		dto.setCreatedAt(umfrage.getCreatedAt());
 		dto.setUpdatedAt(umfrage.getUpdatedAt());
