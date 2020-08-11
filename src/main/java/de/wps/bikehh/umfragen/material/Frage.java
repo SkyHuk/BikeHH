@@ -3,69 +3,72 @@ package de.wps.bikehh.umfragen.material;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 
 /**
- * Eine Frage als Teil einer Umfrage
+ * Eine Frage als Teil einer Befragung.
  */
 @Entity
 public class Frage {
 
 	@Id
-	@GeneratedValue
-	private int id;
+	private long id;
+
+	@ManyToOne
+	private Befragung befragung;
 
 	/**
-	 * Titel beziehungsweise Fragestellung
+	 * Die Fragestellung selbst.
 	 */
-	private String titel;
+	private String text;
 
 	@ElementCollection
 	private List<String> antworten;
 
 	/**
 	 * Liste an Bedingungen, die gelten müssen, damit die Frage gestellt wird.
-	 * Mehrere Umfragen sollten als logisches UND implementiert werden.
 	 */
 	@ElementCollection
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, targetEntity = Bedingung.class)
 	private List<Bedingung> bedingungen = new ArrayList<Bedingung>();
 
 	/**
-	 * Ob diese Frage eine benutzerdefinierte- bzw. eine Freitextantwort erlaubt
+	 * Ob diese Frage eine Freitextantwort erlaubt.
 	 */
-	private boolean erlaubeBenutzerdefinierteAntwort;
+	private boolean hatFreitextAntwort;
 
-	private double breitengrad;
-	private double laengengrad;
-
-	/**
-	 * Winkel im Bogenmaß nach Osten (Wertebereich 0 - 2pi, nach Osten weil das
-	 * mathematischer Standard ist) eine fahrtrichtung von 0.0 ist ungültig und
-	 * steht symbolisierend für "keine Fahrtrichtung gesetzt"
-	 */
-	private double fahrtrichtung;
-
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
-	public String getTitel() {
-		return titel;
+	public Befragung getBefragung() {
+		return befragung;
 	}
 
-	public void setTitel(String titel) {
-		this.titel = titel;
+	public void setBefragung(Befragung befragung) {
+		this.befragung = befragung;
+	}
+
+	public String getText() {
+		return text;
+	}
+
+	public void setText(String text) {
+		this.text = text;
+	}
+
+	public List<String> getAntworten() {
+		return antworten;
+	}
+
+	public void setAntworten(List<String> antworten) {
+		this.antworten = antworten;
 	}
 
 	public List<Bedingung> getBedingungen() {
@@ -76,44 +79,12 @@ public class Frage {
 		this.bedingungen = bedingungen;
 	}
 
-	public boolean isErlaubeBenutzerdefinierteAntwort() {
-		return erlaubeBenutzerdefinierteAntwort;
+	public boolean getHatFreitextAntwort() {
+		return hatFreitextAntwort;
 	}
 
-	public void setErlaubeBenutzerdefinierteAntwort(boolean erlaubeBenutzerdefinierteAntwort) {
-		this.erlaubeBenutzerdefinierteAntwort = erlaubeBenutzerdefinierteAntwort;
-	}
-
-	public double getBreitengrad() {
-		return breitengrad;
-	}
-
-	public void setBreitengrad(double breitengrad) {
-		this.breitengrad = breitengrad;
-	}
-
-	public double getLaengengrad() {
-		return laengengrad;
-	}
-
-	public void setLaengengrad(double laengengrad) {
-		this.laengengrad = laengengrad;
-	}
-
-	public double getFahrtrichtung() {
-		return fahrtrichtung;
-	}
-
-	public void setFahrtrichtung(double fahrtrichtung) {
-		this.fahrtrichtung = fahrtrichtung;
-	}
-
-	public void setAntworten(List<String> antworten) {
-		this.antworten = antworten;
-	}
-
-	public List<String> getAntworten() {
-		return antworten;
+	public void setHatFreitextAntwort(boolean hatFreitextAntwort) {
+		this.hatFreitextAntwort = hatFreitextAntwort;
 	}
 
 }

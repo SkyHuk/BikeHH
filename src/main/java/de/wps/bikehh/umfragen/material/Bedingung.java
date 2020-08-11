@@ -1,56 +1,45 @@
 package de.wps.bikehh.umfragen.material;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.Embeddable;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 /**
- * Eine Bedingung gehört zu einer Frage. Diese Frage soll dann nur entsprechend
- * der Bedingung gestellt werden.
+ * Die Bedingung, die erfüllt sein muss damit die Frage, zu der diese Bedingung
+ * gehört, angezeigt wird.
  * 
- * Konkret: Stelle die Frage, zu der diese Bedingung gehört, nur, wenn andere
- * Frage mit <FRAGEID> mit der Antwort <ANTWORTID> beantwortet wurde. Diese
- * Logik muss von den mobile Anwendungen implementiert werden
+ * Dazu muss die Frage mit frageId mit der Antwort antwortId beantwortet worden
+ * sein.
  */
-@Entity
+@Embeddable
 public class Bedingung {
-
-	@Id
-	@GeneratedValue
-	private int id;
 
 	/**
 	 * Die andere Frage, die als Bedingung einbezogen wird
 	 */
-	private int frageId;
+	@ManyToOne
+	@JoinColumn(name = "target_frage", referencedColumnName = "id")
+	private Frage frage;
 
 	/**
 	 * Antwort auf diese andere Frage, die als Bedingung gilt
 	 */
-	private int antwortId;
+	private int antwortIndex;
 
-	public int getId() {
-		return id;
+	public Frage getFrage() {
+		return frage;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setFrage(Frage frage) {
+		this.frage = frage;
 	}
 
-	public int getFrageId() {
-		return frageId;
+	public int getAntwortIndex() {
+		return antwortIndex;
 	}
 
-	public void setFrageId(int frageId) {
-		this.frageId = frageId;
-	}
-
-	public int getAntwortId() {
-		return antwortId;
-	}
-
-	public void setAntwortId(int antwortId) {
-		this.antwortId = antwortId;
+	public void setAntwortIndex(int antwortIndex) {
+		this.antwortIndex = antwortIndex;
 	}
 
 }

@@ -10,8 +10,11 @@ import de.wps.bikehh.umfragen.material.Frage;
 public class FrageDto {
 
 	@NotNull
-	private String titel;
+	private String text;
 	private List<String> antworten;
+	private boolean hatFreitextAntwort;
+
+	// TODO: Bedingungen
 
 	public FrageDto() {
 		antworten = new ArrayList<>();
@@ -21,17 +24,18 @@ public class FrageDto {
 
 	public static FrageDto from(Frage frage) {
 		FrageDto dto = new FrageDto();
-		dto.setTitel(frage.getTitel());
+		dto.setText(frage.getText());
+		dto.setHatFreitextAntwort(frage.getHatFreitextAntwort());
 		dto.setAntworten(frage.getAntworten());
 		return dto;
 	}
 
-	public String getTitel() {
-		return titel;
+	public String getText() {
+		return text;
 	}
 
-	public void setTitel(String titel) {
-		this.titel = titel;
+	public void setText(String text) {
+		this.text = text;
 	}
 
 	public List<String> getAntworten() {
@@ -40,6 +44,14 @@ public class FrageDto {
 
 	public void setAntworten(List<String> antworten) {
 		this.antworten = antworten;
+	}
+
+	public boolean getHatFreitextAntwort() {
+		return hatFreitextAntwort;
+	}
+
+	public void setHatFreitextAntwort(boolean hatFreitextAntwort) {
+		this.hatFreitextAntwort = hatFreitextAntwort;
 	}
 
 }

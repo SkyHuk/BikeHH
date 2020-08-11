@@ -1,7 +1,6 @@
 package de.wps.bikehh.umfragen.applicationservice;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -10,12 +9,9 @@ import org.springframework.stereotype.Service;
 
 import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.umfragen.dto.EditUmfrageDto;
-import de.wps.bikehh.umfragen.dto.FrageDto;
 import de.wps.bikehh.umfragen.dto.NewUmfrageDto;
 import de.wps.bikehh.umfragen.dto.UmfragenListeDto;
 import de.wps.bikehh.umfragen.dto.ViewUmfrageDto;
-import de.wps.bikehh.umfragen.fachwert.Kategorie;
-import de.wps.bikehh.umfragen.material.Frage;
 import de.wps.bikehh.umfragen.material.Umfrage;
 import de.wps.bikehh.umfragen.service.UmfragenService;
 
@@ -49,12 +45,11 @@ public class UmfragenApplicationService {
 				.collect(Collectors.toList());
 	}
 
-	public long addNewUmfrage(User ersteller, NewUmfrageDto dto, boolean isManuellErstellt) {
+	public long addNewUmfrage(User ersteller, NewUmfrageDto dto) {
 		Umfrage umfrage = new Umfrage();
 		fillUmfrageFromDto(umfrage, dto);
 
 		umfrage.setErsteller(ersteller);
-		umfrage.setManuellErstellt(isManuellErstellt);
 		umfrage.setCreatedAt(LocalDate.now());
 
 		Umfrage savedUmfrage = umfragenService.save(umfrage);
@@ -85,26 +80,9 @@ public class UmfragenApplicationService {
 
 	private void fillUmfrageFromDto(Umfrage umfrage, NewUmfrageDto dto) {
 		umfrage.setTitel(dto.getTitel());
-		umfrage.setBestaetigtSchwellenwert(dto.getBestaetigungsSchwellenwert());
-		umfrage.setLaengengrad(dto.getLaengengrad());
-		umfrage.setBreitengrad(dto.getBreitengrad());
 		umfrage.setStartDatum(dto.getStartDatum());
 		umfrage.setEndDatum(dto.getEndDatum());
-
-		// TODO: Kategorie embedabble machen
-		Kategorie kategorie = new Kategorie();
-		kategorie.setName(dto.getKategorie());
-		umfrage.setKategorie(kategorie);
-
-		List<Frage> fragen = new ArrayList<>();
-		for (FrageDto frage : dto.getFragen()) {
-			Frage frageMat = new Frage();
-			frageMat.setTitel(frage.getTitel());
-			frageMat.setAntworten(frage.getAntworten());
-			// TODO: Freitextantworten
-			fragen.add(frageMat);
-		}
-		umfrage.setFragen(fragen);
+		umfrage.setKategorie(dto.getKategorie());
 	}
 
 }

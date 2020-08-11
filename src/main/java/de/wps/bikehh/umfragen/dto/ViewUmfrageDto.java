@@ -4,7 +4,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import de.wps.bikehh.umfragen.material.Adresse;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import de.wps.bikehh.umfragen.material.Umfrage;
 
 public class ViewUmfrageDto {
@@ -12,54 +13,44 @@ public class ViewUmfrageDto {
 	private long id;
 
 	private String titel;
-
-	private double laengengrad;
-	private double breitengrad;
-
 	private String kategorie;
 
+	@DateTimeFormat(pattern = "dd.MM.yyyy")
 	private LocalDate startDatum;
+
+	@DateTimeFormat(pattern = "dd.MM.yyyy")
 	private LocalDate endDatum;
 
+	@DateTimeFormat(pattern = "dd.MM.yyyy")
 	private LocalDate createdAt;
+
+	@DateTimeFormat(pattern = "dd.MM.yyyy")
 	private LocalDate updatedAt;
 
-	private boolean verified;
+	private List<EditBefragungDto> befragungen;
 
-	private double fahrtrichtung;
-	private List<String> bestaetigtVonUsernames;
-	private int bestaetigungsSchwellenwert;
-	private List<FrageDto> fragen;
-	private String erstellerName;
-	private Adresse adresse;
-	private boolean isAutomatischErstellt;
-	private boolean isDisabled;
+	private String ersteller;
+
+	private boolean istMehrfachBeantwortbar;
+	private boolean istDisabled;
 
 	public static ViewUmfrageDto from(Umfrage umfrage) {
 		ViewUmfrageDto dto = new ViewUmfrageDto();
 		dto.setId(umfrage.getId());
 		dto.setTitel(umfrage.getTitel());
-		dto.setLaengengrad(umfrage.getLaengengrad());
-		dto.setBreitengrad(umfrage.getBreitengrad());
-		dto.setKategorie(umfrage.getKategorie().getName());
+		dto.setKategorie(umfrage.getKategorie());
 		dto.setStartDatum(umfrage.getStartDatum());
 		dto.setEndDatum(umfrage.getEndDatum());
 		dto.setCreatedAt(umfrage.getCreatedAt());
 		dto.setUpdatedAt(umfrage.getUpdatedAt());
-		dto.setVerified(umfrage.getIstBestaetigt());
-		dto.setFahrtrichtung(umfrage.getFahrtrichtung());
-		dto.setBestaetigtVonUsernames(umfrage.getBestaetigtVonUsern().stream().map(user -> user.getEmailAddress())
+		dto.setBefragungen(umfrage.getBefragungen()
+				.stream()
+				.map(EditBefragungDto::from)
 				.collect(Collectors.toList()));
-		dto.setBestaetigungsSchwellenwert(umfrage.getBestaetigtSchwellenwert());
-		List<FrageDto> fragen = umfrage.getFragen().stream()
-				.map(FrageDto::from)
-				.collect(Collectors.toList());
-		dto.setFragen(fragen);
-		dto.setErstellerName(umfrage.getErsteller().getEmailAddress());
-		dto.setAdresse(umfrage.getAdresse());
-		dto.setAutomatischErstellt(!umfrage.getManuellErstellt());
-		dto.setIsDisabled(umfrage.getIsDisabled());
-		return dto;
+		dto.setErsteller(umfrage.getErsteller().getEmailAddress());
+		dto.setIstMehrfachBeantwortbar(umfrage.getIstMehrfachBeantwortbar());
+		dto.setIstDisabled(umfrage.getIstDisabled());
+		return null;
 	}
 
 	public long getId() {
@@ -76,22 +67,6 @@ public class ViewUmfrageDto {
 
 	public void setTitel(String titel) {
 		this.titel = titel;
-	}
-
-	public double getLaengengrad() {
-		return laengengrad;
-	}
-
-	public void setLaengengrad(double laengengrad) {
-		this.laengengrad = laengengrad;
-	}
-
-	public double getBreitengrad() {
-		return breitengrad;
-	}
-
-	public void setBreitengrad(double breitengrad) {
-		this.breitengrad = breitengrad;
 	}
 
 	public String getKategorie() {
@@ -134,76 +109,36 @@ public class ViewUmfrageDto {
 		this.updatedAt = updatedAt;
 	}
 
-	public boolean isVerified() {
-		return verified;
+	public List<EditBefragungDto> getBefragungen() {
+		return befragungen;
 	}
 
-	public void setVerified(boolean verified) {
-		this.verified = verified;
+	public void setBefragungen(List<EditBefragungDto> befragungen) {
+		this.befragungen = befragungen;
 	}
 
-	public double getFahrtrichtung() {
-		return fahrtrichtung;
+	public String getErsteller() {
+		return ersteller;
 	}
 
-	public void setFahrtrichtung(double fahrtrichtung) {
-		this.fahrtrichtung = fahrtrichtung;
+	public void setErsteller(String ersteller) {
+		this.ersteller = ersteller;
 	}
 
-	public List<String> getBestaetigtVonUsernames() {
-		return bestaetigtVonUsernames;
+	public boolean getIstMehrfachBeantwortbar() {
+		return istMehrfachBeantwortbar;
 	}
 
-	public void setBestaetigtVonUsernames(List<String> bestaetigtVonUsernames) {
-		this.bestaetigtVonUsernames = bestaetigtVonUsernames;
+	public void setIstMehrfachBeantwortbar(boolean istMehrfachBeantwortbar) {
+		this.istMehrfachBeantwortbar = istMehrfachBeantwortbar;
 	}
 
-	public int getBestaetigungsSchwellenwert() {
-		return bestaetigungsSchwellenwert;
+	public boolean getIstDisabled() {
+		return istDisabled;
 	}
 
-	public void setBestaetigungsSchwellenwert(int bestaetigungsSchwellenwert) {
-		this.bestaetigungsSchwellenwert = bestaetigungsSchwellenwert;
-	}
-
-	public List<FrageDto> getFragen() {
-		return fragen;
-	}
-
-	public void setFragen(List<FrageDto> fragen) {
-		this.fragen = fragen;
-	}
-
-	public String getErstellerName() {
-		return erstellerName;
-	}
-
-	public void setErstellerName(String erstellerName) {
-		this.erstellerName = erstellerName;
-	}
-
-	public Adresse getAdresse() {
-		return adresse;
-	}
-
-	public void setAdresse(Adresse adresse) {
-		this.adresse = adresse;
-	}
-
-	public boolean isAutomatischErstellt() {
-		return isAutomatischErstellt;
-	}
-
-	public void setAutomatischErstellt(boolean isAutomatischErstellt) {
-		this.isAutomatischErstellt = isAutomatischErstellt;
-	}
-
-	public boolean getIsDisabled() {
-		return isDisabled;
-	}
-
-	public void setIsDisabled(boolean isDisabled) {
-		this.isDisabled = isDisabled;
+	public void setIstDisabled(boolean istDisabled) {
+		this.istDisabled = istDisabled;
 	}
 
 }

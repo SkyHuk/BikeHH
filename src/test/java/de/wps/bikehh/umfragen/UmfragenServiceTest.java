@@ -52,7 +52,7 @@ public class UmfragenServiceTest {
 		// assert
 		ArgumentCaptor<Umfrage> argument = ArgumentCaptor.forClass(Umfrage.class);
 		verify(umfrageRepository).save(argument.capture());
-		assertFalse(argument.getValue().getIsDisabled());
+		assertFalse(argument.getValue().getIstDisabled());
 	}
 
 	@Test
@@ -63,6 +63,6 @@ public class UmfragenServiceTest {
 		// assert
 		ArgumentCaptor<Umfrage> argument = ArgumentCaptor.forClass(Umfrage.class);
 		verify(umfrageRepository).save(argument.capture());
-		assertTrue(argument.getValue().getIsDisabled());
+		assertTrue(argument.getValue().getIstDisabled());
 	}
 }

@@ -101,13 +101,13 @@ public class UmfragenService {
 
 	public void enableUmfrage(long id) {
 		Umfrage umfrage = getById(id);
-		umfrage.setIsDisabled(false);
+		umfrage.setIstDisabled(false);
 		save(umfrage);
 	}
 
 	public void disableUmfrage(long id) {
 		Umfrage umfrage = getById(id);
-		umfrage.setIsDisabled(true);
+		umfrage.setIstDisabled(true);
 		save(umfrage);
 	}
 

@@ -1,20 +1,14 @@
 package de.wps.bikehh.benutzerverwaltung.material;
 
 import java.util.Date;
-import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 
 import org.hibernate.annotations.CreationTimestamp;
-
-import de.wps.bikehh.umfragen.material.Umfrage;
 
 @Entity
 public class User {
@@ -36,9 +30,6 @@ public class User {
 	private int privacySetting;
 
 	private String role;
-
-	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "bestaetigtVonUsern", cascade = CascadeType.ALL)
-	private List<Umfrage> bestaetigteUmfragen;
 
 	@Column(nullable = false)
 	@CreationTimestamp
@@ -140,14 +131,6 @@ public class User {
 
 	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
-	}
-
-	public List<Umfrage> getBestaetigteUmfragen() {
-		return bestaetigteUmfragen;
-	}
-
-	public void setBestaetigteUmfragen(List<Umfrage> confirmedSurveys) {
-		this.bestaetigteUmfragen = confirmedSurveys;
 	}
 
 }

@@ -5,22 +5,18 @@ import de.wps.bikehh.umfragen.material.Umfrage;
 public class UmfragenListeDto {
 
 	private long id;
-	private AdresseDto adresse;
 	private String titel;
 	private String kategorie;
 	private String createdAt;
-	private int anzahlBestaetigungen;
 	private boolean isDisabled;
 
 	public static UmfragenListeDto from(Umfrage umfrage) {
 		UmfragenListeDto dto = new UmfragenListeDto();
 		dto.setId(umfrage.getId());
-		// dto.setAdresse(AdresseDto.from(umfrage.getAdresse()));
 		dto.setTitel(umfrage.getTitel());
-		dto.setKategorie(umfrage.getKategorie().getName());
+		dto.setKategorie(umfrage.getKategorie());
 		dto.setCreatedAt(umfrage.getCreatedAt().toString());
-		dto.setAnzahlBestaetigungen(umfrage.getBestaetigtVonUsern().size());
-		dto.setIsDisabled(umfrage.getIsDisabled());
+		dto.setIsDisabled(umfrage.getIstDisabled());
 		return dto;
 	}
 
@@ -30,14 +26,6 @@ public class UmfragenListeDto {
 
 	public void setId(long id) {
 		this.id = id;
-	}
-
-	public AdresseDto getAdresse() {
-		return adresse;
-	}
-
-	public void setAdresse(AdresseDto adresse) {
-		this.adresse = adresse;
 	}
 
 	public String getTitel() {
@@ -62,14 +50,6 @@ public class UmfragenListeDto {
 
 	public void setCreatedAt(String createdAt) {
 		this.createdAt = createdAt;
-	}
-
-	public int getAnzahlBestaetigungen() {
-		return anzahlBestaetigungen;
-	}
-
-	public void setAnzahlBestaetigungen(int anzahlBestaetigungen) {
-		this.anzahlBestaetigungen = anzahlBestaetigungen;
 	}
 
 	public boolean getIsDisabled() {
