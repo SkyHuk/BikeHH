@@ -5,7 +5,7 @@ import OSM from 'ol/source/OSM';
 import Draw from 'ol/interaction/Draw';
 import VectorSource from 'ol/source/Vector';
 import VectorLayer from 'ol/layer/Vector';
-import {Circle, Fill, Style} from 'ol/style';
+import {Circle, Fill, Style, Stroke, Text} from 'ol/style';
 import Point from 'ol/geom/Point';
 import Feature from 'ol/Feature';
 
@@ -14,28 +14,15 @@ import Feature from 'ol/Feature';
  */
 
 if (window.document.showMap) {
-	const longitudeField = document.getElementById('longitude');
-	const latitudeField = document.getElementById('latitude');
+	const befragungenCountField = document.getElementById('befragungen_count');
 	
-	const addOrtBtn = document.getElementById('mapAddOrtBtn');
-	const resetOrtBtn = document.getElementById('resetOrtBtn');
+	let currentInteraction;
 	
-	const raster = new TileLayer({source: new OSM()});
-	const vectorSource = new VectorSource({wrapX: false});
+	const vectorSource = new VectorSource();
 	const vectorLayer = new VectorLayer({
-		source: vectorSource,
-		style: new Style({
-	        image: new Circle({
-	          radius: 5,
-	          fill: new Fill({color: 'blue'}),
-	        }),
-	    }),
+		source: vectorSource
 	});
-	
-	const draw = new Draw({
-		source : vectorSource,
-		type: 'Point'
-	});
+	const raster = new TileLayer({source: new OSM()});
 	
 	const map = new Map({
 		layers: [raster, vectorLayer],
@@ -47,48 +34,65 @@ if (window.document.showMap) {
 		})
 	});
 	
-	const addInteraction = function(map) {
-		map.addInteraction(draw);
+	window.document.removeBefragungsOrt = function(befragungsIndex) {
+		// TODO Ort von Befragung entfernen
+		if(currentInteraction) { removeInteraction(map, currentInteraction); }
+		currentInteraction = null;
 	}
 	
-	const removeInteraction = function(map) {
-		map.removeInteraction(draw);
-	}
-	
-	const clearOrt = function() {
-		vectorSource.clear();
-		longitudeField.value = 0;
-		latitudeField.value = 0;
-	}
-	
-	if(addOrtBtn) {
-		// Ist der Ort hinzufügen Button vorhanden, sollte die Map auf
-		// Interaktionen reagieren
+	window.document.addBefragungsOrt = function(befragungsIndex) {
+		window.document.removeBefragungsOrt(befragungsIndex);
+		if(currentInteraction) { removeInteraction(map, currentInteraction); }
 		
-		addOrtBtn.onclick = function() {
-			clearOrt();
-			addInteraction(map);
-		};
+		currentInteraction = new Draw({
+			source: vectorSource,
+			type: 'Point',
+			style: new Style({
+		        image: new Circle({
+		            radius: 7,
+		            fill: new Fill({color: 'blue'}),
+		            stroke: new Stroke({color: 'blue'})
+		        }),
+		    })
+		});
 		
-		vectorSource.on('addfeature', function(event){
-			const geometry = event.feature.getGeometry();
+		currentInteraction.on('drawend', function(event) {
+			const feature = event.feature;
+			
+			const featureLabel = '' + (befragungsIndex + 1);
+			feature.setStyle(new Style({
+		        image: new Circle({
+		            radius: 7,
+		            fill: new Fill({color: 'blue'}),
+		        	stroke: new Stroke({color: 'blue'})
+		        }),
+		        text: new Text({
+		        	text: featureLabel,
+		        	fill: new Fill({color: 'white'})
+		        })
+		    }));
+			
+			const geometry = feature.getGeometry();
 			const coordinates = geometry.getCoordinates();
 			
+			const longitudeField = document.getElementById('longitude_' + befragungsIndex);
+			const latitudeField = document.getElementById('latitude_' + befragungsIndex);
 			longitudeField.value = coordinates[0].toFixed(2);
 			latitudeField.value = coordinates[1].toFixed(2);
 			
 			// Zoom map
 			map.getView().fit(geometry.getExtent(), map.getSize());
 			
-			removeInteraction(map);
+			removeInteraction(map, currentInteraction);
 		});
+		
+		addInteraction(map, currentInteraction);
 	}
 	
-	if(resetOrtBtn) {
-		resetOrtBtn.onclick = function() {
-			clearOrt();
-			removeInteraction(map);
-		};
+	/*
+	if(befragungenCountField.value) {
+		const longitudeField = document.getElementById('longitude');
+		const latitudeField = document.getElementById('latitude');
 	}
 	
 	if(longitudeField.value) {
@@ -98,6 +102,13 @@ if (window.document.showMap) {
 		vectorSource.addFeature(feature);
 		map.getView().fit(feature.getGeometry().getExtent(), map.getSize());
 	}
-	
+	*/
 }
 
+function addInteraction(map, interaction) {
+	map.addInteraction(interaction);
+}
+
+function removeInteraction(map, interaction) {
+	map.removeInteraction(interaction);
+}
