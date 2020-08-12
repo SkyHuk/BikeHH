@@ -75,7 +75,7 @@ public class UmfrageErstellenController {
 	 * @return HTML-Template
 	 */
 	@GetMapping("/bearbeiten")
-	public String zeigeUmfragenBearbeiter(@RequestParam(required = true, name = "umfrageId") int umfrageId,
+	public String zeigeUmfragenBearbeiter(@RequestParam(required = true, name = "umfrageId") Long umfrageId,
 			Model model) {
 
 		Umfrage umfrage = umfragenService.getById(umfrageId);

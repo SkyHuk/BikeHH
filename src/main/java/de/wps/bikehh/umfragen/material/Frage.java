@@ -3,10 +3,14 @@ package de.wps.bikehh.umfragen.material;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Convert;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+
+import de.wps.bikehh.framework.db.converter.StringListConverter;
 
 /**
  * Eine Frage als Teil einer Befragung.
@@ -15,7 +19,8 @@ import javax.persistence.ManyToOne;
 public class Frage {
 
 	@Id
-	private long id;
+	@GeneratedValue
+	private Long id;
 
 	@ManyToOne
 	private Befragung befragung;
@@ -25,7 +30,7 @@ public class Frage {
 	 */
 	private String text;
 
-	@ElementCollection
+	@Convert(converter = StringListConverter.class)
 	private List<String> antworten;
 
 	/**
@@ -39,11 +44,20 @@ public class Frage {
 	 */
 	private boolean hatFreitextAntwort;
 
-	public long getId() {
+	public void merge(Frage frage) {
+		if (frage.getId() != null) {
+			id = frage.getId();
+		}
+		text = frage.getText();
+		antworten = frage.getAntworten();
+		bedingungen = frage.getBedingungen();
+	}
+
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

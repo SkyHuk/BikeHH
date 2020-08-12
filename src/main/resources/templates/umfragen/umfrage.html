@@ -14,9 +14,6 @@
 	<div class="card w-80 my-2">
 		<div class="card-img-top">
 			<div id="map" class="w-100" style="height: 400px;"></div>
-			<input type="hidden" id="longitude" th:value="${umfrage.laengengrad}">
-			<input type="hidden" id="latitude" th:value="${umfrage.breitengrad}">
-
 			<script th:inline="javascript">
 				window.document.showMap = true;
 			</script>
@@ -26,12 +23,16 @@
 
 			<div class="row">
 				<div class="col border-right">
-					<!-- Erstellt am -->
+					<div class="row py-1">
+						<span class="col-4 text-right">Ersteller: </span> <span
+							class="col-8" th:text="${umfrage.ersteller}"></span>
+					</div>
+
 					<div class="row py-1">
 						<span class="col-4 text-right">Erstellt am: </span> <span
 							class="col-8" th:text="${umfrage.createdAt}"></span>
 					</div>
-					<!-- Bearbeitet am -->
+
 					<div class="row py-1" th:if="${umfrage.updatedAt != null}">
 						<span class="col-4 text-right">Bearbeitet am: </span> <span
 							class="col-8" th:text="${umfrage.updatedAt}"></span>
@@ -53,20 +54,32 @@
 					</div>
 
 					<div class="row py-1">
-						<span class="col-4 text-right">Bestätigungs-Schwellenwert:
-						</span> <span class="col-8"
-							th:text="${umfrage.bestaetigungsSchwellenwert}"></span>
+						<span class="col-4 text-right">Mehrfach beantwortbar: </span>
+						<div class="col-8">
+							<i th:if="${umfrage.istMehrfachBeantwortbar}"
+								class="fas fa-check text-success"></i> <i
+								th:unless="${umfrage.istMehrfachBeantwortbar}"
+								class="fas fa-times text-danger"></i>
+						</div>
 					</div>
 				</div>
 				<div class="col">
+					<input type="hidden" id="befragungen_count" th:value="${#lists.size(umfrage.befragungen)}">
+					<div class="py-2">
+						<h4>Befragungen</h4>
+					</div>
 					<div class="border rounded p-2 mb-2"
-						th:each="frage : ${umfrage.fragen}">
-						<div class="py-1">
-							<h5 th:text="${frage.titel}"></h5>
-						</div>
-						<!-- Die Antworten -->
-						<div class="py-1" th:each="antwort : ${frage.antworten}">
-							<span th:text="${antwort}"></span>
+						th:each="befragung, bStat : ${umfrage.befragungen}">
+						<input type="hidden" th:id="'longitude_' + ${bStat.index}" th:value="${befragung.laengengrad}">
+						<input type="hidden" th:id="'latitude_' + ${bStat.index}" th:value="${befragung.breitengrad}">
+						<div th:each="frage : ${befragung.fragen}">
+							<div class="py-1 border-bottom">
+								<h5 th:text="${frage.text}"></h5>
+							</div>
+							<!-- Die Antworten -->
+							<div class="py-1" th:each="antwort : ${frage.antworten}">
+								<span th:text="${antwort}"></span>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -79,9 +92,9 @@
 					th:href="@{'/umfragen/' + ${umfrage.id} + '/edit'}">Bearbeiten</a>
 			</div>
 			<div class="py-1">
-				<a th:unless="${umfrage.isDisabled}" class="btn btn-danger w-100"
+				<a th:unless="${umfrage.istDisabled}" class="btn btn-danger w-100"
 					th:href="@{'/umfragen/' + ${umfrage.id} + '/disable'}">Deaktivieren</a>
-				<a th:if="${umfrage.isDisabled}" class="btn btn-success w-100"
+				<a th:if="${umfrage.istDisabled}" class="btn btn-success w-100"
 					th:href="@{'/umfragen/' + ${umfrage.id} + '/enable'}">Aktivieren</a>
 			</div>
 		</div>

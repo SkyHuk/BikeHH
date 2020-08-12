@@ -1,19 +1,3 @@
--- simple script to drop all tables and by this delete everything
-/* DROP TABLE IF EXISTS `Antwort_Moeglichkeit` cascade;
-DROP TABLE IF EXISTS `Bedingung` cascade;
-DROP TABLE IF EXISTS `Frage` cascade;
-DROP TABLE IF EXISTS `antwort` cascade;
-DROP TABLE IF EXISTS `Frage_antworten` cascade;
-DROP TABLE IF EXISTS `frage_bedingungen` cascade;
-DROP TABLE IF EXISTS `meldung` cascade;
-DROP TABLE IF EXISTS `MELDUNG_ANTWORTEN_AUF_FRAGEN` cascade;
-DROP TABLE IF EXISTS `Umfrage` cascade;
-DROP TABLE IF EXISTS `Umfrage_fragen` cascade;
-DROP TABLE IF EXISTS `adresse` cascade;
-DROP TABLE IF EXISTS `Kategorie` cascade;
-DROP TABLE IF EXISTS `UMFRAGE_BESTAETIGT_VON_BENUTZERN` cascade;
-DROP TABLE IF EXISTS `Benutzer` cascade; */
-
 DROP TABLE IF EXISTS `Verification`;
 DROP TABLE IF EXISTS `Session`;
 DROP TABLE IF EXISTS `Reset`;

@@ -24,7 +24,7 @@ public class KartenController {
 
 	@GetMapping
 	public String getMap(Model model) {
-		List<ViewUmfrageDto> umfragen = umfragenAppService.getAlleUmfragen();
+		List<ViewUmfrageDto> umfragen = umfragenAppService.getAlleUmfragenFuerKarte();
 		model.addAttribute("umfragen", umfragen);
 		return "map/map";
 	}

@@ -20,7 +20,6 @@
 					<th>Kategorie</th>
 					<th>Erstellungsdatum</th>
 					<th>Status</th>
-					<th>Bestätigungen</th>
 					<th></th>
 				</tr>
 			</thead>
@@ -30,7 +29,6 @@
 					<td th:text="${umfrage.kategorie}"></td>
 					<td th:text="${umfrage.createdAt}"></td>
 					<td th:text="${umfrage.isDisabled} ? 'deaktiviert' : 'aktiviert'"></td>
-					<td th:text="${umfrage.anzahlBestaetigungen}"></td>
 					<td><a class="btn btn-sm btn-primary"
 						th:href="@{'/umfragen/' + ${umfrage.id}}">Anzeigen</a></td>
 				</tr>

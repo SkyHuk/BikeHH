@@ -2,11 +2,8 @@ package de.wps.bikehh.umfragen.dto;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotEmpty;
-
-import de.wps.bikehh.umfragen.material.Befragung;
 
 public class EditBefragungDto {
 
@@ -29,19 +26,6 @@ public class EditBefragungDto {
 
 	public EditBefragungDto() {
 		fragen = new ArrayList<>();
-	}
-
-	public static EditBefragungDto from(Befragung befragung) {
-		EditBefragungDto dto = new EditBefragungDto();
-		dto.setBefragungId(befragung.getId());
-		dto.setLaengengrad(befragung.getLaengengrad());
-		dto.setBreitengrad(befragung.getBreitengrad());
-		dto.setFahrtrichtung(befragung.getFahrtrichtung());
-		dto.setFragen(befragung.getFragen()
-				.stream()
-				.map(FrageDto::from)
-				.collect(Collectors.toList()));
-		return dto;
 	}
 
 	public Long getBefragungId() {

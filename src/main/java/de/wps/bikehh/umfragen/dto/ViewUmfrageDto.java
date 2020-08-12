@@ -2,11 +2,8 @@ package de.wps.bikehh.umfragen.dto;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.format.annotation.DateTimeFormat;
-
-import de.wps.bikehh.umfragen.material.Umfrage;
 
 public class ViewUmfrageDto {
 
@@ -33,25 +30,6 @@ public class ViewUmfrageDto {
 
 	private boolean istMehrfachBeantwortbar;
 	private boolean istDisabled;
-
-	public static ViewUmfrageDto from(Umfrage umfrage) {
-		ViewUmfrageDto dto = new ViewUmfrageDto();
-		dto.setId(umfrage.getId());
-		dto.setTitel(umfrage.getTitel());
-		dto.setKategorie(umfrage.getKategorie());
-		dto.setStartDatum(umfrage.getStartDatum());
-		dto.setEndDatum(umfrage.getEndDatum());
-		dto.setCreatedAt(umfrage.getCreatedAt());
-		dto.setUpdatedAt(umfrage.getUpdatedAt());
-		dto.setBefragungen(umfrage.getBefragungen()
-				.stream()
-				.map(EditBefragungDto::from)
-				.collect(Collectors.toList()));
-		dto.setErsteller(umfrage.getErsteller().getEmailAddress());
-		dto.setIstMehrfachBeantwortbar(umfrage.getIstMehrfachBeantwortbar());
-		dto.setIstDisabled(umfrage.getIstDisabled());
-		return null;
-	}
 
 	public long getId() {
 		return id;

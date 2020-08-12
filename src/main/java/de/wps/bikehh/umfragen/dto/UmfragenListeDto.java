@@ -1,7 +1,5 @@
 package de.wps.bikehh.umfragen.dto;
 
-import de.wps.bikehh.umfragen.material.Umfrage;
-
 public class UmfragenListeDto {
 
 	private long id;
@@ -9,16 +7,6 @@ public class UmfragenListeDto {
 	private String kategorie;
 	private String createdAt;
 	private boolean isDisabled;
-
-	public static UmfragenListeDto from(Umfrage umfrage) {
-		UmfragenListeDto dto = new UmfragenListeDto();
-		dto.setId(umfrage.getId());
-		dto.setTitel(umfrage.getTitel());
-		dto.setKategorie(umfrage.getKategorie());
-		dto.setCreatedAt(umfrage.getCreatedAt().toString());
-		dto.setIsDisabled(umfrage.getIstDisabled());
-		return dto;
-	}
 
 	public long getId() {
 		return id;

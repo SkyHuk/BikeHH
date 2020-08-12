@@ -37,7 +37,7 @@ public class KartenControllerTest {
 		List<ViewUmfrageDto> alleUmfragen = new ArrayList<>();
 		alleUmfragen.add(testUmfrage);
 
-		when(umfragenAppService.getAlleUmfragen()).thenReturn(alleUmfragen);
+		when(umfragenAppService.getAlleUmfragenFuerKarte()).thenReturn(alleUmfragen);
 	}
 
 	@Test
@@ -46,7 +46,7 @@ public class KartenControllerTest {
 		String redirectStr = kartenController.getMap(model);
 
 		// assert
-		verify(umfragenAppService, times(1)).getAlleUmfragen();
+		verify(umfragenAppService, times(1)).getAlleUmfragenFuerKarte();
 		assertTrue(model.containsAttribute("umfragen"));
 		assertEquals("map/map", redirectStr);
 	}

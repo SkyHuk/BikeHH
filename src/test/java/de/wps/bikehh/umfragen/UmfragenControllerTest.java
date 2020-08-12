@@ -45,7 +45,7 @@ public class UmfragenControllerTest {
 
 		when(umfragenAppService.hasUmfrage(testUmfrage.getId())).thenReturn(true);
 		when(umfragenAppService.getUmfrageById(testUmfrage.getId())).thenReturn(testUmfrage);
-		when(umfragenAppService.getAlleUmfragen()).thenReturn(alleUmfragen);
+		when(umfragenAppService.getAlleUmfragenFuerKarte()).thenReturn(alleUmfragen);
 	}
 
 	@Test

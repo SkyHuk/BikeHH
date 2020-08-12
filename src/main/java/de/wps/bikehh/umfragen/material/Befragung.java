@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -16,6 +16,7 @@ import de.wps.bikehh.meldungen.material.Meldung;
 public class Befragung {
 
 	@Id
+	@GeneratedValue
 	private Long id;
 
 	/**
@@ -33,7 +34,7 @@ public class Befragung {
 	/**
 	 * Die Ansammlung von Fragen für diese Befragung.
 	 */
-	@OneToMany(mappedBy = "befragung", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "befragung", cascade = CascadeType.ALL)
 	private List<Frage> fragen;
 
 	@ManyToOne

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import de.wps.bikehh.umfragen.applicationservice.UmfragenApplicationService;
+import de.wps.bikehh.umfragen.dto.ViewUmfrageDto;
 
 @Controller
 @RequestMapping("umfragen")
@@ -42,7 +43,8 @@ public class UmfragenController {
 		if (!umfragenAppService.hasUmfrage(umfrageId)) {
 			// TODO: Hat Umfrage nicht. Fehler anzeigen.
 		}
-		model.addAttribute("umfrage", umfragenAppService.getUmfrageById(umfrageId));
+		ViewUmfrageDto dto = umfragenAppService.getUmfrageById(umfrageId);
+		model.addAttribute("umfrage", dto);
 		return "umfragen/umfrage";
 	}
 

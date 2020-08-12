@@ -61,7 +61,7 @@ public class UmfragenService {
 	 * 
 	 * @return die Umfrage zur gegebenen Id
 	 */
-	public Umfrage getById(long id) {
+	public Umfrage getById(Long id) {
 		Contract.check(umfrageRepository.existsById(id), "umfrage exists");
 
 		return umfrageRepository.findById(id).get();

@@ -105,6 +105,8 @@ public class NewUmfrageErstellenController {
 			return "umfragen/umfrage-form";
 		}
 		// TODO: fachliche Fehler prüfen.
+		// TODO: Fragen dürfen keine Semikolons enthalten und als konvertierte
+		// Liste max 255 Zeichen haben
 
 		long umfrageId = umfragenAppService.addNewUmfrage(user, umfrageDto);
 		return "redirect:/umfragen/" + umfrageId + "?saved";
