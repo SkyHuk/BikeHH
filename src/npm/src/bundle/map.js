@@ -14,8 +14,6 @@ import Feature from 'ol/Feature';
  */
 
 if (window.document.showMap) {
-	const befragungenCountField = document.getElementById('befragungen_count');
-	
 	let currentInteraction;
 	
 	const vectorSource = new VectorSource();
@@ -89,20 +87,34 @@ if (window.document.showMap) {
 		addInteraction(map, currentInteraction);
 	}
 	
-	/*
+	const befragungenCountField = document.getElementById('befragungen_count');
 	if(befragungenCountField.value) {
-		const longitudeField = document.getElementById('longitude');
-		const latitudeField = document.getElementById('latitude');
+		// Beim Laden der Seite existieren bereits Positionen.
+		// Features müssen erstellt werden
+		vectorSource.clear();
+		const befragungenCount = befragungenCountField.value;
+		for(let i = 0; i < befragungenCount; i++) {
+			const longitude = document.getElementById('longitude_' + i).value;
+			const latitude = document.getElementById('latitude_' + i).value;
+			
+			if(!longitude) { continue; }
+			
+			const feature = new Feature(new Point([longitude, latitude]));
+			const featureLabel = '' + (i + 1);
+			feature.setStyle(new Style({
+		        image: new Circle({
+		            radius: 7,
+		            fill: new Fill({color: 'blue'}),
+		        	stroke: new Stroke({color: 'blue'})
+		        }),
+		        text: new Text({
+		        	text: featureLabel,
+		        	fill: new Fill({color: 'white'})
+		        })
+		    }));
+			vectorSource.addFeature(feature);
+		}
 	}
-	
-	if(longitudeField.value) {
-		const longitude = longitudeField.value;
-		const latitude = latitudeField.value;
-		const feature = new Feature(new Point([longitude, latitude]));
-		vectorSource.addFeature(feature);
-		map.getView().fit(feature.getGeometry().getExtent(), map.getSize());
-	}
-	*/
 }
 
 function addInteraction(map, interaction) {
