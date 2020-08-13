@@ -34,7 +34,7 @@ public class Befragung {
 	/**
 	 * Die Ansammlung von Fragen für diese Befragung.
 	 */
-	@OneToMany(mappedBy = "befragung", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "befragung", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Frage> fragen;
 
 	@ManyToOne
@@ -130,6 +130,20 @@ public class Befragung {
 
 	public void setDisabled(boolean isDisabled) {
 		this.isDisabled = isDisabled;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == null) {
+			return false;
+		}
+
+		if (!o.getClass().equals(Befragung.class)) {
+			return false;
+		}
+		Befragung that = (Befragung) o;
+		return this.getId().equals(that.getId()) && this.getLaengengrad() == that.getLaengengrad()
+				&& this.getBreitengrad() == that.getBreitengrad();
 	}
 
 }

@@ -46,7 +46,7 @@ public class Umfrage {
 
 	private LocalDate updatedAt;
 
-	@OneToMany(mappedBy = "umfrage", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "umfrage", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Befragung> befragungen;
 
 	@ManyToOne

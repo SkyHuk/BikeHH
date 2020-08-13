@@ -34,9 +34,9 @@ public class EditUmfrageController {
 		if (!umfragenAppService.hasUmfrage(umfrageId)) {
 			// TODO: Hat Umfrage nicht. Fehler anzeigen.
 		}
-		model.addAttribute("umfrage", umfragenAppService.getUmfrageForEdit(umfrageId));
-		model.addAttribute("formPostUrl", "/umfragen/" + umfrageId + "/edit");
-		model.addAttribute("umfrageId", umfrageId);
+		EditUmfrageDto dto = umfragenAppService.getUmfrageForEdit(umfrageId);
+		model.addAttribute("umfrage", dto);
+		addCommonAttributes(model, dto);
 		return "umfragen/umfrage-form";
 	}
 
@@ -61,53 +61,64 @@ public class EditUmfrageController {
 	}
 
 	@RequestMapping(params = { "addBefragung" })
-	public String addBefragung(@ModelAttribute("umfrage") EditUmfrageDto umfrage) {
+	public String addBefragung(@ModelAttribute("umfrage") EditUmfrageDto umfrage, Model model) {
 		EditBefragungDto dtoToAdd = new EditBefragungDto();
 		dtoToAdd.getFragen().add(new FrageDto());
 		umfrage.getBefragungen().add(dtoToAdd);
+
+		addCommonAttributes(model, umfrage);
 		return "umfragen/umfrage-form";
 	}
 
 	@RequestMapping(params = { "removeBefragung" })
 	public String removeBefragung(
-			@ModelAttribute("umfrage") EditUmfrageDto umfrage, HttpServletRequest req) {
+			@ModelAttribute("umfrage") EditUmfrageDto umfrage, HttpServletRequest req, Model model) {
 		Integer befragungIndex = Integer.valueOf(req.getParameter("removeBefragung"));
 		umfrage.getBefragungen().remove(befragungIndex.intValue());
+
+		addCommonAttributes(model, umfrage);
 		return "umfragen/umfrage-form";
 	}
 
 	@RequestMapping(params = { "addFrage" })
-	public String addFrage(@ModelAttribute("umfrage") EditUmfrageDto umfrage, HttpServletRequest req) {
+	public String addFrage(@ModelAttribute("umfrage") EditUmfrageDto umfrage, HttpServletRequest req, Model model) {
 		Integer befragungIndex = Integer.valueOf(req.getParameter("addFrage"));
 		umfrage.getBefragungen().get(befragungIndex.intValue())
 				.getFragen().add(new FrageDto());
+
+		addCommonAttributes(model, umfrage);
 		return "umfragen/umfrage-form";
 	}
 
 	@RequestMapping(params = { "removeFrage" })
 	public String removeFrage(
-			@ModelAttribute("umfrage") EditUmfrageDto umfrage, HttpServletRequest req) {
+			@ModelAttribute("umfrage") EditUmfrageDto umfrage, HttpServletRequest req, Model model) {
 		String befragungFragePair = req.getParameter("removeFrage");
 		Integer befragungIndex = Integer.valueOf(befragungFragePair.split(";")[0]);
 		Integer fragenIndex = Integer.valueOf(befragungFragePair.split(";")[1]);
 		umfrage.getBefragungen().get(befragungIndex.intValue())
 				.getFragen().remove(fragenIndex.intValue());
+
+		addCommonAttributes(model, umfrage);
 		return "umfragen/umfrage-form";
 	}
 
 	@RequestMapping(params = { "addAntwort" })
-	public String addAntwort(@ModelAttribute("umfrage") EditUmfrageDto umfrage, HttpServletRequest req) {
+	public String addAntwort(@ModelAttribute("umfrage") EditUmfrageDto umfrage, HttpServletRequest req, Model model) {
 		String befragungFragePair = req.getParameter("addAntwort");
 		Integer befragungIndex = Integer.valueOf(befragungFragePair.split(";")[0]);
 		Integer fragenIndex = Integer.valueOf(befragungFragePair.split(";")[1]);
 		umfrage.getBefragungen().get(befragungIndex.intValue())
 				.getFragen().get(fragenIndex.intValue())
 				.getAntworten().add("");
+
+		addCommonAttributes(model, umfrage);
 		return "umfragen/umfrage-form";
 	}
 
 	@RequestMapping(params = { "removeAntwort" })
-	public String removeAntwort(@ModelAttribute("umfrage") EditUmfrageDto umfrage, HttpServletRequest req) {
+	public String removeAntwort(@ModelAttribute("umfrage") EditUmfrageDto umfrage, HttpServletRequest req,
+			Model model) {
 		String befragungFragePair = req.getParameter("removeAntwort");
 		Integer befragungIndex = Integer.valueOf(befragungFragePair.split(";")[0]);
 		Integer fragenIndex = Integer.valueOf(befragungFragePair.split(";")[1]);
@@ -115,7 +126,13 @@ public class EditUmfrageController {
 		umfrage.getBefragungen().get(befragungIndex.intValue())
 				.getFragen().get(fragenIndex.intValue())
 				.getAntworten().remove(antwortIndex.intValue());
+
+		addCommonAttributes(model, umfrage);
 		return "umfragen/umfrage-form";
+	}
+
+	private void addCommonAttributes(Model model, EditUmfrageDto dto) {
+		model.addAttribute("formPostUrl", "/umfragen/" + dto.getId() + "/edit");
 	}
 
 }

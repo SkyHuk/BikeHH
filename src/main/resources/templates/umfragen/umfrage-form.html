@@ -7,7 +7,7 @@
 <body layout:fragment="content">
 	<form method="POST" th:action="@{${formPostUrl}}"
 		th:object="${umfrage}">
-		<input type="hidden" th:if="${umfrageId}" th:field="*{id}">
+		<input type="hidden" th:if="${umfrage.id}" th:field="*{id}">
 
 		<div class="card w-80">
 			<div class="card-body">

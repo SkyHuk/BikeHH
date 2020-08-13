@@ -44,15 +44,6 @@ public class Frage {
 	 */
 	private boolean hatFreitextAntwort;
 
-	public void merge(Frage frage) {
-		if (frage.getId() != null) {
-			id = frage.getId();
-		}
-		text = frage.getText();
-		antworten = frage.getAntworten();
-		bedingungen = frage.getBedingungen();
-	}
-
 	public Long getId() {
 		return id;
 	}
@@ -99,6 +90,19 @@ public class Frage {
 
 	public void setHatFreitextAntwort(boolean hatFreitextAntwort) {
 		this.hatFreitextAntwort = hatFreitextAntwort;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == null) {
+			return false;
+		}
+
+		if (!o.getClass().equals(Frage.class)) {
+			return false;
+		}
+		Frage that = (Frage) o;
+		return this.getId().equals(that.getId()) && this.getText().equals(that.getText());
 	}
 
 }

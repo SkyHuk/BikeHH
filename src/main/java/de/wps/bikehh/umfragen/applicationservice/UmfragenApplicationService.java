@@ -71,8 +71,40 @@ public class UmfragenApplicationService {
 	}
 
 	public EditUmfrageDto getUmfrageForEdit(long umfragenId) {
-		// return EditUmfrageDto.from(umfragenService.getById(umfragenId));
-		return null;
+		Umfrage umfrage = umfragenService.getById(umfragenId);
+		EditUmfrageDto dto = new EditUmfrageDto();
+
+		dto.setId(umfrage.getId());
+		dto.setTitel(umfrage.getTitel());
+		dto.setStartDatum(umfrage.getStartDatum());
+		dto.setEndDatum(umfrage.getEndDatum());
+		dto.setIstMehrfachBeantwortbar(umfrage.getIstMehrfachBeantwortbar());
+		dto.setKategorie(umfrage.getKategorie());
+
+		List<EditBefragungDto> befragungen = new ArrayList<>();
+		for (Befragung befragung : umfrage.getBefragungen()) {
+			EditBefragungDto befragungDto = new EditBefragungDto();
+			befragungDto.setBefragungId(befragung.getId());
+			befragungDto.setLaengengrad(befragung.getLaengengrad());
+			befragungDto.setBreitengrad(befragung.getBreitengrad());
+			befragungDto.setFahrtrichtung(befragung.getFahrtrichtung());
+
+			List<FrageDto> fragen = new ArrayList<>();
+			for (Frage frage : befragung.getFragen()) {
+				FrageDto frageDto = new FrageDto();
+				frageDto.setText(frage.getText());
+				frageDto.setAntworten(frage.getAntworten());
+				frageDto.setHatFreitextAntwort(frage.getHatFreitextAntwort());
+
+				fragen.add(frageDto);
+			}
+			befragungDto.setFragen(fragen);
+
+			befragungen.add(befragungDto);
+		}
+		dto.setBefragungen(befragungen);
+
+		return dto;
 	}
 
 	public List<ViewUmfrageDto> getAlleUmfragenFuerKarte() {
@@ -138,8 +170,35 @@ public class UmfragenApplicationService {
 
 	public long saveEditedUmfrage(EditUmfrageDto dto) {
 		Umfrage umfrage = umfragenService.getById(dto.getId());
-		// fillUmfrageFromDto(umfrage, dto);
 
+		umfrage.setTitel(dto.getTitel());
+		umfrage.setStartDatum(dto.getStartDatum());
+		umfrage.setEndDatum(dto.getEndDatum());
+		umfrage.setIstMehrfachBeantwortbar(dto.getIstMehrfachBeantwortbar());
+		umfrage.setKategorie(dto.getKategorie());
+
+		List<Befragung> befragungen = umfrage.getBefragungen();
+		befragungen.clear();
+		for (EditBefragungDto befragungDto : dto.getBefragungen()) {
+			Befragung befragung = new Befragung();
+			befragung.setUmfrage(umfrage);
+			befragung.setLaengengrad(befragungDto.getLaengengrad());
+			befragung.setBreitengrad(befragungDto.getBreitengrad());
+			befragung.setFahrtrichtung(befragungDto.getFahrtrichtung());
+			befragung.setErsteller(umfrage.getErsteller());
+
+			List<Frage> fragen = new ArrayList<>();
+			for (FrageDto frageDto : befragungDto.getFragen()) {
+				Frage frage = new Frage();
+				frage.setBefragung(befragung);
+				frage.setText(frageDto.getText());
+				frage.setAntworten(frageDto.getAntworten());
+
+				fragen.add(frage);
+			}
+			befragung.setFragen(fragen);
+			befragungen.add(befragung);
+		}
 		umfrage.setUpdatedAt(LocalDate.now());
 
 		Umfrage savedUmfrage = umfragenService.save(umfrage);
