@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
-import de.wps.bikehh.umfragen.material.Frage;
+import de.wps.bikehh.befragungen.material.Frage;
 
 public class FrageDto {
 

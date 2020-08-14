@@ -1,4 +1,4 @@
-package de.wps.bikehh.umfragen.material;
+package de.wps.bikehh.befragungen.material;
 
 import java.util.ArrayList;
 import java.util.List;

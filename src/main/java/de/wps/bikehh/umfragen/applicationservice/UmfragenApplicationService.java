@@ -7,6 +7,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import de.wps.bikehh.befragungen.material.Befragung;
+import de.wps.bikehh.befragungen.material.Frage;
 import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.umfragen.dto.EditBefragungDto;
 import de.wps.bikehh.umfragen.dto.EditUmfrageDto;
@@ -14,8 +16,6 @@ import de.wps.bikehh.umfragen.dto.FrageDto;
 import de.wps.bikehh.umfragen.dto.NewUmfrageDto;
 import de.wps.bikehh.umfragen.dto.UmfragenListeDto;
 import de.wps.bikehh.umfragen.dto.ViewUmfrageDto;
-import de.wps.bikehh.umfragen.material.Befragung;
-import de.wps.bikehh.umfragen.material.Frage;
 import de.wps.bikehh.umfragen.material.Umfrage;
 import de.wps.bikehh.umfragen.service.UmfragenService;
 

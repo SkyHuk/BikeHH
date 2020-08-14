@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import de.wps.bikehh.befragungen.material.Befragung;
 import de.wps.bikehh.benutzerverwaltung.material.User;
 
 /**

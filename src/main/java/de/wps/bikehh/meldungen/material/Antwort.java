@@ -6,7 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
-import de.wps.bikehh.umfragen.material.Frage;
+import de.wps.bikehh.befragungen.material.Frage;
 
 /**
  * Diese Klasse ist eine Antwort auf eine Umfrage, die automatisch aus einer

@@ -1,4 +1,4 @@
-package de.wps.bikehh.umfragen.material;
+package de.wps.bikehh.befragungen.material;
 
 import java.util.List;
 
@@ -11,6 +11,7 @@ import javax.persistence.OneToMany;
 
 import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.meldungen.material.Meldung;
+import de.wps.bikehh.umfragen.material.Umfrage;
 
 @Entity
 public class Befragung {
