@@ -3,7 +3,6 @@ package de.wps.bikehh.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -32,18 +31,20 @@ public class SecurityConfig {
 
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
-			http.antMatcher("/api/**").cors().and().csrf().disable().authorizeRequests().anyRequest().authenticated()
-					.and().httpBasic().authenticationEntryPoint(new OAuthEntryPoint()).and()
-					.addFilterBefore(new OAuthFilter(), BasicAuthenticationFilter.class).sessionManagement()
+			http.antMatcher("/api/**")
+					.cors().and().csrf().disable()
+					.authorizeRequests().anyRequest().authenticated()
+					.and()
+					.httpBasic().authenticationEntryPoint(new OAuthEntryPoint())
+					.and()
+					.addFilterBefore(new OAuthFilter(), BasicAuthenticationFilter.class)
+					.sessionManagement()
 					.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		}
 
 		@Override
 		public void configure(WebSecurity web) throws Exception {
-			web.ignoring()
-					.antMatchers(HttpMethod.POST, "/api/user", "/api/auth", "/umfrage-erstellen", "/meldung-erstellen")
-					.antMatchers("/api/password", "api/verify").antMatchers(HttpMethod.DELETE, "/umfragen/delete/*")
-					.antMatchers(HttpMethod.PATCH, "/umfragen/disable/*", "/umfrage-erstellen");
+			web.ignoring().antMatchers("api/**");
 		}
 
 		@Override
@@ -66,11 +67,23 @@ public class SecurityConfig {
 
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
-			String[] publicUrls = { "/", "/logout", "/img/**", "/generated/css/*", "/generated/js/*",
-					"/generated/webfonts/*", "/h2/**" };
+			String[] publicUrls = {
+					"/",
+					"/logout",
+					"/img/**",
+					"/generated/css/*",
+					"/generated/js/*",
+					"/generated/webfonts/*",
+					"/h2/**"
+			};
 
-			http.authorizeRequests().antMatchers(publicUrls).permitAll().anyRequest().authenticated().and().formLogin()
-					.loginPage("/login").permitAll().and().logout().logoutSuccessUrl("/login?logout")
+			http.authorizeRequests().antMatchers(publicUrls).permitAll()
+					.anyRequest().authenticated()
+					.and()
+					.formLogin()
+					.loginPage("/login").permitAll()
+					.and()
+					.logout().logoutSuccessUrl("/login?logout")
 					.logoutUrl("/logout").logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
 					.invalidateHttpSession(true).deleteCookies("JSESSIONID").permitAll();
 
