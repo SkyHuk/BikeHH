@@ -133,6 +133,7 @@ public class EditUmfrageController {
 
 	private void addCommonAttributes(Model model, EditUmfrageDto dto) {
 		model.addAttribute("formPostUrl", "/umfragen/" + dto.getId() + "/edit");
+		model.addAttribute("umfrageId", dto.getId());
 	}
 
 }
