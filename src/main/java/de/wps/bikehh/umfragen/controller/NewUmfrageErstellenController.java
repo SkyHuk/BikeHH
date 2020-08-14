@@ -120,7 +120,7 @@ public class NewUmfrageErstellenController {
 		// TODO: Fragen dürfen keine Semikolons enthalten und als konvertierte
 		// Liste max 255 Zeichen haben
 
-		long umfrageId = umfragenAppService.addNewUmfrage(user, umfrageDto);
+		long umfrageId = umfragenAppService.saveNewUmfrage(user, umfrageDto);
 		return "redirect:/umfragen/" + umfrageId + "?saved";
 	}
 

@@ -1,5 +1,6 @@
 package de.wps.bikehh.befragungen.material;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -31,6 +32,9 @@ public class Befragung {
 	private double breitengrad;
 
 	private double fahrtrichtung;
+
+	private LocalDate startDatum;
+	private LocalDate endDatum;
 
 	/**
 	 * Die Ansammlung von Fragen für diese Befragung.
@@ -145,6 +149,22 @@ public class Befragung {
 		Befragung that = (Befragung) o;
 		return this.getId().equals(that.getId()) && this.getLaengengrad() == that.getLaengengrad()
 				&& this.getBreitengrad() == that.getBreitengrad();
+	}
+
+	public LocalDate getStartDatum() {
+		return startDatum;
+	}
+
+	public void setStartDatum(LocalDate startDatum) {
+		this.startDatum = startDatum;
+	}
+
+	public LocalDate getEndDatum() {
+		return endDatum;
+	}
+
+	public void setEndDatum(LocalDate endDatum) {
+		this.endDatum = endDatum;
 	}
 
 }
