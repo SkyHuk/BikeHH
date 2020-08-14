@@ -11,11 +11,6 @@
     "popper.js": "^1.15.0"
   },
   "devDependencies": {
-    "css-loader": "^3.6.0",
-    "file-loader": "^6.0.0",
-    "leaflet": "^1.6.0",
-    "leaflet-polylinedecorator": "^1.6.0",
-    "vue": "^2.6.11",
     "webpack": "^4.36.1",
     "webpack-cli": "^3.3.6"
   }
