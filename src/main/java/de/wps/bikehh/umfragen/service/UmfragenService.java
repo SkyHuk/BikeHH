@@ -87,18 +87,6 @@ public class UmfragenService {
 		return umfragen;
 	}
 
-	public List<Umfrage> getUmfragenImUmkreis(double laengengrad, double breitengrad) {
-		List<Umfrage> umfragen = new ArrayList<>();
-		// TODO: Umfragen in einem bestimmten Radius um gegebener Position
-		// raussuchen und bereitstellen.
-
-		return umfragen;
-	}
-
-	public void beantworteUmfrage() {
-		// TODO: Umfragen beantworten
-	}
-
 	public void enableUmfrage(long id) {
 		Umfrage umfrage = getById(id);
 		umfrage.setIstDisabled(false);
