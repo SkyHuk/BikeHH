@@ -20,7 +20,7 @@ public class Frage {
 
 	@Id
 	@GeneratedValue
-	private Long id;
+	private long id;
 
 	@ManyToOne
 	private Befragung befragung;
@@ -44,11 +44,11 @@ public class Frage {
 	 */
 	private boolean hatFreitextAntwort;
 
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -102,7 +102,7 @@ public class Frage {
 			return false;
 		}
 		Frage that = (Frage) o;
-		return this.getId().equals(that.getId()) && this.getText().equals(that.getText());
+		return this.getId() == that.getId() && this.getText().equals(that.getText());
 	}
 
 }

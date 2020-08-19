@@ -19,7 +19,7 @@ public class Befragung {
 
 	@Id
 	@GeneratedValue
-	private Long id;
+	private long id;
 
 	/**
 	 * longitude in EPSG:3857
@@ -57,11 +57,11 @@ public class Befragung {
 
 	private boolean isDisabled;
 
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -147,7 +147,7 @@ public class Befragung {
 			return false;
 		}
 		Befragung that = (Befragung) o;
-		return this.getId().equals(that.getId()) && this.getLaengengrad() == that.getLaengengrad()
+		return this.getId() == that.getId() && this.getLaengengrad() == that.getLaengengrad()
 				&& this.getBreitengrad() == that.getBreitengrad();
 	}
 

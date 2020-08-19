@@ -3,7 +3,6 @@ package de.wps.bikehh.befragungen.api.applicationservice;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,14 +34,12 @@ public class BefragungenRestApplicationService {
 	}
 
 	public BefragungDetailRestDto getBefragungsDetails(long befragungsId) {
-		Optional<Befragung> optBefragung = befragungenService.getBefragung(befragungsId);
-
-		return optBefragung.isPresent() ? createBefragungDetailRestDtoFromBefragung(optBefragung.get()) : null;
+		return createBefragungDetailRestDtoFromBefragung(befragungenService.getBefragung(befragungsId));
 	}
 
 	private BefragungPositionRestDto createBefragungPositionRestDtoFromBefragung(Befragung befragung) {
 		BefragungPositionRestDto dto = new BefragungPositionRestDto();
-		dto.setId(befragung.getId().longValue());
+		dto.setId(befragung.getId());
 		dto.setLaengengrad(befragung.getLaengengrad());
 		dto.setBreitengrad(befragung.getBreitengrad());
 		return dto;
@@ -50,12 +47,12 @@ public class BefragungenRestApplicationService {
 
 	private BefragungDetailRestDto createBefragungDetailRestDtoFromBefragung(Befragung befragung) {
 		BefragungDetailRestDto dto = new BefragungDetailRestDto();
-		dto.setId(befragung.getId().longValue());
+		dto.setId(befragung.getId());
 
 		List<FrageRestDto> fragen = new ArrayList<>();
 		for (Frage frage : befragung.getFragen()) {
 			FrageRestDto frageDto = new FrageRestDto();
-			frageDto.setId(frage.getId().longValue());
+			frageDto.setId(frage.getId());
 			frageDto.setText(frage.getText());
 			frageDto.setHatFreitextAntwort(frage.getHatFreitextAntwort());
 			frageDto.setAntworten(frage.getAntworten());

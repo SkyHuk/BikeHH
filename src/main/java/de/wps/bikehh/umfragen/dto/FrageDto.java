@@ -5,9 +5,9 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
-import de.wps.bikehh.befragungen.material.Frage;
-
 public class FrageDto {
+
+	private long id;
 
 	@NotNull
 	private String text;
@@ -18,16 +18,6 @@ public class FrageDto {
 
 	public FrageDto() {
 		antworten = new ArrayList<>();
-		antworten.add("Ja");
-		antworten.add("Nein");
-	}
-
-	public static FrageDto from(Frage frage) {
-		FrageDto dto = new FrageDto();
-		dto.setText(frage.getText());
-		dto.setHatFreitextAntwort(frage.getHatFreitextAntwort());
-		dto.setAntworten(frage.getAntworten());
-		return dto;
 	}
 
 	public String getText() {
@@ -52,6 +42,14 @@ public class FrageDto {
 
 	public void setHatFreitextAntwort(boolean hatFreitextAntwort) {
 		this.hatFreitextAntwort = hatFreitextAntwort;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
 	}
 
 }

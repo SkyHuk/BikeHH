@@ -92,6 +92,7 @@ public class UmfragenApplicationService {
 			List<FrageDto> fragen = new ArrayList<>();
 			for (Frage frage : befragung.getFragen()) {
 				FrageDto frageDto = new FrageDto();
+				frageDto.setId(frage.getId());
 				frageDto.setText(frage.getText());
 				frageDto.setAntworten(frage.getAntworten());
 				frageDto.setHatFreitextAntwort(frage.getHatFreitextAntwort());
@@ -130,7 +131,7 @@ public class UmfragenApplicationService {
 		return dtoListe;
 	}
 
-	public Long saveNewUmfrage(User ersteller, NewUmfrageDto dto) {
+	public long saveNewUmfrage(User ersteller, NewUmfrageDto dto) {
 		Umfrage umfrage = new Umfrage();
 		umfrage.setTitel(dto.getTitel());
 		umfrage.setStartDatum(dto.getStartDatum());
@@ -183,6 +184,7 @@ public class UmfragenApplicationService {
 		befragungen.clear();
 		for (EditBefragungDto befragungDto : dto.getBefragungen()) {
 			Befragung befragung = new Befragung();
+			befragung.setId(dto.getId());
 			befragung.setUmfrage(umfrage);
 			befragung.setLaengengrad(befragungDto.getLaengengrad());
 			befragung.setBreitengrad(befragungDto.getBreitengrad());
@@ -194,6 +196,7 @@ public class UmfragenApplicationService {
 			List<Frage> fragen = new ArrayList<>();
 			for (FrageDto frageDto : befragungDto.getFragen()) {
 				Frage frage = new Frage();
+				frage.setId(frageDto.getId());
 				frage.setBefragung(befragung);
 				frage.setText(frageDto.getText());
 				frage.setAntworten(frageDto.getAntworten());

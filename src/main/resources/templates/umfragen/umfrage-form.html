@@ -76,6 +76,7 @@
 
 						<div class="border rounded px-2 mb-2"
 							th:each="befragung, bStat : *{befragungen}">
+							<input type="hidden" th:field="*{befragungen[__${bStat.index}__].befragungId}">
 							<!-- Ort der Befragung -->
 							<input type="hidden" th:id="'longitude_' + ${bStat.index}"
 								th:field="*{befragungen[__${bStat.index}__].laengengrad}">
@@ -103,6 +104,7 @@
 							<!-- Fragen -->
 							<div class="border-bottom p-2"
 								th:each="frage, fStat : ${befragung.fragen}">
+								<input type="hidden" th:field="*{befragungen[__${bStat.index}__].fragen[__${fStat.index}__].id}">
 								<div class="py-1">
 									<span>Frage </span><span th:text="${fStat.count}"></span>
 								</div>

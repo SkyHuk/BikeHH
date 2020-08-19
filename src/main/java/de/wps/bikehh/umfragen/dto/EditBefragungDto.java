@@ -7,7 +7,7 @@ import javax.validation.constraints.NotEmpty;
 
 public class EditBefragungDto {
 
-	private Long befragungId;
+	private long befragungId;
 
 	/**
 	 * longitude in EPSG:3857
@@ -28,11 +28,11 @@ public class EditBefragungDto {
 		fragen = new ArrayList<>();
 	}
 
-	public Long getBefragungId() {
+	public long getBefragungId() {
 		return befragungId;
 	}
 
-	public void setBefragungId(Long befragungId) {
+	public void setBefragungId(long befragungId) {
 		this.befragungId = befragungId;
 	}
 
