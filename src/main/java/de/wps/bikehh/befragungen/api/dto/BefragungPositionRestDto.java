@@ -1,8 +1,6 @@
 package de.wps.bikehh.befragungen.api.dto;
 
-import java.util.List;
-
-public class BefragungRestDto {
+public class BefragungPositionRestDto {
 
 	private long id;
 
@@ -18,8 +16,6 @@ public class BefragungRestDto {
 
 	// TODO: Fahrtrichtung
 	// private double fahrtrichtung;
-
-	private List<FrageRestDto> fragen;
 
 	public long getId() {
 		return id;
@@ -43,14 +39,6 @@ public class BefragungRestDto {
 
 	public void setBreitengrad(double breitengrad) {
 		this.breitengrad = breitengrad;
-	}
-
-	public List<FrageRestDto> getFragen() {
-		return fragen;
-	}
-
-	public void setFragen(List<FrageRestDto> fragen) {
-		this.fragen = fragen;
 	}
 
 }

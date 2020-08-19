@@ -3,12 +3,14 @@ package de.wps.bikehh.befragungen.api.applicationservice;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import de.wps.bikehh.befragungen.api.dto.BefragungRestDto;
+import de.wps.bikehh.befragungen.api.dto.BefragungDetailRestDto;
+import de.wps.bikehh.befragungen.api.dto.BefragungPositionRestDto;
 import de.wps.bikehh.befragungen.api.dto.FrageRestDto;
 import de.wps.bikehh.befragungen.material.Befragung;
 import de.wps.bikehh.befragungen.material.Frage;
@@ -24,19 +26,31 @@ public class BefragungenRestApplicationService {
 		this.befragungenService = service;
 	}
 
-	public List<BefragungRestDto> getAktuelleBefragungen(LocalDate currentDate) {
+	public List<BefragungPositionRestDto> getAktuellePositionenVonBefragungen(LocalDate currentDate) {
 		List<Befragung> befragungen = befragungenService.getAktuelleBefragungen(currentDate);
-		List<BefragungRestDto> dtoList = befragungen.stream()
-				.map(this::createBefragungRestDtoFromBefragung)
+		List<BefragungPositionRestDto> dtoList = befragungen.stream()
+				.map(this::createBefragungPositionRestDtoFromBefragung)
 				.collect(Collectors.toList());
 		return dtoList;
 	}
 
-	private BefragungRestDto createBefragungRestDtoFromBefragung(Befragung befragung) {
-		BefragungRestDto dto = new BefragungRestDto();
+	public BefragungDetailRestDto getBefragungsDetails(long befragungsId) {
+		Optional<Befragung> optBefragung = befragungenService.getBefragung(befragungsId);
+
+		return optBefragung.isPresent() ? createBefragungDetailRestDtoFromBefragung(optBefragung.get()) : null;
+	}
+
+	private BefragungPositionRestDto createBefragungPositionRestDtoFromBefragung(Befragung befragung) {
+		BefragungPositionRestDto dto = new BefragungPositionRestDto();
 		dto.setId(befragung.getId().longValue());
 		dto.setLaengengrad(befragung.getLaengengrad());
 		dto.setBreitengrad(befragung.getBreitengrad());
+		return dto;
+	}
+
+	private BefragungDetailRestDto createBefragungDetailRestDtoFromBefragung(Befragung befragung) {
+		BefragungDetailRestDto dto = new BefragungDetailRestDto();
+		dto.setId(befragung.getId().longValue());
 
 		List<FrageRestDto> fragen = new ArrayList<>();
 		for (Frage frage : befragung.getFragen()) {
@@ -48,7 +62,7 @@ public class BefragungenRestApplicationService {
 			fragen.add(frageDto);
 		}
 		dto.setFragen(fragen);
-
 		return dto;
 	}
+
 }
