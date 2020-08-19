@@ -5,65 +5,66 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import de.wps.bikehh.benutzerverwaltung.material.Rollen;
 import de.wps.bikehh.benutzerverwaltung.security.OAuthEntryPoint;
 import de.wps.bikehh.benutzerverwaltung.security.OAuthFilter;
 import de.wps.bikehh.benutzerverwaltung.security.OAuthProvider;
-import de.wps.bikehh.benutzerverwaltung.service.PasswordEncoderService;
 import de.wps.bikehh.benutzerverwaltung.service.UserDetailService;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig {
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-	@Order(1)
+	// Wieso weshalb warum:
+	// https://docs.spring.io/spring-security/site/docs/3.2.x/reference/htmlsingle/html5/#multiple-httpsecurity
+
+	@Autowired
+	private UserDetailService userDetailService;
+
+	@Autowired
+	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+		// Administrator beim Start neu hinzufügen.
+		// TODO: Für Produktivbetrieb löschen
+		userDetailService.createAdmin("admin@bikehh.de", "admin_pw");
+	}
+
 	@Configuration
-	public static class RestConfiguration extends WebSecurityConfigurerAdapter {
+	@Order(1)
+	public static class ApiWebSecurityConfigurationAdapter extends WebSecurityConfigurerAdapter {
 
 		@Autowired
-		OAuthProvider authProvider;
+		private OAuthProvider authProvider;
 
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
-			http.antMatcher("/api/auth/**")
-					.cors().and().csrf().disable()
-					.authorizeRequests().anyRequest().authenticated()
-					.and()
-					.httpBasic().authenticationEntryPoint(new OAuthEntryPoint())
-					.and()
+
+			http.antMatcher("/api/**")
+					.authenticationProvider(authProvider)
 					.addFilterBefore(new OAuthFilter(), BasicAuthenticationFilter.class)
+					.httpBasic()
+					.authenticationEntryPoint(new OAuthEntryPoint())
+					.and()
 					.sessionManagement()
 					.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		}
-
-		@Override
-		public void configure(WebSecurity web) throws Exception {
-			web.ignoring().antMatchers("api/**");
-		}
-
-		@Override
-		public void configure(AuthenticationManagerBuilder auth) throws Exception {
-			auth.authenticationProvider(authProvider);
-		}
 	}
 
-	@Order(2)
 	@Configuration
-	public static class WebConfiguration extends WebSecurityConfigurerAdapter {
+	@Order(2)
+	public static class FormLoginWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
 
 		@Autowired
-		UserDetailService userDetailService;
+		private PasswordEncoder passwordEncoder;
 
 		@Autowired
-		public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-			auth.userDetailsService(userDetailService).passwordEncoder(new PasswordEncoderService());
-		}
+		private UserDetailService userDetailService;
 
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
@@ -77,8 +78,9 @@ public class SecurityConfig {
 					"/h2/**"
 			};
 
-			http.authorizeRequests().antMatchers(publicUrls).permitAll()
-					.anyRequest().authenticated()
+			http.authorizeRequests()
+					.antMatchers(publicUrls).permitAll()
+					.anyRequest().hasAuthority(Rollen.ROLE_ADMIN)
 					.and()
 					.formLogin()
 					.loginPage("/login").permitAll()
@@ -90,5 +92,13 @@ public class SecurityConfig {
 			http.csrf().ignoringAntMatchers("/h2/**");
 			http.headers().frameOptions().sameOrigin();
 		}
+
+		@Override
+		public void configure(AuthenticationManagerBuilder auth) throws Exception {
+			auth
+					.userDetailsService(userDetailService)
+					.passwordEncoder(passwordEncoder);
+		}
 	}
+
 }

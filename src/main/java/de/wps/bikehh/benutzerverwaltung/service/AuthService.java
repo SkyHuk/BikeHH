@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import de.wps.bikehh.benutzerverwaltung.exception.ApiRequestException;
@@ -17,6 +18,9 @@ import de.wps.bikehh.benutzerverwaltung.util.Utils;
 
 @Service
 public class AuthService {
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	private SessionRepository _sessionRepository;
 	private UserAuthenticationRepository _userAuthenticationRepository;
@@ -33,8 +37,10 @@ public class AuthService {
 	 *
 	 * erstellt eine Session in der Datenbank
 	 *
-	 * @param email email des Users
-	 * @param password passwort des Users
+	 * @param email
+	 *            email des Users
+	 * @param password
+	 *            passwort des Users
 	 * @return eine gültige Session
 	 */
 	public Session loginUser(String email, String password) throws BadCredentialsException {
@@ -42,8 +48,7 @@ public class AuthService {
 			throw new ApiRequestException(ErrorCode.bad_credentials, HttpStatus.BAD_REQUEST);
 		}
 
-		PasswordEncoderService hashService = new PasswordEncoderService();
-		String hashedPassword = hashService.encodePassword(password);
+		String hashedPassword = passwordEncoder.encode(password);
 
 		User user = _userAuthenticationRepository.findByEmailAddress(email);
 		if (user.getIsLocked()) {
@@ -65,7 +70,8 @@ public class AuthService {
 	 *
 	 * löscht die Session in der Datenbank
 	 *
-	 * @param session die aktuelle session des User
+	 * @param session
+	 *            die aktuelle session des User
 	 */
 	public void logoutUser(Session session) {
 		_sessionRepository.delete(session);
@@ -82,7 +88,8 @@ public class AuthService {
 	 * gibt eine Session anhand ihres Tokens zurück
 	 *
 	 *
-	 * @param token session-token
+	 * @param token
+	 *            session-token
 	 * @return Session
 	 */
 	public Session getSessionByToken(String token) {

@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import de.wps.bikehh.benutzerverwaltung.dto.request.UpdateUserDetailsRequestModel;
@@ -21,6 +22,9 @@ import de.wps.bikehh.benutzerverwaltung.repository.UserAuthenticationRepository;
 
 @Service
 public class UserDetailService implements UserDetailsService {
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	private UserAuthenticationRepository _userAuthenticationRepository;
 	private VerifyDetailService _verifyDetailService;
@@ -40,7 +44,8 @@ public class UserDetailService implements UserDetailsService {
 	/**
 	 * gibt den User mit der entsprechenden Email zurück
 	 *
-	 * @param email email des Users
+	 * @param email
+	 *            email des Users
 	 * @return User
 	 */
 	@Override
@@ -76,8 +81,10 @@ public class UserDetailService implements UserDetailsService {
 	/**
 	 * erstellt einen User
 	 *
-	 * @param email email des Users
-	 * @param password passwort des Users
+	 * @param email
+	 *            email des Users
+	 * @param password
+	 *            passwort des Users
 	 */
 	public void createUser(String email, String password) throws ApiRequestException {
 		createUserEntity(email, password, Rollen.ROLE_USER);
@@ -86,8 +93,10 @@ public class UserDetailService implements UserDetailsService {
 	/**
 	 * erstellt einen Admin
 	 *
-	 * @param email email des Admins
-	 * @param password passwort des Admins
+	 * @param email
+	 *            email des Admins
+	 * @param password
+	 *            passwort des Admins
 	 */
 	public void createAdmin(String email, String password) {
 		createUserEntity(email, password, Rollen.ROLE_ADMIN);
@@ -101,8 +110,7 @@ public class UserDetailService implements UserDetailsService {
 		User user = new User(email, password);
 		user.setRole(role);
 
-		PasswordEncoderService encoder = new PasswordEncoderService();
-		user.setEncryptedPassword(encoder.encodePassword(password));
+		user.setEncryptedPassword(passwordEncoder.encode(password));
 
 		_userAuthenticationRepository.save(user);
 		_verifyDetailService.requestVerificationMail(user.getEmailAddress());
@@ -111,8 +119,10 @@ public class UserDetailService implements UserDetailsService {
 	/**
 	 * aktualisiert einen User
 	 *
-	 * @param user user
-	 * @param userUpdate aktualisierter User
+	 * @param user
+	 *            user
+	 * @param userUpdate
+	 *            aktualisierter User
 	 */
 	public void updateUser(User user, UpdateUserDetailsRequestModel userUpdate) throws ApiRequestException {
 		if (user.getIsLocked()) {
@@ -127,7 +137,8 @@ public class UserDetailService implements UserDetailsService {
 	/**
 	 * löscht einen User
 	 *
-	 * @param user User
+	 * @param user
+	 *            User
 	 */
 	public void deleteUser(User user) {
 		Long userId = user.getId();
@@ -142,17 +153,19 @@ public class UserDetailService implements UserDetailsService {
 	/**
 	 * aktualisiert Passwort eines Users
 	 *
-	 * @param user User
-	 * @param passwordOld alte Passwort
-	 * @param passwordNew neue Passwort
+	 * @param user
+	 *            User
+	 * @param passwordOld
+	 *            alte Passwort
+	 * @param passwordNew
+	 *            neue Passwort
 	 */
 	public void updatePassword(User user, String passwordOld, String passwordNew) throws ApiRequestException {
 
-		PasswordEncoderService encoder = new PasswordEncoderService();
-		if (!encoder.matches(passwordOld, user.getEncryptedPassword())) {
+		if (!passwordEncoder.matches(passwordOld, user.getEncryptedPassword())) {
 			throw new ApiRequestException(ErrorCode.bad_credentials, HttpStatus.BAD_REQUEST);
 		}
-		user.setEncryptedPassword(encoder.encodePassword(passwordNew));
+		user.setEncryptedPassword(passwordEncoder.encode(passwordNew));
 		_userAuthenticationRepository.save(user);
 	}
 
@@ -176,7 +189,8 @@ public class UserDetailService implements UserDetailsService {
 	/**
 	 * gibt einen User zurück anhand seiner id
 	 *
-	 * @param id id des Users
+	 * @param id
+	 *            id des Users
 	 * @return User
 	 */
 	public User getUserById(Long id) {
@@ -191,7 +205,8 @@ public class UserDetailService implements UserDetailsService {
 	/**
 	 * löscht einen User anhand seiner id
 	 *
-	 * @param id id des Users
+	 * @param id
+	 *            id des Users
 	 */
 	public void deleteUserById(Long id) {
 		if (!_userAuthenticationRepository.existsById(id)) {
@@ -204,8 +219,10 @@ public class UserDetailService implements UserDetailsService {
 	/**
 	 * updated einen User anhand seiner id
 	 *
-	 * @param id id des Users
-	 * @param userModel aktualisierter User
+	 * @param id
+	 *            id des Users
+	 * @param userModel
+	 *            aktualisierter User
 	 * @return User
 	 */
 	public User updateUserById(Long id, UpdateUsersDetailsRequestModel userModel) {

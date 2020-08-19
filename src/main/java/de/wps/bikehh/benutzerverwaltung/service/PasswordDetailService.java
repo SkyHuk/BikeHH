@@ -9,6 +9,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import de.wps.bikehh.benutzerverwaltung.exception.ApiRequestException;
@@ -22,6 +23,9 @@ import de.wps.bikehh.benutzerverwaltung.util.Utils;
 
 @Service
 public class PasswordDetailService {
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	private PasswordAuthenticationRepository _passwordAuthenticationRepository;
 	private UserAuthenticationRepository _userAuthenticationRepository;
@@ -39,7 +43,8 @@ public class PasswordDetailService {
 	 * verschickt eine passwort-reset mail
 	 *
 	 *
-	 * @param email email des Users
+	 * @param email
+	 *            email des Users
 	 */
 	public void requestResetMail(String email) throws ApiRequestException {
 		if (!_userAuthenticationRepository.existsByEmailAddress(email)) {
@@ -62,7 +67,8 @@ public class PasswordDetailService {
 		// Send mail
 		Mail mail = new Mail(user.getEmailAddress(), "Reset password");
 
-		// @TODO set frontend link. Add config file with host depending on environment
+		// @TODO set frontend link. Add config file with host depending on
+		// environment
 		String redirectLink = String.format("http://localhost:8080/api/password?token=%s", token);
 
 		Map<String, String> model = new HashMap<>();
@@ -77,8 +83,10 @@ public class PasswordDetailService {
 	/**
 	 * setzt ein neues Passwort
 	 *
-	 * @param token token, welcher den User identifiziert
-	 * @param password passwort des Users
+	 * @param token
+	 *            token, welcher den User identifiziert
+	 * @param password
+	 *            passwort des Users
 	 */
 	public void resetPassword(String password, String token) throws ApiRequestException {
 		Reset reset = _passwordAuthenticationRepository.findByToken(token).orElse(null);
@@ -91,8 +99,7 @@ public class PasswordDetailService {
 			throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
 		}
 
-		PasswordEncoderService _encoder = new PasswordEncoderService();
-		String encodedPassword = _encoder.encode(password);
+		String encodedPassword = passwordEncoder.encode(password);
 		user.setEncryptedPassword(encodedPassword);
 
 		// Delete reset token and set new password
@@ -103,7 +110,8 @@ public class PasswordDetailService {
 	/**
 	 * löscht einen reset-token
 	 *
-	 * @param userId id des Users
+	 * @param userId
+	 *            id des Users
 	 */
 	public void deleteResetToken(Long userId) {
 		Reset reset = _passwordAuthenticationRepository.findByUserId(userId).orElse(null);

@@ -41,23 +41,3 @@ ALTER TABLE `Reset` ADD CONSTRAINT `fk_reset_userId` FOREIGN KEY (`user_Id`) REF
 ALTER TABLE `Session` ADD CONSTRAINT `fk_session_userId` FOREIGN KEY (`user_Id`) REFERENCES `User` (`id`);
 ALTER TABLE `Verification` ADD CONSTRAINT `fk_verification_userId` FOREIGN KEY (`user_Id`) REFERENCES `User` (`id`);
 
-INSERT INTO `User` (`email_address`, `encrypted_password`, `role`) VALUES
-('admin@chef.lol', 'sha: uwXzywW1mNUAWQZIaRA3cvRyyQQ=', 'administrator');
-
-/*test_pw*/
-INSERT INTO `User` (`email_address`, `encrypted_password`, `role`) VALUES
-('test@mail.com', 'sha: 2YbXcpo8qT6PuNnA8ZYlZK7Z+Ck=', 'user');
-
-/*test_pw*/
-INSERT INTO `User` (`email_address`, `encrypted_password`, `role`) VALUES
-('test2@mail.com', 'sha: 2YbXcpo8qT6PuNnA8ZYlZK7Z+Ck=', 'user');
-
-INSERT INTO `Session` (`user_Id`, `token`) VALUES
-(1, '12345');
-
-INSERT INTO `Session` (`user_Id`, `token`) VALUES
-(2, '123');
-
-INSERT INTO `Session` (`user_Id`, `token`) VALUES
-(2, '1234');
-
