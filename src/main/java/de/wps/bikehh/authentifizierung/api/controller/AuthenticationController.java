@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import de.wps.bikehh.authentifizierung.api.dto.AuthTokenDto;
 import de.wps.bikehh.authentifizierung.api.dto.LoginDto;
+import de.wps.bikehh.authentifizierung.material.Session;
 import de.wps.bikehh.authentifizierung.security.OAuthToken;
 import de.wps.bikehh.authentifizierung.service.AuthenticationService;
-import de.wps.bikehh.benutzerverwaltung.material.Session;
 
 @RestController
 @RequestMapping("/api/auth")

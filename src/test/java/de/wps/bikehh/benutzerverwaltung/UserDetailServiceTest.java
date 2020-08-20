@@ -21,7 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import de.wps.bikehh.authentifizierung.service.AuthenticationService;
 import de.wps.bikehh.benutzerverwaltung.material.Rollen;
 import de.wps.bikehh.benutzerverwaltung.material.User;
-import de.wps.bikehh.benutzerverwaltung.repository.UserAuthenticationRepository;
+import de.wps.bikehh.benutzerverwaltung.repository.UserRepository;
 import de.wps.bikehh.benutzerverwaltung.service.UserDetailService;
 import de.wps.bikehh.passwortzuruecksetzung.service.PasswordResetService;
 import de.wps.bikehh.verifizierung.service.VerificationService;
@@ -37,7 +37,7 @@ public class UserDetailServiceTest {
 	PasswordResetService passwordDetailService;
 
 	@Mock
-	private UserAuthenticationRepository userRepository;
+	private UserRepository userRepository;
 	@InjectMocks
 	private UserDetailService userDetailService;
 

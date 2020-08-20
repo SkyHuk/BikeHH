@@ -1,7 +1,8 @@
-package de.wps.bikehh.benutzerverwaltung.repository;
+package de.wps.bikehh.authentifizierung.repository;
 
-import de.wps.bikehh.benutzerverwaltung.material.Session;
 import org.springframework.data.repository.CrudRepository;
+
+import de.wps.bikehh.authentifizierung.material.Session;
 
 import java.util.List;
 import java.util.Optional;

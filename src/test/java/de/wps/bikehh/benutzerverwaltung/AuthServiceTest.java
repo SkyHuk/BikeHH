@@ -20,11 +20,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import de.wps.bikehh.authentifizierung.material.Session;
+import de.wps.bikehh.authentifizierung.repository.SessionRepository;
 import de.wps.bikehh.authentifizierung.service.AuthenticationService;
-import de.wps.bikehh.benutzerverwaltung.material.Session;
 import de.wps.bikehh.benutzerverwaltung.material.User;
-import de.wps.bikehh.benutzerverwaltung.repository.SessionRepository;
-import de.wps.bikehh.benutzerverwaltung.repository.UserAuthenticationRepository;
+import de.wps.bikehh.benutzerverwaltung.repository.UserRepository;
 import de.wps.bikehh.framework.api.exception.ApiRequestException;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -34,7 +34,7 @@ public class AuthServiceTest {
 	SessionRepository _sessionRepository;
 
 	@Mock
-	UserAuthenticationRepository _userAuthenticationRepository;
+	UserRepository _userAuthenticationRepository;
 
 	@InjectMocks
 	AuthenticationService _authService;

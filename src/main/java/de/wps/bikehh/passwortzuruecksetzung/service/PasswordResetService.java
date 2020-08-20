@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 import de.wps.bikehh.benutzerverwaltung.material.Mail;
 import de.wps.bikehh.benutzerverwaltung.material.User;
-import de.wps.bikehh.benutzerverwaltung.repository.UserAuthenticationRepository;
+import de.wps.bikehh.benutzerverwaltung.repository.UserRepository;
 import de.wps.bikehh.benutzerverwaltung.service.SmtpService;
 import de.wps.bikehh.benutzerverwaltung.service.TokenService;
 import de.wps.bikehh.framework.api.exception.ApiRequestException;
@@ -29,14 +29,14 @@ public class PasswordResetService {
 	private PasswordEncoder passwordEncoder;
 
 	private PasswordResetRepository passwordResetRepository;
-	private UserAuthenticationRepository userRepository;
+	private UserRepository userRepository;
 	private SmtpService smtpService;
 	private TokenService tokenService;
 
 	@Autowired
 	public PasswordResetService(TokenService tokenService,
 			PasswordResetRepository passwordAuthenticationRepository,
-			UserAuthenticationRepository userAuthenticationRepository, SmtpService smtpService) {
+			UserRepository userAuthenticationRepository, SmtpService smtpService) {
 		this.passwordResetRepository = passwordAuthenticationRepository;
 		this.userRepository = userAuthenticationRepository;
 		this.smtpService = smtpService;

@@ -15,7 +15,7 @@ import de.wps.bikehh.authentifizierung.service.AuthenticationService;
 import de.wps.bikehh.benutzerverwaltung.material.BikehhUserDetails;
 import de.wps.bikehh.benutzerverwaltung.material.Rollen;
 import de.wps.bikehh.benutzerverwaltung.material.User;
-import de.wps.bikehh.benutzerverwaltung.repository.UserAuthenticationRepository;
+import de.wps.bikehh.benutzerverwaltung.repository.UserRepository;
 import de.wps.bikehh.framework.api.exception.ApiRequestException;
 import de.wps.bikehh.framework.api.exception.ErrorCode;
 import de.wps.bikehh.passwortzuruecksetzung.service.PasswordResetService;
@@ -27,13 +27,13 @@ public class UserDetailService implements UserDetailsService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-	private UserAuthenticationRepository _userAuthenticationRepository;
+	private UserRepository _userAuthenticationRepository;
 	private VerificationService _verifyDetailService;
 	private PasswordResetService _passwordDetailService;
 	private AuthenticationService _authService;
 
 	@Autowired
-	public UserDetailService(UserAuthenticationRepository userAuthenticationRepository,
+	public UserDetailService(UserRepository userAuthenticationRepository,
 			VerificationService verifyDetailService, PasswordResetService passwordDetailService,
 			AuthenticationService authService) {
 		this._userAuthenticationRepository = userAuthenticationRepository;

@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 import de.wps.bikehh.benutzerverwaltung.material.Mail;
 import de.wps.bikehh.benutzerverwaltung.material.User;
-import de.wps.bikehh.benutzerverwaltung.repository.UserAuthenticationRepository;
+import de.wps.bikehh.benutzerverwaltung.repository.UserRepository;
 import de.wps.bikehh.benutzerverwaltung.service.SmtpService;
 import de.wps.bikehh.benutzerverwaltung.service.TokenService;
 import de.wps.bikehh.framework.api.exception.ApiRequestException;
@@ -27,14 +27,14 @@ public class VerificationService {
 	private VerificationRepository verificationRepository;
 
 	// FIXME: Keine direkten Calls auf einem fremden Repository!
-	private UserAuthenticationRepository _userAuthenticationRepository;
+	private UserRepository _userAuthenticationRepository;
 	private SmtpService smtpService;
 	private TokenService tokenService;
 
 	@Autowired
 	public VerificationService(TokenService tokenService,
 			VerificationRepository verificationRepository,
-			UserAuthenticationRepository userAuthenticationRepository, SmtpService smtpService) {
+			UserRepository userAuthenticationRepository, SmtpService smtpService) {
 		this.verificationRepository = verificationRepository;
 		this._userAuthenticationRepository = userAuthenticationRepository;
 		this.smtpService = smtpService;

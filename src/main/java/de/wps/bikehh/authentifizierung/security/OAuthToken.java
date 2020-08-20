@@ -2,7 +2,7 @@ package de.wps.bikehh.authentifizierung.security;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
-import de.wps.bikehh.benutzerverwaltung.material.Session;
+import de.wps.bikehh.authentifizierung.material.Session;
 import de.wps.bikehh.benutzerverwaltung.material.User;
 
 public class OAuthToken extends UsernamePasswordAuthenticationToken {

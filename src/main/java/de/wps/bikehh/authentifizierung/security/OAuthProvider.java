@@ -7,8 +7,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
+import de.wps.bikehh.authentifizierung.material.Session;
 import de.wps.bikehh.authentifizierung.service.AuthenticationService;
-import de.wps.bikehh.benutzerverwaltung.material.Session;
 import de.wps.bikehh.framework.api.exception.ErrorCode;
 
 @Component

@@ -17,7 +17,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import de.wps.bikehh.benutzerverwaltung.material.Mail;
 import de.wps.bikehh.benutzerverwaltung.material.User;
-import de.wps.bikehh.benutzerverwaltung.repository.UserAuthenticationRepository;
+import de.wps.bikehh.benutzerverwaltung.repository.UserRepository;
 import de.wps.bikehh.benutzerverwaltung.service.SmtpService;
 import de.wps.bikehh.passwortzuruecksetzung.material.Reset;
 import de.wps.bikehh.passwortzuruecksetzung.repository.PasswordResetRepository;
@@ -28,7 +28,7 @@ public class PasswordDetailServiceTest {
 	@Mock
 	PasswordResetRepository _passwordAuthenticationRepository;
 	@Mock
-	UserAuthenticationRepository _userAuthenticationRepository;
+	UserRepository _userAuthenticationRepository;
 	@Mock
 	SmtpService _smtpService;
 

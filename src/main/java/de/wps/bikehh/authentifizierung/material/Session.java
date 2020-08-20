@@ -1,6 +1,8 @@
-package de.wps.bikehh.benutzerverwaltung.material;
+package de.wps.bikehh.authentifizierung.material;
 
 import org.hibernate.annotations.CreationTimestamp;
+
+import de.wps.bikehh.benutzerverwaltung.material.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
