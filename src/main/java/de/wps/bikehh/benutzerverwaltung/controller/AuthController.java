@@ -23,11 +23,11 @@ import de.wps.bikehh.benutzerverwaltung.service.AuthService;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-	private AuthService _authService;
+	private AuthService authService;
 
 	@Autowired
 	public AuthController(AuthService authService) {
-		this._authService = authService;
+		this.authService = authService;
 	}
 
 	/**
@@ -42,14 +42,14 @@ public class AuthController {
 		String email = loginrequest.getEmail();
 		String password = loginrequest.getPassword();
 
-		Session session = _authService.loginUser(email, password);
+		Session session = authService.loginUser(email, password);
 		AuthTokenDto responseDto = new AuthTokenDto();
 		responseDto.setToken(session.getToken());
 		return responseDto;
 	}
 
 	/**
-	 * loggt einen existierenden User aus
+	 * Loggt einen User aus.
 	 *
 	 * @param auth
 	 *            der aktuelle authentifizierte User
@@ -59,6 +59,6 @@ public class AuthController {
 	public void logout(Authentication auth) {
 		Session session = ((OAuthToken) auth).getSession();
 
-		_authService.logoutUser(session);
+		authService.logoutUser(session);
 	}
 }

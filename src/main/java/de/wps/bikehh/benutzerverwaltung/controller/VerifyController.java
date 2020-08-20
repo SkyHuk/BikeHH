@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.wps.bikehh.benutzerverwaltung.dto.request.ResetPasswordMailDto;
+import de.wps.bikehh.benutzerverwaltung.dto.request.RequestPasswordResetMailDto;
 import de.wps.bikehh.benutzerverwaltung.service.VerifyDetailService;
 
 @RestController
@@ -35,7 +35,7 @@ public class VerifyController {
 	 *            email
 	 */
 	@PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<String> requestVerificationMail(@RequestBody @Valid ResetPasswordMailDto requestModel) {
+	public ResponseEntity<String> requestVerificationMail(@RequestBody @Valid RequestPasswordResetMailDto requestModel) {
 		_verifyDetailService.requestVerificationMail(requestModel.getEmail());
 		return new ResponseEntity<>(HttpStatus.OK);
 	}

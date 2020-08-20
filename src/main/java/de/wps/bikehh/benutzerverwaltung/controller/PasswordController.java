@@ -13,18 +13,18 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.wps.bikehh.benutzerverwaltung.dto.request.ResetPasswordDto;
-import de.wps.bikehh.benutzerverwaltung.dto.request.ResetPasswordMailDto;
+import de.wps.bikehh.benutzerverwaltung.dto.request.RequestPasswordResetMailDto;
 import de.wps.bikehh.benutzerverwaltung.service.PasswordDetailService;
 
 @RestController
 @RequestMapping("/api/password")
 public class PasswordController {
 
-	private PasswordDetailService _passwordDetailService;
+	private PasswordDetailService passwordDetailService;
 
 	@Autowired
 	public PasswordController(PasswordDetailService passwordDetailService) {
-		this._passwordDetailService = passwordDetailService;
+		this.passwordDetailService = passwordDetailService;
 	}
 
 	/**
@@ -35,10 +35,10 @@ public class PasswordController {
 	 */
 	@PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE })
 	@ResponseStatus(HttpStatus.OK)
-	public void requestPasswordResetMail(@RequestBody @Valid ResetPasswordMailDto requestModel) {
+	public void requestPasswordResetMail(@RequestBody @Valid RequestPasswordResetMailDto requestModel) {
 		String email = requestModel.getEmail();
 
-		_passwordDetailService.requestResetMail(email);
+		passwordDetailService.requestResetMail(email);
 	}
 
 	/**
@@ -52,7 +52,7 @@ public class PasswordController {
 	@PostMapping(value = "/reset", consumes = { MediaType.APPLICATION_JSON_VALUE })
 	@ResponseStatus(HttpStatus.OK)
 	public void resetPassword(@RequestBody @Valid ResetPasswordDto requestModel, @RequestParam String token) {
-		_passwordDetailService.resetPassword(requestModel.getNewPassword(), token);
+		passwordDetailService.resetPassword(requestModel.getNewPassword(), token);
 	}
 
 }
