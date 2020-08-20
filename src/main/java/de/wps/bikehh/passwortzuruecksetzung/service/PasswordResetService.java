@@ -77,7 +77,7 @@ public class PasswordResetService {
 		// environment
 		String redirectLink = String.format("http://localhost:8080/api/password?token=%s", token);
 
-		Map<String, String> model = new HashMap<>();
+		Map<String, Object> model = new HashMap<>();
 		// model.put("username", user.getEmailAddress());
 		model.put("link", redirectLink);
 		mail.setModel(model);
