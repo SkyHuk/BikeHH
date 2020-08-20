@@ -1,4 +1,4 @@
-package de.wps.bikehh.benutzerverwaltung.controller;
+package de.wps.bikehh.verifizierung.api.controller;
 
 import javax.validation.Valid;
 
@@ -13,18 +13,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.wps.bikehh.benutzerverwaltung.service.VerifyDetailService;
 import de.wps.bikehh.passwortzuruecksetzung.api.dto.RequestPasswordResetMailDto;
+import de.wps.bikehh.verifizierung.service.VerificationService;
 
 @RestController
 @RequestMapping("/api/verify")
-public class VerifyController {
+public class VerificationController {
 
-	private VerifyDetailService _verifyDetailService;
+	private VerificationService verificationService;
 
 	@Autowired
-	public VerifyController(VerifyDetailService verifyDetailService) {
-		this._verifyDetailService = verifyDetailService;
+	public VerificationController(VerificationService verifyDetailService) {
+		this.verificationService = verifyDetailService;
 	}
 
 	/**
@@ -36,7 +36,7 @@ public class VerifyController {
 	 */
 	@PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<String> requestVerificationMail(@RequestBody @Valid RequestPasswordResetMailDto requestModel) {
-		_verifyDetailService.requestVerificationMail(requestModel.getEmail());
+		verificationService.requestVerificationMail(requestModel.getEmail());
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
@@ -49,6 +49,6 @@ public class VerifyController {
 	 */
 	@PutMapping
 	public void verifyUser(@RequestParam String token) {
-		_verifyDetailService.verifyUser(token);
+		verificationService.verifyUser(token);
 	}
 }

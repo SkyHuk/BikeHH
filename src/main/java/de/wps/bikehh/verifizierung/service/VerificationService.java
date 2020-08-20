@@ -1,4 +1,4 @@
-package de.wps.bikehh.benutzerverwaltung.service;
+package de.wps.bikehh.verifizierung.service;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -13,27 +13,31 @@ import org.springframework.stereotype.Service;
 
 import de.wps.bikehh.benutzerverwaltung.material.Mail;
 import de.wps.bikehh.benutzerverwaltung.material.User;
-import de.wps.bikehh.benutzerverwaltung.material.Verification;
 import de.wps.bikehh.benutzerverwaltung.repository.UserAuthenticationRepository;
-import de.wps.bikehh.benutzerverwaltung.repository.VerificationAuthenticationRepository;
+import de.wps.bikehh.benutzerverwaltung.service.SmtpService;
+import de.wps.bikehh.benutzerverwaltung.service.TokenService;
 import de.wps.bikehh.framework.api.exception.ApiRequestException;
 import de.wps.bikehh.framework.api.exception.ErrorCode;
+import de.wps.bikehh.verifizierung.material.Verification;
+import de.wps.bikehh.verifizierung.repository.VerificationRepository;
 
 @Service
-public class VerifyDetailService {
+public class VerificationService {
 
-	private VerificationAuthenticationRepository _verificationRepository;
+	private VerificationRepository verificationRepository;
+
+	// FIXME: Keine direkten Calls auf einem fremden Repository!
 	private UserAuthenticationRepository _userAuthenticationRepository;
-	private SmtpService _smtpService;
+	private SmtpService smtpService;
 	private TokenService tokenService;
 
 	@Autowired
-	public VerifyDetailService(TokenService tokenService,
-			VerificationAuthenticationRepository verificationRepository,
+	public VerificationService(TokenService tokenService,
+			VerificationRepository verificationRepository,
 			UserAuthenticationRepository userAuthenticationRepository, SmtpService smtpService) {
-		this._verificationRepository = verificationRepository;
+		this.verificationRepository = verificationRepository;
 		this._userAuthenticationRepository = userAuthenticationRepository;
-		this._smtpService = smtpService;
+		this.smtpService = smtpService;
 		this.tokenService = tokenService;
 	}
 
@@ -54,15 +58,16 @@ public class VerifyDetailService {
 		}
 
 		// Delete in case token for user already exists
-		Verification verification = _verificationRepository.findByUserId(user.getId()).orElse(null);
-		if (verification != null) {
-			_verificationRepository.delete(verification);
+		if (verificationRepository.existsByUser(user)) {
+			verificationRepository.deleteByUser(user);
 		}
 
 		String token = tokenService.generateSecureToken();
-		Verification verificationToken = new Verification(user.getId(), token);
+		Verification verification = new Verification();
+		verification.setToken(token);
+		verification.setUser(user);
 
-		_verificationRepository.save(verificationToken);
+		verificationRepository.save(verification);
 
 		// Send mail
 		Mail mail = new Mail(user.getEmailAddress(), "Verify Account");
@@ -76,7 +81,7 @@ public class VerifyDetailService {
 		model.put("link", redirectLink);
 		mail.setModel(model);
 
-		_smtpService.sendMail(mail, SmtpService.Templates.VERIFY);
+		smtpService.sendMail(mail, SmtpService.Templates.VERIFY);
 
 	}
 
@@ -87,34 +92,28 @@ public class VerifyDetailService {
 	 *            token, der in der db hinterlegt worden ist
 	 */
 	public void verifyUser(String token) throws ApiRequestException {
-		Verification verification = _verificationRepository.findByToken(token).orElse(null);
+		Verification verification = verificationRepository.findByToken(token).orElse(null);
 		if (verification == null) {
 			throw new ApiRequestException(ErrorCode.unauthorized, HttpStatus.UNAUTHORIZED);
 		}
 
-		Long userId = verification.getUserId();
-		User user = _userAuthenticationRepository.findById(userId).orElse(null);
-		if (user == null) {
-			throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
-		}
-
+		User user = verification.getUser();
 		user.setVerified(true);
 
-		// Delete reset token and set new password
-		_verificationRepository.delete(verification);
+		// Delete verification token
+		verificationRepository.delete(verification);
 		_userAuthenticationRepository.save(user);
 	}
 
 	/**
-	 * löscht einen verify-token anhand der User-id
+	 * löscht einen verify-token anhand des Users
 	 *
 	 * @param id
 	 *            id des Users
 	 */
-	public void deleteVerification(Long userId) {
-		Verification verification = _verificationRepository.findByUserId(userId).orElse(null);
-		if (verification != null) {
-			_verificationRepository.delete(verification);
+	public void deleteVerification(User user) {
+		if (verificationRepository.existsByUser(user)) {
+			verificationRepository.deleteByUser(user);
 		}
 	}
 
@@ -124,14 +123,14 @@ public class VerifyDetailService {
 	@Scheduled(fixedRate = 10000)
 	public void deleteExpiredTokens() {
 		List<Verification> list = new ArrayList<>();
-		_verificationRepository.findAll().forEach(list::add);
+		verificationRepository.findAll().forEach(list::add);
 
 		Date now = new Date();
 		long oneHour = 1000 * 60 * 60;
 
 		for (Verification v : list) {
 			if ((now.getTime() - v.getCreatedAt().getTime()) > oneHour) {
-				_verificationRepository.delete(v);
+				verificationRepository.delete(v);
 			}
 		}
 	}
