@@ -1,54 +1,54 @@
 package de.wps.bikehh.benutzerverwaltung.controller;
 
-import de.wps.bikehh.benutzerverwaltung.dto.request.RequestMailModel;
-import de.wps.bikehh.benutzerverwaltung.exception.ApiRequestException;
-import de.wps.bikehh.benutzerverwaltung.exception.ErrorCode;
-import de.wps.bikehh.benutzerverwaltung.service.VerifyDetailService;
-import de.wps.bikehh.benutzerverwaltung.util.Validation;
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
+import de.wps.bikehh.benutzerverwaltung.dto.request.ResetPasswordMailDto;
+import de.wps.bikehh.benutzerverwaltung.service.VerifyDetailService;
 
 @RestController
 @RequestMapping("/api/verify")
 public class VerifyController {
 
-    private VerifyDetailService _verifyDetailService;
+	private VerifyDetailService _verifyDetailService;
 
+	@Autowired
+	public VerifyController(VerifyDetailService verifyDetailService) {
+		this._verifyDetailService = verifyDetailService;
+	}
 
-    @Autowired
-    public VerifyController(VerifyDetailService verifyDetailService) {
-        this._verifyDetailService = verifyDetailService;
-    }
+	/**
+	 *
+	 * schickt eine account-verifizeren Email raus
+	 *
+	 * @param requestModel
+	 *            email
+	 */
+	@PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<String> requestVerificationMail(@RequestBody @Valid ResetPasswordMailDto requestModel) {
+		_verifyDetailService.requestVerificationMail(requestModel.getEmail());
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 
-    /**
-     *
-     * schickt eine account-verifizeren Email raus
-     *
-     * @param requestModel email
-     */
-    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public void requestVerificationMail(@Valid @RequestBody RequestMailModel requestModel) throws ApiRequestException {
-        String email = requestModel.getEmail();
-
-        if (!Validation.isEmailValid(email)) {
-            throw new ApiRequestException(ErrorCode.bad_credentials, HttpStatus.BAD_REQUEST);
-        }
-
-        _verifyDetailService.requestVerificationMail(email);
-    }
-
-    /**
-     *
-     * verifiziert einen User
-     *
-     * @param token der token, welcher den User identifiziert
-     */
-    @PutMapping
-    public void verifyUser(@RequestParam String token) {
-        _verifyDetailService.verifyUser(token);
-    }
+	/**
+	 *
+	 * verifiziert einen User
+	 *
+	 * @param token
+	 *            der token, welcher den User identifiziert
+	 */
+	@PutMapping
+	public void verifyUser(@RequestParam String token) {
+		_verifyDetailService.verifyUser(token);
+	}
 }

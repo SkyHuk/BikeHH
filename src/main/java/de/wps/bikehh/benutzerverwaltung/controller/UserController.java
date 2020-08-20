@@ -1,111 +1,121 @@
 package de.wps.bikehh.benutzerverwaltung.controller;
 
-import de.wps.bikehh.benutzerverwaltung.dto.request.PasswordRequestModel;
-import de.wps.bikehh.benutzerverwaltung.dto.request.UpdateUserDetailsRequestModel;
-import de.wps.bikehh.benutzerverwaltung.dto.request.UserDetailsRequestModel;
-import de.wps.bikehh.benutzerverwaltung.dto.response.UserDetailsResponseModel;
-import de.wps.bikehh.benutzerverwaltung.exception.ApiRequestException;
-import de.wps.bikehh.benutzerverwaltung.exception.ErrorCode;
-import de.wps.bikehh.benutzerverwaltung.material.User;
-import de.wps.bikehh.benutzerverwaltung.service.UserDetailService;
-import de.wps.bikehh.benutzerverwaltung.util.Validation;
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
+import de.wps.bikehh.benutzerverwaltung.dto.request.ChangePasswordDto;
+import de.wps.bikehh.benutzerverwaltung.dto.request.UpdateUserDetailsDto;
+import de.wps.bikehh.benutzerverwaltung.dto.request.UserDetailsDto;
+import de.wps.bikehh.benutzerverwaltung.dto.response.UserProfileDto;
+import de.wps.bikehh.benutzerverwaltung.exception.ApiRequestException;
+import de.wps.bikehh.benutzerverwaltung.material.User;
+import de.wps.bikehh.benutzerverwaltung.service.UserDetailService;
 
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
 
-    private UserDetailService _UserDetailService;
+	private UserDetailService userDetailService;
 
-    @Autowired
-    public UserController(UserDetailService userDetailService) {
-        this._UserDetailService = userDetailService;
-    }
+	@Autowired
+	public UserController(UserDetailService userDetailService) {
+		this.userDetailService = userDetailService;
+	}
 
-    /**
-     *
-     * gebt den aktuellen User zurück
-     *
-     * @param auth der aktuelle authentifizierte User
-     * @return User
-     */
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public UserDetailsResponseModel getCurrentUser(Authentication auth) throws ApiRequestException {
-        User user = (User) auth.getPrincipal();
-        return new UserDetailsResponseModel(user);
-    }
+	/**
+	 *
+	 * gebt den aktuellen User zurück
+	 *
+	 * @param auth
+	 *            der aktuelle authentifizierte User
+	 * @return User
+	 */
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public UserProfileDto getCurrentUser(Authentication auth) throws ApiRequestException {
+		User user = (User) auth.getPrincipal();
+		UserProfileDto userProfileDto = new UserProfileDto();
+		userProfileDto.setEmail(user.getEmailAddress());
+		userProfileDto.setPrivacySetting(user.getPrivacySetting());
+		userProfileDto.setCredibility(user.getCredibility());
+		userProfileDto.setVerified(user.getIsVerified());
+		return userProfileDto;
+	}
 
-    /**
-     *
-     * registriert einen neuen User
-     *
-     * @param requestUserDetails User credentials
-     */
-    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void createUser(@Valid @RequestBody UserDetailsRequestModel requestUserDetails) throws ApiRequestException {
-        String email = requestUserDetails.getEmail();
-        String password = requestUserDetails.getPassword();
+	/**
+	 *
+	 * registriert einen neuen User
+	 *
+	 * @param requestUserDetails
+	 *            User credentials
+	 */
+	@PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE })
+	@ResponseStatus(HttpStatus.OK)
+	public void createUser(@RequestBody @Valid UserDetailsDto requestUserDetails) {
+		userDetailService.createUser(requestUserDetails.getEmail(), requestUserDetails.getPassword());
+	}
 
-        if (!Validation.isEmailValid(email) || !Validation.isPasswordValid(password)) {
-            throw new ApiRequestException(ErrorCode.bad_credentials, HttpStatus.BAD_REQUEST);
-        }
+	/**
+	 *
+	 * updated einen existierenden User
+	 *
+	 * @param requestUserDetails
+	 *            die veränderten Userdaten
+	 */
+	@PutMapping(consumes = { MediaType.APPLICATION_JSON_VALUE })
+	@ResponseStatus(HttpStatus.OK)
+	public void updateUser(Authentication auth,
+			@RequestBody @Valid UpdateUserDetailsDto requestUserDetails) {
+		User user = (User) auth.getPrincipal();
 
-        _UserDetailService.createUser(email, password);
-    }
+		userDetailService.updateUser(user, requestUserDetails);
+	}
 
-    /**
-     *
-     * updated einen existierenden User
-     *
-     * @param requestUserDetails die veränderten Userdaten
-     */
-    @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void updateUser(Authentication auth, @Valid @RequestBody UpdateUserDetailsRequestModel requestUserDetails) {
-        User user = (User) auth.getPrincipal();
+	/**
+	 *
+	 * löscht einen User Account
+	 *
+	 * @param auth
+	 *            der aktuelle authentifizierte User
+	 */
+	@DeleteMapping(consumes = { MediaType.APPLICATION_JSON_VALUE })
+	@ResponseStatus(HttpStatus.OK)
+	public void deleteUser(Authentication auth) {
+		User user = (User) auth.getPrincipal();
 
-        _UserDetailService.updateUser(user, requestUserDetails);
-    }
+		userDetailService.deleteUser(user);
+	}
 
-    /**
-     *
-     * löscht einen User Account
-     *
-     * @param auth der aktuelle authentifizierte User
-     */
-    @DeleteMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteUser(Authentication auth) {
-        User user = (User) auth.getPrincipal();
+	/**
+	 *
+	 * setzt ein neues Passwort für ein schon eingeloggter User
+	 *
+	 * @param auth
+	 *            der aktuelle authentifizierte User
+	 * @param passwordRequestModel
+	 *            das neue Passwort
+	 */
+	@RequestMapping(value = "/password", method = RequestMethod.PUT)
+	public void updatePassword(Authentication auth, @Valid @RequestBody ChangePasswordDto passwordRequestModel) {
+		User user = (User) auth.getPrincipal();
 
-        _UserDetailService.deleteUser(user);
-    }
+		String passwordOld = passwordRequestModel.getOldPassword();
+		String passwordNew = passwordRequestModel.getNewPassword();
 
-    /**
-     *
-     * setzt ein neues Passwort für ein schon eingeloggter User
-     *
-     * @param auth der aktuelle authentifizierte User
-     * @param passwordRequestModel das neue Passwort
-     */
-    @RequestMapping(value = "/password", method = RequestMethod.PUT)
-    public void updatePassword(Authentication auth, @Valid @RequestBody PasswordRequestModel passwordRequestModel) {
-        User user = (User) auth.getPrincipal();
-
-        String passwordOld = passwordRequestModel.getOldPassword();
-        String passwordNew = passwordRequestModel.getNewPassword();
-
-
-        if (!Validation.isPasswordValid(passwordNew)) {
-            throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
-        }
-
-        _UserDetailService.updatePassword(user, passwordOld, passwordNew);
-    }
+		userDetailService.updatePassword(user, passwordOld, passwordNew);
+	}
 }

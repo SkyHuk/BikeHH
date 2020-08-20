@@ -1,10 +1,6 @@
 package de.wps.bikehh.benutzerverwaltung;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -22,8 +18,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import de.wps.bikehh.benutzerverwaltung.dto.request.UpdateUserDetailsRequestModel;
-import de.wps.bikehh.benutzerverwaltung.dto.request.UpdateUsersDetailsRequestModel;
+import de.wps.bikehh.benutzerverwaltung.dto.request.UpdateUserDetailsDto;
 import de.wps.bikehh.benutzerverwaltung.material.Rollen;
 import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.benutzerverwaltung.repository.UserAuthenticationRepository;
@@ -62,7 +57,7 @@ public class UserDetailServiceTest {
 
 		when(userRepository.save(Mockito.any(User.class))).thenReturn(new User());
 		User user = new User();
-		UpdateUserDetailsRequestModel userUpdate = new UpdateUserDetailsRequestModel();
+		UpdateUserDetailsDto userUpdate = new UpdateUserDetailsDto();
 		userUpdate.setEmail("new@test.de");
 		userUpdate.setPrivacySetting(2);
 		userDetailService.updateUser(user, userUpdate);
@@ -127,16 +122,4 @@ public class UserDetailServiceTest {
 		Mockito.verify(userRepository).deleteById(anyLong());
 	}
 
-	@Test
-	public void testUpdateUserById() {
-		User user = new User("test2@test.com", "Password1234");
-		user.setId(123L);
-		when(userRepository.existsById(anyLong())).thenReturn(true);
-		when(userRepository.findById(anyLong())).thenReturn(java.util.Optional.of(user));
-		when(userRepository.save(any(User.class))).thenReturn(new User());
-
-		UpdateUsersDetailsRequestModel userUpdate = new UpdateUsersDetailsRequestModel();
-		userUpdate.setIsLocked(false);
-		assertThat(userDetailService.updateUserById(user.getId(), userUpdate), is(notNullValue()));
-	}
 }

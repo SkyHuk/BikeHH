@@ -11,8 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import de.wps.bikehh.benutzerverwaltung.dto.request.UpdateUserDetailsRequestModel;
-import de.wps.bikehh.benutzerverwaltung.dto.request.UpdateUsersDetailsRequestModel;
+import de.wps.bikehh.benutzerverwaltung.dto.request.UpdateUserDetailsDto;
 import de.wps.bikehh.benutzerverwaltung.exception.ApiRequestException;
 import de.wps.bikehh.benutzerverwaltung.exception.ErrorCode;
 import de.wps.bikehh.benutzerverwaltung.material.BikehhUserDetails;
@@ -124,7 +123,7 @@ public class UserDetailService implements UserDetailsService {
 	 * @param userUpdate
 	 *            aktualisierter User
 	 */
-	public void updateUser(User user, UpdateUserDetailsRequestModel userUpdate) throws ApiRequestException {
+	public void updateUser(User user, UpdateUserDetailsDto userUpdate) throws ApiRequestException {
 		if (user.getIsLocked()) {
 			throw new ApiRequestException(ErrorCode.unauthorized, HttpStatus.UNAUTHORIZED);
 		}
@@ -214,35 +213,6 @@ public class UserDetailService implements UserDetailsService {
 		}
 
 		_userAuthenticationRepository.deleteById(id);
-	}
-
-	/**
-	 * updated einen User anhand seiner id
-	 *
-	 * @param id
-	 *            id des Users
-	 * @param userModel
-	 *            aktualisierter User
-	 * @return User
-	 */
-	public User updateUserById(Long id, UpdateUsersDetailsRequestModel userModel) {
-		if (!_userAuthenticationRepository.existsById(id)) {
-			throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
-		}
-
-		User user = _userAuthenticationRepository.findById(id).orElse(null);
-		if (user == null) {
-			throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
-		}
-
-		user.setIsLocked(userModel.getIsLocked());
-		if (user.getIsLocked()) {
-			_authService.logoutAllSession(user.getId());
-			_verifyDetailService.deleteVerification(user.getId());
-			_passwordDetailService.deleteResetToken(user.getId());
-		}
-
-		return _userAuthenticationRepository.save(user);
 	}
 
 }

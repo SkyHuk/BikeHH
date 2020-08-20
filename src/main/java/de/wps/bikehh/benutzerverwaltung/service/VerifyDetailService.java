@@ -18,7 +18,6 @@ import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.benutzerverwaltung.material.Verification;
 import de.wps.bikehh.benutzerverwaltung.repository.UserAuthenticationRepository;
 import de.wps.bikehh.benutzerverwaltung.repository.VerificationAuthenticationRepository;
-import de.wps.bikehh.benutzerverwaltung.util.Utils;
 
 @Service
 public class VerifyDetailService {
@@ -26,19 +25,23 @@ public class VerifyDetailService {
 	private VerificationAuthenticationRepository _verificationRepository;
 	private UserAuthenticationRepository _userAuthenticationRepository;
 	private SmtpService _smtpService;
+	private TokenService tokenService;
 
 	@Autowired
-	public VerifyDetailService(VerificationAuthenticationRepository verificationRepository,
+	public VerifyDetailService(TokenService tokenService,
+			VerificationAuthenticationRepository verificationRepository,
 			UserAuthenticationRepository userAuthenticationRepository, SmtpService smtpService) {
 		this._verificationRepository = verificationRepository;
 		this._userAuthenticationRepository = userAuthenticationRepository;
 		this._smtpService = smtpService;
+		this.tokenService = tokenService;
 	}
 
 	/**
 	 * verschickt eine account-verifizieren Mail raus
 	 *
-	 * @param email email
+	 * @param email
+	 *            email
 	 */
 	public void requestVerificationMail(String email) throws ApiRequestException {
 		if (!_userAuthenticationRepository.existsByEmailAddress(email)) {
@@ -56,7 +59,7 @@ public class VerifyDetailService {
 			_verificationRepository.delete(verification);
 		}
 
-		String token = Utils.generateSecureToken(Utils.TOKEN_COUNT);
+		String token = tokenService.generateSecureToken();
 		Verification verificationToken = new Verification(user.getId(), token);
 
 		_verificationRepository.save(verificationToken);
@@ -64,7 +67,8 @@ public class VerifyDetailService {
 		// Send mail
 		Mail mail = new Mail(user.getEmailAddress(), "Verify Account");
 
-		// @TODO set frontend link. Add config file with host depending on environment
+		// TODO set frontend link. Add config file with host depending on
+		// environment
 		String redirectLink = String.format("http://localhost:8080/api/verify?token=%s", token);
 
 		Map<String, Object> model = new HashMap<>();
@@ -79,7 +83,8 @@ public class VerifyDetailService {
 	/**
 	 * verifiziert den Account eines Users
 	 *
-	 * @param token token, der in der db hinterlegt worden ist
+	 * @param token
+	 *            token, der in der db hinterlegt worden ist
 	 */
 	public void verifyUser(String token) throws ApiRequestException {
 		Verification verification = _verificationRepository.findByToken(token).orElse(null);
@@ -103,7 +108,8 @@ public class VerifyDetailService {
 	/**
 	 * löscht einen verify-token anhand der User-id
 	 *
-	 * @param id id des Users
+	 * @param id
+	 *            id des Users
 	 */
 	public void deleteVerification(Long userId) {
 		Verification verification = _verificationRepository.findByUserId(userId).orElse(null);

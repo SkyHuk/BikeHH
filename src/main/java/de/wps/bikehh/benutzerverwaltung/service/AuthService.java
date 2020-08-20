@@ -14,7 +14,6 @@ import de.wps.bikehh.benutzerverwaltung.material.Session;
 import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.benutzerverwaltung.repository.SessionRepository;
 import de.wps.bikehh.benutzerverwaltung.repository.UserAuthenticationRepository;
-import de.wps.bikehh.benutzerverwaltung.util.Utils;
 
 @Service
 public class AuthService {
@@ -22,12 +21,16 @@ public class AuthService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
+	private TokenService tokenService;
+
 	private SessionRepository _sessionRepository;
 	private UserAuthenticationRepository _userAuthenticationRepository;
 
 	@Autowired
-	public AuthService(SessionRepository sessionRepository,
+	public AuthService(TokenService tokenService,
+			SessionRepository sessionRepository,
 			UserAuthenticationRepository _userAuthenticationRepository) {
+		this.tokenService = tokenService;
 		this._sessionRepository = sessionRepository;
 		this._userAuthenticationRepository = _userAuthenticationRepository;
 	}
@@ -48,18 +51,15 @@ public class AuthService {
 			throw new ApiRequestException(ErrorCode.bad_credentials, HttpStatus.BAD_REQUEST);
 		}
 
-		String hashedPassword = passwordEncoder.encode(password);
-
 		User user = _userAuthenticationRepository.findByEmailAddress(email);
 		if (user.getIsLocked()) {
 			throw new ApiRequestException(ErrorCode.unauthorized, HttpStatus.UNAUTHORIZED);
 		}
-		if (!user.getEncryptedPassword().equals(hashedPassword)) {
+		if (!passwordEncoder.matches(password, user.getEncryptedPassword())) {
 			throw new ApiRequestException(ErrorCode.bad_credentials, HttpStatus.BAD_REQUEST);
 		}
 
-		String token = Utils.generateSecureToken(Utils.TOKEN_COUNT);
-		Session session = new Session(token, user);
+		Session session = new Session(tokenService.generateSecureToken(), user);
 		_sessionRepository.save(session);
 
 		return session;

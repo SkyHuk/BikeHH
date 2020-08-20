@@ -19,7 +19,6 @@ import de.wps.bikehh.benutzerverwaltung.material.Reset;
 import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.benutzerverwaltung.repository.PasswordAuthenticationRepository;
 import de.wps.bikehh.benutzerverwaltung.repository.UserAuthenticationRepository;
-import de.wps.bikehh.benutzerverwaltung.util.Utils;
 
 @Service
 public class PasswordDetailService {
@@ -30,13 +29,16 @@ public class PasswordDetailService {
 	private PasswordAuthenticationRepository _passwordAuthenticationRepository;
 	private UserAuthenticationRepository _userAuthenticationRepository;
 	private SmtpService _smtpService;
+	private TokenService tokenService;
 
 	@Autowired
-	public PasswordDetailService(PasswordAuthenticationRepository passwordAuthenticationRepository,
+	public PasswordDetailService(TokenService tokenService,
+			PasswordAuthenticationRepository passwordAuthenticationRepository,
 			UserAuthenticationRepository userAuthenticationRepository, SmtpService smtpService) {
 		this._passwordAuthenticationRepository = passwordAuthenticationRepository;
 		this._userAuthenticationRepository = userAuthenticationRepository;
 		this._smtpService = smtpService;
+		this.tokenService = tokenService;
 	}
 
 	/**
@@ -59,7 +61,7 @@ public class PasswordDetailService {
 			_passwordAuthenticationRepository.delete(reset);
 		}
 
-		String token = Utils.generateSecureToken(Utils.TOKEN_COUNT);
+		String token = tokenService.generateSecureToken();
 		Reset resetToken = new Reset(user.getId(), token);
 
 		_passwordAuthenticationRepository.save(resetToken);
@@ -67,7 +69,7 @@ public class PasswordDetailService {
 		// Send mail
 		Mail mail = new Mail(user.getEmailAddress(), "Reset password");
 
-		// @TODO set frontend link. Add config file with host depending on
+		// TODO set frontend link. Add config file with host depending on
 		// environment
 		String redirectLink = String.format("http://localhost:8080/api/password?token=%s", token);
 
