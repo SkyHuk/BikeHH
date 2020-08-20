@@ -1,10 +1,10 @@
-package de.wps.bikehh.benutzerverwaltung.dto.request;
+package de.wps.bikehh.benutzerverwaltung.api.dto;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 
-public class UserDetailsDto {
+public class RegisterUserDto {
 
 	@Email(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$")
 	private String email;

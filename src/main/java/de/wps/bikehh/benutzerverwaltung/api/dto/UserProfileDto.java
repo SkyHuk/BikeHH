@@ -1,4 +1,4 @@
-package de.wps.bikehh.benutzerverwaltung.dto.response;
+package de.wps.bikehh.benutzerverwaltung.api.dto;
 
 public class UserProfileDto {
 

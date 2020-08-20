@@ -1,4 +1,4 @@
-package de.wps.bikehh.benutzerverwaltung.controller;
+package de.wps.bikehh.benutzerverwaltung.api.controller;
 
 import javax.validation.Valid;
 
@@ -18,21 +18,21 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.wps.bikehh.benutzerverwaltung.dto.request.ChangePasswordDto;
-import de.wps.bikehh.benutzerverwaltung.dto.request.UpdateUserDetailsDto;
-import de.wps.bikehh.benutzerverwaltung.dto.request.UserDetailsDto;
-import de.wps.bikehh.benutzerverwaltung.dto.response.UserProfileDto;
+import de.wps.bikehh.benutzerverwaltung.api.dto.ChangePasswordDto;
+import de.wps.bikehh.benutzerverwaltung.api.dto.RegisterUserDto;
+import de.wps.bikehh.benutzerverwaltung.api.dto.UpdateUserDetailsDto;
+import de.wps.bikehh.benutzerverwaltung.api.dto.UserProfileDto;
 import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.benutzerverwaltung.service.UserDetailService;
 
 @RestController
 @RequestMapping("/api/user")
-public class UserController {
+public class UserRestController {
 
 	private UserDetailService userDetailService;
 
 	@Autowired
-	public UserController(UserDetailService userDetailService) {
+	public UserRestController(UserDetailService userDetailService) {
 		this.userDetailService = userDetailService;
 	}
 
@@ -63,7 +63,7 @@ public class UserController {
 	 */
 	@PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE })
 	@ResponseStatus(HttpStatus.OK)
-	public void createUser(@RequestBody @Valid UserDetailsDto requestUserDetails) {
+	public void createUser(@RequestBody @Valid RegisterUserDto requestUserDetails) {
 		userDetailService.createUser(requestUserDetails.getEmail(), requestUserDetails.getPassword());
 	}
 
