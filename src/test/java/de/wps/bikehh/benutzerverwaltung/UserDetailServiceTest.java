@@ -19,7 +19,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import de.wps.bikehh.authentifizierung.service.AuthenticationService;
-import de.wps.bikehh.benutzerverwaltung.dto.request.UpdateUserDetailsDto;
 import de.wps.bikehh.benutzerverwaltung.material.Rollen;
 import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.benutzerverwaltung.repository.UserAuthenticationRepository;
@@ -57,10 +56,7 @@ public class UserDetailServiceTest {
 
 		when(userRepository.save(Mockito.any(User.class))).thenReturn(new User());
 		User user = new User();
-		UpdateUserDetailsDto userUpdate = new UpdateUserDetailsDto();
-		userUpdate.setEmail("new@test.de");
-		userUpdate.setPrivacySetting(2);
-		userDetailService.updateUser(user, userUpdate);
+		userDetailService.updateUser(user, "new@test.de", 2);
 		Mockito.verify(userRepository).save(Mockito.any(User.class));
 	}
 

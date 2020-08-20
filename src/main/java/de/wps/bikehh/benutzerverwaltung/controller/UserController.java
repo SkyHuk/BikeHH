@@ -80,7 +80,9 @@ public class UserController {
 			@RequestBody @Valid UpdateUserDetailsDto requestUserDetails) {
 		User user = (User) auth.getPrincipal();
 
-		userDetailService.updateUser(user, requestUserDetails);
+		userDetailService.updateUser(user,
+				requestUserDetails.getEmail(),
+				requestUserDetails.getPrivacySetting());
 	}
 
 	/**

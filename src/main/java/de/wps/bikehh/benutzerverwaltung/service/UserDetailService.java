@@ -12,7 +12,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import de.wps.bikehh.authentifizierung.service.AuthenticationService;
-import de.wps.bikehh.benutzerverwaltung.dto.request.UpdateUserDetailsDto;
 import de.wps.bikehh.benutzerverwaltung.material.BikehhUserDetails;
 import de.wps.bikehh.benutzerverwaltung.material.Rollen;
 import de.wps.bikehh.benutzerverwaltung.material.User;
@@ -126,13 +125,13 @@ public class UserDetailService implements UserDetailsService {
 	 * @param userUpdate
 	 *            aktualisierter User
 	 */
-	public void updateUser(User user, UpdateUserDetailsDto userUpdate) throws ApiRequestException {
+	public void updateUser(User user, String email, int privacySetting) throws ApiRequestException {
 		if (user.getIsLocked()) {
 			throw new ApiRequestException(ErrorCode.unauthorized, HttpStatus.UNAUTHORIZED);
 		}
 
-		user.setEmailAddress(userUpdate.getEmail());
-		user.setPrivacySetting(userUpdate.getPrivacySetting());
+		user.setEmailAddress(email);
+		user.setPrivacySetting(privacySetting);
 		_userAuthenticationRepository.save(user);
 	}
 
