@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,7 +22,6 @@ import de.wps.bikehh.benutzerverwaltung.dto.request.ChangePasswordDto;
 import de.wps.bikehh.benutzerverwaltung.dto.request.UpdateUserDetailsDto;
 import de.wps.bikehh.benutzerverwaltung.dto.request.UserDetailsDto;
 import de.wps.bikehh.benutzerverwaltung.dto.response.UserProfileDto;
-import de.wps.bikehh.benutzerverwaltung.exception.ApiRequestException;
 import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.benutzerverwaltung.service.UserDetailService;
 
@@ -46,8 +46,7 @@ public class UserController {
 	 */
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public UserProfileDto getCurrentUser(Authentication auth) throws ApiRequestException {
-		User user = (User) auth.getPrincipal();
+	public UserProfileDto getCurrentUser(@ModelAttribute("user") User user) {
 		UserProfileDto userProfileDto = new UserProfileDto();
 		userProfileDto.setEmail(user.getEmailAddress());
 		userProfileDto.setPrivacySetting(user.getPrivacySetting());

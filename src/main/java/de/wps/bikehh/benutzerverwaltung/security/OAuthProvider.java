@@ -21,9 +21,6 @@ public class OAuthProvider implements AuthenticationProvider {
 		this.authService = authService;
 	}
 
-	/**
-	 * authentifiziert access-token und dessen User
-	 */
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 		OAuthToken auth = (OAuthToken) authentication;
