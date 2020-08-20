@@ -2,7 +2,6 @@ package de.wps.bikehh.benutzerverwaltung;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -17,25 +16,24 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import de.wps.bikehh.benutzerverwaltung.material.Mail;
-import de.wps.bikehh.benutzerverwaltung.material.Reset;
 import de.wps.bikehh.benutzerverwaltung.material.User;
-import de.wps.bikehh.benutzerverwaltung.repository.PasswordAuthenticationRepository;
 import de.wps.bikehh.benutzerverwaltung.repository.UserAuthenticationRepository;
-import de.wps.bikehh.benutzerverwaltung.service.PasswordDetailService;
 import de.wps.bikehh.benutzerverwaltung.service.SmtpService;
-import de.wps.bikehh.framework.api.exception.ApiRequestException;
+import de.wps.bikehh.passwortzuruecksetzung.material.Reset;
+import de.wps.bikehh.passwortzuruecksetzung.repository.PasswordResetRepository;
+import de.wps.bikehh.passwortzuruecksetzung.service.PasswordResetService;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PasswordDetailServiceTest {
 	@Mock
-	PasswordAuthenticationRepository _passwordAuthenticationRepository;
+	PasswordResetRepository _passwordAuthenticationRepository;
 	@Mock
 	UserAuthenticationRepository _userAuthenticationRepository;
 	@Mock
 	SmtpService _smtpService;
 
 	@InjectMocks
-	PasswordDetailService _passwordDetailService;
+	PasswordResetService _passwordDetailService;
 
 	@Test
 	@Ignore("TokenService mitgeben")
@@ -65,31 +63,6 @@ public class PasswordDetailServiceTest {
 
 		verify(_passwordAuthenticationRepository).delete(any(Reset.class));
 		verify(_passwordAuthenticationRepository, times(2)).save(any(Reset.class));
-	}
-
-	@Test(expected = ApiRequestException.class)
-	public void testResetPassword() {
-		String testEmail = "test@mail.com";
-		String testPassword = "TestPw123";
-		User testUser = new User(testEmail, testPassword);
-		testUser.setId(1L);
-
-		String resetToken = "abcdefghijklmnopqrstuvwxyz";
-		Reset reset = new Reset(testUser.getId(), resetToken);
-
-		// when token doesnt exists
-		_passwordDetailService.resetPassword(testPassword, resetToken);
-
-		// when user doesnt exists
-		when(_passwordAuthenticationRepository.findByToken(anyString())).thenReturn(java.util.Optional.of(reset));
-		_passwordDetailService.resetPassword(testPassword, resetToken);
-
-		// Default case
-		when(_userAuthenticationRepository.findById(anyLong())).thenReturn(java.util.Optional.of(testUser));
-
-		_passwordDetailService.resetPassword(testPassword, resetToken);
-		verify(_passwordAuthenticationRepository).delete(any(Reset.class));
-		verify(_userAuthenticationRepository).save(any(User.class));
 	}
 
 	@Test

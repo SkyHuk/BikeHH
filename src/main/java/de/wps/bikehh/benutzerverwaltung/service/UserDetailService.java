@@ -19,6 +19,7 @@ import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.benutzerverwaltung.repository.UserAuthenticationRepository;
 import de.wps.bikehh.framework.api.exception.ApiRequestException;
 import de.wps.bikehh.framework.api.exception.ErrorCode;
+import de.wps.bikehh.passwortzuruecksetzung.service.PasswordResetService;
 
 @Service
 public class UserDetailService implements UserDetailsService {
@@ -28,12 +29,12 @@ public class UserDetailService implements UserDetailsService {
 
 	private UserAuthenticationRepository _userAuthenticationRepository;
 	private VerifyDetailService _verifyDetailService;
-	private PasswordDetailService _passwordDetailService;
+	private PasswordResetService _passwordDetailService;
 	private AuthenticationService _authService;
 
 	@Autowired
 	public UserDetailService(UserAuthenticationRepository userAuthenticationRepository,
-			VerifyDetailService verifyDetailService, PasswordDetailService passwordDetailService,
+			VerifyDetailService verifyDetailService, PasswordResetService passwordDetailService,
 			AuthenticationService authService) {
 		this._userAuthenticationRepository = userAuthenticationRepository;
 		this._verifyDetailService = verifyDetailService;

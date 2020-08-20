@@ -1,4 +1,4 @@
-package de.wps.bikehh.benutzerverwaltung.service;
+package de.wps.bikehh.passwortzuruecksetzung.service;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -13,31 +13,33 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import de.wps.bikehh.benutzerverwaltung.material.Mail;
-import de.wps.bikehh.benutzerverwaltung.material.Reset;
 import de.wps.bikehh.benutzerverwaltung.material.User;
-import de.wps.bikehh.benutzerverwaltung.repository.PasswordAuthenticationRepository;
 import de.wps.bikehh.benutzerverwaltung.repository.UserAuthenticationRepository;
+import de.wps.bikehh.benutzerverwaltung.service.SmtpService;
+import de.wps.bikehh.benutzerverwaltung.service.TokenService;
 import de.wps.bikehh.framework.api.exception.ApiRequestException;
 import de.wps.bikehh.framework.api.exception.ErrorCode;
+import de.wps.bikehh.passwortzuruecksetzung.material.Reset;
+import de.wps.bikehh.passwortzuruecksetzung.repository.PasswordResetRepository;
 
 @Service
-public class PasswordDetailService {
+public class PasswordResetService {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-	private PasswordAuthenticationRepository _passwordAuthenticationRepository;
-	private UserAuthenticationRepository _userAuthenticationRepository;
-	private SmtpService _smtpService;
+	private PasswordResetRepository passwordResetRepository;
+	private UserAuthenticationRepository userRepository;
+	private SmtpService smtpService;
 	private TokenService tokenService;
 
 	@Autowired
-	public PasswordDetailService(TokenService tokenService,
-			PasswordAuthenticationRepository passwordAuthenticationRepository,
+	public PasswordResetService(TokenService tokenService,
+			PasswordResetRepository passwordAuthenticationRepository,
 			UserAuthenticationRepository userAuthenticationRepository, SmtpService smtpService) {
-		this._passwordAuthenticationRepository = passwordAuthenticationRepository;
-		this._userAuthenticationRepository = userAuthenticationRepository;
-		this._smtpService = smtpService;
+		this.passwordResetRepository = passwordAuthenticationRepository;
+		this.userRepository = userAuthenticationRepository;
+		this.smtpService = smtpService;
 		this.tokenService = tokenService;
 	}
 
@@ -48,23 +50,25 @@ public class PasswordDetailService {
 	 * @param email
 	 *            email des Users
 	 */
-	public void requestResetMail(String email) throws ApiRequestException {
-		if (!_userAuthenticationRepository.existsByEmailAddress(email)) {
+	public void requestResetMail(String email) {
+		if (!userRepository.existsByEmailAddress(email)) {
 			return;
 		}
 
-		User user = _userAuthenticationRepository.findByEmailAddress(email);
+		User user = userRepository.findByEmailAddress(email);
 
 		// Delete in case token for user already exists
-		Reset reset = _passwordAuthenticationRepository.findByUserId(user.getId()).orElse(null);
+		Reset reset = passwordResetRepository.findByUserId(user.getId()).orElse(null);
 		if (reset != null) {
-			_passwordAuthenticationRepository.delete(reset);
+			passwordResetRepository.delete(reset);
 		}
 
 		String token = tokenService.generateSecureToken();
-		Reset resetToken = new Reset(user.getId(), token);
+		Reset resetToken = new Reset();
+		resetToken.setToken(token);
+		resetToken.setUser(user);
 
-		_passwordAuthenticationRepository.save(resetToken);
+		passwordResetRepository.save(resetToken);
 
 		// Send mail
 		Mail mail = new Mail(user.getEmailAddress(), "Reset password");
@@ -78,7 +82,7 @@ public class PasswordDetailService {
 		model.put("link", redirectLink);
 		mail.setModel(model);
 
-		_smtpService.sendMail(mail, SmtpService.Templates.RESET);
+		smtpService.sendMail(mail, SmtpService.Templates.RESET);
 
 	}
 
@@ -91,22 +95,18 @@ public class PasswordDetailService {
 	 *            passwort des Users
 	 */
 	public void resetPassword(String password, String token) throws ApiRequestException {
-		Reset reset = _passwordAuthenticationRepository.findByToken(token).orElse(null);
+		Reset reset = passwordResetRepository.findByToken(token).orElse(null);
 		if (reset == null) {
 			throw new ApiRequestException(ErrorCode.invalid_token, HttpStatus.NOT_FOUND);
 		}
 
-		User user = _userAuthenticationRepository.findById(reset.getUserId()).orElse(null);
-		if (user == null) {
-			throw new ApiRequestException(ErrorCode.bad_request, HttpStatus.BAD_REQUEST);
-		}
-
+		User user = reset.getUser();
 		String encodedPassword = passwordEncoder.encode(password);
 		user.setEncryptedPassword(encodedPassword);
 
 		// Delete reset token and set new password
-		_passwordAuthenticationRepository.delete(reset);
-		_userAuthenticationRepository.save(user);
+		passwordResetRepository.delete(reset);
+		userRepository.save(user);
 	}
 
 	/**
@@ -116,9 +116,9 @@ public class PasswordDetailService {
 	 *            id des Users
 	 */
 	public void deleteResetToken(Long userId) {
-		Reset reset = _passwordAuthenticationRepository.findByUserId(userId).orElse(null);
+		Reset reset = passwordResetRepository.findByUserId(userId).orElse(null);
 		if (reset != null) {
-			_passwordAuthenticationRepository.delete(reset);
+			passwordResetRepository.delete(reset);
 		}
 	}
 
@@ -128,14 +128,14 @@ public class PasswordDetailService {
 	@Scheduled(fixedRate = 10000)
 	public void deleteExpiredTokens() {
 		List<Reset> list = new ArrayList<>();
-		_passwordAuthenticationRepository.findAll().forEach(list::add);
+		passwordResetRepository.findAll().forEach(list::add);
 
 		Date now = new Date();
 		long oneHour = 1000 * 60 * 60;
 
 		for (Reset r : list) {
 			if ((now.getTime() - r.getCreatedAt().getTime()) > oneHour) {
-				_passwordAuthenticationRepository.delete(r);
+				passwordResetRepository.delete(r);
 			}
 		}
 	}

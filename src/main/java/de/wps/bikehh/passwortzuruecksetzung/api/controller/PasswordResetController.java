@@ -1,4 +1,4 @@
-package de.wps.bikehh.benutzerverwaltung.controller;
+package de.wps.bikehh.passwortzuruecksetzung.api.controller;
 
 import javax.validation.Valid;
 
@@ -12,18 +12,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.wps.bikehh.benutzerverwaltung.dto.request.ResetPasswordDto;
-import de.wps.bikehh.benutzerverwaltung.dto.request.RequestPasswordResetMailDto;
-import de.wps.bikehh.benutzerverwaltung.service.PasswordDetailService;
+import de.wps.bikehh.passwortzuruecksetzung.api.dto.RequestPasswordResetMailDto;
+import de.wps.bikehh.passwortzuruecksetzung.api.dto.ResetPasswordDto;
+import de.wps.bikehh.passwortzuruecksetzung.service.PasswordResetService;
 
 @RestController
 @RequestMapping("/api/password")
 public class PasswordResetController {
 
-	private PasswordDetailService passwordDetailService;
+	private PasswordResetService passwordDetailService;
 
 	@Autowired
-	public PasswordResetController(PasswordDetailService passwordDetailService) {
+	public PasswordResetController(PasswordResetService passwordDetailService) {
 		this.passwordDetailService = passwordDetailService;
 	}
 

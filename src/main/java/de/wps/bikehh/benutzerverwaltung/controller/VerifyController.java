@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.wps.bikehh.benutzerverwaltung.dto.request.RequestPasswordResetMailDto;
 import de.wps.bikehh.benutzerverwaltung.service.VerifyDetailService;
+import de.wps.bikehh.passwortzuruecksetzung.api.dto.RequestPasswordResetMailDto;
 
 @RestController
 @RequestMapping("/api/verify")

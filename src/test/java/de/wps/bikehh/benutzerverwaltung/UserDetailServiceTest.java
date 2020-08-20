@@ -23,9 +23,9 @@ import de.wps.bikehh.benutzerverwaltung.dto.request.UpdateUserDetailsDto;
 import de.wps.bikehh.benutzerverwaltung.material.Rollen;
 import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.benutzerverwaltung.repository.UserAuthenticationRepository;
-import de.wps.bikehh.benutzerverwaltung.service.PasswordDetailService;
 import de.wps.bikehh.benutzerverwaltung.service.UserDetailService;
 import de.wps.bikehh.benutzerverwaltung.service.VerifyDetailService;
+import de.wps.bikehh.passwortzuruecksetzung.service.PasswordResetService;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserDetailServiceTest {
@@ -35,7 +35,7 @@ public class UserDetailServiceTest {
 	@Mock
 	VerifyDetailService verifyDetailService;
 	@Mock
-	PasswordDetailService passwordDetailService;
+	PasswordResetService passwordDetailService;
 
 	@Mock
 	private UserAuthenticationRepository userRepository;
