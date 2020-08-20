@@ -24,9 +24,9 @@
 		<profile>
 			<id>eclipse</id>
 			<properties>
-				<!-- npm und scss sind sehr langsam. Daher sollte das beim inkrementellen
-					Eclipse-Build nicht ausgeführt werden. In der Eclipse Project-Einstellung
-					muss man unter "Maven" das Profile "eclipse" eintragen, damit das geht. Dann
+				<!-- npm und scss sind sehr langsam. Daher sollte das beim inkrementellen 
+					Eclipse-Build nicht ausgeführt werden. In der Eclipse Project-Einstellung 
+					muss man unter "Maven" das Profile "eclipse" eintragen, damit das geht. Dann 
 					sind die eclipse-builds schön schnell. -->
 				<bikehh.build.skip-scss>true</bikehh.build.skip-scss>
 			</properties>
@@ -88,18 +88,13 @@
 			<artifactId>thymeleaf-layout-dialect</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>com.google.code.gson</groupId>
-			<artifactId>gson</artifactId>
-		</dependency>
-		
 		<!-- Abhängigkeiten für Tests -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
