@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import de.wps.bikehh.authentifizierung.api.dto.AuthTokenDto;
 import de.wps.bikehh.authentifizierung.api.dto.LoginDto;
 import de.wps.bikehh.authentifizierung.security.OAuthToken;
 import de.wps.bikehh.authentifizierung.service.AuthenticationService;
-import de.wps.bikehh.benutzerverwaltung.dto.response.AuthTokenDto;
 import de.wps.bikehh.benutzerverwaltung.material.Session;
 
 @RestController
