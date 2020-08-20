@@ -16,7 +16,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import de.wps.bikehh.benutzerverwaltung.exception.ApiRequestException;
 import de.wps.bikehh.benutzerverwaltung.material.Mail;
 import de.wps.bikehh.benutzerverwaltung.material.Reset;
 import de.wps.bikehh.benutzerverwaltung.material.User;
@@ -24,6 +23,7 @@ import de.wps.bikehh.benutzerverwaltung.repository.PasswordAuthenticationReposit
 import de.wps.bikehh.benutzerverwaltung.repository.UserAuthenticationRepository;
 import de.wps.bikehh.benutzerverwaltung.service.PasswordDetailService;
 import de.wps.bikehh.benutzerverwaltung.service.SmtpService;
+import de.wps.bikehh.framework.api.exception.ApiRequestException;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PasswordDetailServiceTest {

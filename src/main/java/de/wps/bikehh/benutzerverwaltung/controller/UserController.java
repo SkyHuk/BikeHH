@@ -56,7 +56,6 @@ public class UserController {
 	}
 
 	/**
-	 *
 	 * registriert einen neuen User
 	 *
 	 * @param requestUserDetails

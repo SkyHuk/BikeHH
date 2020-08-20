@@ -1,9 +1,10 @@
-package de.wps.bikehh.benutzerverwaltung.security;
+package de.wps.bikehh.authentifizierung.security;
 
-import de.wps.bikehh.benutzerverwaltung.exception.ApiException;
-import de.wps.bikehh.benutzerverwaltung.exception.ErrorCode;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
+
+import de.wps.bikehh.framework.api.exception.ApiException;
+import de.wps.bikehh.framework.api.exception.ErrorCode;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

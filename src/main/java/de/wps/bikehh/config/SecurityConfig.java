@@ -13,10 +13,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import de.wps.bikehh.authentifizierung.security.OAuthEntryPoint;
+import de.wps.bikehh.authentifizierung.security.OAuthFilter;
+import de.wps.bikehh.authentifizierung.security.OAuthProvider;
 import de.wps.bikehh.benutzerverwaltung.material.Rollen;
-import de.wps.bikehh.benutzerverwaltung.security.OAuthEntryPoint;
-import de.wps.bikehh.benutzerverwaltung.security.OAuthFilter;
-import de.wps.bikehh.benutzerverwaltung.security.OAuthProvider;
 import de.wps.bikehh.benutzerverwaltung.service.UserDetailService;
 
 @Configuration

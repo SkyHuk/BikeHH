@@ -18,12 +18,12 @@ import de.wps.bikehh.benutzerverwaltung.service.PasswordDetailService;
 
 @RestController
 @RequestMapping("/api/password")
-public class PasswordController {
+public class PasswordResetController {
 
 	private PasswordDetailService passwordDetailService;
 
 	@Autowired
-	public PasswordController(PasswordDetailService passwordDetailService) {
+	public PasswordResetController(PasswordDetailService passwordDetailService) {
 		this.passwordDetailService = passwordDetailService;
 	}
 

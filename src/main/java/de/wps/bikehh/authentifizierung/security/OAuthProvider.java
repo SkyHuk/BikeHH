@@ -1,4 +1,4 @@
-package de.wps.bikehh.benutzerverwaltung.security;
+package de.wps.bikehh.authentifizierung.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -7,17 +7,17 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
-import de.wps.bikehh.benutzerverwaltung.exception.ErrorCode;
+import de.wps.bikehh.authentifizierung.service.AuthenticationService;
 import de.wps.bikehh.benutzerverwaltung.material.Session;
-import de.wps.bikehh.benutzerverwaltung.service.AuthService;
+import de.wps.bikehh.framework.api.exception.ErrorCode;
 
 @Component
 public class OAuthProvider implements AuthenticationProvider {
 
-	private AuthService authService;
+	private AuthenticationService authService;
 
 	@Autowired
-	public OAuthProvider(AuthService authService) {
+	public OAuthProvider(AuthenticationService authService) {
 		this.authService = authService;
 	}
 

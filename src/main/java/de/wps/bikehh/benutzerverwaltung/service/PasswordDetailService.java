@@ -12,13 +12,13 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import de.wps.bikehh.benutzerverwaltung.exception.ApiRequestException;
-import de.wps.bikehh.benutzerverwaltung.exception.ErrorCode;
 import de.wps.bikehh.benutzerverwaltung.material.Mail;
 import de.wps.bikehh.benutzerverwaltung.material.Reset;
 import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.benutzerverwaltung.repository.PasswordAuthenticationRepository;
 import de.wps.bikehh.benutzerverwaltung.repository.UserAuthenticationRepository;
+import de.wps.bikehh.framework.api.exception.ApiRequestException;
+import de.wps.bikehh.framework.api.exception.ErrorCode;
 
 @Service
 public class PasswordDetailService {

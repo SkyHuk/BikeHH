@@ -1,4 +1,4 @@
-package de.wps.bikehh.benutzerverwaltung.security;
+package de.wps.bikehh.authentifizierung.security;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 

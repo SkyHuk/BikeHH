@@ -1,4 +1,4 @@
-package de.wps.bikehh.benutzerverwaltung.exception;
+package de.wps.bikehh.framework.api.exception;
 
 import org.springframework.http.HttpStatus;
 

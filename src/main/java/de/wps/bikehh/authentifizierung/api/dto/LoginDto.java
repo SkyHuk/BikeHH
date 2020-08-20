@@ -1,4 +1,4 @@
-package de.wps.bikehh.benutzerverwaltung.dto.request;
+package de.wps.bikehh.authentifizierung.api.dto;
 
 import javax.validation.constraints.NotNull;
 

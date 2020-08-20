@@ -18,11 +18,11 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import de.wps.bikehh.authentifizierung.service.AuthenticationService;
 import de.wps.bikehh.benutzerverwaltung.dto.request.UpdateUserDetailsDto;
 import de.wps.bikehh.benutzerverwaltung.material.Rollen;
 import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.benutzerverwaltung.repository.UserAuthenticationRepository;
-import de.wps.bikehh.benutzerverwaltung.service.AuthService;
 import de.wps.bikehh.benutzerverwaltung.service.PasswordDetailService;
 import de.wps.bikehh.benutzerverwaltung.service.UserDetailService;
 import de.wps.bikehh.benutzerverwaltung.service.VerifyDetailService;
@@ -31,7 +31,7 @@ import de.wps.bikehh.benutzerverwaltung.service.VerifyDetailService;
 public class UserDetailServiceTest {
 
 	@Mock
-	AuthService authService;
+	AuthenticationService authService;
 	@Mock
 	VerifyDetailService verifyDetailService;
 	@Mock

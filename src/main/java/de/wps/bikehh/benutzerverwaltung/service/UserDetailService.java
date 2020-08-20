@@ -11,13 +11,14 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import de.wps.bikehh.authentifizierung.service.AuthenticationService;
 import de.wps.bikehh.benutzerverwaltung.dto.request.UpdateUserDetailsDto;
-import de.wps.bikehh.benutzerverwaltung.exception.ApiRequestException;
-import de.wps.bikehh.benutzerverwaltung.exception.ErrorCode;
 import de.wps.bikehh.benutzerverwaltung.material.BikehhUserDetails;
 import de.wps.bikehh.benutzerverwaltung.material.Rollen;
 import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.benutzerverwaltung.repository.UserAuthenticationRepository;
+import de.wps.bikehh.framework.api.exception.ApiRequestException;
+import de.wps.bikehh.framework.api.exception.ErrorCode;
 
 @Service
 public class UserDetailService implements UserDetailsService {
@@ -28,12 +29,12 @@ public class UserDetailService implements UserDetailsService {
 	private UserAuthenticationRepository _userAuthenticationRepository;
 	private VerifyDetailService _verifyDetailService;
 	private PasswordDetailService _passwordDetailService;
-	private AuthService _authService;
+	private AuthenticationService _authService;
 
 	@Autowired
 	public UserDetailService(UserAuthenticationRepository userAuthenticationRepository,
 			VerifyDetailService verifyDetailService, PasswordDetailService passwordDetailService,
-			AuthService authService) {
+			AuthenticationService authService) {
 		this._userAuthenticationRepository = userAuthenticationRepository;
 		this._verifyDetailService = verifyDetailService;
 		this._authService = authService;

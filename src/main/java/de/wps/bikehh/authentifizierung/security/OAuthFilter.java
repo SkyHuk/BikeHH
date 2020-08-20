@@ -1,4 +1,4 @@
-package de.wps.bikehh.benutzerverwaltung.security;
+package de.wps.bikehh.authentifizierung.security;
 
 import java.io.IOException;
 
@@ -11,8 +11,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import de.wps.bikehh.benutzerverwaltung.exception.ApiException;
-import de.wps.bikehh.benutzerverwaltung.exception.ErrorCode;
+import de.wps.bikehh.framework.api.exception.ApiException;
+import de.wps.bikehh.framework.api.exception.ErrorCode;
 
 public class OAuthFilter extends OncePerRequestFilter {
 

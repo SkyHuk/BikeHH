@@ -1,4 +1,4 @@
-package de.wps.bikehh.benutzerverwaltung.controller;
+package de.wps.bikehh.authentifizierung.api.controller;
 
 import javax.validation.Valid;
 
@@ -13,20 +13,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.wps.bikehh.benutzerverwaltung.dto.request.LoginDto;
+import de.wps.bikehh.authentifizierung.api.dto.LoginDto;
+import de.wps.bikehh.authentifizierung.security.OAuthToken;
+import de.wps.bikehh.authentifizierung.service.AuthenticationService;
 import de.wps.bikehh.benutzerverwaltung.dto.response.AuthTokenDto;
 import de.wps.bikehh.benutzerverwaltung.material.Session;
-import de.wps.bikehh.benutzerverwaltung.security.OAuthToken;
-import de.wps.bikehh.benutzerverwaltung.service.AuthService;
 
 @RestController
 @RequestMapping("/api/auth")
-public class AuthController {
+public class AuthenticationController {
 
-	private AuthService authService;
+	private AuthenticationService authService;
 
 	@Autowired
-	public AuthController(AuthService authService) {
+	public AuthenticationController(AuthenticationService authService) {
 		this.authService = authService;
 	}
 

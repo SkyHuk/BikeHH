@@ -1,4 +1,4 @@
-package de.wps.bikehh.benutzerverwaltung.service;
+package de.wps.bikehh.authentifizierung.service;
 
 import java.util.List;
 
@@ -8,15 +8,16 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import de.wps.bikehh.benutzerverwaltung.exception.ApiRequestException;
-import de.wps.bikehh.benutzerverwaltung.exception.ErrorCode;
 import de.wps.bikehh.benutzerverwaltung.material.Session;
 import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.benutzerverwaltung.repository.SessionRepository;
 import de.wps.bikehh.benutzerverwaltung.repository.UserAuthenticationRepository;
+import de.wps.bikehh.benutzerverwaltung.service.TokenService;
+import de.wps.bikehh.framework.api.exception.ApiRequestException;
+import de.wps.bikehh.framework.api.exception.ErrorCode;
 
 @Service
-public class AuthService {
+public class AuthenticationService {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -27,7 +28,7 @@ public class AuthService {
 	private UserAuthenticationRepository _userAuthenticationRepository;
 
 	@Autowired
-	public AuthService(TokenService tokenService,
+	public AuthenticationService(TokenService tokenService,
 			SessionRepository sessionRepository,
 			UserAuthenticationRepository _userAuthenticationRepository) {
 		this.tokenService = tokenService;
