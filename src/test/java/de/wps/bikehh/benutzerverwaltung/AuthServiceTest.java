@@ -6,12 +6,8 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
-import java.util.Arrays;
-import java.util.List;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -23,6 +19,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import de.wps.bikehh.authentifizierung.material.Session;
 import de.wps.bikehh.authentifizierung.repository.SessionRepository;
 import de.wps.bikehh.authentifizierung.service.AuthenticationService;
+import de.wps.bikehh.benutzerverwaltung.material.Rollen;
 import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.benutzerverwaltung.repository.UserRepository;
 import de.wps.bikehh.framework.api.exception.ApiRequestException;
@@ -46,7 +43,7 @@ public class AuthServiceTest {
 		String testPw = "test";
 		String testPwHash = "test_hashed_LOL";
 
-		User testUser = new User(testEmail, testPwHash);
+		User testUser = new User(testEmail, testPwHash, Rollen.ROLE_USER);
 
 		when(_userAuthenticationRepository.existsByEmailAddress(testEmail)).thenReturn(true);
 		when(_userAuthenticationRepository.findByEmailAddress(testEmail)).thenReturn(testUser);
@@ -70,16 +67,6 @@ public class AuthServiceTest {
 	public void testLogoutUser() {
 		_authService.logoutUser(new Session());
 		verify(_sessionRepository, atLeastOnce()).delete(any(Session.class));
-	}
-
-	@Test
-	public void testLogoutAllSession() {
-		Long testId = 14524L;
-		List<Session> sessionsByUser = Arrays.asList(new Session(), new Session(), new Session());
-		when(_sessionRepository.findAllByUserId(testId)).thenReturn(sessionsByUser);
-
-		_authService.logoutAllSession(testId);
-		verify(_sessionRepository, times(3)).delete(any(Session.class));
 	}
 
 	@Test

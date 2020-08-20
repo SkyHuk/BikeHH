@@ -27,26 +27,17 @@ public class VerificationController {
 		this.verificationService = verifyDetailService;
 	}
 
-	/**
-	 *
-	 * schickt eine account-verifizeren Email raus
-	 *
-	 * @param requestModel
-	 *            email
-	 */
 	@PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<String> requestVerificationMail(@RequestBody @Valid RequestPasswordResetMailDto requestModel) {
-		verificationService.requestVerificationMail(requestModel.getEmail());
+	public ResponseEntity<String> requestVerificationMail(
+			@RequestBody @Valid RequestPasswordResetMailDto requestModel) {
+		try {
+			verificationService.requestVerificationMail(requestModel.getEmail());
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-	/**
-	 *
-	 * verifiziert einen User
-	 *
-	 * @param token
-	 *            der token, welcher den User identifiziert
-	 */
 	@PutMapping
 	public void verifyUser(@RequestParam String token) {
 		verificationService.verifyUser(token);

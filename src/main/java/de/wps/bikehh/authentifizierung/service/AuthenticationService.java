@@ -1,20 +1,18 @@
 package de.wps.bikehh.authentifizierung.service;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.LockedException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import de.wps.bikehh.authentifizierung.material.Session;
 import de.wps.bikehh.authentifizierung.repository.SessionRepository;
 import de.wps.bikehh.benutzerverwaltung.material.User;
-import de.wps.bikehh.benutzerverwaltung.repository.UserRepository;
 import de.wps.bikehh.benutzerverwaltung.service.TokenService;
-import de.wps.bikehh.framework.api.exception.ApiRequestException;
-import de.wps.bikehh.framework.api.exception.ErrorCode;
+import de.wps.bikehh.benutzerverwaltung.service.UserService;
+import de.wps.bikehh.framework.Contract;
 
 @Service
 public class AuthenticationService {
@@ -22,78 +20,55 @@ public class AuthenticationService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
+	private SessionRepository sessionRepository;
+
+	private UserService userService;
 	private TokenService tokenService;
 
-	private SessionRepository _sessionRepository;
-	private UserRepository _userAuthenticationRepository;
-
 	@Autowired
-	public AuthenticationService(TokenService tokenService,
+	public AuthenticationService(
 			SessionRepository sessionRepository,
-			UserRepository _userAuthenticationRepository) {
+			UserService userService,
+			TokenService tokenService) {
+		this.sessionRepository = sessionRepository;
 		this.tokenService = tokenService;
-		this._sessionRepository = sessionRepository;
-		this._userAuthenticationRepository = _userAuthenticationRepository;
+		this.userService = userService;
 	}
 
-	/**
-	 * loggt einen User ein
-	 *
-	 * erstellt eine Session in der Datenbank
-	 *
-	 * @param email
-	 *            email des Users
-	 * @param password
-	 *            passwort des Users
-	 * @return eine gültige Session
-	 */
-	public Session loginUser(String email, String password) throws BadCredentialsException {
-		if (!_userAuthenticationRepository.existsByEmailAddress(email)) {
-			throw new ApiRequestException(ErrorCode.bad_credentials, HttpStatus.BAD_REQUEST);
+	public Session loginUser(String email, String password)
+			throws UsernameNotFoundException, LockedException, BadCredentialsException {
+		Contract.notEmpty(email, "email");
+		Contract.notEmpty(password, "password");
+
+		if (!userService.existsByEmail(email)) {
+			throw new UsernameNotFoundException("Unbekannter User: " + email);
 		}
 
-		User user = _userAuthenticationRepository.findByEmailAddress(email);
+		User user = userService.getUserByEmail(email);
+
 		if (user.getIsLocked()) {
-			throw new ApiRequestException(ErrorCode.unauthorized, HttpStatus.UNAUTHORIZED);
+			throw new LockedException("Nutzer ist gesperrt");
 		}
+
 		if (!passwordEncoder.matches(password, user.getEncryptedPassword())) {
-			throw new ApiRequestException(ErrorCode.bad_credentials, HttpStatus.BAD_REQUEST);
+			throw new BadCredentialsException("Falsches Passwort");
 		}
 
 		Session session = new Session(tokenService.generateSecureToken(), user);
-		_sessionRepository.save(session);
+		sessionRepository.save(session);
 
 		return session;
 	}
 
-	/**
-	 * loggt einen User aus
-	 *
-	 * löscht die Session in der Datenbank
-	 *
-	 * @param session
-	 *            die aktuelle session des User
-	 */
 	public void logoutUser(Session session) {
-		_sessionRepository.delete(session);
+		Contract.notNull(session, "session");
+
+		sessionRepository.delete(session);
 	}
 
-	public void logoutAllSession(Long userId) {
-		List<Session> sessions = _sessionRepository.findAllByUserId(userId);
-		for (Session s : sessions) {
-			_sessionRepository.delete(s);
-		}
-	}
-
-	/**
-	 * gibt eine Session anhand ihres Tokens zurück
-	 *
-	 *
-	 * @param token
-	 *            session-token
-	 * @return Session
-	 */
 	public Session getSessionByToken(String token) {
-		return _sessionRepository.findByToken(token).orElse(null);
+		Contract.notEmpty(token, "token");
+
+		return sessionRepository.findByToken(token).orElse(null);
 	}
 }

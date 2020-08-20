@@ -22,17 +22,18 @@ import de.wps.bikehh.benutzerverwaltung.api.dto.ChangePasswordDto;
 import de.wps.bikehh.benutzerverwaltung.api.dto.RegisterUserDto;
 import de.wps.bikehh.benutzerverwaltung.api.dto.UpdateUserDetailsDto;
 import de.wps.bikehh.benutzerverwaltung.api.dto.UserProfileDto;
+import de.wps.bikehh.benutzerverwaltung.material.Rollen;
 import de.wps.bikehh.benutzerverwaltung.material.User;
-import de.wps.bikehh.benutzerverwaltung.service.UserDetailService;
+import de.wps.bikehh.benutzerverwaltung.service.UserService;
 
 @RestController
 @RequestMapping("/api/user")
 public class UserRestController {
 
-	private UserDetailService userDetailService;
+	private UserService userDetailService;
 
 	@Autowired
-	public UserRestController(UserDetailService userDetailService) {
+	public UserRestController(UserService userDetailService) {
 		this.userDetailService = userDetailService;
 	}
 
@@ -64,7 +65,13 @@ public class UserRestController {
 	@PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE })
 	@ResponseStatus(HttpStatus.OK)
 	public void createUser(@RequestBody @Valid RegisterUserDto requestUserDetails) {
-		userDetailService.createUser(requestUserDetails.getEmail(), requestUserDetails.getPassword());
+		userDetailService.createUser(
+				requestUserDetails.getEmail(),
+				requestUserDetails.getPassword(),
+				Rollen.ROLE_USER);
+
+		// FIXME: ApplicationService erstellen und Verifizierungsmail schicken.
+		// _verifyDetailService.requestVerificationMail(user.getEmailAddress());
 	}
 
 	/**

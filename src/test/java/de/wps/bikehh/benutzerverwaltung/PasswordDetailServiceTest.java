@@ -6,8 +6,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.Optional;
-
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import de.wps.bikehh.benutzerverwaltung.material.Mail;
+import de.wps.bikehh.benutzerverwaltung.material.Rollen;
 import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.benutzerverwaltung.repository.UserRepository;
 import de.wps.bikehh.benutzerverwaltung.service.SmtpService;
@@ -39,7 +38,7 @@ public class PasswordDetailServiceTest {
 	@Ignore("TokenService mitgeben")
 	public void testRequestResetMail() {
 		String testEmail = "test@mail.com";
-		User testUser = new User(testEmail, "testPw123");
+		User testUser = new User(testEmail, "testPw123", Rollen.ROLE_USER);
 		testUser.setId(1L);
 
 		// Default case
@@ -65,11 +64,4 @@ public class PasswordDetailServiceTest {
 		verify(_passwordAuthenticationRepository, times(2)).save(any(Reset.class));
 	}
 
-	@Test
-	public void testDeleteResetToken() {
-		when(_passwordAuthenticationRepository.findByUserId(anyLong())).thenReturn(Optional.of(new Reset()));
-
-		_passwordDetailService.deleteResetToken(1L);
-		verify(_passwordAuthenticationRepository).delete(any(Reset.class));
-	}
 }

@@ -17,7 +17,7 @@ import de.wps.bikehh.authentifizierung.security.OAuthEntryPoint;
 import de.wps.bikehh.authentifizierung.security.OAuthFilter;
 import de.wps.bikehh.authentifizierung.security.OAuthProvider;
 import de.wps.bikehh.benutzerverwaltung.material.Rollen;
-import de.wps.bikehh.benutzerverwaltung.service.UserDetailService;
+import de.wps.bikehh.benutzerverwaltung.service.UserService;
 
 @Configuration
 @EnableWebSecurity
@@ -27,13 +27,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	// https://docs.spring.io/spring-security/site/docs/3.2.x/reference/htmlsingle/html5/#multiple-httpsecurity
 
 	@Autowired
-	private UserDetailService userDetailService;
+	private UserService userService;
 
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 		// Administrator beim Start neu hinzufügen.
 		// TODO: Für Produktivbetrieb löschen
-		userDetailService.createAdmin("admin@bikehh.de", "admin_pw");
+		userService.createUser("admin@bikehh.de", "admin_pw", Rollen.ROLE_ADMIN);
 	}
 
 	@Configuration
@@ -72,7 +72,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		private PasswordEncoder passwordEncoder;
 
 		@Autowired
-		private UserDetailService userDetailService;
+		private UserService userService;
 
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
@@ -104,7 +104,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		@Override
 		public void configure(AuthenticationManagerBuilder auth) throws Exception {
 			auth
-					.userDetailsService(userDetailService)
+					.userDetailsService(userService)
 					.passwordEncoder(passwordEncoder);
 		}
 	}

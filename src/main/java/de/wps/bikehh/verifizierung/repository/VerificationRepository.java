@@ -1,7 +1,5 @@
 package de.wps.bikehh.verifizierung.repository;
 
-import java.util.Optional;
-
 import org.springframework.data.repository.CrudRepository;
 
 import de.wps.bikehh.benutzerverwaltung.material.User;
@@ -11,9 +9,11 @@ public interface VerificationRepository extends CrudRepository<Verification, Lon
 
 	boolean existsByUser(User user);
 
-	Optional<Verification> findByUser(User user);
+	Verification findByUser(User user);
 
 	void deleteByUser(User user);
 
-	Optional<Verification> findByToken(String token);
+	boolean existsByToken(String token);
+
+	Verification findByToken(String token);
 }

@@ -1,12 +1,7 @@
 package de.wps.bikehh.benutzerverwaltung;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
-
-import java.util.Arrays;
-import java.util.List;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -22,7 +17,7 @@ import de.wps.bikehh.authentifizierung.service.AuthenticationService;
 import de.wps.bikehh.benutzerverwaltung.material.Rollen;
 import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.benutzerverwaltung.repository.UserRepository;
-import de.wps.bikehh.benutzerverwaltung.service.UserDetailService;
+import de.wps.bikehh.benutzerverwaltung.service.UserService;
 import de.wps.bikehh.passwortzuruecksetzung.service.PasswordResetService;
 import de.wps.bikehh.verifizierung.service.VerificationService;
 
@@ -39,14 +34,12 @@ public class UserDetailServiceTest {
 	@Mock
 	private UserRepository userRepository;
 	@InjectMocks
-	private UserDetailService userDetailService;
-
-	// ------------------
+	private UserService userDetailService;
 
 	@Test
 	@Ignore
 	public void testCreateUser() {
-		userDetailService.createUser("test@web.de", "Test1234");
+		userDetailService.createUser("test@web.de", "Test1234", Rollen.ROLE_USER);
 		Mockito.verify(userRepository).existsByEmailAddress(anyString());
 		Mockito.verify(userRepository).save(Mockito.any(User.class));
 	}
@@ -68,9 +61,6 @@ public class UserDetailServiceTest {
 		userDetailService.deleteUser(user);
 
 		Mockito.verify(userRepository).delete(Mockito.any(User.class));
-		Mockito.verify(authService).logoutAllSession(anyLong());
-		Mockito.verify(verifyDetailService).deleteVerification(Mockito.any(User.class));
-		Mockito.verify(passwordDetailService).deleteResetToken(anyLong());
 	}
 
 	@Test
@@ -83,39 +73,6 @@ public class UserDetailServiceTest {
 		user.setEncryptedPassword(encoder.encode("Test1234"));
 		userDetailService.updatePassword(user, "Test1234", "Kern1234");
 		Mockito.verify(userRepository).save(Mockito.any(User.class));
-	}
-
-	@Test
-	public void testRetrieveUsers() {
-		List<User> allUser = Arrays.asList(new User("test@mail.com", "Password123", Rollen.ROLE_USER),
-				new User("another@mail.com", "anotherPassword123", Rollen.ROLE_USER),
-				new User("test2@mail.com", "Password123", Rollen.ROLE_ADMIN));
-		when(userRepository.findAll()).thenReturn(allUser);
-
-		List<User> result = userDetailService.retrieveUsers();
-		assertEquals(2, result.size());
-	}
-
-	@Test
-	public void testGetUserById() {
-		User user = new User("test@test.com", "Password1234");
-		user.setId(222L);
-		when(userRepository.existsById(anyLong())).thenReturn(true);
-		userDetailService.getUserById(user.getId());
-		Mockito.verify(userRepository).existsById(anyLong());
-		Mockito.verify(userRepository).findById(anyLong());
-	}
-
-	@Test
-	public void testDeleteUserById() {
-		User user = new User("test1@test.com", "Password1234");
-		user.setId(111L);
-		when(userRepository.existsById(anyLong())).thenReturn(true);
-
-		userDetailService.deleteUserById(user.getId());
-
-		Mockito.verify(userRepository).existsById(anyLong());
-		Mockito.verify(userRepository).deleteById(anyLong());
 	}
 
 }

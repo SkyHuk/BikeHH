@@ -9,14 +9,14 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import de.wps.bikehh.benutzerverwaltung.material.Mail;
 import de.wps.bikehh.benutzerverwaltung.material.User;
-import de.wps.bikehh.benutzerverwaltung.repository.UserRepository;
 import de.wps.bikehh.benutzerverwaltung.service.SmtpService;
 import de.wps.bikehh.benutzerverwaltung.service.TokenService;
+import de.wps.bikehh.benutzerverwaltung.service.UserService;
+import de.wps.bikehh.framework.Contract;
 import de.wps.bikehh.framework.api.exception.ApiRequestException;
 import de.wps.bikehh.framework.api.exception.ErrorCode;
 import de.wps.bikehh.passwortzuruecksetzung.material.Reset;
@@ -25,37 +25,27 @@ import de.wps.bikehh.passwortzuruecksetzung.repository.PasswordResetRepository;
 @Service
 public class PasswordResetService {
 
-	@Autowired
-	private PasswordEncoder passwordEncoder;
-
 	private PasswordResetRepository passwordResetRepository;
-	private UserRepository userRepository;
-	private SmtpService smtpService;
+
+	private UserService userService;
 	private TokenService tokenService;
+	private SmtpService smtpService;
 
 	@Autowired
-	public PasswordResetService(TokenService tokenService,
-			PasswordResetRepository passwordAuthenticationRepository,
-			UserRepository userAuthenticationRepository, SmtpService smtpService) {
-		this.passwordResetRepository = passwordAuthenticationRepository;
-		this.userRepository = userAuthenticationRepository;
+	public PasswordResetService(UserService userService,
+			TokenService tokenService,
+			PasswordResetRepository passwordResetRepository,
+			SmtpService smtpService) {
+		this.passwordResetRepository = passwordResetRepository;
+		this.userService = userService;
 		this.smtpService = smtpService;
 		this.tokenService = tokenService;
 	}
 
-	/**
-	 * verschickt eine passwort-reset mail
-	 *
-	 *
-	 * @param email
-	 *            email des Users
-	 */
 	public void requestResetMail(String email) {
-		if (!userRepository.existsByEmailAddress(email)) {
-			return;
-		}
+		Contract.check(userService.existsByEmail(email), "userService.existsByEmail(email)");
 
-		User user = userRepository.findByEmailAddress(email);
+		User user = userService.getUserByEmail(email);
 
 		// Delete in case token for user already exists
 		Reset reset = passwordResetRepository.findByUserId(user.getId()).orElse(null);
@@ -83,47 +73,26 @@ public class PasswordResetService {
 		mail.setModel(model);
 
 		smtpService.sendMail(mail, SmtpService.Templates.RESET);
-
 	}
 
-	/**
-	 * setzt ein neues Passwort
-	 *
-	 * @param token
-	 *            token, welcher den User identifiziert
-	 * @param password
-	 *            passwort des Users
-	 */
-	public void resetPassword(String password, String token) throws ApiRequestException {
+	public User resetPassword(String password, String token) throws ApiRequestException {
+		Contract.notEmpty(password, "password");
+		Contract.notEmpty(token, "token");
+
+		// TODO: Hier wird nix mehr mit APIRequestExceptions geduldet.
 		Reset reset = passwordResetRepository.findByToken(token).orElse(null);
 		if (reset == null) {
 			throw new ApiRequestException(ErrorCode.invalid_token, HttpStatus.NOT_FOUND);
 		}
 
-		User user = reset.getUser();
-		String encodedPassword = passwordEncoder.encode(password);
-		user.setEncryptedPassword(encodedPassword);
+		User updatedUser = userService.setPassword(reset.getUser(), password);
 
-		// Delete reset token and set new password
 		passwordResetRepository.delete(reset);
-		userRepository.save(user);
+		return updatedUser;
 	}
 
 	/**
-	 * löscht einen reset-token
-	 *
-	 * @param userId
-	 *            id des Users
-	 */
-	public void deleteResetToken(Long userId) {
-		Reset reset = passwordResetRepository.findByUserId(userId).orElse(null);
-		if (reset != null) {
-			passwordResetRepository.delete(reset);
-		}
-	}
-
-	/**
-	 * scheduler, welcher abgelaufene password-reset tokens löscht
+	 * Scheduler, der abgelaufene password-reset tokens löscht
 	 */
 	@Scheduled(fixedRate = 10000)
 	public void deleteExpiredTokens() {

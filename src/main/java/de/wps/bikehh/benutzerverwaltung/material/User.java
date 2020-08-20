@@ -15,7 +15,7 @@ public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+	private long id;
 
 	private String emailAddress;
 
@@ -39,11 +39,6 @@ public class User {
 	@CreationTimestamp
 	private Date createdAt;
 
-	public User(String email, String encryptedPassword) {
-		this.emailAddress = email;
-		this.encryptedPassword = encryptedPassword;
-	}
-
 	public User(String email, String encryptedPassword, String role) {
 		this.role = role;
 		this.emailAddress = email;
@@ -53,11 +48,11 @@ public class User {
 	public User() {
 	}
 
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
