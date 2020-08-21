@@ -7,12 +7,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import de.wps.bikehh.framework.api.exception.ApiException;
-import de.wps.bikehh.framework.api.exception.ErrorCode;
 
 public class OAuthFilter extends OncePerRequestFilter {
 
@@ -35,7 +35,7 @@ public class OAuthFilter extends OncePerRequestFilter {
 	}
 
 	private void sendUnauthorizedResponse(HttpServletResponse response) throws IOException {
-		ApiException exception = new ApiException(ErrorCode.unauthorized);
+		ApiException exception = new ApiException(HttpStatus.UNAUTHORIZED);
 
 		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		response.setContentType("application/json");

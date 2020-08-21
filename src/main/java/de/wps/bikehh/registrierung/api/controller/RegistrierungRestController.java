@@ -24,7 +24,7 @@ public class RegistrierungRestController {
 	}
 
 	@PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<String> createUser(@RequestBody @Valid RegisterUserDto registerUserDto) {
+	public ResponseEntity<String> createUser(@Valid @RequestBody RegisterUserDto registerUserDto) {
 		try {
 			registerAppService.registerUser(registerUserDto);
 		} catch (Exception e) {

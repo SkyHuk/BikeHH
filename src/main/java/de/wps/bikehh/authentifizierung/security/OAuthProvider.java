@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 import de.wps.bikehh.authentifizierung.material.Session;
 import de.wps.bikehh.authentifizierung.service.AuthenticationService;
-import de.wps.bikehh.framework.api.exception.ErrorCode;
 
 @Component
 public class OAuthProvider implements AuthenticationProvider {
@@ -27,7 +26,7 @@ public class OAuthProvider implements AuthenticationProvider {
 		String token = (String) auth.getCredentials();
 		Session session = authService.getSessionByToken(token);
 		if (session == null) {
-			throw new BadCredentialsException(ErrorCode.invalid_token);
+			throw new BadCredentialsException("Invalid Token");
 		}
 
 		OAuthToken nAuth = new OAuthToken(session.getUser(), token);
