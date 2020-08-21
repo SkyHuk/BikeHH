@@ -33,7 +33,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 		// Administrator beim Start neu hinzufügen.
 		// TODO: Für Produktivbetrieb löschen
-		userService.createUser("admin@bikehh.de", "admin_pw", Rollen.ROLE_ADMIN);
+		if (!userService.existsByEmail("admin@bikehh.de")) {
+			userService.createUser("admin@bikehh.de", "admin_pw", Rollen.ROLE_ADMIN);
+		}
 	}
 
 	@Configuration
