@@ -65,6 +65,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 					"/api/verify",
 					"/api/password/forgot",
 					"/api/password/reset",
+					"/api/user/register"
 			};
 
 			web.ignoring().antMatchers(publicUrls);

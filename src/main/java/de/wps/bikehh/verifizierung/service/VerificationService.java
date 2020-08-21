@@ -46,7 +46,7 @@ public class VerificationService {
 
 		User user = userService.getUserByEmail(email);
 		if (user.getIsVerified()) {
-			throw new Exception("Der Benutzer ist bereits verifiziert");
+			throw new Exception("Der Benutzer ist bereits verifiziert.");
 		}
 
 		// Delete in case token for user already exists
