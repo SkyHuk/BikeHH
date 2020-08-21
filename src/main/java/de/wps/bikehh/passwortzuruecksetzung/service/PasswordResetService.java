@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +16,6 @@ import de.wps.bikehh.benutzerverwaltung.service.SmtpService;
 import de.wps.bikehh.benutzerverwaltung.service.TokenService;
 import de.wps.bikehh.benutzerverwaltung.service.UserService;
 import de.wps.bikehh.framework.Contract;
-import de.wps.bikehh.framework.api.exception.ApiRequestException;
-import de.wps.bikehh.framework.api.exception.ErrorCode;
 import de.wps.bikehh.passwortzuruecksetzung.material.Reset;
 import de.wps.bikehh.passwortzuruecksetzung.repository.PasswordResetRepository;
 
@@ -48,9 +45,8 @@ public class PasswordResetService {
 		User user = userService.getUserByEmail(email);
 
 		// Delete in case token for user already exists
-		Reset reset = passwordResetRepository.findByUserId(user.getId()).orElse(null);
-		if (reset != null) {
-			passwordResetRepository.delete(reset);
+		if (!passwordResetRepository.existsByUserId(user.getId())) {
+			passwordResetRepository.deleteByUserId(user.getId());
 		}
 
 		String token = tokenService.generateSecureToken();
@@ -75,16 +71,12 @@ public class PasswordResetService {
 		smtpService.sendMail(mail, SmtpService.Templates.RESET);
 	}
 
-	public User resetPassword(String password, String token) throws ApiRequestException {
+	public User resetPassword(String password, String token) {
 		Contract.notEmpty(password, "password");
 		Contract.notEmpty(token, "token");
+		Contract.check(passwordResetRepository.existsByToken(token), "token exists");
 
-		// TODO: Hier wird nix mehr mit APIRequestExceptions geduldet.
-		Reset reset = passwordResetRepository.findByToken(token).orElse(null);
-		if (reset == null) {
-			throw new ApiRequestException(ErrorCode.invalid_token, HttpStatus.NOT_FOUND);
-		}
-
+		Reset reset = passwordResetRepository.findByToken(token);
 		User updatedUser = userService.setPassword(reset.getUser(), password);
 
 		passwordResetRepository.delete(reset);

@@ -56,7 +56,7 @@ public class PasswordDetailServiceTest {
 
 		// with existing verification token
 		when(_userAuthenticationRepository.existsByEmailAddress(testEmail)).thenReturn(true);
-		when(_passwordAuthenticationRepository.findByUserId(anyLong())).thenReturn(java.util.Optional.of(new Reset()));
+		when(_passwordAuthenticationRepository.findByUserId(anyLong())).thenReturn(new Reset());
 
 		_passwordDetailService.requestResetMail(testEmail);
 

@@ -4,9 +4,15 @@ import org.springframework.data.repository.CrudRepository;
 
 import de.wps.bikehh.passwortzuruecksetzung.material.Reset;
 
-import java.util.Optional;
-
 public interface PasswordResetRepository extends CrudRepository<Reset, Long> {
-    Optional<Reset> findByUserId(Long userId);
-    Optional<Reset> findByToken(String token);
+
+	Reset findByUserId(long userId);
+
+	boolean existsByUserId(long userId);
+
+	void deleteByUserId(long userId);
+
+	Reset findByToken(String token);
+
+	boolean existsByToken(String token);
 }

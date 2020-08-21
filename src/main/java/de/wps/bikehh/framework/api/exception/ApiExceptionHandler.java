@@ -27,14 +27,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RequestMapping(produces = "application/json")
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
-	@ExceptionHandler(value = { ApiRequestException.class })
-	public ResponseEntity<Object> handleApiBadRequestException(ApiRequestException e) {
-
-		ApiException apiException = new ApiException(e.getMessage());
-
-		return new ResponseEntity<>(apiException, e.getHttpStatus());
-	}
-
 	@Override
 	protected ResponseEntity<Object> handleServletRequestBindingException(ServletRequestBindingException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
