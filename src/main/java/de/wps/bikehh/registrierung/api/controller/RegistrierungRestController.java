@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import de.wps.bikehh.framework.api.exception.ApiException;
 import de.wps.bikehh.registrierung.api.applicationservice.RegistrierungApplicationService;
 import de.wps.bikehh.registrierung.api.dto.RegisterUserDto;
 
@@ -24,11 +25,13 @@ public class RegistrierungRestController {
 	}
 
 	@PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<String> createUser(@Valid @RequestBody RegisterUserDto registerUserDto) {
+	public ResponseEntity<Object> createUser(@Valid @RequestBody RegisterUserDto registerUserDto) {
 		try {
 			registerAppService.registerUser(registerUserDto);
 		} catch (Exception e) {
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(
+					new ApiException(HttpStatus.BAD_REQUEST, e.getMessage()),
+					HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<>(HttpStatus.OK);
 	}

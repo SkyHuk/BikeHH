@@ -14,7 +14,9 @@ public class RegisterUserDto {
 
 	@NotEmpty(message = "Das Passwort darf nicht leer sein.")
 	@Length(min = 8, max = 64, message = "Das Passwort muss zwischen 8 und 64 Zeichen enthalten.")
-	@Pattern(regexp = "^(?=.*\\d)[a-zA-Z\\d]", message = "Das Passwort muss mindestens einen Großbuchstaben, einen Kleinbuchstaben und eine Zahl enthalten.")
+	@Pattern(regexp = ".*\\d.*", message = "Das Passwort muss mindestens eine Zahl enthalten.")
+	@Pattern(regexp = ".*[a-z].*", message = "Das Passwort muss mindestens einen Kleinbuchstaben enthalten.")
+	@Pattern(regexp = ".*[A-Z].*", message = "Das Passwort muss mindestens einen Großbuchstaben enthalten.")
 	private String password;
 
 	public String getEmail() {
