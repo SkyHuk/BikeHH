@@ -14,7 +14,7 @@ import de.wps.bikehh.registrierung.api.applicationservice.RegistrierungApplicati
 import de.wps.bikehh.registrierung.api.dto.RegisterUserDto;
 
 @RestController
-@RequestMapping("/api/register")
+@RequestMapping("/api/user/register")
 public class RegistrierungRestController {
 
 	private RegistrierungApplicationService registerAppService;
