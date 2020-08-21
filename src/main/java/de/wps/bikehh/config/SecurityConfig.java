@@ -60,7 +60,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 		@Override
 		public void configure(WebSecurity web) throws Exception {
-			web.ignoring().antMatchers("/api/auth");
+			String[] publicUrls = {
+					"/api/auth",
+					"/api/verify",
+					"/api/password/forgot",
+					"/api/password/reset",
+			};
+
+			web.ignoring().antMatchers(publicUrls);
 		}
 	}
 

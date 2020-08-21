@@ -27,13 +27,7 @@ public class PasswordResetController {
 		this.passwordDetailService = passwordDetailService;
 	}
 
-	/**
-	 * schickt eine email raus, um sein Passwort zurückzusetzen
-	 *
-	 * @param requestModel
-	 *            email
-	 */
-	@PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE })
+	@PostMapping(value = "/forgot", consumes = { MediaType.APPLICATION_JSON_VALUE })
 	@ResponseStatus(HttpStatus.OK)
 	public void requestPasswordResetMail(@RequestBody @Valid RequestPasswordResetMailDto requestModel) {
 		String email = requestModel.getEmail();
@@ -41,14 +35,6 @@ public class PasswordResetController {
 		passwordDetailService.requestResetMail(email);
 	}
 
-	/**
-	 * Setzt ein neues Passwort für den mit dem Token verbundenen User.
-	 *
-	 * @param requestModel
-	 *            neues Passwort
-	 * @param token
-	 *            eindeutiger Token, um User zu identifizieren
-	 */
 	@PostMapping(value = "/reset", consumes = { MediaType.APPLICATION_JSON_VALUE })
 	@ResponseStatus(HttpStatus.OK)
 	public void resetPassword(@RequestBody @Valid ResetPasswordDto requestModel, @RequestParam String token) {
