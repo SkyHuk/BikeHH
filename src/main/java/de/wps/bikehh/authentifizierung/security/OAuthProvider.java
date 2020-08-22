@@ -24,13 +24,13 @@ public class OAuthProvider implements AuthenticationProvider {
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 		OAuthToken auth = (OAuthToken) authentication;
 		String token = (String) auth.getCredentials();
-		Session session = authService.getSessionByToken(token);
-		if (session == null) {
+
+		if (!authService.hasSession(token)) {
 			throw new BadCredentialsException("Invalid Token");
 		}
 
-		OAuthToken nAuth = new OAuthToken(session.getUser(), token);
-		nAuth.setSession(session);
+		Session session = authService.getSessionByToken(token);
+		OAuthToken nAuth = new OAuthToken(session);
 		return nAuth;
 	}
 

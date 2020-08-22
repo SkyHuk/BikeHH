@@ -19,6 +19,11 @@ public class OAuthToken extends UsernamePasswordAuthenticationToken {
 		super(user, token);
 	}
 
+	public OAuthToken(Session session) {
+		super(session.getUser(), session.getToken());
+		this.session = session;
+	}
+
 	public void setSession(Session session) {
 		this.session = session;
 	}

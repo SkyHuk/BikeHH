@@ -1,5 +1,8 @@
 package de.wps.bikehh.authentifizierung.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.LockedException;
@@ -8,7 +11,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import de.wps.bikehh.authentifizierung.material.Session;
-import de.wps.bikehh.authentifizierung.repository.SessionRepository;
 import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.benutzerverwaltung.service.TokenService;
 import de.wps.bikehh.benutzerverwaltung.service.UserService;
@@ -20,19 +22,21 @@ public class AuthenticationService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-	private SessionRepository sessionRepository;
+	/**
+	 * <Token, Session>
+	 */
+	private Map<String, Session> sessions;
 
 	private UserService userService;
 	private TokenService tokenService;
 
 	@Autowired
 	public AuthenticationService(
-			SessionRepository sessionRepository,
 			UserService userService,
 			TokenService tokenService) {
-		this.sessionRepository = sessionRepository;
 		this.tokenService = tokenService;
 		this.userService = userService;
+		this.sessions = new HashMap<>();
 	}
 
 	public Session loginUser(String email, String password)
@@ -55,7 +59,7 @@ public class AuthenticationService {
 		}
 
 		Session session = new Session(tokenService.generateSecureToken(), user);
-		sessionRepository.save(session);
+		sessions.put(session.getToken(), session);
 
 		return session;
 	}
@@ -63,12 +67,19 @@ public class AuthenticationService {
 	public void logoutUser(Session session) {
 		Contract.notNull(session, "session");
 
-		sessionRepository.delete(session);
+		sessions.remove(session.getToken());
+	}
+
+	public boolean hasSession(String token) {
+		Contract.notEmpty(token, "token");
+
+		return sessions.containsKey(token);
 	}
 
 	public Session getSessionByToken(String token) {
 		Contract.notEmpty(token, "token");
+		Contract.check(sessions.containsKey(token), "sessions.containsKey(token)");
 
-		return sessionRepository.findByToken(token).orElse(null);
+		return sessions.get(token);
 	}
 }
