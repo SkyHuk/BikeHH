@@ -2,13 +2,18 @@ package de.wps.bikehh.befragungen.service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import de.wps.bikehh.befragungen.material.Befragung;
+import de.wps.bikehh.befragungen.material.Frage;
 import de.wps.bikehh.befragungen.repository.BefragungenRepository;
+import de.wps.bikehh.benutzerverwaltung.material.User;
+import de.wps.bikehh.framework.Contract;
+import de.wps.bikehh.meldungen.material.Meldung;
 
 @Service
 public class BefragungenService {
@@ -20,8 +25,36 @@ public class BefragungenService {
 		this.befragungenRepository = repository;
 	}
 
+	public Befragung save(Befragung befragung) {
+		Contract.notNull(befragung, "befragung");
+
+		return befragungenRepository.save(befragung);
+	}
+
 	public Befragung getBefragung(long id) {
 		return befragungenRepository.findById(id).get();
+	}
+
+	public Befragung createNewBefragungFromMeldung(User user, Meldung meldung) {
+		Befragung befragung = new Befragung();
+
+		befragung.setLaengengrad(meldung.getLaengengrad());
+		befragung.setBreitengrad(meldung.getBreitengrad());
+		befragung.setErsteller(user);
+
+		// TODO: Mit Georg klären wie lang Befragungen zu Meldungen sichtbar
+		// sein sollen.
+		befragung.setStartDatum(LocalDate.now());
+		befragung.setEndDatum(LocalDate.now().plusDays(1));
+
+		befragung.setBestaetigungsSchwellenwert(10);
+
+		Frage frage = new Frage();
+		frage.setText("Ist an diesem Ort " + meldung.getKategorie() + " vorzufinden?");
+		frage.setAntworten(Arrays.asList("Ja", "Nein"));
+		befragung.setFragen(Arrays.asList(frage));
+
+		return befragungenRepository.save(befragung);
 	}
 
 	public List<Befragung> getAktuelleBefragungen(LocalDate currentDate) {

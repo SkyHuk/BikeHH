@@ -6,6 +6,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import de.wps.bikehh.befragungen.material.Befragung;
+import de.wps.bikehh.befragungen.service.BefragungenService;
+import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.framework.Contract;
 import de.wps.bikehh.meldungen.material.Meldung;
 import de.wps.bikehh.meldungen.repository.MeldungenRepository;
@@ -18,63 +21,54 @@ public class MeldungenService {
 
 	private MeldungenRepository meldungenRepository;
 
+	private BefragungenService befragungenService;
+
 	@Autowired
-	public MeldungenService(MeldungenRepository meldungenRepository) {
+	public MeldungenService(MeldungenRepository meldungenRepository,
+			BefragungenService befragungenService) {
 		this.meldungenRepository = meldungenRepository;
+		this.befragungenService = befragungenService;
 	}
 
-	/**
-	 * Liefert alle in der Datenbank gespeicherten Meldungen
-	 * 
-	 * @return alle Meldungen
-	 */
+	public Meldung save(Meldung meldung) {
+		Contract.notNull(meldung, "meldung");
+
+		return meldungenRepository.save(meldung);
+	}
+
+	public boolean hasMeldung(long id) {
+		return meldungenRepository.existsById(id);
+	}
+
+	public void delete(long id) {
+		Contract.check(hasMeldung(id), "hasMeldung(id)");
+
+		meldungenRepository.deleteById(id);
+	}
+
+	public void reicheMeldungEin(User user, Meldung meldung) {
+		Contract.notNull(user, "user");
+		Contract.notNull(meldung, "meldung");
+
+		Befragung generierteBefragung = befragungenService.createNewBefragungFromMeldung(user, meldung);
+
+		meldung.setBefragung(generierteBefragung);
+		Meldung savedMeldung = save(meldung);
+
+		generierteBefragung.setMeldung(savedMeldung);
+		befragungenService.save(generierteBefragung);
+	}
+
 	public List<Meldung> getAlleMeldungen() {
 		List<Meldung> meldungen = new ArrayList<Meldung>();
 		meldungenRepository.findAll().forEach(meldungen::add);
 		return meldungen;
 	}
 
-	/**
-	 * Liefert die Meldung zu einer gegebenen Id.
-	 * 
-	 * @param id
-	 *            die id der Meldung
-	 * 
-	 * @require meldung exists
-	 * 
-	 * @return die Meldung zur gegebenen Id
-	 */
-	public Meldung getMeldungNachId(int id) {
+	public Meldung getById(int id) {
 		Contract.check(meldungenRepository.existsById((long) id), "meldung exists");
 
 		return meldungenRepository.findById((long) id).get();
 	}
 
-	/**
-	 * Speichert oder aktualisiert eine Meldung.
-	 * 
-	 * @param meldung
-	 *            die zu speichernde / verändernde Meldung
-	 * 
-	 * @require meldung not null
-	 */
-	public void speichereOderUpdateMeldung(Meldung meldung) {
-		Contract.notNull(meldung, "meldung");
-
-		meldungenRepository.save(meldung);
-	}
-
-	/**
-	 * Löscht eine Meldung aus der Datenbank.
-	 * 
-	 * @param id
-	 *            id der zu löschenden Meldung
-	 * 
-	 * @require meldung exists
-	 */
-	public void loesche(int id) {
-		Contract.check(meldungenRepository.existsById((long) id), "meldung exists");
-
-		meldungenRepository.deleteById((long) id);
-	}
 }

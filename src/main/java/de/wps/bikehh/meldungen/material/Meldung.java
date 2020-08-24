@@ -1,84 +1,48 @@
 package de.wps.bikehh.meldungen.material;
 
-import java.util.List;
+import java.time.LocalDate;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
-import de.wps.bikehh.umfragen.material.Umfrage;
+import org.hibernate.annotations.CreationTimestamp;
 
-/**
- * Dieses Model gibt die Struktur für die mobile apps vor, nach welcher die DTOs
- * aufgebaut werden müssen
- * 
- * TODO: Auf Vollständigkeit prüfen. Alle Funktionalitäten abgedeckt?
- */
+import de.wps.bikehh.befragungen.material.Befragung;
+import de.wps.bikehh.benutzerverwaltung.material.User;
+
 @Entity
 public class Meldung {
 
 	@Id
 	@GeneratedValue
-	private int id;
+	private long id;
+
+	@OneToOne
+	private Befragung befragung;
+
+	@ManyToOne
+	private User ersteller;
 
 	private double laengengrad;
 	private double breitengrad;
 
-	/**
-	 * Die Umfrage, auf die die Meldung antwortet muss nicht gesetzt sein wenn
-	 * diese Meldung nicht auf eine Umfrage antwortet sondern neu von einem
-	 * Radfahrer erzeugt wurde. Dann ist sie leer beim postRequest und wird
-	 * danach generiert und gesetzt
-	 */
-	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Umfrage.class)
-	private Umfrage umfrage;
-
-	/**
-	 * Liste an Antworten. Leer bei Neuerstellung
-	 */
-	@OneToMany(fetch = FetchType.LAZY, targetEntity = Antwort.class)
-	private List<Antwort> antwortenAufFragen;
-
-	/**
-	 * Winkel im Bogenmaß nach Osten (Wertebereich 0 - 2pi, nach Osten weil das
-	 * mathematischer Standard ist) eine fahrtrichtung von 0.0 ist ungültig und
-	 * steht symbolisierend für "keine Fahrtrichtung gesetzt"
-	 */
-	private double fahrtrichtung;
-
-	/**
-	 * Nur gefüllt wenn Meldung neu generiert wird
-	 */
 	private String text;
 
-	// TODO: Kategorie ordentlich einbauen (Liste an vorgegebenen Kategorien)
-	// @ManyToOne(fetch = FetchType.LAZY, targetEntity = Kategorie.class)
-	// private Kategorie kategorie;
+	private String kategorie;
+
+	@CreationTimestamp
+	private LocalDate createdAt;
 
 	// TODO: Meldung soll Foto beinhalten können
 
-	public Meldung() {
-	}
-
-	public Meldung(int id, double laengengrad, double breitengrad, Umfrage umfrage, List<Antwort> antwortenAufFragen,
-			double fahrtrichtung, String text) {
-		this.id = id;
-		this.laengengrad = laengengrad;
-		this.breitengrad = breitengrad;
-		this.umfrage = umfrage;
-		this.antwortenAufFragen = antwortenAufFragen;
-		this.fahrtrichtung = fahrtrichtung;
-		this.text = text;
-	}
-
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -98,36 +62,44 @@ public class Meldung {
 		this.breitengrad = breitengrad;
 	}
 
-	public Umfrage getUmfrage() {
-		return umfrage;
-	}
-
-	public void setUmfrage(Umfrage umfrage) {
-		this.umfrage = umfrage;
-	}
-
-	public List<Antwort> getAntwortenAufFragen() {
-		return antwortenAufFragen;
-	}
-
-	public void setAntwortenAufFragen(List<Antwort> antwortenAufFragen) {
-		this.antwortenAufFragen = antwortenAufFragen;
-	}
-
-	public double getFahrtrichtung() {
-		return fahrtrichtung;
-	}
-
-	public void setFahrtrichtung(double fahrtrichtung) {
-		this.fahrtrichtung = fahrtrichtung;
-	}
-
 	public String getText() {
 		return text;
 	}
 
 	public void setText(String text) {
 		this.text = text;
+	}
+
+	public Befragung getBefragung() {
+		return befragung;
+	}
+
+	public void setBefragung(Befragung befragung) {
+		this.befragung = befragung;
+	}
+
+	public User getErsteller() {
+		return ersteller;
+	}
+
+	public void setErsteller(User ersteller) {
+		this.ersteller = ersteller;
+	}
+
+	public String getKategorie() {
+		return kategorie;
+	}
+
+	public void setKategorie(String kategorie) {
+		this.kategorie = kategorie;
+	}
+
+	public LocalDate getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(LocalDate createdAt) {
+		this.createdAt = createdAt;
 	}
 
 }

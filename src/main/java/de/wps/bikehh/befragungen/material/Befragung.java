@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.meldungen.material.Meldung;
@@ -48,7 +49,7 @@ public class Befragung {
 	@ManyToOne
 	private Umfrage umfrage;
 
-	@ManyToOne
+	@OneToOne
 	private Meldung meldung;
 
 	private int bestaetigungsSchwellenwert;
