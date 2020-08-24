@@ -1,0 +1,13 @@
+<li th:fragment="oberkategorie(kategorie)" class="list-group-item">
+	<div th:text="${kategorie.name}"></div>
+	<ul th:replace="this::fragment_kategorie(${kategorie})"></ul>
+</li>
+
+<ul th:fragment="fragment_kategorie(kategorie)"
+	th:unless="${#lists.isEmpty(kategorie.unterKategorien)}">
+	<li th:each="unterkategorie : ${kategorie.unterKategorien}"
+		th:inline="text">
+		<div th:text="${unterkategorie.name}"></div>
+		<ul th:replace="this::fragment_kategorie(${unterkategorie})"></ul>
+	</li>
+</ul>

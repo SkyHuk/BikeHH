@@ -1,0 +1,28 @@
+<html layout:decorate="~{layout/layout}">
+
+<head>
+<title>Kategorien</title>
+</head>
+
+<body layout:fragment="content">
+	<h2 class="my-4 mr-4">Kategorien</h2>
+
+	<div class="card w-80 my-2">
+		<div class="card-body">
+			<div>Bereich zum erstellen von neuen Ober-Kategorien hier.</div>
+		</div>
+	</div>
+
+	<div class="card w-80 my-2">
+		<div class="card-body">
+			<div th:if="${#lists.isEmpty(kategorien)}"
+				class="text-center text-muted">Hmm ganz schön leer hier</div>
+			<ul th:unless="${#lists.isEmpty(kategorien)}"
+				class="list-group list-group-flush">
+				<li th:each="kategorie : ${kategorien}"
+					th:include="kategorien/kategorien_liste_fragment :: oberkategorie(kategorie)"></li>
+			</ul>
+		</div>
+	</div>
+</body>
+</html>
