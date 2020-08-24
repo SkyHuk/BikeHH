@@ -41,6 +41,7 @@ public class BefragungenService {
 		befragung.setLaengengrad(meldung.getLaengengrad());
 		befragung.setBreitengrad(meldung.getBreitengrad());
 		befragung.setErsteller(user);
+		befragung.setMeldung(meldung);
 
 		// TODO: Mit Georg klären wie lang Befragungen zu Meldungen sichtbar
 		// sein sollen.

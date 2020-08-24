@@ -2,6 +2,7 @@ package de.wps.bikehh.meldungen.material;
 
 import java.time.LocalDate;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -20,7 +21,7 @@ public class Meldung {
 	@GeneratedValue
 	private long id;
 
-	@OneToOne
+	@OneToOne(mappedBy = "meldung", cascade = CascadeType.PERSIST)
 	private Befragung befragung;
 
 	@ManyToOne

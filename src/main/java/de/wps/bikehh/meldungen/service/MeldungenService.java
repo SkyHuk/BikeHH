@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import de.wps.bikehh.befragungen.material.Befragung;
 import de.wps.bikehh.befragungen.service.BefragungenService;
 import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.framework.Contract;
@@ -50,13 +49,8 @@ public class MeldungenService {
 		Contract.notNull(user, "user");
 		Contract.notNull(meldung, "meldung");
 
-		Befragung generierteBefragung = befragungenService.createNewBefragungFromMeldung(user, meldung);
-
-		meldung.setBefragung(generierteBefragung);
 		Meldung savedMeldung = save(meldung);
-
-		generierteBefragung.setMeldung(savedMeldung);
-		befragungenService.save(generierteBefragung);
+		befragungenService.createNewBefragungFromMeldung(user, savedMeldung);
 	}
 
 	public List<Meldung> getAlleMeldungen() {
