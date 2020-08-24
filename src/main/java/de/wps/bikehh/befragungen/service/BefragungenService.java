@@ -51,6 +51,7 @@ public class BefragungenService {
 		befragung.setBestaetigungsSchwellenwert(10);
 
 		Frage frage = new Frage();
+		frage.setBefragung(befragung);
 		frage.setText("Ist an diesem Ort " + meldung.getKategorie() + " vorzufinden?");
 		frage.setAntworten(Arrays.asList("Ja", "Nein"));
 		befragung.setFragen(Arrays.asList(frage));
