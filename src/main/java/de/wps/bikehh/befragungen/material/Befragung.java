@@ -23,12 +23,12 @@ public class Befragung {
 	private long id;
 
 	/**
-	 * longitude in EPSG:3857
+	 * longitude in EPSG:4326
 	 */
 	private double laengengrad;
 
 	/**
-	 * latitude in EPSG:3857
+	 * latitude in EPSG:4326
 	 */
 	private double breitengrad;
 

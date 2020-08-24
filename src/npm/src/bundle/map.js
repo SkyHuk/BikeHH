@@ -10,7 +10,8 @@ import Point from 'ol/geom/Point';
 import Feature from 'ol/Feature';
 
 /*
- * Default coordinate projection is EPSG:3857
+ * Default coordinate projection is EPSG:3857, positions are EPSG:4326 so we
+ * need to convert
  */
 
 if (window.document.showMap) {
@@ -71,12 +72,16 @@ if (window.document.showMap) {
 		    }));
 			
 			const geometry = feature.getGeometry();
-			const coordinates = geometry.getCoordinates();
+			
+			const clonedGeometry = geometry.clone();
+			clonedGeometry.transform('EPSG:3857', 'EPSG:4326');
+				
+			const coordinates = clonedGeometry.getCoordinates();
 			
 			const longitudeField = document.getElementById('longitude_' + befragungsIndex);
 			const latitudeField = document.getElementById('latitude_' + befragungsIndex);
-			longitudeField.value = coordinates[0].toFixed(2);
-			latitudeField.value = coordinates[1].toFixed(2);
+			longitudeField.value = coordinates[0];
+			latitudeField.value = coordinates[1];
 			
 			// Zoom map
 			map.getView().fit(geometry.getExtent(), map.getSize());
@@ -99,7 +104,10 @@ if (window.document.showMap) {
 			
 			if(!longitude) { continue; }
 			
-			const feature = new Feature(new Point([longitude, latitude]));
+			const geometry = new Point([longitude, latitude]);
+			geometry.transform('EPSG:4326', 'EPSG:3857');
+			
+			const feature = new Feature(geometry);
 			const featureLabel = '' + (i + 1);
 			feature.setStyle(new Style({
 		        image: new Circle({
