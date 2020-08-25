@@ -56,4 +56,8 @@ public class Kategorie {
 		this.unterKategorien = unterKategorien;
 	}
 
+	public boolean isOberkategorie() {
+		return oberKategorie == null;
+	}
+
 }

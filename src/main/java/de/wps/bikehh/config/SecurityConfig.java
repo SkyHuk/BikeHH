@@ -26,18 +26,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	// Wieso weshalb warum:
 	// https://docs.spring.io/spring-security/site/docs/3.2.x/reference/htmlsingle/html5/#multiple-httpsecurity
 
-	@Autowired
-	private UserService userService;
-
-	@Autowired
-	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-		// Administrator beim Start neu hinzufügen.
-		// TODO: Für Produktivbetrieb löschen
-		if (!userService.existsByEmail("admin@bikehh.de")) {
-			userService.createUser("admin@bikehh.de", "admin_pw", Rollen.ROLE_ADMIN);
-		}
-	}
-
 	@Configuration
 	@Order(1)
 	public static class ApiWebSecurityConfigurationAdapter extends WebSecurityConfigurerAdapter {

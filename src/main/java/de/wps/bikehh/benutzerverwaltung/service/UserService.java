@@ -44,6 +44,10 @@ public class UserService implements UserDetailsService {
 		return new BikehhUserDetails(user, email, user.getEncryptedPassword(), createAuthorities(user));
 	}
 
+	public boolean isEmpty() {
+		return userRepository.count() == 0;
+	}
+
 	public User getUserById(long id) {
 		Contract.check(userRepository.existsById(id), "userRepository.existsById(id)");
 

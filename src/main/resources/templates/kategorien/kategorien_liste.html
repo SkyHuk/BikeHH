@@ -9,7 +9,53 @@
 
 	<div class="card w-80 my-2">
 		<div class="card-body">
-			<div>Bereich zum erstellen von neuen Ober-Kategorien hier.</div>
+			<div class="pb-2 border-bottom">
+				<h3 class="card-title">Neue Oberkategorie erstellen:</h3>
+			</div>
+			<form method="POST" th:action="@{/kategorien}"
+				th:object="${kategorie}">
+				<div class="row pt-2">
+					<div class="col">
+						<input type="text" class="form-control" id="titel"
+							th:field="*{name}" th:errorclass="is-invalid" placeholder="Name"
+							maxlength="255">
+						<div class="invalid-feedback" th:errors="*{name}"></div>
+					</div>
+					<div class="col-2">
+						<button type="submit" class="btn btn-primary">
+							<i class="fas fa-save"></i> <span class="ml-1">Speichern</span>
+						</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<div th:if="${unterKategorie}" class="card w-80 my-2">
+		<div class="card-body">
+			<div class="pb-2 border-bottom">
+				<h3 class="card-title">
+					Neue Unterkategorie erstellen für <span
+						th:text="${unterKategorie.oberKategorieName}"></span>:
+				</h3>
+			</div>
+			<form method="POST" th:action="@{'/kategorien/' + ${kategorieId} + '/add'}"
+				th:object="${unterKategorie}">
+				<div class="row pt-2">
+					<input type="hidden" th:field="*{oberKategorieId}">
+					<div class="col">
+						<input type="text" class="form-control" id="titel"
+							th:field="*{name}" th:errorclass="is-invalid" placeholder="Name"
+							maxlength="255">
+						<div class="invalid-feedback" th:errors="*{name}"></div>
+					</div>
+					<div class="col-2">
+						<button type="submit" class="btn btn-primary">
+							<i class="fas fa-save"></i> <span class="ml-1">Speichern</span>
+						</button>
+					</div>
+				</div>
+			</form>
 		</div>
 	</div>
 
@@ -19,7 +65,9 @@
 				class="text-center text-muted">Hmm ganz schön leer hier</div>
 			<ul th:unless="${#lists.isEmpty(kategorien)}"
 				class="list-group list-group-flush">
-				<li th:each="kategorie : ${kategorien}"
+				<li
+					class="row list-group-item d-flex justify-content-between align-items-center"
+					th:each="kategorie : ${kategorien}"
 					th:include="kategorien/kategorien_liste_fragment :: oberkategorie(kategorie)"></li>
 			</ul>
 		</div>
