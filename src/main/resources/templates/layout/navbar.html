@@ -22,6 +22,10 @@
 						th:classappend="${#request.getServletPath().startsWith('/umfragen') ? 'active' : ''}">
 							<span><i class="fas fa-file-alt"></i></span> Umfragen
 					</a></li>
+					<li class="nav-item"><a class="nav-link" href="/befragungen"
+						th:classappend="${#request.getServletPath().startsWith('/befragungen') ? 'active' : ''}">
+							<span><i class="fas fa-file-alt"></i></span> Befragungen
+					</a></li>
 					<li class="nav-item"><a class="nav-link" href="/meldungen"
 						th:classappend="${#request.getServletPath().startsWith('/meldungen') ? 'active' : ''}">
 							<span><i class="fas fa-map-marker-alt"></i></span> Meldungen
@@ -40,11 +44,9 @@
 			<div sec:authorize="isAuthenticated()">
 				<hr class="my-4">
 				<ul class="nav flex-column mb-2">
-					<li class="nav-item">
-						<span class="py-2 px-3 user-select-none"><i
-								class="fas fa-user-circle"></i> <span
-							th:text="${user.emailAddress}"></span></span>
-					</li>
+					<li class="nav-item"><span class="py-2 px-3 user-select-none"><i
+							class="fas fa-user-circle"></i> <span
+							th:text="${user.emailAddress}"></span></span></li>
 					<li class="nav-item">
 						<form>
 							<a class="nav-link" href="/logout"> <span><i

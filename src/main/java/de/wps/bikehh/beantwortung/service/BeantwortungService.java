@@ -1,7 +1,6 @@
 package de.wps.bikehh.beantwortung.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -19,7 +18,11 @@ public class BeantwortungService {
 	}
 
 	public List<Beantwortung> getAntwortenAufFrage(Frage frage) {
-		return repository.findAllByFrage(frage).collect(Collectors.toList());
+		return repository.findAllByFrage(frage);
+	}
+
+	public long getAnzahlAntwortenAufFrage(Frage frage) {
+		return repository.findAllByFrage(frage).size();
 	}
 
 	public void beantworteFrage(Frage frage, int antwortIndex, String antwortFreitext) {

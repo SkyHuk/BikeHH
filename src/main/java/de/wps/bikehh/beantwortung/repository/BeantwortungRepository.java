@@ -1,6 +1,6 @@
 package de.wps.bikehh.beantwortung.repository;
 
-import java.util.stream.Stream;
+import java.util.List;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -11,6 +11,6 @@ import de.wps.bikehh.befragungen.material.Frage;
 @Repository
 public interface BeantwortungRepository extends CrudRepository<Beantwortung, Long> {
 
-	Stream<Beantwortung> findAllByFrage(Frage frage);
+	List<Beantwortung> findAllByFrage(Frage frage);
 
 }

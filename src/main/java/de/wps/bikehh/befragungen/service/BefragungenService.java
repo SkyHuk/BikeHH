@@ -79,6 +79,12 @@ public class BefragungenService {
 		return befragungenRepository.save(befragung);
 	}
 
+	public List<Befragung> getAlleBefragungen() {
+		List<Befragung> befragungen = new ArrayList<>();
+		befragungenRepository.findAll().forEach(befragungen::add);
+		return befragungen;
+	}
+
 	public List<Befragung> getAktuelleBefragungen(LocalDate currentDate) {
 		List<Befragung> befragungen = new ArrayList<>();
 		befragungenRepository.findAll().forEach(befragung -> {

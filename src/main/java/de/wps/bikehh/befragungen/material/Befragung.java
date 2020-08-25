@@ -168,4 +168,12 @@ public class Befragung {
 		this.endDatum = endDatum;
 	}
 
+	public boolean istAusUmfrage() {
+		return umfrage != null;
+	}
+
+	public boolean istAusMeldung() {
+		return meldung != null;
+	}
+
 }

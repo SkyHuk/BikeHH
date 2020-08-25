@@ -1,0 +1,44 @@
+<html layout:decorate="~{layout/layout}">
+
+<head>
+<title>Befragungen</title>
+</head>
+
+<body layout:fragment="content">
+	<h2 class="my-4 mr-4">Befragungen</h2>
+
+	<div class="card w-80 my-2" th:if="${#lists.isEmpty(befragungen)}">
+		<div class="card-body text-center text-muted">Hmm ganz schön
+			leer hier</div>
+	</div>
+
+	<div class="card w-80 my-2" th:unless="${#lists.isEmpty(befragungen)}"
+		th:each="befragung : ${befragungen}">
+		<div class="card-body row align-items-center" style="height: 300px;">
+			<div class="col-4 text-center text-muted">Map here</div>
+			<div class="col">
+				<ul class="list-group list-group-flush">
+					<li class="list-group-item">Ersteller: <span
+						th:text="${befragung.ersteller}"></span></li>
+					<li class="list-group-item">Anzahl Fragen: <span
+						th:text="${befragung.anzahlFragen}"></span></li>
+					<li class="list-group-item">Anzahl Beantwortungen: <span
+						th:text="${befragung.anzahlAntworten}"></span> / <span
+						th:text="${befragung.bestaetigungsSchwellenwert}"></span></li>
+					<li class="list-group-item">Aus Meldung generiert: <span
+						th:text="${befragung.istAusMeldung}"></span></li>
+					<li class="list-group-item">Aus Umfrage generiert: <span
+						th:text="${befragung.istAusUmfrage}"></span></li>
+				</ul>
+			</div>
+			<div class="col-2 align-self-start">
+				<a class="btn btn-primary my-1 w-100 text-white">Anzeigen</a> <a
+					class="btn btn-danger my-1 w-100 text-white"
+					th:unless="${befragung.isDisabled}">Deaktivieren</a> <a
+					class="btn btn-success my-1 w-100 text-white"
+					th:if="${befragung.isDisabled}">Aktivieren</a>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
