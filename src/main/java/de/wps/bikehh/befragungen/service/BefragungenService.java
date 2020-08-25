@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import de.wps.bikehh.befragungen.material.Befragung;
 import de.wps.bikehh.befragungen.material.Frage;
 import de.wps.bikehh.befragungen.repository.BefragungenRepository;
+import de.wps.bikehh.befragungen.repository.FragenRepository;
 import de.wps.bikehh.benutzerverwaltung.material.User;
 import de.wps.bikehh.framework.Contract;
 import de.wps.bikehh.meldungen.material.Meldung;
@@ -19,10 +20,13 @@ import de.wps.bikehh.meldungen.material.Meldung;
 public class BefragungenService {
 
 	private BefragungenRepository befragungenRepository;
+	private FragenRepository fragenRepository;
 
 	@Autowired
-	public BefragungenService(BefragungenRepository repository) {
+	public BefragungenService(BefragungenRepository repository,
+			FragenRepository fragenRepository) {
 		this.befragungenRepository = repository;
+		this.fragenRepository = fragenRepository;
 	}
 
 	public Befragung save(Befragung befragung) {
@@ -31,8 +35,24 @@ public class BefragungenService {
 		return befragungenRepository.save(befragung);
 	}
 
+	public boolean doesBefragungExist(long befragungId) {
+		return befragungenRepository.existsById(befragungId);
+	}
+
+	public boolean doesFrageExist(long fragenId) {
+		return fragenRepository.existsById(fragenId);
+	}
+
 	public Befragung getBefragung(long id) {
+		Contract.check(doesBefragungExist(id), "doesBefragungExist(id)");
+
 		return befragungenRepository.findById(id).get();
+	}
+
+	public Frage getFrage(long id) {
+		Contract.check(doesFrageExist(id), "doesFrageExist(id)");
+
+		return fragenRepository.findById(id).get();
 	}
 
 	public Befragung createNewBefragungFromMeldung(User user, Meldung meldung) {
@@ -83,4 +103,5 @@ public class BefragungenService {
 		});
 		return befragungen;
 	}
+
 }

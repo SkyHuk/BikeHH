@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import de.wps.bikehh.beantwortung.service.BeantwortungService;
+import de.wps.bikehh.befragungen.api.dto.BeantwortungDto;
 import de.wps.bikehh.befragungen.api.dto.BefragungDetailRestDto;
 import de.wps.bikehh.befragungen.api.dto.BefragungPositionRestDto;
 import de.wps.bikehh.befragungen.api.dto.FrageRestDto;
@@ -20,9 +22,13 @@ public class BefragungenRestApplicationService {
 
 	private BefragungenService befragungenService;
 
+	private BeantwortungService beantwortungService;
+
 	@Autowired
-	public BefragungenRestApplicationService(BefragungenService service) {
+	public BefragungenRestApplicationService(BefragungenService service,
+			BeantwortungService beantwortungService) {
 		this.befragungenService = service;
+		this.beantwortungService = beantwortungService;
 	}
 
 	public List<BefragungPositionRestDto> getAktuellePositionenVonBefragungen(LocalDate currentDate) {
@@ -35,6 +41,21 @@ public class BefragungenRestApplicationService {
 
 	public BefragungDetailRestDto getBefragungsDetails(long befragungsId) {
 		return createBefragungDetailRestDtoFromBefragung(befragungenService.getBefragung(befragungsId));
+	}
+
+	public boolean doesBefragungExist(long befragungId) {
+		return befragungenService.doesBefragungExist(befragungId);
+	}
+
+	public boolean doesFrageExist(long fragenId) {
+		return befragungenService.doesFrageExist(fragenId);
+	}
+
+	public void beantworteFrage(BeantwortungDto dto) {
+		beantwortungService.beantworteFrage(
+				befragungenService.getFrage(dto.getFragenId()),
+				dto.getAntwortIndex(),
+				dto.getAntwortFreitext());
 	}
 
 	private BefragungPositionRestDto createBefragungPositionRestDtoFromBefragung(Befragung befragung) {

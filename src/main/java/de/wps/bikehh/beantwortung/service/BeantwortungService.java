@@ -22,4 +22,12 @@ public class BeantwortungService {
 		return repository.findAllByFrage(frage).collect(Collectors.toList());
 	}
 
+	public void beantworteFrage(Frage frage, int antwortIndex, String antwortFreitext) {
+		Beantwortung beantwortung = new Beantwortung();
+		beantwortung.setFrage(frage);
+		beantwortung.setAntwortIndex(antwortIndex);
+		beantwortung.setAntwortFreitext(antwortFreitext);
+		repository.save(beantwortung);
+	}
+
 }
