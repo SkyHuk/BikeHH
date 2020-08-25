@@ -12,28 +12,52 @@
 			Umfrage erstellen</a>
 	</div>
 
-	<div class="table-responsive mb-4">
-		<table class="table table-hover">
-			<thead>
-				<tr>
-					<th>Titel</th>
-					<th>Kategorie</th>
-					<th>Erstellungsdatum</th>
-					<th>Status</th>
-					<th></th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="umfrage: ${umfragen}">
-					<td th:text="${umfrage.titel}"></td>
-					<td th:text="${umfrage.kategorie}"></td>
-					<td th:text="${umfrage.createdAt}"></td>
-					<td th:text="${umfrage.isDisabled} ? 'deaktiviert' : 'aktiviert'"></td>
-					<td><a class="btn btn-sm btn-primary"
-						th:href="@{'/umfragen/' + ${umfrage.id}}">Anzeigen</a></td>
-				</tr>
-			</tbody>
-		</table>
+	<div class="card w-80 my-2" th:if="${#lists.isEmpty(umfragen)}">
+		<div class="card-body text-center text-muted">Hmm ganz schön
+			leer hier</div>
+	</div>
+
+	<div class="card w-80 my-2" th:unless="${#lists.isEmpty(umfragen)}"
+		th:each="umfrage: ${umfragen}">
+		<div class="card-body row align-items-center" style="height: 300px;">
+			<div class="col-4 text-center text-muted">Map here</div>
+			<div class="col border-left border-right">
+				<ul class="list-group list-group-flush">
+					<li class="list-group-item">
+						<div class="w-100 d-flex justify-content-between align-items-center">
+							<span>Titel: </span><span th:text="${umfrage.titel}"></span>
+						</div>
+					</li>
+					<li class="list-group-item">
+						<div class="w-100 d-flex justify-content-between align-items-center">
+							<span>Ersteller:</span> <span th:text="${umfrage.ersteller}"></span>
+						</div>
+					</li>
+					<li class="list-group-item">
+						<div class="w-100 d-flex justify-content-between align-items-center">
+							<span>Erstellt am:</span> <span th:text="${umfrage.createdAt}"></span>
+						</div>
+					</li>
+					<li class="list-group-item">
+						<div class="w-100 d-flex justify-content-between align-items-center">
+							<span>Kategorie:</span> <span th:text="${umfrage.kategorie}"></span>
+						</div>
+					</li>
+					<li class="list-group-item">
+						<div class="w-100 d-flex justify-content-between align-items-center">
+							<span>Status:</span> <span class="badge badge-danger"
+								th:if="${umfrage.isDisabled}">Deaktiviert</span> <span
+								class="badge badge-success" th:unless="${umfrage.isDisabled}">Aktiviert</span>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div class="col-2 align-self-start">
+				<a class="btn btn-primary my-1 w-100 text-white"
+					th:href="@{'/umfragen/' + ${umfrage.id}}">Anzeigen</a>
+
+			</div>
+		</div>
 	</div>
 </body>
 </html>

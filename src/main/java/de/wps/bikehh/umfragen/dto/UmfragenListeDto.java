@@ -4,6 +4,7 @@ public class UmfragenListeDto {
 
 	private long id;
 	private String titel;
+	private String ersteller;
 	private String kategorie;
 	private String createdAt;
 	private boolean isDisabled;
@@ -46,6 +47,14 @@ public class UmfragenListeDto {
 
 	public void setIsDisabled(boolean isDisabled) {
 		this.isDisabled = isDisabled;
+	}
+
+	public String getErsteller() {
+		return ersteller;
+	}
+
+	public void setErsteller(String ersteller) {
+		this.ersteller = ersteller;
 	}
 
 }

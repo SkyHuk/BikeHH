@@ -120,6 +120,7 @@ public class UmfragenApplicationService {
 		for (Umfrage umfrage : alleUmfragen) {
 			UmfragenListeDto dto = new UmfragenListeDto();
 			dto.setId(umfrage.getId());
+			dto.setErsteller(umfrage.getErsteller().getEmailAddress());
 			dto.setTitel(umfrage.getTitel());
 			dto.setKategorie(umfrage.getKategorie());
 			dto.setCreatedAt(umfrage.getCreatedAt().toString());

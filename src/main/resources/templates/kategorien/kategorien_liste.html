@@ -40,7 +40,7 @@
 				</h3>
 			</div>
 			<form method="POST"
-				th:action="@{'/kategorien/' + ${oberKategorie.id} + '/add'}"
+				th:action="@{'/kategorien/' + ${unterKategorie.oberKategorieId} + '/add'}"
 				th:object="${unterKategorie}">
 				<div class="row pt-2">
 					<input type="hidden" th:field="*{oberKategorieId}">

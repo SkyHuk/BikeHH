@@ -18,17 +18,36 @@
 			<div class="col-4 text-center text-muted">Map here</div>
 			<div class="col border-left border-right">
 				<ul class="list-group list-group-flush">
-					<li class="list-group-item">Ersteller: <span
-						th:text="${befragung.ersteller}"></span></li>
-					<li class="list-group-item">Anzahl Fragen: <span
-						th:text="${befragung.anzahlFragen}"></span></li>
-					<li class="list-group-item">Anzahl Beantwortungen: <span
-						th:text="${befragung.anzahlAntworten}"></span> / <span
-						th:text="${befragung.bestaetigungsSchwellenwert}"></span></li>
-					<li class="list-group-item">Aus Meldung generiert: <span
-						th:text="${befragung.istAusMeldung}"></span></li>
-					<li class="list-group-item">Aus Umfrage generiert: <span
-						th:text="${befragung.istAusUmfrage}"></span></li>
+					<li class="list-group-item">
+						<div
+							class="w-100 d-flex justify-content-between align-items-center">
+							<span>Ersteller:</span> <span th:text="${befragung.ersteller}"></span>
+						</div>
+					</li>
+					<li class="list-group-item">
+						<div
+							class="w-100 d-flex justify-content-between align-items-center">
+							<span>Anzahl Fragen:</span> <span
+								th:text="${befragung.anzahlFragen}"></span>
+						</div>
+					</li>
+					<li class="list-group-item">
+						<div
+							class="w-100 d-flex justify-content-between align-items-center">
+							<span>Anzahl Beantwortungen:</span><span> <span
+								th:text="${befragung.anzahlAntworten}"></span> / <span
+								th:text="${befragung.bestaetigungsSchwellenwert}"></span></span>
+						</div>
+					</li>
+					<li class="list-group-item">
+						<div
+							class="w-100 d-flex justify-content-between align-items-center">
+							<span>Generiert aus:</span> <span><span
+								class="badge badge-info" th:if="${befragung.istAusMeldung}">Meldung</span>
+								<span class="badge badge-info"
+								th:if="${befragung.istAusUmfrage}">Umfrage</span></span>
+						</div>
+					</li>
 				</ul>
 			</div>
 			<div class="col-2 align-self-start">

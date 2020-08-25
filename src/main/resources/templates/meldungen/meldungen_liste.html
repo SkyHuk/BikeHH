@@ -19,14 +19,30 @@
 			<div class="col-4 text-center text-muted">Map here</div>
 			<div class="col border-left border-right">
 				<ul class="list-group list-group-flush">
-					<li class="list-group-item">Ersteller: <span
-						th:text="${meldung.ersteller}"></span></li>
-					<li class="list-group-item">Erstellt am: <span
-						th:text="${meldung.createdAt}"></span></li>
-					<li class="list-group-item">Kategorie: <span
-						th:text="${meldung.kategorie}"></span></li>
-					<li class="list-group-item">Meldung: <span
-						th:text="${meldung.text}"></span></li>
+					<li class="list-group-item">
+						<div
+							class="w-100 d-flex justify-content-between align-items-center">
+							<span>Ersteller: </span><span th:text="${meldung.ersteller}"></span>
+						</div>
+					</li>
+					<li class="list-group-item">
+						<div
+							class="w-100 d-flex justify-content-between align-items-center">
+							<span>Erstellt am:</span> <span th:text="${meldung.createdAt}"></span>
+						</div>
+					</li>
+					<li class="list-group-item">
+						<div
+							class="w-100 d-flex justify-content-between align-items-center">
+							<span>Kategorie: </span><span th:text="${meldung.kategorie}"></span>
+						</div>
+					</li>
+					<li class="list-group-item">
+						<div class="w-100">
+							<div>Meldung:</div>
+							<span th:text="${meldung.text}"></span>
+						</div>
+					</li>
 				</ul>
 			</div>
 			<div class="col-2 align-self-start">
