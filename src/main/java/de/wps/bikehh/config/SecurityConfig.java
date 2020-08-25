@@ -52,6 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		public void configure(WebSecurity web) throws Exception {
 			String[] publicUrls = {
 					"/api/auth",
+					"/api/auth/check",
 					"/api/verify",
 					"/api/password/forgot",
 					"/api/password/reset",
