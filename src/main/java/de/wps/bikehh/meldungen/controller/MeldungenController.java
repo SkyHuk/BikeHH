@@ -24,11 +24,7 @@ public class MeldungenController {
 
 	@GetMapping
 	public String getMeldungenUbersicht(Model model) {
-
-		// TODO: meldungen in das model laden
-		// List<Meldung> meldungenListeList = umfrageService.getAlleMeldungen()
-		// model.addAttribute("meldungen", meldungen)
-
+		model.addAttribute("meldungen", meldungenAppService.getAlleMeldungen());
 		return "meldungen/meldungen_liste";
 	}
 }

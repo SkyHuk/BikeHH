@@ -30,13 +30,13 @@
 						th:classappend="${#request.getServletPath().startsWith('/meldungen') ? 'active' : ''}">
 							<span><i class="fas fa-map-marker-alt"></i></span> Meldungen
 					</a></li>
-					<li class="nav-item"><a class="nav-link" href="/map"
-						th:classappend="${#request.getServletPath().startsWith('/map') ? 'active' : ''}">
-							<span><i class="fas fa-map-marked-alt"></i></span> Karte
-					</a></li>
 					<li class="nav-item"><a class="nav-link" href="/kategorien"
 						th:classappend="${#request.getServletPath().startsWith('/kategorien') ? 'active' : ''}">
 							<span><i class="fas fa-book"></i></span> Kategorien
+					</a></li>
+					<li class="nav-item"><a class="nav-link" href="/map"
+						th:classappend="${#request.getServletPath().startsWith('/map') ? 'active' : ''}">
+							<span><i class="fas fa-map-marked-alt"></i></span> Karte
 					</a></li>
 				</ul>
 
