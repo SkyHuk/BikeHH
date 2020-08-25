@@ -39,7 +39,8 @@
 						th:text="${unterKategorie.oberKategorieName}"></span>:
 				</h3>
 			</div>
-			<form method="POST" th:action="@{'/kategorien/' + ${kategorieId} + '/add'}"
+			<form method="POST"
+				th:action="@{'/kategorien/' + ${oberKategorie.id} + '/add'}"
 				th:object="${unterKategorie}">
 				<div class="row pt-2">
 					<input type="hidden" th:field="*{oberKategorieId}">
@@ -59,18 +60,26 @@
 		</div>
 	</div>
 
-	<div class="card w-80 my-2">
-		<div class="card-body">
-			<div th:if="${#lists.isEmpty(kategorien)}"
-				class="text-center text-muted">Hmm ganz schön leer hier</div>
-			<ul th:unless="${#lists.isEmpty(kategorien)}"
-				class="list-group list-group-flush">
-				<li
-					class="row list-group-item d-flex justify-content-between align-items-center"
-					th:each="kategorie : ${kategorien}"
-					th:include="kategorien/kategorien_liste_fragment :: oberkategorie(kategorie)"></li>
-			</ul>
+	<div class="card w-80 my-2" th:if="${#lists.isEmpty(kategorien)}">
+		<div class="card-body text-center text-muted">Hmm ganz schön
+			leer hier</div>
+	</div>
+
+	<div class="card w-80 my-2" th:unless="${#lists.isEmpty(kategorien)}"
+		th:each="oberkategorie : ${kategorien}">
+		<div class="card-body row align-items-center">
+			<div class="col-10" th:text="${oberkategorie.name}"></div>
+			<div class="col-2 text-right">
+				<a th:href="@{'/kategorien/' + ${oberkategorie.id} + '/add'}"
+					class="btn btn-primary"> <i class="fas fa-plus"></i>
+				</a> <a th:href="@{'/kategorien/' + ${oberkategorie.id} + '/delete'}"
+					class="btn btn-danger ml-2"> <i class="far fa-trash-alt"></i>
+				</a>
+			</div>
+			<div
+				th:replace="kategorien/kategorien_liste_fragment::fragment_kategorie(${oberkategorie})"></div>
 		</div>
 	</div>
+
 </body>
 </html>

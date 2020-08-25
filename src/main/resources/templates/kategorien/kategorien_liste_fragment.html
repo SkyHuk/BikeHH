@@ -1,23 +1,10 @@
-<li th:fragment="oberkategorie(kategorie)">
-	<div class="col-10" th:text="${kategorie.name}"></div>
-	<div class="col-2">
-		<a th:href="@{'/kategorien/' + ${kategorie.id} + '/add'}"
-			class="btn btn-primary"> <i class="fas fa-plus"></i>
-		</a> <a th:href="@{'/kategorien/' + ${kategorie.id} + '/delete'}"
-			class="btn btn-danger ml-2"> <i class="far fa-trash-alt"></i>
-		</a>
-	</div>
-	<div th:replace="this::fragment_kategorie(${kategorie})"></div>
-</li>
-
-<div th:fragment="fragment_kategorie(kategorie)"
-	th:unless="${#lists.isEmpty(kategorie.unterKategorien)}" class="col-12">
+<div th:fragment="fragment_kategorie(kat)"
+	th:unless="${#lists.isEmpty(kat.unterKategorien)}" class="col-12">
 	<ul class="list-group list-group-flush">
-		<li th:each="unterkategorie : ${kategorie.unterKategorien}"
-			th:inline="text"
+		<li th:each="unterkategorie : ${kat.unterKategorien}" th:inline="text"
 			class="list-group-item d-flex justify-content-between align-items-center">
 			<div class="col-10" th:text="${unterkategorie.name}"></div>
-			<div class="col-2">
+			<div class="col-2 text-right">
 				<a th:href="@{'/kategorien/' + ${unterkategorie.id} + '/add'}"
 					class="btn btn-primary"> <i class="fas fa-plus"></i>
 				</a> <a th:href="@{'/kategorien/' + ${unterkategorie.id} + '/delete'}"
