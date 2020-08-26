@@ -94,11 +94,13 @@
 									<i class="fas fa-map-marker-alt"></i><span class="ml-1">Ort
 										hinzufügen</span>
 								</button>
+								<!-- 
 								<button type="button" class="btn btn-danger"
 									th:onclick="'removeBefragungsOrt(' + ${bStat.index} + ')'">
 									<i class="fas fa-trash-alt"></i><span class="ml-1">Ort
 										entfernen</span>
 								</button>
+								 -->
 							</div>
 
 							<!-- Fragen -->
@@ -139,18 +141,16 @@
 
 								<!-- Fragen Actions -->
 								<div class="py-1 d-flex justify-content-between">
+									<!-- 
 									<button type="button" class="d-flex btn btn-warning" disabled>Bedingung
 										hinzufügen</button>
+									 -->
+								<button type="submit" name="addFrage" th:value="${bStat.index}"
+									class="btn btn-primary">Frage hinzufügen</button>
 									<button type="submit" name="removeFrage"
 										th:value="${bStat.index} + ';' + ${fStat.index}"
 										class="d-flex btn btn-danger">Frage löschen</button>
 								</div>
-							</div>
-
-							<!-- Eine Frage zur Befragung hinzufügen -->
-							<div class="py-2 border-bottom">
-								<button type="submit" name="addFrage" th:value="${bStat.index}"
-									class="btn btn-primary w-100">Frage hinzufügen</button>
 							</div>
 
 							<div class="py-2">

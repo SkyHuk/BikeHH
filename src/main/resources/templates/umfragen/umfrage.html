@@ -18,68 +18,83 @@
 				window.document.showMap = true;
 			</script>
 		</div>
-		<div class="card-body">
-			<h4 class="card-title" th:text="${umfrage.titel}"></h4>
-
-			<div class="row">
-				<div class="col border-right">
-					<div class="row py-1">
-						<span class="col-4 text-right">Ersteller: </span> <span
-							class="col-8" th:text="${umfrage.ersteller}"></span>
-					</div>
-
-					<div class="row py-1">
-						<span class="col-4 text-right">Erstellt am: </span> <span
-							class="col-8" th:text="${umfrage.createdAt}"></span>
-					</div>
-
-					<div class="row py-1" th:if="${umfrage.updatedAt != null}">
-						<span class="col-4 text-right">Bearbeitet am: </span> <span
-							class="col-8" th:text="${umfrage.updatedAt}"></span>
-					</div>
-
-					<div class="row py-1">
-						<span class="col-4 text-right">Kategorie: </span> <span
-							class="col-8" th:text="${umfrage.kategorie}"></span>
-					</div>
-
-					<div class="row py-1">
-						<span class="col-4 text-right">Startdatum: </span> <span
-							class="col-8" th:text="${umfrage.startDatum}"></span>
-					</div>
-
-					<div class="row py-1">
-						<span class="col-4 text-right">Enddatum: </span> <span
-							class="col-8" th:text="${umfrage.endDatum}"></span>
-					</div>
-
-					<div class="row py-1">
-						<span class="col-4 text-right">Mehrfach beantwortbar: </span>
-						<div class="col-8">
-							<i th:if="${umfrage.istMehrfachBeantwortbar}"
-								class="fas fa-check text-success"></i> <i
-								th:unless="${umfrage.istMehrfachBeantwortbar}"
-								class="fas fa-times text-danger"></i>
+		<div class="card-body row">
+			<div class="col border-right">
+				<ul class="list-group list-group-flush">
+					<li class="list-group-item">
+						<div
+							class="w-100 d-flex justify-content-between align-items-center">
+							<span>Titel: </span> <span th:text="${umfrage.titel}"></span>
 						</div>
-					</div>
+					</li>
+					<li class="list-group-item">
+						<div
+							class="w-100 d-flex justify-content-between align-items-center">
+							<span>Ersteller: </span> <span th:text="${umfrage.ersteller}"></span>
+						</div>
+					</li>
+					<li class="list-group-item">
+						<div
+							class="w-100 d-flex justify-content-between align-items-center">
+							<span>Erstellt am: </span> <span th:text="${umfrage.createdAt}"></span>
+						</div>
+					</li>
+					<li class="list-group-item" th:if="${umfrage.updatedAt != null}">
+						<div
+							class="w-100 d-flex justify-content-between align-items-center">
+							<span>Bearbeitet am: </span> <span th:text="${umfrage.updatedAt}"></span>
+						</div>
+					</li>
+					<li class="list-group-item">
+						<div
+							class="w-100 d-flex justify-content-between align-items-center">
+							<span>Kategorie: </span> <span th:text="${umfrage.kategorie}"></span>
+						</div>
+					</li>
+					<li class="list-group-item">
+						<div
+							class="w-100 d-flex justify-content-between align-items-center">
+							<span>Startdatum: </span> <span th:text="${umfrage.startDatum}"></span>
+						</div>
+					</li>
+					<li class="list-group-item">
+						<div
+							class="w-100 d-flex justify-content-between align-items-center">
+							<span>Enddatum: </span> <span th:text="${umfrage.endDatum}"></span>
+						</div>
+					</li>
+					<li class="list-group-item">
+						<div
+							class="w-100 d-flex justify-content-between align-items-center">
+							<span>Mehrfach beantwortbar: </span> <span
+								class="badge badge-success"
+								th:if="${umfrage.istMehrfachBeantwortbar}">Ja</span> <span
+								class="badge badge-danger"
+								th:unless="${umfrage.istMehrfachBeantwortbar}">Nein</span>
+						</div>
+					</li>
+				</ul>
+			</div>
+			
+			<div class="col">
+				<input type="hidden" id="befragungen_count"
+					th:value="${#lists.size(umfrage.befragungen)}">
+				<div class="py-2">
+					<h4>Befragungen</h4>
 				</div>
-				<div class="col">
-					<input type="hidden" id="befragungen_count" th:value="${#lists.size(umfrage.befragungen)}">
-					<div class="py-2">
-						<h4>Befragungen</h4>
-					</div>
-					<div class="border rounded p-2 mb-2"
-						th:each="befragung, bStat : ${umfrage.befragungen}">
-						<input type="hidden" th:id="'longitude_' + ${bStat.index}" th:value="${befragung.laengengrad}">
-						<input type="hidden" th:id="'latitude_' + ${bStat.index}" th:value="${befragung.breitengrad}">
-						<div th:each="frage : ${befragung.fragen}">
-							<div class="py-1 border-bottom">
-								<h5 th:text="${frage.text}"></h5>
-							</div>
-							<!-- Die Antworten -->
-							<div class="py-1" th:each="antwort : ${frage.antworten}">
-								<span th:text="${antwort}"></span>
-							</div>
+				<div class="border rounded p-2 mb-2"
+					th:each="befragung, bStat : ${umfrage.befragungen}">
+					<input type="hidden" th:id="'longitude_' + ${bStat.index}"
+						th:value="${befragung.laengengrad}"> <input type="hidden"
+						th:id="'latitude_' + ${bStat.index}"
+						th:value="${befragung.breitengrad}">
+					<div th:each="frage : ${befragung.fragen}">
+						<div class="py-1 border-bottom">
+							<h5 th:text="${frage.text}"></h5>
+						</div>
+						<!-- Die Antworten -->
+						<div class="py-1" th:each="antwort : ${frage.antworten}">
+							<span th:text="${antwort}"></span>
 						</div>
 					</div>
 				</div>

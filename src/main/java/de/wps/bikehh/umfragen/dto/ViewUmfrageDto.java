@@ -1,9 +1,6 @@
 package de.wps.bikehh.umfragen.dto;
 
-import java.time.LocalDate;
 import java.util.List;
-
-import org.springframework.format.annotation.DateTimeFormat;
 
 public class ViewUmfrageDto {
 
@@ -12,17 +9,13 @@ public class ViewUmfrageDto {
 	private String titel;
 	private String kategorie;
 
-	@DateTimeFormat(pattern = "dd.MM.yyyy")
-	private LocalDate startDatum;
+	private String startDatum;
 
-	@DateTimeFormat(pattern = "dd.MM.yyyy")
-	private LocalDate endDatum;
+	private String endDatum;
 
-	@DateTimeFormat(pattern = "dd.MM.yyyy")
-	private LocalDate createdAt;
+	private String createdAt;
 
-	@DateTimeFormat(pattern = "dd.MM.yyyy")
-	private LocalDate updatedAt;
+	private String updatedAt;
 
 	private List<EditBefragungDto> befragungen;
 
@@ -55,35 +48,35 @@ public class ViewUmfrageDto {
 		this.kategorie = kategorie;
 	}
 
-	public LocalDate getStartDatum() {
+	public String getStartDatum() {
 		return startDatum;
 	}
 
-	public void setStartDatum(LocalDate startDatum) {
+	public void setStartDatum(String startDatum) {
 		this.startDatum = startDatum;
 	}
 
-	public LocalDate getEndDatum() {
+	public String getEndDatum() {
 		return endDatum;
 	}
 
-	public void setEndDatum(LocalDate endDatum) {
+	public void setEndDatum(String endDatum) {
 		this.endDatum = endDatum;
 	}
 
-	public LocalDate getCreatedAt() {
+	public String getCreatedAt() {
 		return createdAt;
 	}
 
-	public void setCreatedAt(LocalDate createdAt) {
+	public void setCreatedAt(String createdAt) {
 		this.createdAt = createdAt;
 	}
 
-	public LocalDate getUpdatedAt() {
+	public String getUpdatedAt() {
 		return updatedAt;
 	}
 
-	public void setUpdatedAt(LocalDate updatedAt) {
+	public void setUpdatedAt(String updatedAt) {
 		this.updatedAt = updatedAt;
 	}
 

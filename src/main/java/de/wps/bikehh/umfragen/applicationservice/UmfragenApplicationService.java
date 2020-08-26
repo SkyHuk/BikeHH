@@ -1,8 +1,10 @@
 package de.wps.bikehh.umfragen.applicationservice;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,8 @@ import de.wps.bikehh.umfragen.service.UmfragenService;
 @Service
 public class UmfragenApplicationService {
 
+	private static final DateTimeFormatter DATE_LABEL = DateTimeFormatter.ofPattern("dd.MM.yyyy", Locale.GERMAN);
+
 	private UmfragenService umfragenService;
 
 	@Autowired
@@ -36,10 +40,12 @@ public class UmfragenApplicationService {
 		dto.setId(umfrage.getId());
 		dto.setTitel(umfrage.getTitel());
 		dto.setKategorie(umfrage.getKategorie());
-		dto.setStartDatum(umfrage.getStartDatum());
-		dto.setEndDatum(umfrage.getEndDatum());
-		dto.setCreatedAt(umfrage.getCreatedAt());
-		dto.setUpdatedAt(umfrage.getUpdatedAt());
+		dto.setStartDatum(umfrage.getStartDatum().format(DATE_LABEL));
+		dto.setEndDatum(umfrage.getEndDatum().format(DATE_LABEL));
+		dto.setCreatedAt(umfrage.getCreatedAt().format(DATE_LABEL));
+		if (umfrage.getUpdatedAt() != null) {
+			dto.setUpdatedAt(umfrage.getUpdatedAt().format(DATE_LABEL));
+		}
 
 		List<EditBefragungDto> befragungen = new ArrayList<>();
 		for (Befragung befragung : umfrage.getBefragungen()) {
