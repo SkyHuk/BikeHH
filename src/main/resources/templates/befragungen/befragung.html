@@ -1,0 +1,115 @@
+<html layout:decorate="~{layout/layout}">
+
+<head>
+<title>Befragungen</title>
+</head>
+
+<body layout:fragment="content">
+
+	<div>
+		<a href="/befragungen" class="btn btn-link"> <i
+			class="fas fa-arrow-left mr-1"></i>Befragungen
+		</a>
+	</div>
+
+	<div class="card w-80 my-2">
+		<div class="card-img-top">
+			<div id="map" class="w-100" style="height: 300px;"></div>
+			<script th:inline="javascript">
+				window.document.showMap = true;
+			</script>
+			<input type="hidden" id="befragungen_count" th:value="1">
+			<!-- laengengrad -->
+			<input type="hidden" th:id="longitude_0"
+				th:value="${befragung.laengengrad}">
+			<!-- breitengrad -->
+			<input type="hidden" th:id="latitude_0"
+				th:value="${befragung.breitengrad}">
+		</div>
+		<div class="card-body row align-items-center">
+			<div class="col-4">
+				<ul class="list-group list-group-flush">
+					<li class="list-group-item">
+						<div
+							class="w-100 d-flex justify-content-between align-items-center">
+							<span>Ersteller:</span> <span th:text="${befragung.ersteller}"></span>
+						</div>
+					</li>
+					<li class="list-group-item">
+						<div
+							class="w-100 d-flex justify-content-between align-items-center">
+							<span>Startdatum:</span> <span th:text="${befragung.startDatum}"></span>
+						</div>
+					</li>
+					<li class="list-group-item">
+						<div
+							class="w-100 d-flex justify-content-between align-items-center">
+							<span>Enddatum:</span> <span th:text="${befragung.endDatum}"></span>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div class="col border-left border-right">
+				<ul class="list-group list-group-flush">
+					<li class="list-group-item">
+						<div
+							class="w-100 d-flex justify-content-between align-items-center">
+							<span>Anzahl Fragen:</span> <span
+								th:text="${befragung.anzahlFragen}"></span>
+						</div>
+					</li>
+					<li class="list-group-item">
+						<div
+							class="w-100 d-flex justify-content-between align-items-center">
+							<span>Anzahl Beantwortungen:</span><span> <span
+								th:text="${befragung.anzahlAntworten}"></span> / <span
+								th:text="${befragung.bestaetigungsSchwellenwert}"></span></span>
+						</div>
+					</li>
+					<li class="list-group-item">
+						<div
+							class="w-100 d-flex justify-content-between align-items-center">
+							<span>Generiert aus:</span> <span><span
+								class="badge badge-info" th:if="${befragung.istAusMeldung}">Meldung</span>
+								<span class="badge badge-info"
+								th:if="${befragung.istAusUmfrage}">Umfrage</span></span>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div class="col-4 align-self-start">
+				<a class="btn btn-danger my-1 w-100 text-white"
+					th:unless="${befragung.isDisabled}">Deaktivieren</a> <a
+					class="btn btn-success my-1 w-100 text-white"
+					th:if="${befragung.isDisabled}">Aktivieren</a>
+			</div>
+		</div>
+	</div>
+
+	<h2 class="my-4">Beantwortungen</h2>
+
+	<script th:inline="javascript">
+		window.document.showAntwortChart = true;
+		window.document.antworten = {};
+		window.document.werte = {};
+	</script>
+
+	<input type="hidden" id="fragenCount"
+		th:value="${#lists.size(befragung.fragenMitAntworten)}">
+	<div class="card w-80 my-2"
+		th:each="beantwortung, bStat : ${befragung.fragenMitAntworten}">
+		<div class="card-body">
+			<h5 class="card-title" th:text="${beantwortung.frage.text}"></h5>
+
+			<script th:inline="javascript">
+				const index = [[${bStat.index}]];
+				window.document.antworten[index] = [[${beantwortung.frage.antworten}]];
+				window.document.werte[index] = [[${beantwortung.antworten}]];
+			</script>
+			<canvas th:id="'beantwortung_chart_' + ${bStat.index}" class="w-100"
+				style="height: 300px;"></canvas>
+		</div>
+	</div>
+
+</body>
+</html>

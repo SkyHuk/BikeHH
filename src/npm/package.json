@@ -6,6 +6,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.9.0",
     "bootstrap": "^4.3.1",
+    "chart.js": "^2.9.3",
     "jquery": "^3.4.1",
     "ol": "^6.4.3",
     "popper.js": "^1.15.0"
