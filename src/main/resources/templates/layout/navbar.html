@@ -14,11 +14,13 @@
 			<div class="d-flex align-content-between flex-wrap" sec:authorize="isAuthenticated()">
 				<div class="w-100">
 					<ul class="nav flex-column">
+						<!-- 
 						<li class="nav-item"><a class="nav-link" href="/uebersicht"
 							th:classappend="${#request.getServletPath().startsWith('/uebersicht') ? 'active' : ''}">
 								<span><i class="fas fa-chart-line"></i></span> Übersicht <span
 								class="sr-only">(current)</span>
 						</a></li>
+						 -->
 						<li class="nav-item"><a class="nav-link" href="/umfragen"
 							th:classappend="${#request.getServletPath().startsWith('/umfragen') ? 'active' : ''}">
 								<span><i class="fas fa-file-alt"></i></span> Umfragen
@@ -35,10 +37,12 @@
 							th:classappend="${#request.getServletPath().startsWith('/kategorien') ? 'active' : ''}">
 								<span><i class="fas fa-book"></i></span> Kategorien
 						</a></li>
+						<!-- 
 						<li class="nav-item"><a class="nav-link" href="/map"
 							th:classappend="${#request.getServletPath().startsWith('/map') ? 'active' : ''}">
 								<span><i class="fas fa-map-marked-alt"></i></span> Karte
 						</a></li>
+						 -->
 					</ul>
 				</div>
 

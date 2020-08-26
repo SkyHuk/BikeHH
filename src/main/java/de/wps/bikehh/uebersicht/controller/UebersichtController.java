@@ -10,7 +10,7 @@ public class UebersichtController {
 
 	@GetMapping
 	public String home() {
-		return "redirect:/uebersicht";
+		return "redirect:/umfragen";
 	}
 
 	/**
