@@ -129,7 +129,7 @@ public class UmfragenApplicationService {
 			dto.setErsteller(umfrage.getErsteller().getEmailAddress());
 			dto.setTitel(umfrage.getTitel());
 			dto.setKategorie(umfrage.getKategorie());
-			dto.setCreatedAt(umfrage.getCreatedAt().toString());
+			dto.setCreatedAt(umfrage.getCreatedAt().format(DATE_LABEL));
 			dto.setIsDisabled(umfrage.getIstDisabled());
 
 			dtoListe.add(dto);

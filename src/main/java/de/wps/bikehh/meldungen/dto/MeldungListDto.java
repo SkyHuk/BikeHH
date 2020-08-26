@@ -1,9 +1,5 @@
 package de.wps.bikehh.meldungen.dto;
 
-import java.time.LocalDate;
-
-import org.springframework.format.annotation.DateTimeFormat;
-
 public class MeldungListDto {
 
 	private long id;
@@ -19,8 +15,7 @@ public class MeldungListDto {
 
 	private String kategorie;
 
-	@DateTimeFormat(pattern = "dd.MM.yyyy")
-	private LocalDate createdAt;
+	private String createdAt;
 
 	public long getId() {
 		return id;
@@ -78,11 +73,11 @@ public class MeldungListDto {
 		this.kategorie = kategorie;
 	}
 
-	public LocalDate getCreatedAt() {
+	public String getCreatedAt() {
 		return createdAt;
 	}
 
-	public void setCreatedAt(LocalDate erstelltAm) {
+	public void setCreatedAt(String erstelltAm) {
 		this.createdAt = erstelltAm;
 	}
 

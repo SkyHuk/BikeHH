@@ -5,3 +5,4 @@ import 'chart.js';
 
 import './map';
 import './antwortchart';
+import './minimap';

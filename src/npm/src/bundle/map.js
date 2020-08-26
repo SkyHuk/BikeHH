@@ -121,6 +121,7 @@ if (window.document.showMap) {
 		        })
 		    }));
 			vectorSource.addFeature(feature);
+			map.getView().fit(geometry.getExtent(), map.getSize());
 		}
 	}
 }

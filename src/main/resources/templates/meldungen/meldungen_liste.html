@@ -13,10 +13,26 @@
 			leer hier</div>
 	</div>
 
+	<script th:inline="javascript">
+		window.document.showMiniMaps = true;
+		window.document.anzahlMinimaps = [[${#lists.size(meldungen)}]];
+		window.document.coords = {};
+		let index = 0;
+		let coordsArr;
+	</script>
+
 	<div class="card w-80 my-2" th:unless="${#lists.isEmpty(meldungen)}"
-		th:each="meldung : ${meldungen}">
-		<div class="card-body row align-items-center" style="height: 300px;">
-			<div class="col-4 text-center text-muted">Map here</div>
+		th:each="meldung, mStat : ${meldungen}">
+		<div class="card-body row align-items-center">
+			<script th:inline="javascript">
+				index = [[${mStat.index}]];
+				coordsArr = [];
+				coordsArr.push([[${meldung.laengengrad}]]);
+				coordsArr.push([[${meldung.breitengrad}]]);
+				window.document.coords[index] = coordsArr;
+			</script>
+			<div class="col-4" th:id="'map_' + ${mStat.index}"
+				style="height: 250px;"></div>
 			<div class="col border-left border-right">
 				<ul class="list-group list-group-flush">
 					<li class="list-group-item">
@@ -46,7 +62,8 @@
 				</ul>
 			</div>
 			<div class="col-2 align-self-start">
-				<a class="btn btn-primary my-1 w-100 text-white">Befragung
+				<a class="btn btn-primary my-1 w-100 text-white"
+					th:href="@{'/befragungen/' + ${meldung.befragungId}}">Befragung
 					anzeigen</a>
 			</div>
 		</div>
